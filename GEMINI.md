@@ -16,7 +16,7 @@ POS Universe is a modern Point of Sale (POS) web system designed to work seamles
 
 *   **Cross-device Compatibility:** Works on any device with a web browser.
 *   **Offline First:** Using Dexie.js for reliable offline functionality. 
-*   
+*   **Responsive Layout:** Full-page, scrollable layout with dark/light mode support.
 
 
 ## Development Guidelines
@@ -41,6 +41,7 @@ src/
 ├── routes/           # Routing configuration
 ├── styles/           # Global styles and themes
 ├── types/            # Global TypeScript types
+├── locales/            # Global locale store
 └── utils/            # Utility functions
 ```
 

@@ -1,31 +1,12 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { ThemeToggleButton } from '@/components/ThemeToggleButton';
-import { useEffect } from 'react';
-import { userApi } from "@/api";
-
-function Home() {
-
-  useEffect(() => {
-
-    userApi.post({
-      username: "Abc",
-      password: "ppp"
-    });
-
-
-  }, []);
-
-
-  return <h1>Home</h1>;
-}
-
-function About() {
-  return <h1>About</h1>;
-}
+import MainLayout from '@/layouts/MainLayout';
+import HomePage from '@/pages/HomePage';
+import AboutPage from '@/pages/AboutPage';
 
 function App() {
   return (
-    <>
+    <MainLayout>
       <nav>
         <ul>
           <li>
@@ -38,12 +19,12 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
 
-      <ThemeToggleButton></ThemeToggleButton>
-    </>
+      <ThemeToggleButton />
+    </MainLayout>
   );
 }
 
