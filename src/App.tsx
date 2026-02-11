@@ -1,29 +1,18 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
-import MainLayout from '@/layouts/MainLayout';
-import HomePage from '@/pages/HomePage';
-import AboutPage from '@/pages/AboutPage';
+import { Routes, Route } from "react-router-dom";
+import MainLayout from "@/layouts/MainLayout";
+import HomePage from "@/pages/HomePage";
+import AboutPage from "@/pages/AboutPage";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <MainLayout>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
-
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
-
-      <ThemeToggleButton />
     </MainLayout>
   );
 }
