@@ -24,21 +24,6 @@ POS Universe is a modern Point of Sale (POS) web system designed to work seamles
 *   **Clean Code:** Write clean, readable, and maintainable code.
 *   **Fully Type-Based:** Utilize TypeScript to its full potential with strict typing.
 
-## Getting Started
-
-1.  Install dependencies:
-    ```bash
-    npm install
-    ```
-2.  Start the development server:
-    ```bash
-    npm run dev
-    ```
-3.  Build for production:
-    ```bash
-    npm run build
-    ```
-
 ## Project Structure
 
 The project follows a feature-based organization inside the `src` directory.
@@ -58,3 +43,18 @@ src/
 ├── types/            # Global TypeScript types
 └── utils/            # Utility functions
 ```
+
+## Getting Started
+
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
+2.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+3.  Build for production:
+    ```bash
+    npm run build
+    ```
