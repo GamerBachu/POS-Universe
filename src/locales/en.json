@@ -23,8 +23,10 @@
   },
   "register": {
     "title": "Register",
+    "subtitle": "Enter your credentials below",
     "submit": "Register",
-    "successMessage": "Registration successful! Redirecting...",
+    "login": "Already have an account? Log In",
+    "successMessage": "Registration successful! login now.",
     "passwordMismatch": "Passwords do not match. Please try again.",
     "usernameTaken": "Username is already taken. Please choose another one."
   }

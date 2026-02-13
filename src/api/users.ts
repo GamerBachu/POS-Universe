@@ -1,5 +1,6 @@
 import db from "../libs/db/appDb";
 import type { User } from "@/types/user";
+import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 
 export class userApi {
     static async get(id: number) {
@@ -24,5 +25,16 @@ export class userApi {
             .equals(username)
             .and((user) => user.password === password)
             .first();
+    }
+
+    static async postRegister(payload: Partial<User>) {
+
+        payload.name = payload.username; // Set name same as username for simplicity
+        payload.email = payload.username;
+        payload.isActive = true;
+        payload.createdDate = toUTCNowForDB();
+        payload.createdBy = 0;
+
+        return db.users.add(payload as User);
     }
 }

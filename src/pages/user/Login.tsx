@@ -2,6 +2,7 @@ import React, { useActionState } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
+import { Link } from "react-router-dom";
 
 interface ActionState {
   success: boolean | null;
@@ -93,12 +94,12 @@ const Login: React.FC = () => {
             >
               {isPending ? `${resource.login.submit}...` : resource.login.submit}
             </button>
-            <button
-              type="button"
-              className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all"
+            <Link
+              to="/account/register"
+              className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
             >
               {resource.login.register}
-            </button>
+            </Link>
           </div>
         </form>
       </div>
