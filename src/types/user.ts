@@ -1,7 +1,9 @@
 export interface User {
     id: number;  // primary key
     guid: string;
-    name: string;
+    nameFirst: string;
+    nameMiddle: string;
+    nameLast: string;
     email: string;
     username: string;
     password: string;

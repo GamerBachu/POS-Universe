@@ -1,7 +1,9 @@
+import type { StorageKey } from "../keys";
+
 export default class applicationStorage {
     private k: string;
-    constructor(key: string) {
-        this.k = key;
+    constructor(key: StorageKey) {
+        this.k = key.toString();
     }
 
     set = (v: string): void => {
