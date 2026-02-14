@@ -1,16 +1,11 @@
-import { userApi } from "@/api";
+
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
-import { useEffect } from "react";
+
 import { Link } from "react-router-dom";
 
 function HomePage() {
 
-  useEffect(() => {
-    userApi.post({
-      username: "Abc",
-      password: "ppp"
-    });
-  }, []);
+
 
   return (
     <>

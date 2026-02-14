@@ -1,9 +1,20 @@
-
-
 import { useActionState } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
+import { Link } from "react-router-dom";
+import { PATHS } from "@/routes/paths";
+import AppPurchase from "@/components/AppPurchase";
+
+// Defined the form interface for strict typing
+interface RegisterFormPayload {
+    username: string;
+    password?: string;
+    nameFirst: string;
+    nameMiddle: string;
+    nameLast: string;
+    email: string;
+}
 
 interface ActionState {
     success: boolean | null;
@@ -16,17 +27,40 @@ const Register = () => {
         formData: FormData,
     ): Promise<ActionState> => {
         try {
-            const username = formData.get("username") as string;
-            const password = formData.get("password") as string;
+            // Mapping FormData to our interface
+            const data: RegisterFormPayload = {
+                username: formData.get("email") as string,
+                password: formData.get("password") as string,
+                nameFirst: formData.get("nameFirst") as string,
+                nameMiddle: formData.get("nameMiddle") as string,
+                nameLast: formData.get("nameLast") as string,
+                email: formData.get("email") as string,
+            };
 
-            if (!username || !password) {
-                return { success: false, message: resource.login.invalidCredentials };
+            if (!data.username || !data.password) {
+                return {
+                    success: false,
+                    message: resource.login.invalidCredentials,
+                };
             }
-            const response = await userApi.postRegister({ username, password });
-            if (response) {
-                return { success: true, message: resource.register.successMessage };
+
+            const response = await userApi.postRegister(data);
+
+            if (!response) {
+                return { success: false, message: resource.common.error };
             }
-            return { success: false, message: resource.common.error };
+
+            // Handling statuses based on our ServiceResponse structure
+            switch (response.status) {
+                case 201:
+                    return { success: true, message: resource.register.successMessage };
+                case 409:
+                    return { success: false, message: resource.register.userExists };
+                case 400:
+                    return { success: false, message: resource.login.invalidCredentials };
+                default:
+                    return { success: false, message: resource.common.error };
+            }
         } catch {
             return { success: false, message: resource.common.error };
         }
@@ -36,9 +70,9 @@ const Register = () => {
 
     return (
         <div className="flex items-center justify-center p-6 min-h-[inherit]">
-            <div className="relative w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
-                <ThemeToggleIcon
-                    className="absolute top-4 right-4" />
+            <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
+                <ThemeToggleIcon className="absolute top-4 right-4" />
+
                 <header className="text-center mb-8">
                     <h1 className="text-2xl font-bold tracking-tight">
                         {resource.register.title}
@@ -50,27 +84,39 @@ const Register = () => {
 
                 <form action={formAction} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-                            {resource.common.usernameLabel}
+                        <label className="input-label-style">
+                            {resource.common.name}
                         </label>
                         <input
                             type="text"
-                            name="username"
+                            name="nameFirst"
                             required
-                            className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-                            placeholder={resource.common.usernamePlaceholder}
+                            className="input-style"
+                            placeholder={resource.common.namePlaceholder}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
+                        <label className="input-label-style">
+                            {resource.common.email}/  {resource.common.usernameLabel}
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            className="input-style"
+                            placeholder={resource.common.emailPlaceholder}
+                        />
+                    </div>
+                    <div>
+                        <label className="input-label-style">
                             {resource.common.passwordLabel}
                         </label>
                         <input
                             type="password"
                             name="password"
                             required
-                            className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                            className="input-style"
                             placeholder={resource.common.passwordPlaceholder}
                         />
                     </div>
@@ -78,9 +124,7 @@ const Register = () => {
                     {state?.message && (
                         <div
                             role="alert"
-                            className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success === true
-                                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800"
-                                : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800"
+                            className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success ? "status-success" : "status-error"
                                 }`}
                         >
                             {state.message}
@@ -88,23 +132,20 @@ const Register = () => {
                     )}
 
                     <div className="flex flex-col gap-3 pt-4">
-                        <button
-                            type="submit"
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-sm transition-transform active:scale-95 disabled:opacity-70"
-                            disabled={isPending}
-                        >
-                            {isPending ? `${resource.register.submit}...` : resource.register.submit}
+                        <button type="submit" className="btn-primary" disabled={isPending}>
+                            {isPending
+                                ? `${resource.register.submit}...`
+                                : resource.register.submit}
                         </button>
-                        <button
-                            type="button"
-                            className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all"
-                        >
+                        <Link to={PATHS.LOGIN} className="link-style text-center">
                             {resource.login.submit}
-                        </button>
+                        </Link>
                     </div>
+                    <AppPurchase />
                 </form>
             </div>
         </div>
     );
 };
+
 export default Register;

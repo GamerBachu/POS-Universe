@@ -3,6 +3,7 @@ import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link } from "react-router-dom";
+import { PATHS } from "@/routes/paths";
 
 interface ActionState {
   success: boolean | null;
@@ -95,7 +96,7 @@ const Login: React.FC = () => {
               {isPending ? `${resource.login.submit}...` : resource.login.submit}
             </button>
             <Link
-              to="/account/register"
+              to={PATHS.REGISTER}
               className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
             >
               {resource.login.register}

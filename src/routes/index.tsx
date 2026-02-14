@@ -5,19 +5,29 @@ import Login from '@/pages/user/Login';
 import Register from '@/pages/user/Register';
 import ErrorPage from '@/pages/ErrorPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
+
+
 
 export const router = createBrowserRouter([
     {
         path: '/',
         errorElement: <ErrorPage />, // Global catch-all for crashes
         children: [
-            { index: true, element: <HomePage /> },
-            { path: 'home', element: <Navigate to="/" replace /> }, // Clean redirect
-            { path: 'about', element: <AboutPage /> },
+            {
+                element: <ProtectedRoute />,
+                children: [
+                    { index: true, element: <HomePage /> },
+                    { path: 'home', element: <Navigate to="/" replace /> }, // Clean redirect
+                    { path: 'about', element: <AboutPage /> },
+                ],
+            },
 
             // Grouped Account Routes
             {
                 path: 'account',
+                element: <PublicRoute />,
                 children: [
                     { path: 'login', element: <Login /> },
                     { path: 'register', element: <Register /> },
@@ -31,3 +41,4 @@ export const router = createBrowserRouter([
     },
 ]);
 
+export default router;

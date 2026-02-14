@@ -2,6 +2,11 @@
   "common": {
     "welcome": "Welcome to POS Universal!",
 
+    "email": "Email",
+    "emailPlaceholder": "Email@...",
+    "name": "Name",
+    "namePlaceholder": "Name...",
+
     "usernameLabel": "Username",
     "usernamePlaceholder": "Username",
     "passwordLabel": "Password",
@@ -27,6 +32,7 @@
     "submit": "Register",
     "login": "Already have an account? Log In",
     "successMessage": "Registration successful! login now.",
+    "userExists": "User already exists. Please choose a different username.",
     "passwordMismatch": "Passwords do not match. Please try again.",
     "usernameTaken": "Username is already taken. Please choose another one."
   }
