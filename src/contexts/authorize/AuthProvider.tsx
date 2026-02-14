@@ -3,7 +3,7 @@ import type { IAuthorize } from "./type";
 import defaultSession from "./const";
 import { AuthProviderContext } from "./AuthProviderContext";
 import { applicationStorage, sessionStorage, StorageKeys } from "@/utils";
-import type { appUser } from "@/types/appUser";
+import type { authUser } from "@/types/user";
 
 
 export function AuthProvider({ children }: { children: ReactNode; }) {
@@ -11,28 +11,41 @@ export function AuthProvider({ children }: { children: ReactNode; }) {
 
     const value = {
         info,
-        setInfo: (info: IAuthorize) => {
-            setInfoStart(info);
-        },
+        setInfo: (info: IAuthorize | undefined) => { setInfoStart(info); },
     };
 
     const setInfoStart = useCallback((value: IAuthorize | undefined) => {
-        const newValue = value ?? defaultSession;
+
+        const newValue = value;
 
         const userStorage = new applicationStorage(StorageKeys.USER);
         const tokenStorage = new sessionStorage(StorageKeys.TOKEN);
 
-        const newUser: appUser = {
-            guid: newValue.account?.guid ?? "",
-            displayName: newValue.account?.displayName ?? "",
-            username: newValue.account?.username ?? "",
-            roles: newValue.account?.roles ?? [],
-            refreshToken: newValue.account?.refreshToken ?? "",
-        };
-
-        tokenStorage.set(newValue.appToken);
-        userStorage.set(JSON.stringify(newUser));
-        setInfo(newValue);
+        if (newValue === undefined) {
+            //logout
+            setInfo(defaultSession);
+            tokenStorage.remove();
+            userStorage.remove();
+        }
+        else if (newValue.isAuthorized===false) {
+            //logout
+            setInfo(defaultSession);
+            tokenStorage.remove();
+            userStorage.remove();
+        }
+        else {
+            //login
+            const newUser: authUser = {
+                guid: newValue.authUser?.guid ?? "",
+                displayName: newValue.authUser?.displayName ?? "",
+                username: newValue.authUser?.username ?? "",
+                roles: newValue.authUser?.roles ?? [],
+                refreshToken: newValue.authUser?.refreshToken ?? "",
+            };
+            tokenStorage.set(newValue.appToken);
+            userStorage.set(JSON.stringify(newUser));
+            setInfo(newValue);
+        }
     }, []);
 
 

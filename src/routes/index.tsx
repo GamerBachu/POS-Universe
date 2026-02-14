@@ -7,6 +7,7 @@ import ErrorPage from '@/pages/ErrorPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
+import Logout from '@/pages/user/Logout';
 
 
 
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
                 children: [
                     { path: 'login', element: <Login /> },
                     { path: 'register', element: <Register /> },
+                    { path: 'logout', element: <Logout /> },
                 ],
             },
 

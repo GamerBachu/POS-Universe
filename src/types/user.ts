@@ -23,3 +23,13 @@ export interface UserToken {
     validTill: string;
     createdDate: string;
 }
+
+export interface authUser {
+
+    guid: string;
+    displayName: string;
+    username: string;
+    roles: string[];
+    refreshToken: string;
+
+}

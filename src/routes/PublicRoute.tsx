@@ -1,10 +1,11 @@
-import { useAuth } from "@/contexts/authorize";
-import { Navigate, Outlet } from "react-router-dom";
-import { PATHS } from "./paths";
+
+import {  Outlet } from "react-router-dom";
+
 
 const PublicRoute = () => {
-    const auth = useAuth();
-    const isAuthorized = auth?.info?.isAuthorized;
-    return isAuthorized ? <Navigate to={PATHS.START} replace /> : <Outlet />;
+    // const auth = useAuth();
+    // const isAuthorized = auth?.info?.isAuthorized;
+    // return isAuthorized ? <Navigate to={PATHS.START} replace /> : <Outlet />;
+    return <Outlet />;
 };
 export default PublicRoute;

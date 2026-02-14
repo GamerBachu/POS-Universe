@@ -1,9 +1,13 @@
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
+import { useAuth } from "@/contexts/authorize";
+import type { User, UserToken } from "@/types/user";
+import { getName } from "@/utils";
+import type { IAuthorize } from "@/contexts/authorize/type";
 
 interface ActionState {
   success: boolean | null;
@@ -11,6 +15,8 @@ interface ActionState {
 }
 
 const Login: React.FC = () => {
+  const auth = useAuth();
+
   const loginAction = async (
     prevState: ActionState | null,
     formData: FormData,
@@ -23,22 +29,70 @@ const Login: React.FC = () => {
         return { success: false, message: resource.login.invalidCredentials };
       }
       const response = await userApi.postLogin(username, password);
-      if (response) {
-        return { success: true, message: resource.login.successMessage };
+
+      if (!response) {
+        return { success: false, message: resource.common.error };
       }
-      return { success: false, message: resource.login.invalidCredentials };
+
+      // Handling statuses based on our ServiceResponse structure
+      switch (response.status) {
+        case 200: {
+          const { user, token } = response.data as {
+            user: User;
+            token: UserToken;
+          };
+
+          const authUser = {
+            guid: user.guid,
+            displayName: getName(
+              user.nameFirst,
+              user.nameMiddle,
+              user.nameLast,
+            ),
+            username: user.username,
+            roles: [],
+            refreshToken: "",
+          };
+
+          const info: IAuthorize = {
+            authUser,
+            appToken: token.token,
+            isAuthorized: true,
+          };
+
+          auth.setInfo(info);
+
+          return { success: true, message: resource.login.successMessage };
+        }
+        case 400:
+        case 401:
+        case 404:
+          return { success: false, message: resource.login.invalidCredentials };
+        default:
+          return { success: false, message: resource.common.error };
+      }
     } catch {
-      return { success: false, message: resource.common.error };
+      return {
+        success: false,
+        message: resource.common.error,
+      };
     }
   };
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (state === null) return;
+    else if (state.success === false) return;
+    else {
+      navigate(PATHS.START, { replace: true }); // Using replace: true is often a good practice here
+    }
+  }, [state, navigate]);
 
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">
       <div className="relative w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
-        <ThemeToggleIcon
-          className="absolute top-4 right-4" />
+        <ThemeToggleIcon className="absolute top-4 right-4" />
         <header className="text-center mb-8">
           <h1 className="text-2xl font-bold tracking-tight">
             {resource.login.title}
@@ -93,7 +147,9 @@ const Login: React.FC = () => {
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-sm transition-transform active:scale-95 disabled:opacity-70"
               disabled={isPending}
             >
-              {isPending ? `${resource.login.submit}...` : resource.login.submit}
+              {isPending
+                ? `${resource.login.submit}...`
+                : resource.login.submit}
             </button>
             <Link
               to={PATHS.REGISTER}

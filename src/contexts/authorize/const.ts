@@ -1,6 +1,6 @@
 import type { IAuthorize } from "./type";
 const defaultSession: IAuthorize = {
-    account: undefined,
+    authUser: undefined,
     isAuthorized: false,
     appToken: "",
 };

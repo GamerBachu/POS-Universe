@@ -1,12 +1,12 @@
-import type { appUser } from "@/types/appUser";
+import type { authUser } from "@/types/user";
 
 export type AuthProviderState = {
     info: IAuthorize;
-    setInfo: (info: IAuthorize) => void;
+    setInfo: (info: IAuthorize | undefined) => void;
 };
 
 export interface IAuthorize {
-    account?: appUser;
     isAuthorized: boolean;
     appToken: string;
+    authUser?: authUser;
 }

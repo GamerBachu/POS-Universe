@@ -19,9 +19,9 @@ export const toUTCForDB = (localDateTime: string | undefined | null): string => 
  * Example: "2026-01-31T13:14" -> "2026-01-31T07:44:00.000Z" (depending on local offset)
  */
 
-export const toUTCNowForDB = (): string => {
-    const date = new Date();
-    return date.toISOString();
+export const toUTCNowForDB = (date?: Date): string => {
+    const d = date || new Date();
+    return d.toISOString();
 };
 
 

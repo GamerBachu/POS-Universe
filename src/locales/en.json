@@ -35,5 +35,10 @@
     "userExists": "User already exists. Please choose a different username.",
     "passwordMismatch": "Passwords do not match. Please try again.",
     "usernameTaken": "Username is already taken. Please choose another one."
+  },
+  "logout": {
+    "successMessage": "Logout successful!",
+    "subtitle": "logout successful, can be close app safely",
+    "errorMessage": "Logout failed. Please try again."
   }
 }
