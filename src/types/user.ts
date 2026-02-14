@@ -1,7 +1,9 @@
 export interface User {
     id: number;  // primary key
     guid: string;
-    name: string;
+    nameFirst: string;
+    nameMiddle: string;
+    nameLast: string;
     email: string;
     username: string;
     password: string;
@@ -20,4 +22,14 @@ export interface UserToken {
     token: string;
     validTill: string;
     createdDate: string;
+}
+
+export interface authUser {
+
+    guid: string;
+    displayName: string;
+    username: string;
+    roles: string[];
+    refreshToken: string;
+
 }

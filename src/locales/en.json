@@ -1,0 +1,44 @@
+{
+  "common": {
+    "welcome": "Welcome to POS Universal!",
+
+    "email": "Email",
+    "emailPlaceholder": "Email@...",
+    "name": "Name",
+    "namePlaceholder": "Name...",
+
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Username",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "******************",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "******************",
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again."
+  },
+
+  "login": {
+    "title": "Account Login",
+    "subtitle": "Enter your credentials below",
+    "submit": "Log In",
+    "forgotPassword": "Forgot Password?",
+    "register": "Create new account",
+    "successMessage": "Login successful! Redirecting...",
+    "invalidCredentials": "Invalid username or password. Please try again."
+  },
+  "register": {
+    "title": "Register",
+    "subtitle": "Enter your credentials below",
+    "submit": "Register",
+    "login": "Already have an account? Log In",
+    "successMessage": "Registration successful! login now.",
+    "userExists": "User already exists. Please choose a different username.",
+    "passwordMismatch": "Passwords do not match. Please try again.",
+    "usernameTaken": "Username is already taken. Please choose another one."
+  },
+  "logout": {
+    "successMessage": "Logout successful!",
+    "subtitle": "logout successful, can be close app safely",
+    "errorMessage": "Logout failed. Please try again."
+  }
+}
