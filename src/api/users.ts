@@ -171,6 +171,69 @@ export class userApi {
         };
     }
 
+
+
+    static async postValidateToken(token: string, device: string,): Promise<ServiceResponse<{ user: User; token: UserToken; }>> {
+        // 1. Validation (400 Bad Request)
+        if (!token || !device) {
+            return {
+                success: false,
+                status: 400,
+                message: "Username and password are required.",
+                errorCode: "MISSING_FIELDS",
+            };
+        }
+
+        // 2. Business Logic Check (404 Not Found)
+        const userToken = await db.userTokens.where("token").equals(token).first();
+        if (!userToken) {
+            return {
+                success: false,
+                status: 404,
+                message: "User not found.",
+                errorCode: "USER_NOT_FOUND",
+            };
+        }
+
+        // 3. validate user
+        const user = await db.users.get(userToken.userId);
+        if (!user) {
+            return {
+                success: false,
+                status: 401,
+                message: "Invalid credentials.",
+                errorCode: "INVALID_CREDENTIALS",
+            };
+        }
+
+        user.password = ""; // Clear password before returning user data
+
+        //  create token and refresh token here if needed, for now we just return the user data
+
+        // Invalidate existing tokens for the user
+        await db.userTokens.where("userId").equals(user.id).delete();
+
+        // Create a new token for the user
+        const newToken = {
+            userId: user.id,
+            token: generateGuidV2().toUpperCase(),
+            validTill: toUTCNowForDB(new Date(Date.now() + tokenValidTill)), // token valid for 1 hour
+            createdDate: toUTCNowForDB(),
+        };
+        const d = await db.userTokens.add(newToken);
+        // 4. Success (200 OK)
+        return {
+            success: false,
+            status: 200,
+            message: "Login successful.",
+            data: {
+                user,
+                token: { ...newToken, id: d } as UserToken,
+            },
+        };
+    }
+
+
     /**
      * Hashes a password using the native Web Crypto API (SHA-256).
      * This ensures that even if the IndexedDB is exported,

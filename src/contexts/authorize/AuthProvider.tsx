@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import type { IAuthorize } from "./type";
 import defaultSession from "./const";
 import { AuthProviderContext } from "./AuthProviderContext";
@@ -9,25 +9,11 @@ import type { authUser } from "@/types/user";
 export function AuthProvider({ children }: { children: ReactNode; }) {
     const [info, setInfo] = useState<IAuthorize>(() => defaultSession);
 
-    const value = {
-        info,
-        setInfo: (info: IAuthorize | undefined) => { setInfoStart(info); },
-    };
-
     const setInfoStart = useCallback((value: IAuthorize | undefined) => {
-
-        const newValue = value;
-
         const userStorage = new applicationStorage(StorageKeys.USER);
         const tokenStorage = new sessionStorage(StorageKeys.TOKEN);
 
-        if (newValue === undefined) {
-            //logout
-            setInfo(defaultSession);
-            tokenStorage.remove();
-            userStorage.remove();
-        }
-        else if (newValue.isAuthorized===false) {
+        if (value === undefined || value.isAuthorized === false) {
             //logout
             setInfo(defaultSession);
             tokenStorage.remove();
@@ -36,17 +22,23 @@ export function AuthProvider({ children }: { children: ReactNode; }) {
         else {
             //login
             const newUser: authUser = {
-                guid: newValue.authUser?.guid ?? "",
-                displayName: newValue.authUser?.displayName ?? "",
-                username: newValue.authUser?.username ?? "",
-                roles: newValue.authUser?.roles ?? [],
-                refreshToken: newValue.authUser?.refreshToken ?? "",
+                guid: value.authUser?.guid ?? "",
+                displayName: value.authUser?.displayName ?? "",
+                username: value.authUser?.username ?? "",
+                roles: value.authUser?.roles ?? [],
+                refreshToken: value.authUser?.refreshToken ?? "",
             };
-            tokenStorage.set(newValue.appToken);
+            tokenStorage.set(value.appToken);
             userStorage.set(JSON.stringify(newUser));
-            setInfo(newValue);
+            setInfo(value);
         }
     }, []);
+
+    const value = useMemo(() => ({
+        info,
+        setInfo: setInfoStart,
+    }), [info, setInfoStart]);
+
 
 
     return (

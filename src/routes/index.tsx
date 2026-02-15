@@ -1,5 +1,6 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/HomePage';
+import Index from '@/pages/Index';
 import AboutPage from '@/pages/AboutPage';
 import Login from '@/pages/user/Login';
 import Register from '@/pages/user/Register';
@@ -8,6 +9,8 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import Logout from '@/pages/user/Logout';
+import Dashboard from '@/pages/Dashboard';
+import Verify from '@/pages/user/Verify';
 
 
 
@@ -19,12 +22,12 @@ export const router = createBrowserRouter([
             {
                 element: <ProtectedRoute />,
                 children: [
-                    { index: true, element: <HomePage /> },
-                    { path: 'home', element: <Navigate to="/" replace /> }, // Clean redirect
+                    { index: true, element: <Index /> },
+                    { path: 'home', element: <HomePage /> },
                     { path: 'about', element: <AboutPage /> },
+                    { path: 'dashboard', element: <Dashboard /> }
                 ],
             },
-
             // Grouped Account Routes
             {
                 path: 'account',
@@ -33,6 +36,7 @@ export const router = createBrowserRouter([
                     { path: 'login', element: <Login /> },
                     { path: 'register', element: <Register /> },
                     { path: 'logout', element: <Logout /> },
+                    { path: 'verify', element: <Verify /> }
                 ],
             },
 
