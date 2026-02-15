@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type ReactNode } from "react";
 import type { IAuthorize } from "./type";
 import defaultSession from "./const";
 import { AuthProviderContext } from "./AuthProviderContext";
-import { applicationStorage, sessionStorage, StorageKeys } from "@/utils";
+import { applicationStorage, StorageKeys } from "@/utils";
 import type { authUser } from "@/types/user";
 
 
@@ -11,7 +11,7 @@ export function AuthProvider({ children }: { children: ReactNode; }) {
 
     const setInfoStart = useCallback((value: IAuthorize | undefined) => {
         const userStorage = new applicationStorage(StorageKeys.USER);
-        const tokenStorage = new sessionStorage(StorageKeys.TOKEN);
+        const tokenStorage = new applicationStorage(StorageKeys.TOKEN);
 
         if (value === undefined || value.isAuthorized === false) {
             //logout

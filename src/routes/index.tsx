@@ -1,4 +1,5 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Suspense } from 'react';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import HomePage from '@/pages/HomePage';
 import Index from '@/pages/Index';
 import AboutPage from '@/pages/AboutPage';
@@ -11,12 +12,18 @@ import PublicRoute from './PublicRoute';
 import Logout from '@/pages/user/Logout';
 import Dashboard from '@/pages/Dashboard';
 import Verify from '@/pages/user/Verify';
+import Loader from '@/components/Loader';
 
 
 
 export const router = createBrowserRouter([
     {
         path: '/',
+        element: (
+            <Suspense fallback={<Loader></Loader>}>
+                <Outlet />
+            </Suspense>
+        ),
         errorElement: <ErrorPage />, // Global catch-all for crashes
         children: [
             {

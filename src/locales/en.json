@@ -1,5 +1,6 @@
 {
   "common": {
+    "appName": "POS Universal",
     "welcome": "Welcome to POS Universal!",
 
     "email": "Email",
@@ -42,5 +43,35 @@
     "successMessage": "Logout successful!",
     "subtitle": "logout successful, can be close app safely",
     "errorMessage": "Logout failed. Please try again."
+  },
+  "sidebar": {
+    "searchPlaceholder": "Search...",
+    "noResults": "No results found",
+    "showAll": " Show all",
+    "searchPrefix": "Search for"
+  },
+  "navigation": {
+    "dashboard_label": "Dashboard",
+    "dashboard_desc": "Real-time overview of sales and system status.",
+    "home_label": "Home",
+    "home_desc": "Quick access to primary POS functions.",
+    
+    "logIn_label": "Sign In",
+    "logIn_desc": "Log in to synchronize local data.",
+
+    "register_label": "Register",
+    "register_desc": "Create a new local store profile.",
+
+    "logout_label": "Logout",
+    "logout_desc": "Securely end the current session.",
+
+    "about_label": "About",
+    "about_desc": "Version info and documentation.",
+
+    "error_label": "Error",
+    "error_desc": "System error fallback page.",
+
+    "not_found_label": "Not Found",
+    "not_found_desc": "404 page."
   }
 }

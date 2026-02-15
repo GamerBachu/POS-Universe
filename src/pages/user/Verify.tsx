@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import { userApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
 import { isValidPath, PATHS } from "@/routes/paths";
-import { getName, sessionStorage, StorageKeys } from "@/utils";
+import { getName, applicationStorage, StorageKeys } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
 import type { User, UserToken } from "@/types/user";
 import Loader from "@/components/Loader";
@@ -15,7 +15,7 @@ const Verify = () => {
     const location = useLocation();
     const isVerifying = useRef(false); // Prevent double-execution in Strict Mode
 
-    // Blacklisted paths that we should never redirect "back" to
+    // block paths that we should never redirect "back" to
     const AUTH_PATHS = useMemo(() => new Set([
         "/",
         PATHS.LOGIN,
@@ -42,7 +42,7 @@ const Verify = () => {
         if (isVerifying.current) return;
         isVerifying.current = true;
 
-        const tokenStorage = new sessionStorage(StorageKeys.TOKEN);
+        const tokenStorage = new applicationStorage(StorageKeys.TOKEN);
         const storedToken = tokenStorage.get();
 
         const handleVerification = async () => {

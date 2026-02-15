@@ -1,4 +1,4 @@
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useCallback, useEffect, useMemo } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
@@ -83,29 +83,33 @@ const Login: React.FC = () => {
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
+  const AUTH_PATHS = useMemo(() => new Set([
+    "/",
+    PATHS.LOGIN,
+    PATHS.REGISTER,
+    PATHS.LOGOUT,
+    PATHS.ERROR,
+    PATHS.VERIFY
+  ]), []);
+
+  const getSafeRedirectUrl = useCallback(() => {
+    const from = location.state?.from;
+    const fromUrl = from?.pathname;
+
+    if (!fromUrl || AUTH_PATHS.has(fromUrl) || !isValidPath(fromUrl)) {
+      return PATHS.START;
+    }
+
+    return fromUrl + (from?.search || "");
+  }, [AUTH_PATHS, location]);
+
   useEffect(() => {
     if (state === null) return;
     else if (state.success === false) return;
     else {
-      let finalUrl = "/";
-      const fromUrl = location.state?.from?.pathname;
-      if (fromUrl) {
-        if (fromUrl === "/") {
-          finalUrl = PATHS.START;
-        }
-        else if (isValidPath(fromUrl)) {
-          finalUrl = fromUrl;
-        }
-        else {
-          finalUrl = PATHS.START;
-        }
-      }
-      else {
-        finalUrl = PATHS.START;
-      }
-      navigate(finalUrl, { replace: true });
+      navigate(getSafeRedirectUrl(), { replace: true });
     }
-  }, [state, navigate, location.state?.from?.pathname]);
+  }, [state, navigate, getSafeRedirectUrl]);
 
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">

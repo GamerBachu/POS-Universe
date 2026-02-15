@@ -1,12 +1,12 @@
 export const PATHS = {
     START: '/dashboard',
-    HOME: '/home',
     DASHBOARD: '/dashboard',
+    HOME: '/home',
     ABOUT: '/about',
     LOGIN: '/account/login',
-    VERIFY: '/account/verify',
-    LOGOUT: '/account/logout',
     REGISTER: '/account/register',
+    LOGOUT: '/account/logout',
+    VERIFY: '/account/verify',
     ERROR: '/error',
     NOT_FOUND:"/not-found"
 
