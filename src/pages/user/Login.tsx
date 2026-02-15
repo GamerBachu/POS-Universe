@@ -2,8 +2,8 @@ import React, { useActionState, useEffect } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
-import { Link, useNavigate } from "react-router-dom";
-import { PATHS } from "@/routes/paths";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { isValidPath, PATHS } from "@/routes/paths";
 import { useAuth } from "@/contexts/authorize";
 import type { User, UserToken } from "@/types/user";
 import { getName } from "@/utils";
@@ -16,6 +16,8 @@ interface ActionState {
 
 const Login: React.FC = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const loginAction = async (
     prevState: ActionState | null,
@@ -80,14 +82,30 @@ const Login: React.FC = () => {
   };
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
-  const navigate = useNavigate();
+
   useEffect(() => {
     if (state === null) return;
     else if (state.success === false) return;
     else {
-      navigate(PATHS.START, { replace: true }); // Using replace: true is often a good practice here
+      let finalUrl = "/";
+      const fromUrl = location.state?.from?.pathname;
+      if (fromUrl) {
+        if (fromUrl === "/") {
+          finalUrl = PATHS.START;
+        }
+        else if (isValidPath(fromUrl)) {
+          finalUrl = fromUrl;
+        }
+        else {
+          finalUrl = PATHS.START;
+        }
+      }
+      else {
+        finalUrl = PATHS.START;
+      }
+      navigate(finalUrl, { replace: true });
     }
-  }, [state, navigate]);
+  }, [state, navigate, location.state?.from?.pathname]);
 
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">

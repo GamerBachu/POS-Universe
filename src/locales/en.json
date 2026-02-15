@@ -7,6 +7,8 @@
     "name": "Name",
     "namePlaceholder": "Name...",
 
+    "verifyUser": "Please wait, validating...",
+
     "usernameLabel": "Username",
     "usernamePlaceholder": "Username",
     "passwordLabel": "Password",

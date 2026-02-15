@@ -58,3 +58,8 @@ src/
 ├── types/            # Global TypeScript types
 └── utils/            # Utility functions
 ```
+
+
+Base Styling: The index.html file's #root div must contain the following classes to ensure consistent background and text rendering across themes:
+
+min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100
