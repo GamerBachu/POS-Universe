@@ -17,7 +17,28 @@
     "confirmPasswordLabel": "Confirm Password",
     "confirmPasswordPlaceholder": "******************",
     "loading": "Loading...",
-    "error": "An error occurred. Please try again."
+    "error": "An error occurred. Please try again.",
+
+    "noData": "No records found.",
+
+    "toggleActive": "Enable or disable this attribute for product configurations.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "yes": "Yes",
+    "no": "No",
+
+    "btnAction": "Action",
+    "btnBackList": "Back to list",
+    "btnAdd": "Add New",
+    "btnView": "View",
+    "btnEdit": "Edit",
+    "btnDelete": "Delete",
+    "btnSave": "Save",
+    "btnCancel": "Cancel",
+    "failedDelete": "Delete failed. Please try again",
+
+    "successDelete": "Delete successful",
+    "successSave": "Save successful"
   },
 
   "login": {
@@ -55,7 +76,7 @@
     "dashboard_desc": "Real-time overview of sales and system status.",
     "home_label": "Home",
     "home_desc": "Quick access to primary POS functions.",
-    
+
     "logIn_label": "Sign In",
     "logIn_desc": "Log in to synchronize local data.",
 
@@ -72,6 +93,26 @@
     "error_desc": "System error fallback page.",
 
     "not_found_label": "Not Found",
-    "not_found_desc": "404 page."
+    "not_found_desc": "404 page.",
+
+    "product_list_label": "Product Inventory",
+    "product_list_desc": "Product Inventory entry page",
+
+    "master_pro__attr_label": "Product Attribute Master",
+    "master_pro__attr_desc": "Product Attribute Master entry page"
+  },
+  "product_inventory": {
+    "btn_add": "+ Add New Product",
+    "btn_edit": "Edit Product",
+    "btn_view": "View Product",
+    "btn_delete": "Delete Product"
+  },
+  "mst_product_attribute": {
+    "lblId": "Id",
+    "lblName": "Name",
+    "placeHolder_Name": "Name...",
+    "lblActive": "Active",
+    "Req_Name": "Name is required",
+    "toggleActive": "Active attributes are visible and selectable during product setup."
   }
 }

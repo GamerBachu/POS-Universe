@@ -1,0 +1,208 @@
+import { useActionState, useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { PATHS } from "@/routes/paths";
+import resource from "@/locales/en.json";
+import { masterProductAttributeApi } from "@/api";
+import { type IMasterProductAttribute } from "@/types/masters";
+import type { IActionState } from "@/types/actionState";
+import CommonLayout from "@/layouts/CommonLayout";
+
+const AttributeForm = () => {
+  // Directly extract and normalize params
+  const { id: rawId, action: rawAction } = useParams();
+  const navigate = useNavigate();
+
+  const id = Number(rawId);
+  const action = rawAction?.toLowerCase() || "";
+
+  const [initialData, setInitialData] = useState<IMasterProductAttribute>({
+    id: 0,
+    isActive: true,
+    name: "",
+  });
+
+  const onSendBack = useCallback(
+    (i: string) => {
+      navigate(`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${i}`);
+    },
+    [navigate],
+  );
+
+  useEffect(() => {
+    // Validate ID and Action early
+    if (isNaN(id) || !action) {
+      onSendBack("-1");
+      return;
+    }
+
+    // Only fetch if we aren't adding a new record
+    if (action !== "add") {
+      masterProductAttributeApi
+        .getById(id)
+        .then((res) => {
+          if (res.success && res.data) {
+            setInitialData(res.data);
+          } else {
+            onSendBack("-1");
+          }
+        })
+        .catch(() => onSendBack("-1"));
+    }
+  }, [id, action, onSendBack]);
+
+  const handleAction = async (
+    prevState: IActionState | null,
+    formData: FormData,
+  ): Promise<IActionState> => {
+    try {
+      // 1. Delete Logic
+      if (action === "delete") {
+        const res = await masterProductAttributeApi.delete(id);
+        if (res.success) {
+          onSendBack("0");
+          return { success: true, message: resource.common.successDelete };
+        }
+        return { success: false, message: resource.common.failedDelete };
+      }
+
+      // 2. Add/Edit Logic
+      const name = formData.get("name") as string;
+      const isActive = formData.get("isActive") === "on";
+
+      if (!name?.trim()) {
+        return {
+          success: false,
+          message: resource.mst_product_attribute.Req_Name,
+        };
+      }
+
+      const payload: IMasterProductAttribute = {
+        id: action === "edit" ? id : 0,
+        name: name.trim(),
+        isActive: isActive,
+      };
+
+      const response =
+        action === "edit"
+          ? await masterProductAttributeApi.update(id, payload)
+          : await masterProductAttributeApi.add(payload);
+
+      if (response.success) {
+        // Optional: you could navigate back here automatically
+        // onSendBack("0");
+        return { success: true, message: resource.common.successSave };
+      }
+
+      return {
+        success: false,
+        message: resource.common.error,
+      };
+    } catch {
+      return {
+        success: false,
+        message: resource.common.error,
+      };
+    }
+  };
+
+  const [state, formAction, isPending] = useActionState(handleAction, null);
+
+  const isReadOnly = action === "view" || action === "delete";
+
+  return (
+    <CommonLayout h1={resource.navigation.master_pro__attr_label}>
+      {/* Header section */}
+      <div className="flex justify-between items-center mb-4 px-1">
+        <h1 className="text-lg font-bold text-gray-800 dark:text-white capitalize">
+          {action} {resource.navigation.master_pro__attr_label}
+        </h1>
+        <Link
+          to={`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${id}`}
+          className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
+        >
+          {resource.common.btnBackList}
+        </Link>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+        <form action={formAction} className="p-5 space-y-6">
+          <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-1">
+              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {resource.mst_product_attribute.lblName}
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                required
+                type="text"
+                name="name"
+                disabled={isReadOnly}
+                defaultValue={initialData.name}
+                key={`name-${initialData.name}`}
+                placeholder={resource.mst_product_attribute.placeHolder_Name}
+                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
+              />
+            </div>
+            <label
+              htmlFor="isActive"
+              className={`flex items-center justify-between p-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 ${!isReadOnly ? 'cursor-pointer' : ''}`}
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                  {resource.mst_product_attribute.lblActive}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {resource.mst_product_attribute.toggleActive}
+                </span>
+              </div>
+
+              <div className="relative inline-flex items-center">
+                <input
+                  type="checkbox"
+                  id="isActive"
+                  name="isActive"
+                  disabled={isReadOnly}
+                  defaultChecked={initialData.isActive}
+                  key={`active-${initialData.isActive}`}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 disabled:opacity-50"></div>
+              </div>
+            </label>
+          </div>
+          {state?.message && (
+            <div
+              role="alert"
+              className={`p-2 rounded text-sm text-center font-medium border ${state.success
+                ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-900"
+                : "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/10 dark:text-red-400 dark:border-red-900"
+                }`}
+            >
+              {state.message}
+            </div>
+          )}
+          <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
+            <Link
+              to={`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${id}`}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
+            >
+              {resource.common.btnBackList}
+            </Link>
+            {action !== "view" && (
+              <button
+                type="submit"
+                disabled={isPending}
+                className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                  } disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all`}
+              >
+                {isPending ? "..." : action === "delete" ? resource.common.btnDelete : resource.common.btnSave}
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+    </CommonLayout>
+  );
+};
+
+export default AttributeForm;

@@ -1,13 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import resource from "@/locales/en.json";
 import { SIDEBAR_MENU } from "@/routes/navigationMenu";
-import { Link } from "react-router-dom";
 import AppVersion from "./AppVersion";
 
 const SideBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const location = useLocation();
 
-    // Keyboard shortcut to clear search on Escape
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") setSearchTerm("");
@@ -16,17 +16,11 @@ const SideBar = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    // Optimized filtering logic
     const filteredMenu = useMemo(() => {
         if (!searchTerm.trim()) return SIDEBAR_MENU;
-
-        // Split by space and remove empty strings from multiple spaces
         const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
-
         return SIDEBAR_MENU.filter((item) => {
             const contentToSearch = `${item.label} ${item.description}`.toLowerCase();
-
-            // "AND" logic: item must contain every word typed in the search
             return searchWords.every((word) => contentToSearch.includes(word));
         });
     }, [searchTerm]);
@@ -34,8 +28,10 @@ const SideBar = () => {
     return (
         <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 transition-colors duration-200">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold mb-4">
-                    {resource.common.appName}</h2>
+                <h2 className="text-xl font-bold mb-4 text-center">
+                    {resource.common.appName}
+                </h2>
+
                 <div className="relative">
                     <input
                         type="text"
@@ -55,27 +51,36 @@ const SideBar = () => {
                 </div>
             </div>
 
-            {/* Hidden scrollbar with custom classes */}
-            <nav className="flex-1 overflow-y-auto p-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <nav className="flex-1 overflow-y-auto p-2 [&::-webkit-scrollbar]:hidden">
                 <ul className="space-y-1">
                     {filteredMenu.length > 0 ? (
-                        filteredMenu.map((item) => (
-                            <li key={item.path} title={item.description}>
-                                <Link
-                                    key={item.path}
-                                    to={item.path}
-                                    className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
-                                >
-                                    <span role="img" aria-label={item.label} className="text-xl">
-                                        {item.icon}
-                                    </span>
-                                    <span className="font-medium text-sm">{item.label}</span>
-                                </Link>
-                            </li>
-                        ))
+                        filteredMenu.map((item) => {
+                            const isActive = location.pathname === item.path;
+
+                            return (
+                                <li key={item.path} title={item.description}>
+                                    <Link
+                                        to={item.path}
+                                        className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 ${isActive
+                                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold shadow-sm"
+                                                : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            }`}
+                                    >
+                                        <span
+                                            role="img"
+                                            aria-label={item.label}
+                                            className={`text-base w-6 shrink-0 transition-transform ${isActive ? "scale-110" : ""}`}
+                                        >
+                                            {item.icon}
+                                        </span>
+                                        <span className="text-sm truncate">{item.label}</span>
+                                    </Link>
+                                </li>
+                            );
+                        })
                     ) : (
                         <li className="flex flex-col items-center justify-center py-10 px-4 text-center">
-                            <span className="text-3xl mb-2 opacity-50">🚫</span>
+                            <span className="text-2xl mb-2 opacity-50">🚫</span>
                             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 {resource.sidebar.noResults}
                             </p>
@@ -99,5 +104,4 @@ const SideBar = () => {
         </aside>
     );
 };
-
 export default SideBar;

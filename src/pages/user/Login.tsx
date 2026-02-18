@@ -8,11 +8,9 @@ import { useAuth } from "@/contexts/authorize";
 import type { User, UserToken } from "@/types/user";
 import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
+import type { IActionState } from "@/types/actionState";
 
-interface ActionState {
-  success: boolean | null;
-  message: string;
-}
+
 
 const Login: React.FC = () => {
   const auth = useAuth();
@@ -20,9 +18,9 @@ const Login: React.FC = () => {
   const location = useLocation();
 
   const loginAction = async (
-    prevState: ActionState | null,
+    prevState: IActionState | null,
     formData: FormData,
-  ): Promise<ActionState> => {
+  ): Promise<IActionState> => {
     try {
       const username = formData.get("username") as string;
       const password = formData.get("password") as string;

@@ -21,6 +21,24 @@ const NavigationMenu: IMenuItem[] = [
         icon: "🏠",
     },
 
+    // --- Product list ----
+    {
+        path: PATHS.PRODUCT_LIST,
+        label: resource.navigation.product_list_label,
+        description: resource.navigation.product_list_desc,
+        category: "product",
+        isVisible: true,
+        icon: "🛒",
+    },
+    {
+        path: PATHS.MASTER_ATTRIBUTE_LIST,
+        label: resource.navigation.master_pro__attr_label,
+        description: resource.navigation.master_pro__attr_desc,
+        category: "product",
+        isVisible: true,
+        icon: "🛒",
+    },
+
     // --- Account & Auth Routes ---
     {
         path: PATHS.LOGIN,
