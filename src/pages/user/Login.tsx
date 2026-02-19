@@ -1,4 +1,4 @@
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useCallback, useEffect, useMemo } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
@@ -8,11 +8,9 @@ import { useAuth } from "@/contexts/authorize";
 import type { User, UserToken } from "@/types/user";
 import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
+import type { IActionState } from "@/types/actionState";
 
-interface ActionState {
-  success: boolean | null;
-  message: string;
-}
+
 
 const Login: React.FC = () => {
   const auth = useAuth();
@@ -20,15 +18,15 @@ const Login: React.FC = () => {
   const location = useLocation();
 
   const loginAction = async (
-    prevState: ActionState | null,
+    prevState: IActionState | null,
     formData: FormData,
-  ): Promise<ActionState> => {
+  ): Promise<IActionState> => {
     try {
       const username = formData.get("username") as string;
       const password = formData.get("password") as string;
 
       if (!username || !password) {
-        return { success: false, message: resource.login.invalidCredentials };
+        return { success: false, message: resource.login.invalid_credentials };
       }
       const response = await userApi.postLogin(username, password);
 
@@ -64,12 +62,12 @@ const Login: React.FC = () => {
 
           auth.setInfo(info);
 
-          return { success: true, message: resource.login.successMessage };
+          return { success: true, message: resource.login.success_message };
         }
         case 400:
         case 401:
         case 404:
-          return { success: false, message: resource.login.invalidCredentials };
+          return { success: false, message: resource.login.invalid_credentials };
         default:
           return { success: false, message: resource.common.error };
       }
@@ -83,29 +81,33 @@ const Login: React.FC = () => {
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
+  const AUTH_PATHS = useMemo(() => new Set([
+    "/",
+    PATHS.LOGIN,
+    PATHS.REGISTER,
+    PATHS.LOGOUT,
+    PATHS.ERROR,
+    PATHS.VERIFY
+  ]), []);
+
+  const getSafeRedirectUrl = useCallback(() => {
+    const from = location.state?.from;
+    const fromUrl = from?.pathname;
+
+    if (!fromUrl || AUTH_PATHS.has(fromUrl) || !isValidPath(fromUrl)) {
+      return PATHS.START;
+    }
+
+    return fromUrl + (from?.search || "");
+  }, [AUTH_PATHS, location]);
+
   useEffect(() => {
     if (state === null) return;
     else if (state.success === false) return;
     else {
-      let finalUrl = "/";
-      const fromUrl = location.state?.from?.pathname;
-      if (fromUrl) {
-        if (fromUrl === "/") {
-          finalUrl = PATHS.START;
-        }
-        else if (isValidPath(fromUrl)) {
-          finalUrl = fromUrl;
-        }
-        else {
-          finalUrl = PATHS.START;
-        }
-      }
-      else {
-        finalUrl = PATHS.START;
-      }
-      navigate(finalUrl, { replace: true });
+      navigate(getSafeRedirectUrl(), { replace: true });
     }
-  }, [state, navigate, location.state?.from?.pathname]);
+  }, [state, navigate, getSafeRedirectUrl]);
 
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">
@@ -123,27 +125,27 @@ const Login: React.FC = () => {
         <form action={formAction} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.usernameLabel}
+              {resource.common.username}
             </label>
             <input
               type="text"
               name="username"
               required
               className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.usernamePlaceholder}
+              placeholder={resource.common.ph_username}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.passwordLabel}
+              {resource.common.password}
             </label>
             <input
               type="password"
               name="password"
               required
               className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.passwordPlaceholder}
+              placeholder={resource.common.ph_password}
             />
           </div>
 

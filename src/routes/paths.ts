@@ -1,14 +1,26 @@
 export const PATHS = {
     START: '/dashboard',
-    HOME: '/home',
     DASHBOARD: '/dashboard',
+    HOME: '/home',
     ABOUT: '/about',
     LOGIN: '/account/login',
-    VERIFY: '/account/verify',
-    LOGOUT: '/account/logout',
     REGISTER: '/account/register',
+    LOGOUT: '/account/logout',
+    VERIFY: '/account/verify',
     ERROR: '/error',
-    NOT_FOUND:"/not-found"
+    NOT_FOUND: "/not-found",
+    PRODUCT_LIST: "/product_v1/list",
+    PRODUCT_ADD: "/product_v1/add",
+    PRODUCT_EDIT: "/product_v1/edit/",
+    PRODUCT_VIEW: "/product_v1/view/",
+    PRODUCT_DELETE: "/product_v1/delete/",
+
+    MASTER_ATTRIBUTE_LIST: "/m_pro_attribute/list",
+    MASTER_ATTRIBUTE_ADD: "/m_pro_attribute/page/add/",
+    MASTER_ATTRIBUTE_EDIT: "/m_pro_attribute/page/edit/",
+    MASTER_ATTRIBUTE_VIEW: "/m_pro_attribute/page/view/",
+    MASTER_ATTRIBUTE_DELETE: "/m_pro_attribute/page/delete/",
+
 
 } as const;
 

@@ -1,46 +1,123 @@
 {
   "common": {
+    "app_name": "POS Universal",
     "welcome": "Welcome to POS Universal!",
 
     "email": "Email",
-    "emailPlaceholder": "Email@...",
-    "name": "Name",
-    "namePlaceholder": "Name...",
+    "ph_email": "Email@...",
 
-    "verifyUser": "Please wait, validating...",
+    "verify_user": "Please wait, validating...",
 
-    "usernameLabel": "Username",
-    "usernamePlaceholder": "Username",
-    "passwordLabel": "Password",
-    "passwordPlaceholder": "******************",
-    "confirmPasswordLabel": "Confirm Password",
-    "confirmPasswordPlaceholder": "******************",
+    "username": "Username",
+    "ph_username": "Username",
+    "password": "Password",
+    "ph_password": "******************",
+    "confirm_password": "Confirm Password",
+    "ph_confirm_password": "******************",
     "loading": "Loading...",
-    "error": "An error occurred. Please try again."
+    "error": "An error occurred. Please try again.",
+
+    "no_record": "No records found.",
+    "no_result": "No results found.",
+
+    "id": "Id",
+    "name": "Name",
+    "ph_name": "Name...",
+    "search_name": "Search by name...",
+    "req_name": "Name is required",
+
+    "toggle_active": "Enable or disable this attribute for product configurations.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "yes": "Yes",
+    "no": "No",
+    "status": "Status",
+
+    "px_search": "Search for",
+    "search": "Search",
+    "clear": "Clear",
+    "reset": "Reset",
+    "all": "All",
+    "all_status": "All Status",
+    "action": "Action",
+    "back_page": "Back to list",
+    "add": "Add New",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "pagination_info": "Showing {0} to {1} of {2} entries",
+
+    "fail_delete": "Delete failed. Please try again",
+
+    "success_delete": "Delete successful",
+    "success_save": "Save successful"
   },
 
   "login": {
     "title": "Account Login",
     "subtitle": "Enter your credentials below",
     "submit": "Log In",
-    "forgotPassword": "Forgot Password?",
     "register": "Create new account",
-    "successMessage": "Login successful! Redirecting...",
-    "invalidCredentials": "Invalid username or password. Please try again."
+    "success_message": "Login successful! Redirecting...",
+    "invalid_credentials": "Invalid username or password. Please try again."
   },
   "register": {
     "title": "Register",
     "subtitle": "Enter your credentials below",
     "submit": "Register",
     "login": "Already have an account? Log In",
-    "successMessage": "Registration successful! login now.",
-    "userExists": "User already exists. Please choose a different username.",
-    "passwordMismatch": "Passwords do not match. Please try again.",
-    "usernameTaken": "Username is already taken. Please choose another one."
+    "success_message": "Registration successful! login now.",
+    "userExists": "User already exists. Please choose a different username."
   },
   "logout": {
-    "successMessage": "Logout successful!",
-    "subtitle": "logout successful, can be close app safely",
-    "errorMessage": "Logout failed. Please try again."
+    "success_message": "Logout successful!",
+    "subtitle": "logout successful, can be close app safely"
+  },
+  "sidebar": {
+    "ph_search_menu": "Search...",
+    "show_all": " Show all"
+  },
+  "navigation": {
+    "dashboard_label": "Dashboard",
+    "dashboard_desc": "Real-time overview of sales and system status.",
+    "home_label": "Home",
+    "home_desc": "Quick access to primary POS functions.",
+
+    "logIn_label": "Sign In",
+    "logIn_desc": "Log in to synchronize local data.",
+
+    "register_label": "Register",
+    "register_desc": "Create a new local store profile.",
+
+    "logout_label": "Logout",
+    "logout_desc": "Securely end the current session.",
+
+    "about_label": "About",
+    "about_desc": "Version info and documentation.",
+
+    "error_label": "Error",
+    "error_desc": "System error fallback page.",
+
+    "not_found_label": "Not Found",
+    "not_found_desc": "404 page.",
+
+    "product_list_label": "Product Inventory",
+    "product_list_desc": "Product Inventory entry page",
+
+    "master_pro__attr_label": "Product Attribute Master",
+    "master_pro__attr_desc": "Product Attribute Master entry page"
+  },
+  "product_inventory": {
+    "btn_add": "+ Add New Product",
+    "btn_edit": "Edit Product",
+    "btn_view": "View Product",
+    "btn_delete": "Delete Product"
+  },
+  "mst_product_attribute": {
+    "toggle_active": "Active attributes are visible and selectable during product setup."
   }
 }

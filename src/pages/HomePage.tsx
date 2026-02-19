@@ -1,45 +1,21 @@
 
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
-
-import { Link } from "react-router-dom";
+import Header from "@/components/Header";
+import SideBar from "@/components/SideBar";
+import resource from "@/locales/en.json";
 
 function HomePage() {
 
-
-
   return (
-    <>
-      <h1>Home-Page</h1>
+    <div className="fixed inset-0 flex overflow-hidden">
+      <SideBar></SideBar>
+      <main className="flex-1 flex flex-col overflow-hidden transition-colors duration-200">
+        <Header label={resource.navigation.home_label}></Header>
+        <hr className="border-gray-200 dark:border-gray-700" />
+        <div className="flex-1 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-800">
 
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/account/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/account/register">Register</Link>
-          </li>
-          <li>
-            <Link to="/account/profile">Profile</Link>
-          </li>
-          <li>
-            <Link to="/account/logout">Logout</Link>
-          </li>
-          <li>
-            <Link to="/Error">Error</Link>
-          </li>
-        </ul>
-      </nav>
-
-
-      <ThemeToggleButton />
-    </>
+        </div>
+      </main>
+    </div>
   );
 }
 

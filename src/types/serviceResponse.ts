@@ -5,3 +5,9 @@ export type ServiceResponse<T = null> = {
     data?: T;            // The actual payload (e.g., the User object)
     errorCode?: string;  // A string constant like 'USER_EXISTS' for logic checks
 };
+
+
+export interface IPaginationResponse<T> {
+    items: T[];
+    totalCount: number;
+}
