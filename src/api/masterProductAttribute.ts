@@ -1,4 +1,4 @@
-import type { ServiceResponse } from "@/types/serviceResponse";
+import type { IPaginationResponse, ServiceResponse } from "@/types/serviceResponse";
 import db from "../libs/db/appDb";
 import type { IMasterProductAttribute } from "@/types/masters";
 
@@ -73,6 +73,61 @@ export class masterProductAttributeApi {
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : "Fetch failed";
             return this.createResponse([], msg, false, 500);
+        }
+    }
+
+    static async getFiltered(
+        
+        searchTerm: string = "",
+        activeFilter: string = "",
+        page: number = 1,
+        pageSize: number = 10,
+    ): Promise<ServiceResponse<IPaginationResponse<IMasterProductAttribute>>> {
+        try {
+            let collection;
+
+            if (searchTerm.trim() && activeFilter !== "") {
+                // Filter by both Name and Status
+                const isActive = activeFilter === "true";
+                collection = db.masterProductAttributes
+                    .where("name")
+                    .startsWithIgnoreCase(searchTerm)
+                    .filter(item => item.isActive === isActive);
+            }
+            else if (searchTerm.trim()) {
+                // Filter by Name only
+                collection = db.masterProductAttributes
+                    .where("name")
+                    .startsWithIgnoreCase(searchTerm);
+            }
+            else if (activeFilter !== "") {
+                // Filter by Status only
+                const isActive = activeFilter === "true";
+                collection = db.masterProductAttributes
+                    .filter(item => item.isActive === isActive);
+            }
+            else {
+                // No filters applied
+                collection = db.masterProductAttributes.toCollection();
+            }
+
+            // 2. Get Total Count for Pagination
+            const totalCount = await collection.count();
+
+            // 3. Apply Pagination (Sorting by ID descending to show newest first)
+            const items = await collection
+                .reverse()
+                .offset((page - 1) * pageSize)
+                .limit(pageSize)
+                .toArray();
+
+            return this.createResponse(
+                { items, totalCount },
+                "Retrieved successfully"
+            );
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : "Fetch failed";
+            return this.createResponse({ items: [], totalCount: 0 }, msg, false, 500);
         }
     }
 }

@@ -13,7 +13,7 @@ const AttributeList = () => {
                     to={PATHS.MASTER_ATTRIBUTE_ADD + "/0"}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors shadow-sm"
                 >
-                    {resource.common.btnAdd}
+                    {resource.common.add}
                 </Link>
             </div>
 

@@ -40,7 +40,7 @@ const Register = () => {
             if (!data.username || !data.password) {
                 return {
                     success: false,
-                    message: resource.login.invalidCredentials,
+                    message: resource.login.invalid_credentials,
                 };
             }
 
@@ -53,11 +53,11 @@ const Register = () => {
             // Handling statuses based on our ServiceResponse structure
             switch (response.status) {
                 case 201:
-                    return { success: true, message: resource.register.successMessage };
+                    return { success: true, message: resource.register.success_message };
                 case 409:
                     return { success: false, message: resource.register.userExists };
                 case 400:
-                    return { success: false, message: resource.login.invalidCredentials };
+                    return { success: false, message: resource.login.invalid_credentials };
                 default:
                     return { success: false, message: resource.common.error };
             }
@@ -92,32 +92,32 @@ const Register = () => {
                             name="nameFirst"
                             required
                             className="input-style"
-                            placeholder={resource.common.namePlaceholder}
+                            placeholder={resource.common.ph_name}
                         />
                     </div>
 
                     <div>
                         <label className="input-label-style">
-                            {resource.common.email}/  {resource.common.usernameLabel}
+                            {resource.common.email}/  {resource.common.username}
                         </label>
                         <input
                             type="email"
                             name="email"
                             required
                             className="input-style"
-                            placeholder={resource.common.emailPlaceholder}
+                            placeholder={resource.common.ph_email}
                         />
                     </div>
                     <div>
                         <label className="input-label-style">
-                            {resource.common.passwordLabel}
+                            {resource.common.password}
                         </label>
                         <input
                             type="password"
                             name="password"
                             required
                             className="input-style"
-                            placeholder={resource.common.passwordPlaceholder}
+                            placeholder={resource.common.ph_password}
                         />
                     </div>
 

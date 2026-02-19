@@ -29,7 +29,7 @@ const SideBar = () => {
         <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 transition-colors duration-200">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-xl font-bold mb-4 text-center">
-                    {resource.common.appName}
+                    {resource.common.app_name}
                 </h2>
 
                 <div className="relative">
@@ -37,7 +37,7 @@ const SideBar = () => {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder={resource.sidebar.searchPlaceholder}
+                        placeholder={resource.sidebar.ph_search_menu}
                         className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-all"
                     />
                     {searchTerm && (
@@ -82,16 +82,16 @@ const SideBar = () => {
                         <li className="flex flex-col items-center justify-center py-10 px-4 text-center">
                             <span className="text-2xl mb-2 opacity-50">🚫</span>
                             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {resource.sidebar.noResults}
+                                {resource.common.no_result}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                {resource.sidebar.searchPrefix} "{searchTerm}"
+                                {resource.common.px_search} "{searchTerm}"
                             </p>
                             <button
                                 onClick={() => setSearchTerm("")}
                                 className="mt-4 text-xs text-blue-500 hover:underline font-medium"
                             >
-                                {resource.sidebar.showAll}
+                                {resource.sidebar.show_all}
                             </button>
                         </li>
                     )}

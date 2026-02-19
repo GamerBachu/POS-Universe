@@ -93,7 +93,7 @@ const Verify = () => {
         handleVerification();
     }, [auth, navigate, getSafeRedirectUrl, location]);
 
-    return (<Loader label={resource.common.verifyUser}></Loader>);
+    return (<Loader label={resource.common.verify_user}></Loader>);
 };
 
 export default Verify;

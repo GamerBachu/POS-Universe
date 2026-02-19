@@ -26,7 +26,7 @@ const Login: React.FC = () => {
       const password = formData.get("password") as string;
 
       if (!username || !password) {
-        return { success: false, message: resource.login.invalidCredentials };
+        return { success: false, message: resource.login.invalid_credentials };
       }
       const response = await userApi.postLogin(username, password);
 
@@ -62,12 +62,12 @@ const Login: React.FC = () => {
 
           auth.setInfo(info);
 
-          return { success: true, message: resource.login.successMessage };
+          return { success: true, message: resource.login.success_message };
         }
         case 400:
         case 401:
         case 404:
-          return { success: false, message: resource.login.invalidCredentials };
+          return { success: false, message: resource.login.invalid_credentials };
         default:
           return { success: false, message: resource.common.error };
       }
@@ -125,27 +125,27 @@ const Login: React.FC = () => {
         <form action={formAction} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.usernameLabel}
+              {resource.common.username}
             </label>
             <input
               type="text"
               name="username"
               required
               className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.usernamePlaceholder}
+              placeholder={resource.common.ph_username}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.passwordLabel}
+              {resource.common.password}
             </label>
             <input
               type="password"
               name="password"
               required
               className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.passwordPlaceholder}
+              placeholder={resource.common.ph_password}
             />
           </div>
 

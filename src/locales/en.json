@@ -1,75 +1,85 @@
 {
   "common": {
-    "appName": "POS Universal",
+    "app_name": "POS Universal",
     "welcome": "Welcome to POS Universal!",
 
     "email": "Email",
-    "emailPlaceholder": "Email@...",
-    "name": "Name",
-    "namePlaceholder": "Name...",
+    "ph_email": "Email@...",
 
-    "verifyUser": "Please wait, validating...",
+    "verify_user": "Please wait, validating...",
 
-    "usernameLabel": "Username",
-    "usernamePlaceholder": "Username",
-    "passwordLabel": "Password",
-    "passwordPlaceholder": "******************",
-    "confirmPasswordLabel": "Confirm Password",
-    "confirmPasswordPlaceholder": "******************",
+    "username": "Username",
+    "ph_username": "Username",
+    "password": "Password",
+    "ph_password": "******************",
+    "confirm_password": "Confirm Password",
+    "ph_confirm_password": "******************",
     "loading": "Loading...",
     "error": "An error occurred. Please try again.",
 
-    "noData": "No records found.",
+    "no_record": "No records found.",
+    "no_result": "No results found.",
 
-    "toggleActive": "Enable or disable this attribute for product configurations.",
+    "id": "Id",
+    "name": "Name",
+    "ph_name": "Name...",
+    "search_name": "Search by name...",
+    "req_name": "Name is required",
+
+    "toggle_active": "Enable or disable this attribute for product configurations.",
     "active": "Active",
     "inactive": "Inactive",
     "yes": "Yes",
     "no": "No",
+    "status": "Status",
 
-    "btnAction": "Action",
-    "btnBackList": "Back to list",
-    "btnAdd": "Add New",
-    "btnView": "View",
-    "btnEdit": "Edit",
-    "btnDelete": "Delete",
-    "btnSave": "Save",
-    "btnCancel": "Cancel",
-    "failedDelete": "Delete failed. Please try again",
+    "px_search": "Search for",
+    "search": "Search",
+    "clear": "Clear",
+    "reset": "Reset",
+    "all": "All",
+    "all_status": "All Status",
+    "action": "Action",
+    "back_page": "Back to list",
+    "add": "Add New",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "pagination_info": "Showing {0} to {1} of {2} entries",
 
-    "successDelete": "Delete successful",
-    "successSave": "Save successful"
+    "fail_delete": "Delete failed. Please try again",
+
+    "success_delete": "Delete successful",
+    "success_save": "Save successful"
   },
 
   "login": {
     "title": "Account Login",
     "subtitle": "Enter your credentials below",
     "submit": "Log In",
-    "forgotPassword": "Forgot Password?",
     "register": "Create new account",
-    "successMessage": "Login successful! Redirecting...",
-    "invalidCredentials": "Invalid username or password. Please try again."
+    "success_message": "Login successful! Redirecting...",
+    "invalid_credentials": "Invalid username or password. Please try again."
   },
   "register": {
     "title": "Register",
     "subtitle": "Enter your credentials below",
     "submit": "Register",
     "login": "Already have an account? Log In",
-    "successMessage": "Registration successful! login now.",
-    "userExists": "User already exists. Please choose a different username.",
-    "passwordMismatch": "Passwords do not match. Please try again.",
-    "usernameTaken": "Username is already taken. Please choose another one."
+    "success_message": "Registration successful! login now.",
+    "userExists": "User already exists. Please choose a different username."
   },
   "logout": {
-    "successMessage": "Logout successful!",
-    "subtitle": "logout successful, can be close app safely",
-    "errorMessage": "Logout failed. Please try again."
+    "success_message": "Logout successful!",
+    "subtitle": "logout successful, can be close app safely"
   },
   "sidebar": {
-    "searchPlaceholder": "Search...",
-    "noResults": "No results found",
-    "showAll": " Show all",
-    "searchPrefix": "Search for"
+    "ph_search_menu": "Search...",
+    "show_all": " Show all"
   },
   "navigation": {
     "dashboard_label": "Dashboard",
@@ -108,11 +118,6 @@
     "btn_delete": "Delete Product"
   },
   "mst_product_attribute": {
-    "lblId": "Id",
-    "lblName": "Name",
-    "placeHolder_Name": "Name...",
-    "lblActive": "Active",
-    "Req_Name": "Name is required",
-    "toggleActive": "Active attributes are visible and selectable during product setup."
+    "toggle_active": "Active attributes are visible and selectable during product setup."
   }
 }

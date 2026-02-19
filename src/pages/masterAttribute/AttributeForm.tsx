@@ -1,11 +1,11 @@
 import { useActionState, useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { PATHS } from "@/routes/paths";
+import { useNavigate, useParams } from "react-router-dom";
 import resource from "@/locales/en.json";
 import { masterProductAttributeApi } from "@/api";
 import { type IMasterProductAttribute } from "@/types/masters";
 import type { IActionState } from "@/types/actionState";
 import CommonLayout from "@/layouts/CommonLayout";
+import { PATHS } from "@/routes/paths";
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -22,8 +22,12 @@ const AttributeForm = () => {
   });
 
   const onSendBack = useCallback(
-    (i: string) => {
-      navigate(`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${i}`);
+    () => {
+      if (window.history.length > 1 && window.history.state?.idx > 0) {
+        navigate(-1);
+      } else {
+        navigate(PATHS.MASTER_ATTRIBUTE_LIST);
+      }
     },
     [navigate],
   );
@@ -31,7 +35,7 @@ const AttributeForm = () => {
   useEffect(() => {
     // Validate ID and Action early
     if (isNaN(id) || !action) {
-      onSendBack("-1");
+      onSendBack();
       return;
     }
 
@@ -43,10 +47,10 @@ const AttributeForm = () => {
           if (res.success && res.data) {
             setInitialData(res.data);
           } else {
-            onSendBack("-1");
+            onSendBack();
           }
         })
-        .catch(() => onSendBack("-1"));
+        .catch(() => onSendBack());
     }
   }, [id, action, onSendBack]);
 
@@ -59,10 +63,10 @@ const AttributeForm = () => {
       if (action === "delete") {
         const res = await masterProductAttributeApi.delete(id);
         if (res.success) {
-          onSendBack("0");
-          return { success: true, message: resource.common.successDelete };
+          onSendBack();
+          return { success: true, message: resource.common.success_delete };
         }
-        return { success: false, message: resource.common.failedDelete };
+        return { success: false, message: resource.common.fail_delete };
       }
 
       // 2. Add/Edit Logic
@@ -72,7 +76,7 @@ const AttributeForm = () => {
       if (!name?.trim()) {
         return {
           success: false,
-          message: resource.mst_product_attribute.Req_Name,
+          message: resource.common.req_name,
         };
       }
 
@@ -90,7 +94,7 @@ const AttributeForm = () => {
       if (response.success) {
         // Optional: you could navigate back here automatically
         // onSendBack("0");
-        return { success: true, message: resource.common.successSave };
+        return { success: true, message: resource.common.success_save };
       }
 
       return {
@@ -111,17 +115,17 @@ const AttributeForm = () => {
 
   return (
     <CommonLayout h1={resource.navigation.master_pro__attr_label}>
-      {/* Header section */}
+     
       <div className="flex justify-between items-center mb-4 px-1">
         <h1 className="text-lg font-bold text-gray-800 dark:text-white capitalize">
           {action} {resource.navigation.master_pro__attr_label}
         </h1>
-        <Link
-          to={`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${id}`}
+        <button
+          onClick={onSendBack}
           className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
         >
-          {resource.common.btnBackList}
-        </Link>
+          {resource.common.back_page}
+        </button>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
@@ -129,7 +133,7 @@ const AttributeForm = () => {
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {resource.mst_product_attribute.lblName}
+                {resource.common.name}
                 <span className="text-red-500 ml-1">*</span>
               </label>
               <input
@@ -139,7 +143,7 @@ const AttributeForm = () => {
                 disabled={isReadOnly}
                 defaultValue={initialData.name}
                 key={`name-${initialData.name}`}
-                placeholder={resource.mst_product_attribute.placeHolder_Name}
+                placeholder={resource.common.ph_name}
                 className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
@@ -149,10 +153,10 @@ const AttributeForm = () => {
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                  {resource.mst_product_attribute.lblActive}
+                  {resource.common.active}
                 </span>
                 <span className="text-sm text-gray-500">
-                  {resource.mst_product_attribute.toggleActive}
+                  {resource.mst_product_attribute.toggle_active}
                 </span>
               </div>
 
@@ -182,12 +186,12 @@ const AttributeForm = () => {
             </div>
           )}
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <Link
-              to={`${PATHS.MASTER_ATTRIBUTE_LIST}?&id=${id}`}
+            <button
+              onClick={onSendBack}
               className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
             >
-              {resource.common.btnBackList}
-            </Link>
+              {resource.common.back_page}
+            </button>
             {action !== "view" && (
               <button
                 type="submit"
@@ -195,13 +199,13 @@ const AttributeForm = () => {
                 className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
                   } disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all`}
               >
-                {isPending ? "..." : action === "delete" ? resource.common.btnDelete : resource.common.btnSave}
+                {isPending ? "..." : action === "delete" ? resource.common.delete : resource.common.save}
               </button>
             )}
           </div>
         </form>
-      </div>
-    </CommonLayout>
+      </div >
+    </CommonLayout >
   );
 };
 

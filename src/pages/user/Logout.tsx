@@ -15,7 +15,7 @@ const Logout = () => {
         <div className="flex flex-col items-center justify-center min-h-[inherit] text-center p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 
             <h2 className="text-2xl font-semibold mb-4">
-                {resource.logout.successMessage}
+                {resource.logout.success_message}
             </h2>
             <p className="mb-8">
                 {resource.logout.subtitle}

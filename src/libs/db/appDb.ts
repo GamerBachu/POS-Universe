@@ -23,7 +23,7 @@ class POSUniversalDexie extends Dexie {
             users: "++id,guid,name,email,username,password,isActive",
             userTokens: "++id,userId,token,validTill",
 
-            masterProductAttributes: "++id,name",
+            masterProductAttributes: '++id,name',
 
             products: "++id,code,sku,name,price,stock",
             productAttributes: "++id,productId,attributeId",
