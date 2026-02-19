@@ -13,9 +13,8 @@ const AttributeTable = () => {
     const activeFilter = searchParams.get("active") || "";
     const currentPage = Number(searchParams.get("page")) || 1;
 
-    const [localSearch, setLocalSearch] = useState(searchParams.get("q") || "");
-    const [localActive, setLocalActive] = useState(searchParams.get("active") || "");
-
+    const [localSearch, setLocalSearch] = useState(searchTerm);
+    const [localActive, setLocalActive] = useState(activeFilter);
 
     const [data, setData] = useState<IMasterProductAttribute[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +24,6 @@ const AttributeTable = () => {
     const fetchData = useCallback(async () => {
         setIsLoading(true);
         try {
-
             const res = await masterProductAttributeApi.getFiltered(
                 searchTerm,
                 activeFilter,
@@ -49,11 +47,7 @@ const AttributeTable = () => {
     }, [fetchData]);
 
     const handleApplyFilters = () => {
-        setSearchParams({
-            q: localSearch,
-            active: localActive,
-            page: "1"
-        });
+        setSearchParams({ q: localSearch, active: localActive, page: "1" });
     };
 
     const handleClear = () => {
@@ -91,40 +85,29 @@ const AttributeTable = () => {
                     onChange={(e) => setLocalActive(e.target.value)}
                     className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
                 >
-                    <option value="">
-                        {resource.common.all_status}
-                    </option>
-                    <option value="true">
-                        {resource.common.active}
-                    </option>
-                    <option value="false">
-                        {resource.common.inactive}
-                    </option>
+                    <option value="">{resource.common.all_status}</option>
+                    <option value="true">{resource.common.active}</option>
+                    <option value="false">{resource.common.inactive}</option>
                 </select>
 
-                <button
-                    onClick={handleApplyFilters}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium shadow-sm transition-all active:scale-95"
-                >
-                    {resource.common.search}
-                </button>
-
-                <button
-                    onClick={handleClear}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1.5 rounded text-sm font-medium shadow-sm transition-all active:scale-95"
-                >
-                    {resource.common.reset}
-                </button>
+                <div className="flex gap-2 ml-auto">
+                    <button onClick={handleApplyFilters} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium shadow-sm transition-all active:scale-95">
+                        {resource.common.search}
+                    </button>
+                    <button onClick={handleClear} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1.5 rounded text-sm font-medium shadow-sm transition-all active:scale-95">
+                        {resource.common.reset}
+                    </button>
+                </div>
             </div>
 
             <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
                 <table className="w-full text-left border-collapse table-auto sm:table-fixed">
                     <thead>
                         <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
-                            <th className="p-3 w-16">{resource.common.id}</th>
-                            <th className="p-3 min-w-[150px]">{resource.common.name}</th>
-                            <th className="p-3 w-24 text-center">{resource.common.status}</th>
-                            <th className="p-3 w-32 text-right">{resource.common.action}</th>
+                            <th className="p-3 w-15">{resource.common.id}</th>
+                            <th className="p-3 ">{resource.common.name}</th>
+                            <th className="p-3 w-22 text-center">{resource.common.status}</th>
+                            <th className="p-3 w-44 text-center">{resource.common.action}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -141,10 +124,10 @@ const AttributeTable = () => {
                         )}
                     </tbody>
                 </table>
-            </div> 
+            </div>
             {totalPages > 1 && (
-                <div className="flex items-center justify-between px-1">
-                    <span className="text-xs text-gray-500 font-medium">
+                <div className="flex items-center justify-between px-1 py-2">
+                    <span className="text-xs font-mono text-gray-500">
                         {formatString(
                             resource.common.pagination_info,
                             (currentPage - 1) * pageSize + 1,
@@ -156,14 +139,14 @@ const AttributeTable = () => {
                         <button
                             disabled={currentPage === 1 || isLoading}
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-sm font-medium disabled:opacity-50 transition-all"
+                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
                         >
                             {resource.common.previous}
                         </button>
                         <button
                             disabled={currentPage === totalPages || isLoading}
                             onClick={() => handlePageChange(currentPage + 1)}
-                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-sm font-medium disabled:opacity-50 transition-all"
+                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
                         >
                             {resource.common.next}
                         </button>

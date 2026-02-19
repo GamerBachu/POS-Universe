@@ -92,6 +92,7 @@ const AttributeForm = () => {
           : await masterProductAttributeApi.add(payload);
 
       if (response.success) {
+        setInitialData(payload);
         // Optional: you could navigate back here automatically
         // onSendBack("0");
         return { success: true, message: resource.common.success_save };
@@ -115,7 +116,7 @@ const AttributeForm = () => {
 
   return (
     <CommonLayout h1={resource.navigation.master_pro__attr_label}>
-     
+
       <div className="flex justify-between items-center mb-4 px-1">
         <h1 className="text-lg font-bold text-gray-800 dark:text-white capitalize">
           {action} {resource.navigation.master_pro__attr_label}
@@ -170,7 +171,7 @@ const AttributeForm = () => {
                   key={`active-${initialData.isActive}`}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 disabled:opacity-50"></div>
+                <div className="w-11 h-6 rounded-full peer bg-red-200 dark:bg-red-900/40 peer-checked:bg-green-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none disabled:opacity-50"></div>
               </div>
             </label>
           </div>
@@ -187,6 +188,7 @@ const AttributeForm = () => {
           )}
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
             <button
+              type="button"
               onClick={onSendBack}
               className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
             >

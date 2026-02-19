@@ -9,24 +9,51 @@ interface RowProps {
 
 const AttributeTableRow = ({ item }: RowProps) => {
     return (
-        <tr className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-            <td className="p-3 text-sm font-mono text-gray-500">{item.id}</td>
-            <td className="p-3 text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                {item.name}
+        <tr className="group hover:bg-gray-50/80 dark:hover:bg-gray-800/40 transition-colors border-b last:border-0 border-gray-100 dark:border-gray-700/50">
+
+            <td className="p-3 text-xs font-mono text-gray-400 dark:text-gray-500">
+                {item.id}
             </td>
-            <td className="p-3 text-sm text-center">
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${item.isActive
-                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+
+
+            <td className="p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                <span className="truncate block max-w-[200px]" title={item.name}>
+                    {item.name}
+                </span>
+            </td>
+
+            <td className="p-3 text-center">
+                <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${item.isActive
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20"
+                    : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20"
                     }`}>
                     {item.isActive ? resource.common.active : resource.common.inactive}
                 </span>
             </td>
+
+
             <td className="p-3 text-right">
-                <div className="inline-flex items-center rounded-md border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden shadow-sm">
-                    <NavLink to={`${PATHS.MASTER_ATTRIBUTE_VIEW}/${item.id}`} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 border-r border-gray-200 dark:border-gray-600" title="View">🔍</NavLink>
-                    <NavLink to={`${PATHS.MASTER_ATTRIBUTE_EDIT}/${item.id}`} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 border-r border-gray-200 dark:border-gray-600" title="Edit">✏️</NavLink>
-                    <NavLink to={`${PATHS.MASTER_ATTRIBUTE_DELETE}/${item.id}`} className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500" title="Delete">🗑️</NavLink>
+                <div className="inline-flex items-center rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm overflow-hidden">
+                    <NavLink
+                        to={`${PATHS.MASTER_ATTRIBUTE_VIEW}/${item.id}`}
+                        className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors"
+                    >
+                        {resource.common.view}
+                    </NavLink>
+
+                    <NavLink
+                        to={`${PATHS.MASTER_ATTRIBUTE_EDIT}/${item.id}`}
+                        className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
+                    >
+                        {resource.common.edit}
+                    </NavLink>
+
+                    <NavLink
+                        to={`${PATHS.MASTER_ATTRIBUTE_DELETE}/${item.id}`}
+                        className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                    >
+                        {resource.common.delete}
+                    </NavLink>
                 </div>
             </td>
         </tr>

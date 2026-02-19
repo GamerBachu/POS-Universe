@@ -7,8 +7,7 @@ import AttributeTable from "./AttributeTable";
 const AttributeList = () => {
     return (
         <CommonLayout h1={resource.navigation.master_pro__attr_label}>
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold"></h1>
+            <div className="flex justify-end items-center mb-4">
                 <Link
                     to={PATHS.MASTER_ATTRIBUTE_ADD + "/0"}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors shadow-sm"
