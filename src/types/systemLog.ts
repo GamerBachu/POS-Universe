@@ -9,5 +9,11 @@ export interface ISystemLog {
     stackTrace: string;
 }
 
-export type SystemLogType = 'Error' | 'Warning' | 'Info' | 'Debug';
-export const SystemLogTypes: SystemLogType[] = ['Error', 'Warning', 'Info', 'Debug'];
+export const SystemLogType = {
+    Error: 'Error',
+    Warning: 'Warning',
+    Info: 'Info',
+    Debug: 'Debug',
+};
+
+export const SystemLogTypes: string[] = ['Error', 'Warning', 'Info', 'Debug'];
