@@ -3,7 +3,7 @@ import { type IMasterProductAttribute } from "@/types/masters";
 import { masterProductAttributeApi } from "@/api";
 import resource from "@/locales/en.json";
 import AttributeTableRow from "./AttributeTableRow";
-import TableSkeleton from "./TableSkeleton";
+import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
 
 const AttributeTable = () => {
@@ -112,7 +112,7 @@ const AttributeTable = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                         {isLoading ? (
-                            <TableSkeleton />
+                            <TableSkeleton rows={5} column={4} />
                         ) : data.length === 0 ? (
                             <tr>
                                 <td colSpan={4} className="p-8 text-center text-sm text-gray-500 italic bg-gray-50/30">

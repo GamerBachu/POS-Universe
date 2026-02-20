@@ -6,10 +6,14 @@ import {
 } from "@/types/product";
 import { type IMasterProductAttribute } from "@/types/masters";
 import { type User, type UserToken } from "@/types/user";
+import type { ISystemLog } from "@/types/systemLog";
 
 class POSUniversalDexie extends Dexie {
     users!: EntityTable<User, "id">;
     userTokens!: EntityTable<UserToken, "id">;
+
+    systemLogs!: EntityTable<ISystemLog, "id">;
+
 
     masterProductAttributes!: EntityTable<IMasterProductAttribute, "id">;
 
@@ -22,6 +26,8 @@ class POSUniversalDexie extends Dexie {
         this.version(1).stores({
             users: "++id,guid,name,email,username,password,isActive",
             userTokens: "++id,userId,token,validTill",
+
+            systemLogs: '++id,type,pageName,timestamp',
 
             masterProductAttributes: '++id,name',
 

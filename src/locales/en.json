@@ -109,7 +109,10 @@
     "product_list_desc": "Product Inventory entry page",
 
     "master_pro__attr_label": "Product Attribute Master",
-    "master_pro__attr_desc": "Product Attribute Master entry page"
+    "master_pro__attr_desc": "Product Attribute Master entry page",
+
+    "system_log_list_label": "System Log",
+    "system_log_list_desc": "System Log entry page"
   },
   "product_inventory": {
     "btn_add": "+ Add New Product",
@@ -119,5 +122,21 @@
   },
   "mst_product_attribute": {
     "toggle_active": "Active attributes are visible and selectable during product setup."
+  },
+  "system_log": {
+    "type": "Type",
+    "ph_type": "Type",
+    "page_name": "Page Name",
+    "ph_page_name": "Page Name...",
+    "function": "Function",
+    "ph_function": "Function...",
+    "data": "Data",
+    "ph_data": "Data...",
+    "timestamp": "Timestamp",
+    "ph_timestamp": "Timestamp", 
+    "message": "Message",
+    "ph_message": "Message...",
+    "stack_trace": "Stack Trace",
+    "ph_stack_trace": "Stack Trace..."
   }
 }

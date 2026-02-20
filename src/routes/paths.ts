@@ -22,6 +22,13 @@ export const PATHS = {
     MASTER_ATTRIBUTE_DELETE: "/m_pro_attribute/page/delete/",
 
 
+    SYSTEM_LOG_LIST: "/sys_log/list",
+    SYSTEM_LOG_ADD: "/sys_log/page/add/",
+    SYSTEM_LOG_EDIT: "/sys_log/page/edit/",
+    SYSTEM_LOG_VIEW: "/sys_log/page/view/",
+    SYSTEM_LOG_DELETE: "/sys_log/page/delete/",
+
+
 } as const;
 
 type AppPath = (typeof PATHS)[keyof typeof PATHS];
