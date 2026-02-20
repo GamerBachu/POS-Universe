@@ -6,6 +6,7 @@ import SystemLogTableRow from "./SystemLogTableRow";
 
 import { useSearchParams } from "react-router-dom";
 import TableSkeleton from "@/components/TableSkeleton";
+import TableNoRecord from "@/components/TableNoRecord";
 
 const SystemLogTable = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -108,19 +109,16 @@ const SystemLogTable = () => {
               <th className="p-3 w-15 text-left font-bold">{resource.common.id}</th>
               <th className="p-3 w-18 text-left font-bold">{resource.system_log.type}</th>
               <th className="p-3 text-left font-bold">{resource.system_log.page_name}</th>
+              <th className="p-3 text-left font-bold">{resource.system_log.function}</th>
               <th className="p-3 w-44 text-left font-bold">{resource.system_log.timestamp}</th>
               <th className="p-3 w-44 text-center font-bold">{resource.common.action}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {isLoading ? (
-              <TableSkeleton rows={5} column={5} />
+              <TableSkeleton rows={5} column={6} />
             ) : data.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="p-8 text-center text-sm text-gray-500 italic bg-gray-50/30">
-                  {resource.common.no_record}
-                </td>
-              </tr>
+              <TableNoRecord column={6} message={resource.common.no_record} />
             ) : (
               data.map((item) => <SystemLogTableRow key={item.id} item={item} />)
             )}

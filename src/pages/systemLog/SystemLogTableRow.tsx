@@ -21,7 +21,9 @@ const SystemLogTableRow = ({ item }: RowProps) => {
       <td className="p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
         {item.pageName}
       </td>
-
+      <td className="p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+        {item.functionName}
+      </td>
       <td className="p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
         {toDisplayString(item.timestamp)}
       </td>
