@@ -6,6 +6,7 @@ import { type IMasterProductAttribute } from "@/types/masters";
 import type { IActionState } from "@/types/actionState";
 import CommonLayout from "@/layouts/CommonLayout";
 import { PATHS } from "@/routes/paths";
+import loggerUtils from "@/utils/logger";
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -50,7 +51,10 @@ const AttributeForm = () => {
             onSendBack();
           }
         })
-        .catch(() => onSendBack());
+        .catch((error: unknown) => {
+          loggerUtils.logError(error as Error, "AttributeForm", "getById", "55");
+          onSendBack();
+        });
     }
   }, [id, action, onSendBack]);
 
@@ -98,11 +102,13 @@ const AttributeForm = () => {
         return { success: true, message: resource.common.success_save };
       }
 
+      loggerUtils.logError(undefined, "AttributeForm", "handleAction", JSON.stringify(response));
       return {
         success: false,
         message: resource.common.error,
       };
-    } catch {
+    } catch (error: unknown) {
+      loggerUtils.logError(error as Error, "AttributeForm", "handleAction", "107");
       return {
         success: false,
         message: resource.common.error,

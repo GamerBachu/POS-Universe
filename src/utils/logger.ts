@@ -4,7 +4,7 @@ import { systemLogApi } from "@/api/systemLogApi";
 
 class loggerUtils {
     static logError(
-        error: Error,
+        error: Error|undefined,
         pageName: string,
         functionName: string,
         data: string = "",
@@ -16,8 +16,8 @@ class loggerUtils {
             functionName: functionName.trim(),
             data: data.trim(),
             timestamp: toUTCNowForDB(),
-            message: error.message.trim(),
-            stackTrace: error.stack?.trim() || "",
+            message: error?.message.trim() || "",
+            stackTrace: error?.stack?.trim() || "",
         };
         systemLogApi.add(payload);
     }
