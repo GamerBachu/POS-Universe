@@ -20,6 +20,8 @@ import {
     AttributeList,
     AttributeForm,
 } from "@/pages/masterAttribute";
+import SystemLogForm from "@/pages/systemLog/SystemLogForm";
+import SystemLogList from "@/pages/systemLog/SystemLogList";
 
 export const router = createBrowserRouter([
     {
@@ -59,6 +61,16 @@ export const router = createBrowserRouter([
                     { index: true, element: <AttributeList /> },
                     { path: "list", element: <AttributeList /> },
                     { path: "page/:action/:id", element: <AttributeForm /> },
+                ],
+            },
+
+            {
+                path: "sys_log",
+                element: <ProtectedRoute />,
+                children: [
+                    { index: true, element: <SystemLogList /> },
+                    { path: "list", element: <SystemLogList /> },
+                    { path: "page/:action/:id", element: <SystemLogForm /> },
                 ],
             },
 

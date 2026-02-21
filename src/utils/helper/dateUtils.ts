@@ -14,16 +14,6 @@ export const toUTCForDB = (localDateTime: string | undefined | null): string => 
     return date.toISOString();
 };
 
-/**
- * Converts the date time now to an ISO UTC string for the DB.
- * Example: "2026-01-31T13:14" -> "2026-01-31T07:44:00.000Z" (depending on local offset)
- */
-
-export const toUTCNowForDB = (date?: Date): string => {
-    const d = date || new Date();
-    return d.toISOString();
-};
-
 
 /**
  * Converts a UTC ISO string from the DB back to the format <input type="datetime-local"> expects.
@@ -52,4 +42,17 @@ export const toDisplayString = (utcString: string): string => {
         dateStyle: "medium",
         timeStyle: "short",
     });
+};
+
+
+
+
+/**
+ * Converts the date time now to an ISO UTC string for the DB.
+ * Example: "2026-01-31T13:14" -> "2026-01-31T07:44:00.000Z" (depending on local offset)
+ */
+
+export const toUTCNowForDB = (date?: Date): string => {
+    const d = date || new Date();
+    return d.toISOString();
 };

@@ -32,6 +32,22 @@ export class masterProductAttributeApi {
             if (payload?.id !== undefined) {
                 delete payload.id;
             }
+
+            //check name is required
+            if (!payload.name) {
+                return this.createResponse(0, "Name is required", false, 400);
+            }
+
+            // check for duplicate name and active status true
+            const existing = await db.masterProductAttributes
+                .where("name")
+                .equalsIgnoreCase(payload.name)
+                .and(item => item.isActive === true)
+                .first();
+            if (existing) {
+                return this.createResponse(0, "Attribute with this name already exists", false, 409);
+            }
+
             const id = await db.masterProductAttributes.add({
                 name: payload.name ?? '',
                 isActive: payload.isActive ?? true
@@ -77,7 +93,7 @@ export class masterProductAttributeApi {
     }
 
     static async getFiltered(
-        
+
         searchTerm: string = "",
         activeFilter: string = "",
         page: number = 1,

@@ -6,6 +6,7 @@ import { type IMasterProductAttribute } from "@/types/masters";
 import type { IActionState } from "@/types/actionState";
 import CommonLayout from "@/layouts/CommonLayout";
 import { PATHS } from "@/routes/paths";
+import LoggerUtils from "@/utils/logger";
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -50,7 +51,10 @@ const AttributeForm = () => {
             onSendBack();
           }
         })
-        .catch(() => onSendBack());
+        .catch((error: unknown) => {
+          LoggerUtils.logCatch(error, "AttributeForm", "getById", "55");
+          onSendBack();
+        });
     }
   }, [id, action, onSendBack]);
 
@@ -91,18 +95,36 @@ const AttributeForm = () => {
           ? await masterProductAttributeApi.update(id, payload)
           : await masterProductAttributeApi.add(payload);
 
-      if (response.success) {
+
+      if (response.status === 400) {
+        return {
+          success: false,
+          message: resource.common.req_name,
+        };
+      }
+      if (response.status === 409) {
+        return {
+          success: false,
+          message: resource.mst_product_attribute.already_exists,
+        };
+      }
+
+      if (response.status === 200 && response.success) {
         setInitialData(payload);
         // Optional: you could navigate back here automatically
         // onSendBack("0");
         return { success: true, message: resource.common.success_save };
       }
+      // Handle errors
 
+
+      LoggerUtils.logError(response, "AttributeForm", "handleAction", JSON.stringify(payload));
       return {
         success: false,
         message: resource.common.error,
       };
-    } catch {
+    } catch (error: unknown) {
+      LoggerUtils.logCatch(error, "AttributeForm", "handleAction", "107");
       return {
         success: false,
         message: resource.common.error,
