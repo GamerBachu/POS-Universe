@@ -139,7 +139,10 @@ const Register = () => {
                                 ? `${resource.register.submit}...`
                                 : resource.register.submit}
                         </button>
-                        <Link to={PATHS.LOGIN} className="link-style text-center">
+                        <Link
+                            to={PATHS.LOGIN}
+                            className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
+                        >
                             {resource.login.submit}
                         </Link>
                     </div>
