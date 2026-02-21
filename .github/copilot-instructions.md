@@ -1,127 +1,84 @@
 # Copilot Instructions for POS Universe
 
-This document provides comprehensive guidelines for Copilot when generating or refactoring code for the **POS Universe** project. Follow these instructions to maintain consistency, code quality, and adherence to project standards.
+**POS Universe** is an offline-first Point of Sale web system using React 19, TypeScript, Tailwind CSS 4.1, and Dexie.js (IndexedDB).
 
----
+## Critical Architecture
 
-## 1. Project Overview
+### Data Storage: Dexie.js (IndexedDB) First
+- All data persists to IndexedDB via `db` (imported from `src/libs/db/appDb`)
+- API layer (`src/api/*.ts`) uses static methods for Dexie operations
+- **Example:** `productApi.post()` → adds to `db.products` collection
+- No remote API calls; offline-first by design
+- See: [productApi.ts](src/api/productApi.ts) for pattern
 
-**POS Universe** is a modern Point of Sale (POS) web system designed for cross-device compatibility with offline-first capabilities.
-
-### Tech Stack
-- **Framework:** React 19 with Vite
-- **Language:** TypeScript (Strict mode)
-- **Compiler:** React Compiler with babel-plugin-react-compiler
-- **Styling:** Tailwind CSS 4.1 (Dark mode via class strategy)
-- **Routing:** React Router 7
-- **Local Storage:** Dexie.js (IndexedDB)
-- **Linting:** ESLint 9
-- **State Management:** React Context API
-
-### React 19 Features & Form Actions
-
-This project leverages **React 19** features for better form handling and data management:
-
-#### Form Actions with `useActionState`
-React 19 introduces improved form handling through `useActionState`:
-
+### Class-Based API Static Methods
 ```typescript
-// Example: Form with action and pending state
-import { useActionState } from 'react';
-
-async function submitProduct(state: unknown, formData: FormData) {
-  const result = await productApi.post({
-    name: formData.get('name') as string,
-    price: parseFloat(formData.get('price') as string),
-  });
-  return result;
-}
-
-export const ProductForm = () => {
-  const [state, formAction, isPending] = useActionState(submitProduct, null);
-
-  return (
-    <form action={formAction} className="space-y-4">
-      <input
-        name="name"
-        required
-        className="input-style"
-      />
-      <input
-        name="price"
-        type="number"
-        required
-        className="input-style"
-      />
-      <button
-        type="submit"
-        disabled={isPending}
-        className="btn-primary"
-      >
-        {isPending ? 'Saving...' : 'Save'}
-      </button>
-    </form>
-  );
-};
-```
-
-#### Key React 19 Benefits
-- ✅ **Automatic form reset**: Forms reset automatically after successful submissions
-- ✅ **Pending state**: Built-in `isPending` state for loading indicators
-- ✅ **Error handling**: Native error boundaries work better with actions
-- ✅ **No useState for forms**: Cleaner code without useState for form data
-- ✅ **FormData API**: Direct access to form values without ref
-
-#### Form Action Patterns
-
-**Pattern 1: Simple Form with Validation**
-```typescript
-async function handleSubmit(prevState: unknown, formData: FormData) {
-  const value = formData.get('field') as string;
-  
-  if (!value.trim()) {
-    return { error: 'Field is required' };
-  }
-  
-  try {
-    const result = await api.post(value);
-    return { success: true, data: result };
-  } catch (error) {
-    return { error: 'Submission failed' };
-  }
+export class productApi {
+  static async get(id: number) { return db.products.get(id); }
+  static async post(payload: Partial<IProduct>) { return db.products.add(payload as IProduct); }
+  static async search(...): Promise<ServiceResponse<...>> { /* returns { status, success, message, data } */ }
 }
 ```
 
-**Pattern 2: Complex Forms with Multiple Handlers**
-```typescript
-export const ComplexForm = () => {
-  const [state, formAction, isPending] = useActionState(handleSubmit, {
-    success: false,
-    error: null,
-  });
-
-  return (
-    <>
-      {state.error && <ErrorMessage msg={state.error} />}
-      {state.success && <SuccessMessage />}
-      <form action={formAction} className="space-y-4">
-        {/* Form fields */}
-      </form>
-    </>
-  );
-};
+### Component Patterns (Real Implementation)
+**Form Pattern:** Use state + onSubmit, not `useActionState`
+```tsx
+const [data, setData] = useState<IProduct>(initialData);
+<form onSubmit={(e) => { e.preventDefault(); onSubmit(data); }}>
+  <input defaultValue={data.name} onChange={e => setData({...data, name: e.target.value})} />
+</form>
 ```
 
-**Note:** When using form actions, combine with TypeScript strict typing for FormData parsing:
-```typescript
-function getFormValue(formData: FormData, key: string): string {
-  const value = formData.get(key);
-  if (typeof value !== 'string') {
-    throw new Error(`Invalid form data for ${key}`);
-  }
-  return value;
-}
-```
+## Styling & Layout
+
+### Predefined Tailwind Components (globals.css)
+Use these for consistency: `.input-style`, `.input-label-style`, `.btn-primary`, `.status-success`, `.status-error`
+- Dark mode: Always use `dark:` prefix (enabled via class strategy)
+- Root element has: `min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100`
+
+## Context & State
+
+### Auth Context Pattern
+Path: `src/contexts/authorize/` with files: `AuthProvider.tsx`, `AuthProviderContext.tsx`, `useAuth.ts`, `type.ts`, `const.ts`
+- Stores auth info + token in storage (applicationStorage)
+- Use `useAuth()` hook to access
+
+### Storage Keys
+Import from `@/utils`: `StorageKeys.USER`, `StorageKeys.TOKEN`, `StorageKeys.THEME`
+Use applicationStorage wrapper: `new applicationStorage(StorageKeys.USER).set(value)`
+
+## Routing & Page Structure
+
+### Route Protection
+- ProtectedRoute: Wraps authenticated pages, redirects to login if not authorized
+- PublicRoute: For login/register, redirects home if already authenticated
+- See: [routes/index.tsx](src/routes/index.tsx)
+
+### Page Organization
+Feature-based subdirs: `src/pages/products/`, `src/pages/masterAttribute/`, `src/pages/systemLog/`, `src/pages/user/`
+Each feature has list/form/view components; import types from `@/types/`
+
+## Types & Conventions
+
+### Type Files Location
+`src/types/`: `product.ts`, `user.ts`, `serviceResponse.ts`, `actionState.ts`, `menuItem.ts`, `systemLog.ts`, `masters.ts`
+- Interfaces for objects (prefixed `I`), types for unions
+- All API responses return `ServiceResponse<T>` with `{ status, success, message, data }`
+
+### Naming
+- Files: PascalCase (components), camelCase (utils/api)
+- Interfaces: `I` prefix (e.g., `IProduct`)
+- Hooks: `use` prefix (e.g., `useAuth`)
+- Constants: UPPER_SNAKE_CASE
+- Prop interfaces: `Props` suffix (e.g., `ProductFormProps`)
+
+## Development Workflow
+
+### Commands
+- `npm run dev` — Start dev server (port 3690)
+- `npm run build` — Build with TypeScript checking + minify
+- `npm run lint` — Check ESLint
+- `npm run preview` — Serve production build
 
 ---
 
