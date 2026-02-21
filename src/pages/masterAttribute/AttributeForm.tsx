@@ -95,12 +95,28 @@ const AttributeForm = () => {
           ? await masterProductAttributeApi.update(id, payload)
           : await masterProductAttributeApi.add(payload);
 
-      if (response.success) {
+
+      if (response.status === 400) {
+        return {
+          success: false,
+          message: resource.common.req_name,
+        };
+      }
+      if (response.status === 409) {
+        return {
+          success: false,
+          message: resource.mst_product_attribute.already_exists,
+        };
+      }
+
+      if (response.status === 200 && response.success) {
         setInitialData(payload);
         // Optional: you could navigate back here automatically
         // onSendBack("0");
         return { success: true, message: resource.common.success_save };
       }
+      // Handle errors
+
 
       LoggerUtils.logError(response, "AttributeForm", "handleAction", JSON.stringify(payload));
       return {

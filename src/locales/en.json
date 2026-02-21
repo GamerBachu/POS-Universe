@@ -121,7 +121,8 @@
     "btn_delete": "Delete Product"
   },
   "mst_product_attribute": {
-    "toggle_active": "Active attributes are visible and selectable during product setup."
+    "toggle_active": "Active attributes are visible and selectable during product setup.",
+    "already_exists": "Attribute with this name already exists, please choose a different name."
   },
   "system_log": {
     "type": "Type",
@@ -133,7 +134,7 @@
     "data": "Data",
     "ph_data": "Data...",
     "timestamp": "Timestamp",
-    "ph_timestamp": "Timestamp", 
+    "ph_timestamp": "Timestamp",
     "message": "Message",
     "ph_message": "Message...",
     "stack_trace": "Stack Trace",
