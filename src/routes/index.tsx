@@ -13,15 +13,9 @@ import Logout from "@/pages/user/Logout";
 import Dashboard from "@/pages/Dashboard";
 import Verify from "@/pages/user/Verify";
 import Loader from "@/components/Loader";
-import ProductList from "@/pages/products/ProductList";
-import ProductEdit from "@/pages/products/ProductEdit";
-import ProductView from "@/pages/products/ProductView";
-import {
-    AttributeList,
-    AttributeForm,
-} from "@/pages/masterAttribute";
-import SystemLogForm from "@/pages/systemLog/SystemLogForm";
-import SystemLogList from "@/pages/systemLog/SystemLogList";
+import { ProductList, ProductForm } from "@/pages/products";
+import { AttributeList, AttributeForm } from "@/pages/masterAttribute";
+import { SystemLogForm, SystemLogList } from "@/pages/systemLog/";
 
 export const router = createBrowserRouter([
     {
@@ -48,9 +42,7 @@ export const router = createBrowserRouter([
                 children: [
                     { index: true, element: <ProductList /> },
                     { path: "list", element: <ProductList /> },
-                    { path: "edit/:id", element: <ProductEdit /> },
-                    { path: "view/:id", element: <ProductView /> },
-                    { path: "delete/:id", element: <ProductView /> },
+                    { path: "page/:action/:id", element: <ProductForm /> },
                 ],
             },
 

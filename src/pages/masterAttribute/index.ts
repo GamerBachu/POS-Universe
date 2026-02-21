@@ -1,6 +1,3 @@
-import AttributeList from "./AttributeList";
-import AttributeForm from "./AttributeForm";
-export {
-    AttributeList,
-    AttributeForm
-};
+
+export { default as AttributeList } from "./AttributeList";
+export { default as AttributeForm } from "./AttributeForm";
