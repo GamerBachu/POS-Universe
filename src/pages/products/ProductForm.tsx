@@ -2,11 +2,11 @@ import { type IProduct } from "@/types/product";
 
 interface ProductFormProps {
     initialData?: Partial<IProduct>;
-    onSubmit: (data: Partial<IProduct>) => void;
+
     isReadOnly?: boolean;
 }
 
-const ProductForm = ({ initialData, onSubmit, isReadOnly }: ProductFormProps) => {
+const ProductForm = ({ initialData,  isReadOnly }: ProductFormProps) => {
     return (
         <form onSubmit={(e) => { e.preventDefault(); /* handle submit */ }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">

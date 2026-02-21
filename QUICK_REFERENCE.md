@@ -567,7 +567,7 @@ import { productApi } from '@/api/productApi';
 // src/contexts/authorize/index.ts
 export { AuthProvider } from './AuthProvider';
 export { useAuth } from './useAuth';
-export type { authUser } from './type';
+export type { IAuthUser } from './type';
 
 // Usage
 import { useAuth, AuthProvider } from '@/contexts/authorize';

@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from "react-router";
 import { userApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
 import { isValidPath, PATHS } from "@/routes/paths";
-import { getName, applicationStorage, StorageKeys } from "@/utils";
+import { getName, CookieStorage, StorageKeys } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
-import type { User, UserToken } from "@/types/user";
+import type { IUser, IRefreshToken } from "@/types/user";
 import Loader from "@/components/Loader";
 
 const Verify = () => {
@@ -42,8 +42,7 @@ const Verify = () => {
         if (isVerifying.current) return;
         isVerifying.current = true;
 
-        const tokenStorage = new applicationStorage(StorageKeys.TOKEN);
-        const storedToken = tokenStorage.get();
+        const storedToken = CookieStorage.get((StorageKeys.TOKEN));
 
         const handleVerification = async () => {
             if (!storedToken || storedToken.length === 0) {
@@ -51,20 +50,19 @@ const Verify = () => {
             }
 
             try {
-                const response = await userApi.postValidateToken(storedToken, "device");
+                const response = await userApi.postValidateToken(storedToken);
 
                 if (response?.status === 200 && response.data) {
-                    const { user, token } = response.data as { user: User; token: UserToken; };
+                    const { user, token } = response.data as { user: IUser; token: IRefreshToken; };
 
                     const info: IAuthorize = {
                         authUser: {
-                            guid: user.guid,
+                            userId: user.id,
                             displayName: getName(user.nameFirst, user.nameMiddle, user.nameLast),
                             username: user.username,
                             roles: [],
-                            refreshToken: "",
+                            refreshToken: token.token,
                         },
-                        appToken: token.token,
                         isAuthorized: true,
                     };
 

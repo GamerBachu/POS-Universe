@@ -8,7 +8,7 @@ import { userApi } from "@/api";
 const Logout = () => {
     const auth = useAuth();
     useEffect(() => {
-        userApi.postLogout(auth.info.authUser?.username, auth.info.authUser?.guid);
+        userApi.postLogout(auth.info.authUser?.userId, auth.info.authUser?.refreshToken);
         auth.setInfo(undefined);
     }, [auth]);
     return (

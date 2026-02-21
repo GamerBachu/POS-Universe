@@ -5,12 +5,12 @@ import {
     type IProductImage,
 } from "@/types/product";
 import { type IMasterProductAttribute } from "@/types/masters";
-import { type User, type UserToken } from "@/types/user";
+import { type IUser, type IRefreshToken } from "@/types/user";
 import type { ISystemLog } from "@/types/systemLog";
 
 class POSUniversalDexie extends Dexie {
-    users!: EntityTable<User, "id">;
-    userTokens!: EntityTable<UserToken, "id">;
+    users!: EntityTable<IUser, "id">;
+    refreshTokens!: EntityTable<IRefreshToken, "id">;
 
     systemLogs!: EntityTable<ISystemLog, "id">;
 
@@ -25,7 +25,8 @@ class POSUniversalDexie extends Dexie {
         super("POS_UniversalDB_0012");
         this.version(1).stores({
             users: "++id,guid,name,email,username,password,isActive",
-            userTokens: "++id,userId,token,validTill",
+            refreshTokens: "++id,userId,token,expiresAt,browser,os,deviceType",
+
 
             systemLogs: '++id,type,pageName,timestamp',
 

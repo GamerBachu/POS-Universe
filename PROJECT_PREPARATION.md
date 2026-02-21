@@ -423,7 +423,7 @@ export class productApi {
 ```typescript
 // src/contexts/authorize/type.ts
 
-export interface authUser {
+export interface IAuthUser {
   guid: string;
   displayName: string;
   username: string;
@@ -433,7 +433,7 @@ export interface authUser {
 
 export interface AuthInfo {
   isAuthorized: boolean;
-  authUser: authUser | null;
+  authUser: IAuthUser | null;
   lastUpdated: Date | null;
 }
 

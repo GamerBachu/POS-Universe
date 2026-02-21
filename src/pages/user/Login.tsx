@@ -5,7 +5,7 @@ import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { isValidPath, PATHS } from "@/routes/paths";
 import { useAuth } from "@/contexts/authorize";
-import type { User, UserToken } from "@/types/user";
+import type { IAuthUser, IAuthResponse } from "@/types/user";
 import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
 import type { IActionState } from "@/types/actionState";
@@ -38,13 +38,10 @@ const Login: React.FC = () => {
       // Handling statuses based on our ServiceResponse structure
       switch (response.status) {
         case 200: {
-          const { user, token } = response.data as {
-            user: User;
-            token: UserToken;
-          };
+          const { user, token } = response.data as IAuthResponse;
 
-          const authUser = {
-            guid: user.guid,
+          const authUser: IAuthUser = {
+            userId: user.id,
             displayName: getName(
               user.nameFirst,
               user.nameMiddle,
@@ -52,12 +49,11 @@ const Login: React.FC = () => {
             ),
             username: user.username,
             roles: [],
-            refreshToken: "",
+            refreshToken: token.token,
           };
 
           const info: IAuthorize = {
             authUser,
-            appToken: token.token,
             isAuthorized: true,
           };
 
