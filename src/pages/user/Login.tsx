@@ -9,7 +9,7 @@ import type { User, UserToken } from "@/types/user";
 import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
 import type { IActionState } from "@/types/actionState";
-import loggerUtils from "@/utils/logger";
+import LoggerUtils from "@/utils/logger";
 
 
 
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
           return { success: false, message: resource.common.error };
       }
     } catch (error: unknown) {
-      loggerUtils.logError(error as Error, "Login", "handleAction", "76");
+      LoggerUtils.logCatch(error, "Login", "handleAction", "76");
       return {
         success: false,
         message: resource.common.error,

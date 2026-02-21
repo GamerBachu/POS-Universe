@@ -5,7 +5,7 @@ import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import AppPurchase from "@/components/AppPurchase";
-import loggerUtils from "@/utils/logger";
+import LoggerUtils from "@/utils/logger";
 
 // Defined the form interface for strict typing
 interface RegisterFormPayload {
@@ -63,7 +63,7 @@ const Register = () => {
                     return { success: false, message: resource.common.error };
             }
         } catch (error: unknown) {
-            loggerUtils.logError(error as Error, "Register", "handleAction", "66");
+            LoggerUtils.logCatch(error, "Register", "handleAction", "66");
             return { success: false, message: resource.common.error };
         }
     };
