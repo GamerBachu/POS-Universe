@@ -4,6 +4,7 @@ export { type StorageKey, StorageKeys } from './keys';
 export { default as sessionStorage } from './web/sessionStorage';
 export { default as applicationStorage } from './web/applicationStorage';
 export * from './web/cookieStorage';
+export { default as LoggerUtils } from "./logger";
 
 export const tokenValidTill = 60 * 60 * 1000; // 1 hour in milliseconds
 export const refreshTokenValidTill = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
@@ -25,3 +26,5 @@ export const getDeviceInfo = (): IDeviceInfo => {
         deviceType: 'Desktop'
     };
 };
+
+export const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

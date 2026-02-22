@@ -7,6 +7,7 @@ import type { IActionState } from "@/types/actionState";
 import CommonLayout from "@/layouts/CommonLayout";
 import { PATHS } from "@/routes/paths";
 import LoggerUtils from "@/utils/logger";
+ 
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -109,10 +110,8 @@ const AttributeForm = () => {
         };
       }
 
-      if (response.status === 200 && response.success) {
+      if ((response.status === 200 || response.status === 201) && response.success) {
         setInitialData(payload);
-        // Optional: you could navigate back here automatically
-        // onSendBack("0");
         return { success: true, message: resource.common.success_save };
       }
       // Handle errors
@@ -136,6 +135,19 @@ const AttributeForm = () => {
 
   const isReadOnly = action === "view" || action === "delete";
 
+  // useEffect(() => {
+
+  //   const d = new SeedData();
+  //   d.masterProductAttribute.forEach(item => {
+  //     masterProductAttributeApi.add({
+  //       name: item.name,
+  //       isActive: true
+  //     });
+  //   });
+
+  // }, []);
+
+
   return (
     <CommonLayout h1={resource.navigation.master_pro__attr_label}>
 
@@ -152,7 +164,10 @@ const AttributeForm = () => {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-        <form action={formAction} className="p-5 space-y-6">
+        <form
+          key={initialData.id}
+          action={formAction}
+          className="p-5 space-y-6">
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">

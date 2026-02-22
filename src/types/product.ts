@@ -3,7 +3,7 @@
 
 
 export interface IProduct {
-    id: number;           // Internal DB Auto-increment
+    id?: number;           // Internal DB Auto-increment
     code: string;            // Product Uniq Code 
     sku: string;          // Internal SKU (e.g., "XPO-MX3S-BLK")
     barcode: string;      // EAN/UPC for scanner
@@ -16,15 +16,14 @@ export interface IProduct {
 
     // Inventory
     stock: number;
-    reorderLevel: number; // Alert when stock < this value
-    unit: string;
+    reorderLevel: number; // Alert when stock < this value 
 
     // State
     isActive: boolean;    // Soft delete instead of hard delete
 }
 
 export interface IProductAttribute {
-    id: number;           // Internal DB Auto-increment
+    id?: number;           // Internal DB Auto-increment
     productId: number; // foreign key to Product 
     attributeId: number; // foreign key to Attribute
     value: string;
@@ -32,7 +31,7 @@ export interface IProductAttribute {
 
 
 export interface IProductImage {
-    id: number;           // Internal DB Auto-increment
+    id?: number;          // Internal DB Auto-increment
     productId: number; // foreign key to Product 
     title: string;
     description: string;
