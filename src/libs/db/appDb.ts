@@ -21,18 +21,17 @@ class POSUniversalDexie extends Dexie {
         super("POS_UniversalDB_0012");
 
         this.version(1).stores({
-            // Only index fields used in .where(), .orderBy(), or .filter()
-            users: "++id, &guid, &email, &username, isActive",
+
+            users: "++id, guid, name, email, username, password, isActive",
 
             refreshTokens: "++id, userId, token",
 
             systemLogs: '++id, type, pageName, timestamp',
 
-            masterProductAttributes: '++id, &name',
+            masterProductAttributes: '++id, name',
 
-            // Added '&' for unique constraints on identifiers
-            // Removed non-searchable fields like prices/rates to save index memory
-            products: "++id, &code, sku, barcode, name, isActive",
+
+            products: "++id, code, sku, barcode, name, isActive",
 
             productAttributes: "++id, productId, attributeId",
 
