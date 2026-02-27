@@ -55,7 +55,7 @@ Before pushing code, verify:
 - [ ] Error messages displayed clearly
 - [ ] Loading state shown during submission
 - [ ] Success feedback provided
-- [ ] Form inputs use `input-style` class
+- [ ] Form inputs use `w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none` class
 - [ ] Labels use `input-label-style` class
 - [ ] Buttons use `btn-primary` or appropriate variant
 

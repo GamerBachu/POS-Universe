@@ -730,7 +730,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
             type="text"
             value={formData.code}
             onChange={e => handleChange('code', e.target.value)}
-            className={`input-style ${errors.code ? 'border-red-500' : ''}`}
+            className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${errors.code ? 'border-red-500' : ''}`}
             placeholder="e.g., PROD-001"
           />
           {errors.code && <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.code}</p>}
@@ -743,7 +743,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
             type="text"
             value={formData.sku}
             onChange={e => handleChange('sku', e.target.value)}
-            className="input-style"
+            className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
             placeholder="e.g., XPO-MX3S-BLK"
           />
         </div>
@@ -755,7 +755,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
             type="text"
             value={formData.name}
             onChange={e => handleChange('name', e.target.value)}
-            className={`input-style ${errors.name ? 'border-red-500' : ''}`}
+            className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${errors.name ? 'border-red-500' : ''}`}
             placeholder="Product name"
           />
           {errors.name && <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.name}</p>}
@@ -768,7 +768,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
             type="number"
             value={formData.sellingPrice}
             onChange={e => handleChange('sellingPrice', parseFloat(e.target.value))}
-            className={`input-style ${errors.sellingPrice ? 'border-red-500' : ''}`}
+            className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${errors.sellingPrice ? 'border-red-500' : ''}`}
             step="0.01"
             min="0"
           />
@@ -782,7 +782,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
             type="number"
             value={formData.stock}
             onChange={e => handleChange('stock', parseInt(e.target.value, 10))}
-            className={`input-style ${errors.stock ? 'border-red-500' : ''}`}
+            className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${errors.stock ? 'border-red-500' : ''}`}
             min="0"
           />
           {errors.stock && <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.stock}</p>}
@@ -895,7 +895,7 @@ export const ProductFormAction = () => {
           type="text"
           required
           disabled={isPending}
-          className="input-style"
+          className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
           placeholder="PROD-001"
         />
       </div>
@@ -911,7 +911,7 @@ export const ProductFormAction = () => {
           type="text"
           required
           disabled={isPending}
-          className="input-style"
+          className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
           placeholder="Enter product name"
         />
       </div>
@@ -929,7 +929,7 @@ export const ProductFormAction = () => {
           min="0"
           required
           disabled={isPending}
-          className="input-style"
+          className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
           placeholder="0.00"
         />
       </div>
@@ -1018,7 +1018,7 @@ export const ProductTable = ({ products }: { products: IProduct[] }) => {
         placeholder="Search products..."
         value={state.searchQuery}
         onChange={e => setState(prev => ({ ...prev, searchQuery: e.target.value, currentPage: 1 }))}
-        className="input-style"
+        className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
       />
 
       {/* Table */}
@@ -1368,7 +1368,7 @@ export const ProductList = () => {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="input-style"
+              className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
               placeholder="Search by name or code..."
             />
           </div>

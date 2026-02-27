@@ -205,7 +205,7 @@ export const MyForm = () => {
         name="name"
         type="text"
         required
-        className="input-style"
+        className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
         disabled={isPending}
       />
       
@@ -213,7 +213,7 @@ export const MyForm = () => {
         name="email"
         type="email"
         required
-        className="input-style"
+        className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
         disabled={isPending}
       />
 
@@ -386,7 +386,7 @@ export const SimpleForm = ({ onSubmit }: FormProps) => {
           type="text"
           value={data.name}
           onChange={e => handleChange('name', e.target.value)}
-          className="input-style"
+          className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none"
           placeholder="Name"
         />
         {errors.name && <p className="text-red-600">{errors.name}</p>}
@@ -438,7 +438,7 @@ export const SimpleForm = ({ onSubmit }: FormProps) => {
 ### Common Component Classes
 ```tsx
 // Input
-<input className="input-style" />
+<input className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
 
 // Label
 <label className="input-label-style">Label</label>

@@ -32,7 +32,7 @@ const [data, setData] = useState<IProduct>(initialData);
 ## Styling & Layout
 
 ### Predefined Tailwind Components (globals.css)
-Use these for consistency: `.input-style`, `.input-label-style`, `.btn-primary`, `.status-success`, `.status-error`
+Use these for consistency: `.w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none`, `.input-label-style`, `.btn-primary`, `.status-success`, `.status-error`
 - Dark mode: Always use `dark:` prefix (enabled via class strategy)
 - Root element has: `min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100`
 
@@ -256,7 +256,7 @@ Located in `src/styles/globals.css`, use these for common patterns:
 
 ```css
 @layer components {
-  .input-style { /* Full-width input with dark mode support */ }
+  .w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none { /* Full-width input with dark mode support */ }
   .input-label-style { /* Label for form inputs */ }
   .btn-primary { /* Primary action button */ }
   .status-success { /* Success status badge */ }
@@ -267,7 +267,7 @@ Located in `src/styles/globals.css`, use these for common patterns:
 **Usage Example:**
 ```tsx
 <label className="input-label-style">Email Address</label>
-<input type="email" className="input-style" />
+<input type="email" className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
 <button className="btn-primary">Submit</button>
 ```
 
@@ -689,7 +689,7 @@ export const Input = ({ label, error, id, ...props }: InputProps) => (
     <input
       id={id}
       {...props}
-      className={`input-style ${error ? 'border-red-500 dark:border-red-500' : ''}`}
+      className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${error ? 'border-red-500 dark:border-red-500' : ''}`}
     />
     {error && <p className="text-red-600 dark:text-red-400 text-sm mt-1">{error}</p>}
   </div>
