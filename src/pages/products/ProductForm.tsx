@@ -1,4 +1,4 @@
-import { useCallback, useActionState, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   productApi,
   masterProductAttributeApi,
@@ -7,12 +7,11 @@ import {
   productDescriptionApi,
   productKeywordApi,
 } from "@/api";
-import { ProductDetailsSection } from "./ProductDetailsSection";
-import { ProductFinancialSection } from "./ProductFinancialSection";
-
-import { ProductAttributesSection } from "./ProductAttributesSection";
-import { ProductImagesSection } from "./ProductImagesSection";
-import { ProductFormFooter } from "./ProductFormFooter";
+import ProductDetailsSection from "./ProductDetailsSection";
+import ProductFinancialSection from "./ProductFinancialSection";
+import ProductAttributesSection from "./ProductAttributesSection";
+import ProductImagesSection from "./ProductImagesSection";
+import ProductFormFooter from "./ProductFormFooter";
 import { ActionStatusMessage } from "@/components/ActionStatusMessage";
 import type { IMasterProductAttribute } from "@/types/masters";
 import { useNavigate, useParams } from "react-router-dom";
@@ -43,103 +42,105 @@ import {
 } from "./productFormUtils";
 import PageHeader from "@/components/PageHeader";
 import RadioActiveToggle from "@/components/RadioActiveToggle";
-import ProductDescriptionSection from "./ProductDescriptionSection";
 import ProductKeywordsSection from "./ProductKeywordsSection";
-
-const initialState = { success: false, message: "", status: 0 };
 
 const ProductForm = () => {
   const { id: rawId, action: rawAction } = useParams();
   const navigate = useNavigate();
   const id = Number(rawId);
   const action = rawAction?.toLowerCase() || "add";
+  const isReadOnly = action === "view" || action === "delete";
 
-  // Master Attribute State
-  const [masterAttributes, setMasterAttributes] = useState<
-    IMasterProductAttribute[]
-  >([]);
+  // Consolidated form state
+  const [formState, setFormState] = useState<IActionState>({
+    success: false,
+    message: "",
+    status: 0,
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>(
-    [],
-  );
+  // Product data state
+  const [item, setItem] = useState<IProduct>({
+    id: 0,
+    code: "",
+    sku: "",
+    barcode: "",
+    name: "",
+    costPrice: 0,
+    sellingPrice: 0,
+    taxRate: 0,
+    stock: 0,
+    reorderLevel: 5,
+    isActive: true,
+  });
 
+  // Related data state
+  const [masterAttributes, setMasterAttributes] = useState<IMasterProductAttribute[]>([]);
+  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>([]);
   const [imageRows, setImageRows] = useState<IProductImageView[]>([]);
-
   const [descriptionItem, setDescriptionItem] = useState<IProductDescription>({
     productId: 0,
     description: "",
     id: 0,
   });
-
   const [keywordRows, setKeywordRows] = useState<IProductKeywordView[]>([]);
-
-  // Form versioning - increments after successful save to force remount
   const [formVersion, setFormVersion] = useState<number>(0);
 
-  // Load product attributes for edit/view
+  // Consolidated data loading effect
   useEffect(() => {
-    if (id && action !== "add") {
-      productAttributeApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setAttributeRows(transformAttributesToView(res.data));
+    const loadData = async () => {
+      try {
+        // Load master attributes
+        const masterRes = await masterProductAttributeApi.getAll();
+        if (masterRes.success && masterRes.data) {
+          setMasterAttributes(masterRes.data.filter((a) => a.isActive));
         }
-      });
-    }
+
+        // Load product only if editing/viewing
+        if (id && action !== "add") {
+          const [productRes, attrRes, imgRes, descRes, keywordRes] = await Promise.all([
+            productApi.getById(id),
+            productAttributeApi.getAllByProductId(id),
+            productImageApi.getAllByProductId(id),
+            productDescriptionApi.getByProductId(id),
+            productKeywordApi.getAllByProductId(id),
+          ]);
+
+          if (productRes.success && productRes.data) {
+            setItem(productRes.data);
+          }
+          if (attrRes.success && attrRes.data) {
+            setAttributeRows(transformAttributesToView(attrRes.data));
+          }
+          if (imgRes.success && imgRes.data) {
+            setImageRows(imgRes.data);
+          }
+          if (descRes.success && descRes.data) {
+            setDescriptionItem(descRes.data);
+          }
+          if (keywordRes.success && keywordRes.data) {
+            setKeywordRows(
+              keywordRes.data.map((k) => ({ ...k, rowid: generateGuid() + "-" + id })),
+            );
+          }
+        }
+      } catch (error) {
+        LoggerUtils.logCatch(error, "ProductForm", "loadData");
+      }
+    };
+
+    loadData();
   }, [id, action]);
 
-  // Load product images for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productImageApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setImageRows(res.data);
-        }
-      });
-    }
-  }, [id, action]);
-
-  // Load product descriptions for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productDescriptionApi.getByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setDescriptionItem(res.data);
-        }
-      });
-    }
-  }, [id, action]);
-
-  // Load product keywords for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productKeywordApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setKeywordRows(
-            res.data.map((k) => ({ ...k, rowid: generateGuid() + "-" + id })),
-          );
-        }
-      });
-    }
-  }, [id, action]);
-
-  // Fetch master attributes on mount
-  useEffect(() => {
-    masterProductAttributeApi.getAll().then((res) => {
-      if (res.success && res.data)
-        setMasterAttributes(res.data.filter((a) => a.isActive));
-    });
-  }, []);
-
-  // Handlers for dynamic attribute rows (memoized with useCallback)
+  // Consolidated row handlers (Attributes, Images, Keywords)
   const handleAddAttributeRow = useCallback(() => {
-    const refProductId: number = action === "add" ? 0 : id;
     setAttributeRows((prev) => [
       ...prev,
       {
         attributeId: 0,
         value: "",
-        productId: refProductId,
-        rowid: generateGuid() + "-" + refProductId,
+        productId: action === "add" ? 0 : id,
+        rowid: generateGuid() + "-" + (action === "add" ? 0 : id),
       },
     ]);
   }, [action, id]);
@@ -164,14 +165,12 @@ const ProductForm = () => {
     [],
   );
 
-  // Handlers for dynamic image rows (memoized with useCallback)
   const handleAddImageRow = useCallback(() => {
-    const refProductId: number = action === "add" ? 0 : id;
     setImageRows((prev) => [
       ...prev,
       {
-        rowid: generateGuid() + "-" + refProductId,
-        productId: refProductId,
+        rowid: generateGuid() + "-" + (action === "add" ? 0 : id),
+        productId: action === "add" ? 0 : id,
         title: "",
         description: "",
         url: "",
@@ -181,9 +180,7 @@ const ProductForm = () => {
 
   const handleRemoveImageRow = useCallback(
     async (rowid: string) => {
-      const row = imageRows.find(
-        (p) => p.rowid === rowid || p.id?.toString() === rowid,
-      );
+      const row = imageRows.find((p) => p.rowid === rowid || p.id?.toString() === rowid);
       if (row?.id && row.id > 0) {
         await productImageApi.delete(row.id);
       }
@@ -207,14 +204,12 @@ const ProductForm = () => {
     [],
   );
 
-  // Handlers for dynamic keyword rows
   const handleAddKeywordRow = useCallback(() => {
-    const refProductId: number = action === "add" ? 0 : id;
     setKeywordRows((prev) => [
       ...prev,
       {
-        rowid: generateGuid() + "-" + refProductId,
-        productId: refProductId,
+        rowid: generateGuid() + "-" + (action === "add" ? 0 : id),
+        productId: action === "add" ? 0 : id,
         keyword: "",
       },
     ]);
@@ -231,28 +226,14 @@ const ProductForm = () => {
     [keywordRows],
   );
 
-  const handleKeywordRowChange = useCallback((rowid: string, value: string) => {
-    setKeywordRows((prev) =>
-      prev.map((p) => (p.rowid === rowid ? { ...p, keyword: value } : p)),
-    );
-  }, []);
-
-  const [item, setItem] = useState<IProduct>({
-    id: 0,
-    code: "",
-    sku: "",
-    barcode: "",
-    name: "",
-
-    costPrice: 0,
-    sellingPrice: 0,
-    taxRate: 0,
-
-    stock: 0,
-    reorderLevel: 5,
-
-    isActive: true,
-  });
+  const handleKeywordRowChange = useCallback(
+    (rowid: string, value: string) => {
+      setKeywordRows((prev) =>
+        prev.map((p) => (p.rowid === rowid ? { ...p, keyword: value } : p)),
+      );
+    },
+    [],
+  );
 
   const onSendBack = useCallback(() => {
     if (window.history.length > 1 && window.history.state?.idx > 0) {
@@ -262,16 +243,13 @@ const ProductForm = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (id && action !== "add") {
-      productApi.getById(id).then((res) => {
-        if (res.success && res.data) setItem(res.data);
-      });
-    }
-  }, [id, action]);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setFormState({ success: false, message: "", status: 0 });
 
-  const handleAction = async (_: IActionState | null, formData: FormData) => {
     try {
+      const formData = new FormData(e.currentTarget);
       const payload = Object.fromEntries(formData) as Record<string, string>;
 
       // Collect attribute rows
@@ -289,25 +267,31 @@ const ProductForm = () => {
         const res = await handleProductDeletion(id);
         if (res.success) {
           onSendBack();
-          return { success: true, message: resource.common.success_delete };
+          return;
         }
-        return { success: false, message: resource.common.fail_delete };
+        setFormState({
+          success: false,
+          message: resource.common.fail_delete,
+          status: 500,
+        });
+        return;
       }
 
       // Validate payload
       const validation = validateProductPayload(payload);
       if (!validation.valid) {
-        return {
+        setFormState({
           success: false,
           message: resource.product_inventory.required_fields,
-        };
+          status: 400,
+        });
+        return;
       }
 
       // Format payload
       const formattedPayload = formatProductPayload(payload, action, id);
 
-      //description payload
-
+      // Description payload
       const description = payload.descContent || "";
       const descriptionPayload: IProductDescription = {
         ...descriptionItem,
@@ -330,14 +314,21 @@ const ProductForm = () => {
 
       const apiResult = handleApiResponse(response, errorMap);
       if (!apiResult.success) {
-        return { success: false, message: apiResult.message };
+        setFormState({
+          success: false,
+          message: apiResult.message,
+          status: 500,
+        });
+        return;
       }
 
-      // Save attributes
+      // Save related data
       const refProductId: number =
         action === "add" ? Number(response.data) : id;
       const warningMessages: string[] = [];
+
       if (refProductId > 0) {
+        // Save attributes
         const newAttributeRows = await handleAttributesSave(
           action,
           refProductId,
@@ -353,8 +344,7 @@ const ProductForm = () => {
         );
         setImageRows(newImageRows);
 
-        // Save Descriptions
-
+        // Save descriptions
         if (descriptionPayload?.description?.trim()) {
           if (descriptionPayload.id && descriptionPayload.id > 0) {
             const descRes = await productDescriptionApi.update(
@@ -369,8 +359,7 @@ const ProductForm = () => {
               setDescriptionItem({ ...descriptionPayload });
             }
           } else {
-            const newIdRes =
-              await productDescriptionApi.add(descriptionPayload);
+            const newIdRes = await productDescriptionApi.add(descriptionPayload);
             if (!newIdRes.success) {
               warningMessages.push(
                 newIdRes.message || "Failed to add product description.",
@@ -381,7 +370,7 @@ const ProductForm = () => {
           }
         }
 
-        // Save Keywords
+        // Save keywords
         try {
           const savedKeywordRows = await Promise.all(
             keywordRows.map(async (row) => {
@@ -419,23 +408,29 @@ const ProductForm = () => {
       setFormVersion((prev) => prev + 1);
 
       if (warningMessages.length > 0) {
-        return {
+        setFormState({
           success: true,
           message: `${resource.common.success_save} Warnings: ${warningMessages.join(", ")}`,
-        };
+          status: 200,
+        });
+      } else {
+        setFormState({
+          success: true,
+          message: resource.common.success_save,
+          status: 200,
+        });
       }
-      return { success: true, message: resource.common.success_save };
     } catch (error) {
-      LoggerUtils.logCatch(error, "ProductForm", "handleAction");
-      return { success: false, message: resource.common.error, status: 500 };
+      LoggerUtils.logCatch(error, "ProductForm", "handleSubmit");
+      setFormState({
+        success: false,
+        message: resource.common.error,
+        status: 500,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const [state, formAction, isPending] = useActionState(
-    handleAction,
-    initialState,
-  );
-  const isReadOnly = action === "view" || action === "delete";
 
   return (
     <CommonLayout h1={resource.navigation.product_list_label}>
@@ -474,6 +469,7 @@ const ProductForm = () => {
           descriptionItem={descriptionItem}
           isReadOnly={isReadOnly}
         />
+        <hr className="dark:border-gray-700" />
         {/* SECTION 5: Dynamic Master Attributes */}
         <ProductAttributesSection
           attributeRows={attributeRows}
