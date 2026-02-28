@@ -1,4 +1,4 @@
-import type { authUser } from "@/types/user";
+import type { IAuthUser } from "@/types/user";
 
 export type AuthProviderState = {
     info: IAuthorize;
@@ -6,7 +6,6 @@ export type AuthProviderState = {
 };
 
 export interface IAuthorize {
-    isAuthorized: boolean;
-    appToken: string;
-    authUser?: authUser;
+    isAuthorized: boolean; 
+    authUser?: IAuthUser;
 }

@@ -134,21 +134,21 @@ const SystemLogForm = () => {
   return (
     <CommonLayout h1={resource.navigation.system_log_list_label}>
 
-      <div className="flex justify-between items-center mb-4 px-1">
+      <div className="flex justify-between items-center mb-2 px-1">
         <h1 className="text-lg font-bold text-gray-800 dark:text-white capitalize">
           {action} {resource.navigation.system_log_list_label}
         </h1>
         <button
           onClick={onSendBack}
-          className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
+          className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm font-medium shadow-sm transition-all"
         >
           {resource.common.back_page}
         </button>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-        <form action={formAction} className="p-5 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form action={formAction} className="p-2 space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
 
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">

@@ -25,7 +25,7 @@ const ThemeToggleIcon: React.FC<ThemeToggleIconProps> = ({ className = "fixed to
         // Sun Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-4 w-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -41,7 +41,7 @@ const ThemeToggleIcon: React.FC<ThemeToggleIconProps> = ({ className = "fixed to
         // Moon Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-4 w-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

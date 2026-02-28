@@ -2,38 +2,46 @@ import Dexie, { type EntityTable } from "dexie";
 import {
     type IProduct,
     type IProductAttribute,
+    type IProductDescription,
     type IProductImage,
+    type IProductKeyWord,
 } from "@/types/product";
 import { type IMasterProductAttribute } from "@/types/masters";
-import { type User, type UserToken } from "@/types/user";
+import { type IUser, type IRefreshToken } from "@/types/user";
 import type { ISystemLog } from "@/types/systemLog";
 
 class POSUniversalDexie extends Dexie {
-    users!: EntityTable<User, "id">;
-    userTokens!: EntityTable<UserToken, "id">;
-
+    users!: EntityTable<IUser, "id">;
+    refreshTokens!: EntityTable<IRefreshToken, "id">;
     systemLogs!: EntityTable<ISystemLog, "id">;
-
-
     masterProductAttributes!: EntityTable<IMasterProductAttribute, "id">;
 
+    //product set
     products!: EntityTable<IProduct, "id">;
     productAttributes!: EntityTable<IProductAttribute, "id">;
     productImages!: EntityTable<IProductImage, "id">;
+    productDescriptions!: EntityTable<IProductDescription, "id">;
+    productKeywords!: EntityTable<IProductKeyWord, "id">;
 
     constructor() {
         super("POS_UniversalDB_0012");
+
         this.version(1).stores({
-            users: "++id,guid,name,email,username,password,isActive",
-            userTokens: "++id,userId,token,validTill",
 
-            systemLogs: '++id,type,pageName,timestamp',
+            users: "++id, guid, name, email, username, password, isActive",
 
-            masterProductAttributes: '++id,name',
+            refreshTokens: "++id, userId, token",
 
-            products: "++id,code,sku,name,price,stock",
-            productAttributes: "++id,productId,attributeId",
-            productImages: "++id,productId",
+            systemLogs: '++id, type, pageName, timestamp',
+
+            masterProductAttributes: '++id, name',
+
+            //product tables
+            products: "++id, code, sku, barcode, name, isActive",
+            productAttributes: "++id, productId, attributeId",
+            productImages: "++id, productId",
+            productDescriptions: "++id, productId",
+            productKeywords: "++id, productId",
         });
     }
 }

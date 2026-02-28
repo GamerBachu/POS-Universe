@@ -9,13 +9,13 @@ const Header = ({ label = "Loading..." }: { label?: string; }) => {
 
 
     return (
-        <header className="flex justify-between items-center p-3 flex-shrink-0">
-            <h1 className="text-3xl font-bold">
+        <header className="flex justify-between items-center p-2 flex-shrink-0">
+            <h1 className="text-1xl font-bold">
                 {label}
             </h1>
             <div className="flex items-center gap-4">
                 <div className="text-sm text-gray-500 dark:text-gray-400">{name}</div>
-                <ThemeToggleIcon className="p-2 rounded-sm border border-gray-300 dark:border-gray-600" />
+                <ThemeToggleIcon className="p-1 rounded-sm border border-gray-300 dark:border-gray-600" />
             </div>
         </header>
     );

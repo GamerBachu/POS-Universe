@@ -5,11 +5,13 @@ import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { isValidPath, PATHS } from "@/routes/paths";
 import { useAuth } from "@/contexts/authorize";
-import type { User, UserToken } from "@/types/user";
+import type { IAuthUser, IAuthResponse } from "@/types/user";
 import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
 import type { IActionState } from "@/types/actionState";
 import LoggerUtils from "@/utils/logger";
+import InputWithLabel from "@/components/InputWithLabel";
+import { Button } from "@/components/Button";
 
 
 
@@ -38,13 +40,10 @@ const Login: React.FC = () => {
       // Handling statuses based on our ServiceResponse structure
       switch (response.status) {
         case 200: {
-          const { user, token } = response.data as {
-            user: User;
-            token: UserToken;
-          };
+          const { user, token } = response.data as IAuthResponse;
 
-          const authUser = {
-            guid: user.guid,
+          const authUser: IAuthUser = {
+            userId: user.id,
             displayName: getName(
               user.nameFirst,
               user.nameMiddle,
@@ -52,12 +51,11 @@ const Login: React.FC = () => {
             ),
             username: user.username,
             roles: [],
-            refreshToken: "",
+            refreshToken: token.token,
           };
 
           const info: IAuthorize = {
             authUser,
-            appToken: token.token,
             isAuthorized: true,
           };
 
@@ -125,32 +123,20 @@ const Login: React.FC = () => {
         </header>
 
         <form action={formAction} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.username}
-            </label>
-            <input
-              type="text"
-              name="username"
-              required
-              className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.ph_username}
-            />
-          </div>
+          <InputWithLabel
+            label={resource.common.username}
+            name="username"
+            placeholder={resource.common.ph_username}
+            required={true}
+          />
 
-          <div>
-            <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-              {resource.common.password}
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              className="w-full px-4 py-2 rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder={resource.common.ph_password}
-            />
-          </div>
-
+          <InputWithLabel
+            label={resource.common.password}
+            type="password"
+            name="password"
+            placeholder={resource.common.ph_password}
+            required={true}
+          />
           {state?.message && (
             <div
               role="alert"
@@ -164,15 +150,14 @@ const Login: React.FC = () => {
           )}
 
           <div className="flex flex-col gap-3 pt-4">
-            <button
+            <Button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-sm transition-transform active:scale-95 disabled:opacity-70"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
               disabled={isPending}
+              isLoading={isPending}
             >
-              {isPending
-                ? `${resource.login.submit}...`
-                : resource.login.submit}
-            </button>
+              {resource.login.submit}
+            </Button>
             <Link
               to={PATHS.REGISTER}
               className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"

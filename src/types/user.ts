@@ -1,4 +1,16 @@
-export interface User {
+export interface ILoginCredentials {
+    email: string;
+    password: string;
+}
+
+
+
+export interface IAuthResponse {
+    user: IUser;
+    token: IRefreshToken;
+}
+
+export interface IUser {
     id: number;  // primary key
     guid: string;
     nameFirst: string;
@@ -16,20 +28,29 @@ export interface User {
     deletedBy: number;
 }
 
-export interface UserToken {
-    id: number; // primary key
-    userId: number;  // foreign key to User
-    token: string;
-    validTill: string;
-    createdDate: string;
+export interface IRefreshToken {
+    id: number;          // Primary key (auto-incremented)
+    userId: number;       // reference numeric id
+    token: string;        // The actual refresh token string
+    expiresAt: string;    // Timestamp (Date.now() + duration)
+    createdAt: string;    // When the session was created
+    browser: string;       // e.g., "Chrome"
+    os: string;            // e.g., "Windows 11"
+    deviceType: string;    // e.g., "Mobile" or "Desktop"
+
 }
 
-export interface authUser {
-
-    guid: string;
+export interface IAuthUser {
+    userId: number;       // reference numeric id
     displayName: string;
     username: string;
     roles: string[];
     refreshToken: string;
 
+}
+
+export interface IDeviceInfo {
+    browser: string;       // e.g., "Chrome"
+    os: string;            // e.g., "Windows 11"
+    deviceType: string;    // e.g., "Mobile" or "Desktop"
 }
