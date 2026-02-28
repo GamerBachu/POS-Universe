@@ -1,12 +1,47 @@
-# Project Guidelines and Coding Standards
 
-## Project Guidelines
-1. **Clarity and Purpose**: Ensure that the purpose of the project is clear and all project goals are defined.
-2. **Open Communication**: Use Issue Tracker for discussions and updates to encourage open communication among team members.
-3. **Documentation**: Maintain comprehensive documentation to facilitate understanding and collaboration.
+# GitHub Copilot Instructions for POS Universe
 
-## Coding Standards
-1. **Code Readability**: Code should be easy to read and follow. Use clear naming conventions and consistent formatting.
-2. **Commenting**: Code should include comments to explain complex logic or important sections to aid future developers.
-3. **Version Control**: Use Git for version control. Make small, incremental commits with clear messages.
-4. **Testing**: Write tests for new features and ensure existing tests pass after changes.
+## Overview
+POS Universe is a modern, type-safe Point of Sale web system built with React 19, Vite, and TypeScript. The project emphasizes clean code, strict typing, and a feature-based structure for scalability and maintainability.
+
+## Key Guidelines
+
+- **Type Safety:**
+	- Use TypeScript everywhere. Prefer explicit types and interfaces.
+	- Avoid use of `any` and implicit `any` types.
+	- Leverage types from the `types/` directory for consistency.
+
+- **React 19:**
+	- Use React 19 features and idioms.
+	- Prefer functional components and hooks.
+	- Use React 19 form patterns and action state for handling forms and side effects.
+
+- **Project Structure:**
+	- Follow the feature-based organization in `src/`:
+		- `api/` for API logic
+		- `components/` for shared UI
+		- `contexts/` for global state
+		- `hooks/` for custom hooks
+		- `layouts/`, `libs/`, `pages/`, `routes/`, `styles/`, `types/`, `utils/`
+
+- **Styling:**
+	- Use Tailwind CSS for all styling.
+	- Ensure the `#root` div in `index.html` has: `min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100`.
+
+- **Code Quality:**
+	- Write clean, readable, and maintainable code.
+	- Use clear naming conventions and consistent formatting.
+	- Add comments for complex logic.
+	- Use Git for version control with small, clear commits.
+	- Write and maintain tests for all features.
+
+## Forms & Action State
+- Use React 19's form and action state patterns for all forms.
+- Keep form logic type-safe and colocated with components.
+
+## References
+- See `README.md` for tech stack and getting started.
+- See `src/types/` for shared types.
+
+---
+_This file is for GitHub Copilot and contributors. Please follow these guidelines for a consistent, type-safe, and modern codebase._
