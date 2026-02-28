@@ -29,12 +29,8 @@ export interface IProductAttribute {
     value: string;
 }
 
-export interface IProductAttributeView {
-    rowid:string
-    id?: number;           // Internal DB Auto-increment
-    productId: number; // foreign key to Product 
-    attributeId: number; // foreign key to Attribute
-    value: string;
+export interface IProductAttributeView extends IProductAttribute {
+    rowid: string;  // Temporary ID for frontend management of new rows
 }
 
 
@@ -46,13 +42,23 @@ export interface IProductImage {
     url: string;
 }
 
-export interface IProductImageView {
-    rowid?: string;       // Temporary row ID for new images
+export interface IProductImageView extends IProductImage {
+    rowid?: string;  // Temporary ID for frontend management of new rows
+}
+
+export interface IProductDescription {
     id?: number;          // Internal DB Auto-increment
     productId: number; // foreign key to Product 
-    title: string;
     description: string;
-    url: string;
+}
+
+export interface IProductKeyWord {
+    id?: number;          // Internal DB Auto-increment
+    productId: number; // foreign key to Product 
+    keyword: string;
+}
+export interface IProductKeywordView extends IProductKeyWord {
+    rowid?: string; // Temporary ID for frontend management of new rows
 }
 
 //   // Tracking

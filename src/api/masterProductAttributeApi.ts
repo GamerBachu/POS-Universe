@@ -29,7 +29,7 @@ export class masterProductAttributeApi {
 
     static async add(payload: Partial<IMasterProductAttribute>): Promise<ServiceResponse<number>> {
         try {
-            if (payload?.id !== undefined) {
+            if (payload.id !== undefined && payload.id !== null && payload.id <= 0) {
                 delete payload.id;
             }
 

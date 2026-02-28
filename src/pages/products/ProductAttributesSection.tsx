@@ -25,6 +25,9 @@ export const ProductAttributesSection = ({
 }: ProductAttributesSectionProps) => {
   return (
     <div>
+      <label className="text-xs font-bold uppercase text-gray-500" >
+        Product Attributes
+      </label>
       <div className="space-y-2">
         {attributeRows.map((row) => (
           <div key={row.rowid} className="flex gap-2 items-center">

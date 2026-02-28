@@ -38,9 +38,7 @@ export class productApi {
 
     static async add(payload: IProduct): Promise<ServiceResponse<number | undefined | null>> {
 
-        // always delete the id from payload to prevent any accidental overwriting of existing records        
-        // always delete the id from payload to prevent any accidental overwriting of existing records        
-        if (payload.id !== undefined) {
+        if (payload.id !== undefined && payload.id !== null && payload.id <= 0) {
             delete payload.id;
         }
 

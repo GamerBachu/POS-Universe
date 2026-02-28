@@ -1,7 +1,12 @@
 import { useCallback, useActionState, useEffect, useState } from "react";
-import { masterProductAttributeApi } from "@/api/masterProductAttributeApi";
-import { productAttributeApi } from "@/api/productAttributeApi";
-import { productImageApi } from "@/api/productImageApi";
+import {
+  productApi,
+  masterProductAttributeApi,
+  productAttributeApi,
+  productImageApi,
+  productDescriptionApi,
+  productKeywordApi,
+} from "@/api";
 import { ProductDetailsSection } from "./ProductDetailsSection";
 import { ProductFinancialSection } from "./ProductFinancialSection";
 
@@ -14,8 +19,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommonLayout from "@/layouts/CommonLayout";
 import resource from "@/locales/en.json";
 import { PATHS } from "@/routes/paths";
-import { productApi } from "@/api/productApi";
-import { type IProduct, type IProductAttributeView, type IProductImageView } from "@/types/product";
+
+import type {
+  IProduct,
+  IProductAttributeView,
+  IProductDescription,
+  IProductImageView,
+  IProductKeywordView,
+} from "@/types/product";
 import { LoggerUtils } from "@/utils";
 import type { IActionState } from "@/types/actionState";
 import { generateGuid } from "@/utils/helper/guid";
@@ -32,6 +43,8 @@ import {
 } from "./productFormUtils";
 import PageHeader from "@/components/PageHeader";
 import RadioActiveToggle from "@/components/RadioActiveToggle";
+import ProductDescriptionSection from "./ProductDescriptionSection";
+import ProductKeywordsSection from "./ProductKeywordsSection";
 
 const initialState = { success: false, message: "", status: 0 };
 
@@ -42,11 +55,23 @@ const ProductForm = () => {
   const action = rawAction?.toLowerCase() || "add";
 
   // Master Attribute State
-  const [masterAttributes, setMasterAttributes] = useState<IMasterProductAttribute[]>([]);
+  const [masterAttributes, setMasterAttributes] = useState<
+    IMasterProductAttribute[]
+  >([]);
 
-  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>([]);
+  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>(
+    [],
+  );
 
   const [imageRows, setImageRows] = useState<IProductImageView[]>([]);
+
+  const [descriptionItem, setDescriptionItem] = useState<IProductDescription>({
+    productId: 0,
+    description: "",
+    id: 0,
+  });
+
+  const [keywordRows, setKeywordRows] = useState<IProductKeywordView[]>([]);
 
   // Form versioning - increments after successful save to force remount
   const [formVersion, setFormVersion] = useState<number>(0);
@@ -68,6 +93,30 @@ const ProductForm = () => {
       productImageApi.getAllByProductId(id).then((res) => {
         if (res.success && res.data) {
           setImageRows(res.data);
+        }
+      });
+    }
+  }, [id, action]);
+
+  // Load product descriptions for edit/view
+  useEffect(() => {
+    if (id && action !== "add") {
+      productDescriptionApi.getByProductId(id).then((res) => {
+        if (res.success && res.data) {
+          setDescriptionItem(res.data);
+        }
+      });
+    }
+  }, [id, action]);
+
+  // Load product keywords for edit/view
+  useEffect(() => {
+    if (id && action !== "add") {
+      productKeywordApi.getAllByProductId(id).then((res) => {
+        if (res.success && res.data) {
+          setKeywordRows(
+            res.data.map((k) => ({ ...k, rowid: generateGuid() + "-" + id })),
+          );
         }
       });
     }
@@ -103,16 +152,16 @@ const ProductForm = () => {
       }
       setAttributeRows((prev) => prev.filter((p) => p.rowid !== rowid));
     },
-    [attributeRows]
+    [attributeRows],
   );
 
   const handleAttributeRowChange = useCallback(
     (rowid: string, field: "attributeId" | "value", value: string | number) => {
       setAttributeRows((prev) =>
-        prev.map((p) => (p.rowid === rowid ? { ...p, [field]: value } : p))
+        prev.map((p) => (p.rowid === rowid ? { ...p, [field]: value } : p)),
       );
     },
-    []
+    [],
   );
 
   // Handlers for dynamic image rows (memoized with useCallback)
@@ -132,27 +181,61 @@ const ProductForm = () => {
 
   const handleRemoveImageRow = useCallback(
     async (rowid: string) => {
-      const row = imageRows.find((p) => p.rowid === rowid || p.id?.toString() === rowid);
+      const row = imageRows.find(
+        (p) => p.rowid === rowid || p.id?.toString() === rowid,
+      );
       if (row?.id && row.id > 0) {
         await productImageApi.delete(row.id);
       }
-      setImageRows((prev) => prev.filter((p) => p.rowid !== rowid && p.id?.toString() !== rowid));
+      setImageRows((prev) =>
+        prev.filter((p) => p.rowid !== rowid && p.id?.toString() !== rowid),
+      );
     },
-    [imageRows]
+    [imageRows],
   );
 
   const handleImageRowChange = useCallback(
     (rowid: string, field: "title" | "description" | "url", value: string) => {
       setImageRows((prev) =>
         prev.map((p) =>
-          (p.rowid === rowid || p.id?.toString() === rowid)
+          p.rowid === rowid || p.id?.toString() === rowid
             ? { ...p, [field]: value }
-            : p
-        )
+            : p,
+        ),
       );
     },
-    []
+    [],
   );
+
+  // Handlers for dynamic keyword rows
+  const handleAddKeywordRow = useCallback(() => {
+    const refProductId: number = action === "add" ? 0 : id;
+    setKeywordRows((prev) => [
+      ...prev,
+      {
+        rowid: generateGuid() + "-" + refProductId,
+        productId: refProductId,
+        keyword: "",
+      },
+    ]);
+  }, [action, id]);
+
+  const handleRemoveKeywordRow = useCallback(
+    async (rowid: string) => {
+      const row = keywordRows.find((p) => p.rowid === rowid);
+      if (row?.id && row.id > 0) {
+        await productKeywordApi.delete(row.id);
+      }
+      setKeywordRows((prev) => prev.filter((p) => p.rowid !== rowid));
+    },
+    [keywordRows],
+  );
+
+  const handleKeywordRowChange = useCallback((rowid: string, value: string) => {
+    setKeywordRows((prev) =>
+      prev.map((p) => (p.rowid === rowid ? { ...p, keyword: value } : p)),
+    );
+  }, []);
 
   const [item, setItem] = useState<IProduct>({
     id: 0,
@@ -199,6 +282,10 @@ const ProductForm = () => {
 
       // Handle product deletion
       if (action === "delete") {
+        await productDescriptionApi.deleteByProductId(id);
+        await productKeywordApi.deleteByProductId(id);
+        await productAttributeApi.deleteByProductId(id);
+        await productImageApi.deleteByProductId(id);
         const res = await handleProductDeletion(id);
         if (res.success) {
           onSendBack();
@@ -210,11 +297,23 @@ const ProductForm = () => {
       // Validate payload
       const validation = validateProductPayload(payload);
       if (!validation.valid) {
-        return { success: false, message: resource.product_inventory.required_fields };
+        return {
+          success: false,
+          message: resource.product_inventory.required_fields,
+        };
       }
 
       // Format payload
       const formattedPayload = formatProductPayload(payload, action, id);
+
+      //description payload
+
+      const description = payload.descContent || "";
+      const descriptionPayload: IProductDescription = {
+        ...descriptionItem,
+        productId: id,
+        description,
+      };
 
       // Save product
       const response =
@@ -235,19 +334,96 @@ const ProductForm = () => {
       }
 
       // Save attributes
-      const refProductId: number = action === "add" ? Number(response.data) : id;
+      const refProductId: number =
+        action === "add" ? Number(response.data) : id;
+      const warningMessages: string[] = [];
       if (refProductId > 0) {
-        const newAttributeRows = await handleAttributesSave(action, refProductId, attributes);
+        const newAttributeRows = await handleAttributesSave(
+          action,
+          refProductId,
+          attributes,
+        );
         setAttributeRows(newAttributeRows);
 
         // Save images
-        const newImageRows = await handleImagesSave(action, refProductId, images);
+        const newImageRows = await handleImagesSave(
+          action,
+          refProductId,
+          images,
+        );
         setImageRows(newImageRows);
+
+        // Save Descriptions
+
+        if (descriptionPayload?.description?.trim()) {
+          if (descriptionPayload.id && descriptionPayload.id > 0) {
+            const descRes = await productDescriptionApi.update(
+              descriptionPayload.id,
+              descriptionPayload,
+            );
+            if (!descRes.success) {
+              warningMessages.push(
+                descRes.message || "Failed to update product description.",
+              );
+            } else {
+              setDescriptionItem({ ...descriptionPayload });
+            }
+          } else {
+            const newIdRes =
+              await productDescriptionApi.add(descriptionPayload);
+            if (!newIdRes.success) {
+              warningMessages.push(
+                newIdRes.message || "Failed to add product description.",
+              );
+            } else {
+              setDescriptionItem({ ...descriptionPayload, id: newIdRes.data });
+            }
+          }
+        }
+
+        // Save Keywords
+        try {
+          const savedKeywordRows = await Promise.all(
+            keywordRows.map(async (row) => {
+              const keywordPayload = { ...row, productId: refProductId };
+              if (keywordPayload.rowid) delete keywordPayload.rowid;
+              if (row.id && row.id > 0) {
+                const res = await productKeywordApi.update(
+                  row.id,
+                  keywordPayload,
+                );
+                if (!res.success)
+                  throw new Error(
+                    res.message || `Failed to update keyword: ${row.keyword}`,
+                  );
+                return row;
+              }
+              const res = await productKeywordApi.add(keywordPayload);
+              if (!res.success)
+                throw new Error(
+                  res.message || `Failed to add keyword: ${row.keyword}`,
+                );
+              return { ...row, id: res.data };
+            }),
+          );
+          setKeywordRows(savedKeywordRows as IProductKeywordView[]);
+        } catch (error) {
+          warningMessages.push(
+            (error as Error).message || "Failed to save keywords.",
+          );
+        }
       }
 
       // Update item state and increment form version to trigger remount
       setItem(formattedPayload);
-      setFormVersion(prev => prev + 1);
+      setFormVersion((prev) => prev + 1);
+
+      if (warningMessages.length > 0) {
+        return {
+          success: true,
+          message: `${resource.common.success_save} Warnings: ${warningMessages.join(", ")}`,
+        };
+      }
       return { success: true, message: resource.common.success_save };
     } catch (error) {
       LoggerUtils.logCatch(error, "ProductForm", "handleAction");
@@ -284,15 +460,21 @@ const ProductForm = () => {
         {/* SECTION 2: Financial & Inventory */}
         <ProductFinancialSection item={item} isReadOnly={isReadOnly} />
 
-        {/* State Toggle */}
+        {/* SECTION 3: State Toggle */}
         <RadioActiveToggle
           isActive={item.isActive}
           isReadOnly={isReadOnly}
           title={resource.common.active}
           desc={resource.common.toggle_active}
-          name="isActive" />
+          name="isActive"
+        />
 
-        {/* SECTION 3: Dynamic Master Attributes */}
+        {/* SECTION 4: Product Description */}
+        <ProductDescriptionSection
+          descriptionItem={descriptionItem}
+          isReadOnly={isReadOnly}
+        />
+        {/* SECTION 5: Dynamic Master Attributes */}
         <ProductAttributesSection
           attributeRows={attributeRows}
           masterAttributes={masterAttributes}
@@ -304,7 +486,7 @@ const ProductForm = () => {
 
         <hr className="dark:border-gray-700" />
 
-        {/* SECTION 4: Product Images */}
+        {/* SECTION 6: Product Images */}
         <ProductImagesSection
           imageRows={imageRows}
           isReadOnly={isReadOnly}
@@ -313,12 +495,23 @@ const ProductForm = () => {
           onChangeRow={handleImageRowChange}
         />
 
+        <hr className="dark:border-gray-700" />
+
+        {/* SECTION 7: Product Keyword List */}
+        <ProductKeywordsSection
+          keywordRows={keywordRows}
+          isReadOnly={isReadOnly}
+          onAddRow={handleAddKeywordRow}
+          onRemoveRow={handleRemoveKeywordRow}
+          onChangeRow={handleKeywordRowChange}
+        />
+        {/* SECTION 8: Action Status Message */}
         <ActionStatusMessage
           message={state?.message}
           success={state?.success ?? false}
         />
 
-        {/* Action Footer */}
+        {/* SECTION 9:Action Footer */}
         <ProductFormFooter
           action={action}
           isPending={isPending}

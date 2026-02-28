@@ -20,10 +20,10 @@ export const ProductImagesSection = ({
 }: ProductImagesSectionProps) => {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
+      <label className="text-xs font-bold uppercase text-gray-500" >
         Product Images
-      </h3>
-      <div className="space-y-3">
+      </label>
+      <div className="space-y-2">
         {imageRows.map((row) => {
           const key = row.rowid || `id-${row.id}`;
           return (

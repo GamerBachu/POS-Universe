@@ -149,11 +149,11 @@ const ProductTable = () => {
           <thead>
             <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
               <th className="p-3 w-16">{resource.common.id}</th>
-              <th className="p-3 min-w-[150px]">{resource.product_inventory.name}</th>
-              <th className="p-3 w-32">{resource.product_inventory.sku}</th>
-              <th className="p-3 w-24 text-right">{resource.product_inventory.selling_price}</th>
-              <th className="p-3 w-24 text-center">{resource.product_inventory.stock}</th>
-              <th className="p-3 w-20 text-center">{resource.common.status}</th>
+              <th className="p-3">{resource.product_inventory.name}</th>
+              <th className="p-3">{resource.product_inventory.sku}</th>
+              <th className="p-3 text-right">{resource.product_inventory.selling_price}</th>
+              <th className="p-3 text-center">{resource.product_inventory.stock}</th>
+              <th className="p-3 text-center">{resource.common.status}</th>
               <th className="p-3 w-44 text-center">{resource.common.action}</th>
             </tr>
           </thead>

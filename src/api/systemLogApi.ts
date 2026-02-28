@@ -29,7 +29,7 @@ export class systemLogApi {
     static async add(payload: Partial<ISystemLog>): Promise<ServiceResponse<number>> {
 
         try {
-            if (payload?.id !== undefined) {
+            if (payload.id !== undefined && payload.id !== null && payload.id <= 0) {
                 delete payload.id;
             }
             const id = await db.systemLogs.add({
