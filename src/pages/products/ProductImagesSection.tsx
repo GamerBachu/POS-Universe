@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
+import resource from "@/locales/en.json";
 import type { IProductImageView } from "@/types/product";
 
 interface ProductImagesSectionProps {
@@ -21,11 +22,11 @@ export const ProductImagesSection = ({
   return (
     <div>
       <label className="text-xs font-bold uppercase text-gray-500" >
-        Product Images
+        {resource.product_inventory.images}
       </label>
       <div className="space-y-2">
         {imageRows.map((row) => {
-          const key = row.rowid || `id-${row.id}`;
+          const key = row.rowid ?? (row.id !== undefined ? `id-${row.id}` : "");
           return (
             <div key={key} className="p-3 border border-gray-200 dark:border-gray-700 rounded space-y-2">
               <div className="flex gap-2">
@@ -34,16 +35,16 @@ export const ProductImagesSection = ({
                   name={`imageTitle_${key}`}
                   value={row.title || ""}
                   disabled={isReadOnly}
-                  onChange={(e) => onChangeRow(row.rowid || row.id?.toString() || "", "title", e.target.value)}
-                  placeholder="Image Title"
+                  onChange={(e) => onChangeRow(key, "title", e.target.value)}
+                  placeholder={resource.product_inventory.image_title}
                 />
                 {!isReadOnly && (
                   <Button
                     type="button"
-                    onClick={() => onRemoveRow(row.rowid || row.id?.toString() || "")}
+                    onClick={() => onRemoveRow(key)}
                     className="bg-red-500 hover:bg-red-600"
                   >
-                    Remove
+                    {resource.common.remove}
                   </Button>
                 )}
               </div>
@@ -51,8 +52,8 @@ export const ProductImagesSection = ({
                 name={`imageDescription_${key}`}
                 value={row.description || ""}
                 disabled={isReadOnly}
-                onChange={(e) => onChangeRow(row.rowid || row.id?.toString() || "", "description", e.target.value)}
-                placeholder="Image Description"
+                onChange={(e) => onChangeRow(key, "description", e.target.value)}
+                placeholder={resource.product_inventory.image_description}
                 rows={2}
               />
               <Input
@@ -61,7 +62,7 @@ export const ProductImagesSection = ({
                 value={row.url || ""}
                 disabled={isReadOnly}
                 onChange={(e) => onChangeRow(row.rowid || row.id?.toString() || "", "url", e.target.value)}
-                placeholder="Image URL (e.g., https://example.com/image.jpg)"
+                placeholder={resource.product_inventory.image_url}
               />
               {row.url && (
                 <div className="mt-2 border border-gray-300 dark:border-gray-600 rounded overflow-hidden max-h-32">
@@ -79,7 +80,7 @@ export const ProductImagesSection = ({
           );
         })}
         {imageRows.length === 0 && (
-          <div className="text-xs text-gray-400">No images added.</div>
+          <div className="text-xs text-gray-400">{resource.product_inventory.no_images}</div>
         )}
       </div>
       <div className="flex items-center justify-between mt-3">
@@ -89,7 +90,7 @@ export const ProductImagesSection = ({
             onClick={onAddRow}
             className="w-full bg-indigo-600 hover:bg-indigo-700"
           >
-            + Add Image
+            {resource.product_inventory.add_image}
           </Button>
         )}
       </div>

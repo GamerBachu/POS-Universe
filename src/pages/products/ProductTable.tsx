@@ -9,7 +9,7 @@ import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
 
-const ProductTable = () => {
+const ProductTable: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // URL States

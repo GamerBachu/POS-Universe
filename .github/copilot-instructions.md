@@ -4,6 +4,12 @@
 ## Overview
 POS Universe is a modern, type-safe Point of Sale web system built with React 19, Vite, and TypeScript. The project emphasizes clean code, strict typing, and a feature-based structure for scalability and maintainability.
 
+
+## i18n & Localization
+- All user-facing text (labels, placeholders, button text, etc.) in the product folder must use i18n keys from `src/locales/en.json`.
+- Use `resource.product_inventory.KEY` for all product-related UI text.
+- Do not hardcode visible text in JSX or TSX; always reference the appropriate key.
+
 ## Key Guidelines
 
 - **Type Safety:**

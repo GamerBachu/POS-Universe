@@ -1,9 +1,9 @@
-import { Button } from "@/components/Button";
+import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
+import resource from "@/locales/en.json";
 import type { IMasterProductAttribute } from "@/types/masters";
 import type { IProductAttributeView } from "@/types/product";
-
 
 
 interface ProductAttributesSectionProps {
@@ -15,7 +15,7 @@ interface ProductAttributesSectionProps {
   onChangeRow: (rowid: string, field: "attributeId" | "value", value: string | number) => void;
 }
 
-export const ProductAttributesSection = ({
+export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> = ({
   attributeRows,
   masterAttributes,
   isReadOnly,
@@ -26,7 +26,7 @@ export const ProductAttributesSection = ({
   return (
     <div>
       <label className="text-xs font-bold uppercase text-gray-500" >
-        Product Attributes
+        {resource.product_inventory.attributes}
       </label>
       <div className="space-y-2">
         {attributeRows.map((row) => (
@@ -38,7 +38,7 @@ export const ProductAttributesSection = ({
               onChange={(e) => onChangeRow(row.rowid, "attributeId", Number(e.target.value))}
               required
             >
-              <option value="-1">Select Attribute</option>
+              <option value="-1">{resource.product_inventory.select_attribute}</option>
               {masterAttributes.map((attr) => (
                 <option key={"s" + attr.id + row.rowid} value={String(attr.id)}>{attr.name}</option>
               ))}
@@ -50,7 +50,7 @@ export const ProductAttributesSection = ({
               value={row.value}
               disabled={isReadOnly}
               onChange={(e) => onChangeRow(row.rowid, "value", e.target.value)}
-              placeholder="Value"
+              placeholder={resource.product_inventory.attribute_value}
               required
             />
             {!isReadOnly && (
@@ -60,13 +60,13 @@ export const ProductAttributesSection = ({
                 onClick={() => onRemoveRow(row.rowid)}
                 className="bg-red-500 hover:bg-red-600"
               >
-                Remove
+                {resource.common.remove}
               </Button>
             )}
           </div>
         ))}
         {attributeRows.length === 0 && (
-          <div className="text-xs text-gray-400">No attributes added.</div>
+          <div className="text-xs text-gray-400">{resource.product_inventory.no_attributes}</div>
         )}
       </div>
 
@@ -77,7 +77,7 @@ export const ProductAttributesSection = ({
             onClick={onAddRow}
             className="w-full bg-indigo-600 hover:bg-indigo-700"
           >
-            + Add Image
+            {resource.product_inventory.add_attribute}
           </Button>
         )}
       </div>

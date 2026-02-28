@@ -1,4 +1,5 @@
 import TextArea from "@/components/TextArea";
+import resource from "@/locales/en.json";
 import type { IProductDescription } from "@/types/product";
 
 interface ProductDescriptionSectionProps {
@@ -6,20 +7,20 @@ interface ProductDescriptionSectionProps {
     isReadOnly: boolean;
 }
 
-const ProductDescriptionSection = ({
+const ProductDescriptionSection: React.FC<ProductDescriptionSectionProps> = ({
     descriptionItem,
     isReadOnly,
-}: ProductDescriptionSectionProps) => {
+}) => {
     return (
         <div>
             <label className="text-xs font-bold uppercase text-gray-500" >
-                Product Description
+                {resource.product_inventory.description}
             </label>
             <TextArea
-                name={`descContent`}
+                name="descContent"
                 defaultValue={descriptionItem.description || ""}
                 disabled={isReadOnly}
-                placeholder="Description Content"
+                placeholder={resource.product_inventory.ph_description}
                 rows={3}
             />
         </div>

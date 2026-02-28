@@ -48,16 +48,14 @@ import ProductKeywordsSection from "./ProductKeywordsSection";
 
 const initialState = { success: false, message: "", status: 0 };
 
-const ProductForm = () => {
-  const { id: rawId, action: rawAction } = useParams();
+const ProductForm: React.FC = () => {
+  const { id: rawId, action: rawAction } = useParams<{ id: string; action: string; }>();
   const navigate = useNavigate();
   const id = Number(rawId);
   const action = rawAction?.toLowerCase() || "add";
 
   // Master Attribute State
-  const [masterAttributes, setMasterAttributes] = useState<
-    IMasterProductAttribute[]
-  >([]);
+  const [masterAttributes, setMasterAttributes] = useState<IMasterProductAttribute[]>([]);
 
   const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>(
     [],

@@ -8,7 +8,7 @@ interface Props {
   item: IProduct;
 }
 
-const ProductTableRow = ({ item }: Props) => {
+const ProductTableRow: React.FC<Props> = ({ item }) => {
   const currencySymbol = useCurrencySymbol();
   const isLowStock = item.stock <= item.reorderLevel;
   const editPath = `${PATHS.PRODUCT_EDIT}/${item.id}`;
