@@ -5,6 +5,9 @@ import resource from "@/locales/en.json";
 import ProductTableRow from "./ProductTableRow";
 import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
+import Input from "@/components/Input";
+import Select from "@/components/Select";
+import Button from "@/components/Button";
 
 const ProductTable = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -77,42 +80,43 @@ const ProductTable = () => {
 
   return (
     <div className="space-y-4">
-      {/* Multi-Input Filter Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 bg-gray-50/50 dark:bg-gray-900/50 p-3 rounded-md border border-gray-100 dark:border-gray-800">
-        <input
+
+      <div
+        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2  p-3 border border-gray-200 dark:border-gray-700">
+        <Input
           type="text"
           placeholder={resource.product_inventory.ph_name}
           value={localFilters.name}
           onChange={(e) => handleInputChange('name', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-          className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
+
         />
-        <input
+        <Input
           type="text"
           placeholder={resource.product_inventory.ph_code}
           value={localFilters.code}
           onChange={(e) => handleInputChange('code', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-          className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
+
         />
-        <input
+        <Input
           type="text"
           placeholder={resource.product_inventory.ph_sku}
           value={localFilters.sku}
           onChange={(e) => handleInputChange('sku', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-          className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
+
         />
-        <input
+        <Input
           type="text"
           placeholder={resource.product_inventory.ph_barcode}
           value={localFilters.barcode}
           onChange={(e) => handleInputChange('barcode', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-          className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
+
         />
 
-        <select
+        <Select
           value={localFilters.active}
           onChange={(e) => handleInputChange('active', e.target.value)}
           className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
@@ -120,15 +124,22 @@ const ProductTable = () => {
           <option value="">{resource.common.all_status}</option>
           <option value="true">{resource.product_inventory.active}</option>
           <option value="false">{resource.product_inventory.inactive}</option>
-        </select>
+        </Select>
 
         <div className="flex gap-1">
-          <button onClick={handleApplyFilters} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all">
+          <Button
+            onClick={handleApplyFilters}
+            isLoading={isLoading}
+          >
             {resource.common.search}
-          </button>
-          <button onClick={handleClear} className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-2 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all">
+          </Button>
+          <Button
+            onClick={handleClear}
+            isLoading={isLoading}
+            className="bg-gray-600 hover:bg-gray-700"
+          >
             {resource.common.reset}
-          </button>
+          </Button>
         </div>
       </div>
 

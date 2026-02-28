@@ -150,7 +150,7 @@ export const MyForm = () => {
 
   return (
     <form action={formAction}>
-      <input name="email" type="email" required disabled={isPending} />
+      <Input name="email" type="email" required disabled={isPending} />
       <button type="submit" disabled={isPending}>
         {isPending ? 'Submitting...' : 'Submit'}
       </button>

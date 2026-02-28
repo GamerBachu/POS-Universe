@@ -91,7 +91,17 @@ export class masterProductAttributeApi {
             return this.createResponse([], msg, false, 500);
         }
     }
-
+    static async getAllActive(): Promise<ServiceResponse<IMasterProductAttribute[]>> {
+        try {
+            const result = await db.masterProductAttributes
+                .filter(item => item.isActive === true)
+                .toArray();
+            return this.createResponse(result, "Items retrieved successfully");
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : "Fetch failed";
+            return this.createResponse([], msg, false, 500);
+        }
+    }
     static async getFiltered(
 
         searchTerm: string = "",

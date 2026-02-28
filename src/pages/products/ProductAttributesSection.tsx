@@ -1,0 +1,83 @@
+import { Button } from "@/components/Button";
+import Input from "@/components/Input";
+import Select from "@/components/Select";
+import type { IMasterProductAttribute } from "@/types/masters";
+import type { IProductAttributeView } from "@/types/product";
+
+
+
+interface ProductAttributesSectionProps {
+  attributeRows: IProductAttributeView[];
+  masterAttributes: IMasterProductAttribute[];
+  isReadOnly: boolean;
+  onAddRow: () => void;
+  onRemoveRow: (rowid: string) => void;
+  onChangeRow: (rowid: string, field: "attributeId" | "value", value: string | number) => void;
+}
+
+export const ProductAttributesSection = ({
+  attributeRows,
+  masterAttributes,
+  isReadOnly,
+  onAddRow,
+  onRemoveRow,
+  onChangeRow,
+}: ProductAttributesSectionProps) => {
+  return (
+    <div>
+      <div className="space-y-2">
+        {attributeRows.map((row) => (
+          <div key={row.rowid} className="flex gap-2 items-center">
+            <Select
+              name={`attributeId_${row.rowid}`}
+              value={row.attributeId ? String(row.attributeId) : "-1"}
+              disabled={isReadOnly}
+              onChange={(e) => onChangeRow(row.rowid, "attributeId", Number(e.target.value))}
+              required
+            >
+              <option value="-1">Select Attribute</option>
+              {masterAttributes.map((attr) => (
+                <option key={"s" + attr.id + row.rowid} value={String(attr.id)}>{attr.name}</option>
+              ))}
+            </Select>
+            <Input
+              key={"i" + row.rowid}
+              name={`attributeValue_${row.rowid}`}
+              type="text"
+              value={row.value}
+              disabled={isReadOnly}
+              onChange={(e) => onChangeRow(row.rowid, "value", e.target.value)}
+              placeholder="Value"
+              required
+            />
+            {!isReadOnly && (
+              <Button
+                type="button"
+                key={"b" + row.rowid}
+                onClick={() => onRemoveRow(row.rowid)}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                Remove
+              </Button>
+            )}
+          </div>
+        ))}
+        {attributeRows.length === 0 && (
+          <div className="text-xs text-gray-400">No attributes added.</div>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between mt-2">
+        {!isReadOnly && (
+          <Button
+            type="button"
+            onClick={onAddRow}
+            className="w-full bg-indigo-600 hover:bg-indigo-700"
+          >
+            + Add Image
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};

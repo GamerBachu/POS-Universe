@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import AppPurchase from "@/components/AppPurchase";
 import LoggerUtils from "@/utils/logger";
+import InputWithLabel from "@/components/InputWithLabel";
+import Button from "@/components/Button";
 
 // Defined the form interface for strict typing
 interface RegisterFormPayload {
@@ -85,48 +87,33 @@ const Register = () => {
                 </header>
 
                 <form action={formAction} className="space-y-4">
-                    <div>
-                        <label className="input-label-style">
-                            {resource.common.name}
-                        </label>
-                        <input
-                            type="text"
-                            name="nameFirst"
-                            required
-                            className="input-style"
-                            placeholder={resource.common.ph_name}
-                        />
-                    </div>
+                    <InputWithLabel
+                        label={resource.common.name}
+                        name="nameFirst"
+                        placeholder={resource.common.ph_name}
+                        required={true}
+                    />
 
-                    <div>
-                        <label className="input-label-style">
-                            {resource.common.email}/  {resource.common.username}
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            className="input-style"
-                            placeholder={resource.common.ph_email}
-                        />
-                    </div>
-                    <div>
-                        <label className="input-label-style">
-                            {resource.common.password}
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            required
-                            className="input-style"
-                            placeholder={resource.common.ph_password}
-                        />
-                    </div>
+                    <InputWithLabel
+                        label={`${resource.common.email}/${resource.common.username}`}
+                        type="email"
+                        name="email"
+                        placeholder={resource.common.ph_email}
+                        required={true}
+                    />
+
+                    <InputWithLabel
+                        label={resource.common.password}
+                        type="password"
+                        name="password"
+                        placeholder={resource.common.ph_password}
+                        required={true}
+                    />
 
                     {state?.message && (
                         <div
                             role="alert"
-                            className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success ? "status-success" : "status-error"
+                            className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800" : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800"
                                 }`}
                         >
                             {state.message}
@@ -134,11 +121,14 @@ const Register = () => {
                     )}
 
                     <div className="flex flex-col gap-3 pt-4">
-                        <button type="submit" className="btn-primary" disabled={isPending}>
-                            {isPending
-                                ? `${resource.register.submit}...`
-                                : resource.register.submit}
-                        </button>
+                        <Button
+                            type="submit"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700"
+                            disabled={isPending}
+                            isLoading={isPending}
+                        >
+                            {resource.register.submit}
+                        </Button>
                         <Link
                             to={PATHS.LOGIN}
                             className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"

@@ -29,8 +29,25 @@ export interface IProductAttribute {
     value: string;
 }
 
+export interface IProductAttributeView {
+    rowid:string
+    id?: number;           // Internal DB Auto-increment
+    productId: number; // foreign key to Product 
+    attributeId: number; // foreign key to Attribute
+    value: string;
+}
+
 
 export interface IProductImage {
+    id?: number;          // Internal DB Auto-increment
+    productId: number; // foreign key to Product 
+    title: string;
+    description: string;
+    url: string;
+}
+
+export interface IProductImageView {
+    rowid?: string;       // Temporary row ID for new images
     id?: number;          // Internal DB Auto-increment
     productId: number; // foreign key to Product 
     title: string;

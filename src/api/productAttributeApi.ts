@@ -4,9 +4,9 @@ import type { IProductAttribute } from "@/types/product";
 
 export class productAttributeApi {
     private static createResponse<T>(
-        data: T, 
-        message: string, 
-        success: boolean = true, 
+        data: T,
+        message: string,
+        success: boolean = true,
         status: number = 200
     ): ServiceResponse<T> {
         return { status, success, message, data };
@@ -65,6 +65,30 @@ export class productAttributeApi {
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : "Fetch failed";
             return this.createResponse([], msg, false, 500);
+        }
+    }
+
+    static async getAllByProductId(productId: number): Promise<ServiceResponse<IProductAttribute[]>> {
+        try {
+            const result = await db.productAttributes
+                .where("productId").equals(productId)
+                .toArray();
+            return this.createResponse(result, "Items retrieved successfully");
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : "Fetch failed";
+            return this.createResponse([], msg, false, 500);
+        }
+    }
+
+    static async deleteByProductId(productId: number): Promise<ServiceResponse<number>> {
+        try {
+            const count = await db.productAttributes
+                .where("productId").equals(productId)
+                .delete();
+            return this.createResponse(count, `Deleted ${count} attribute(s) successfully`);
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : "Delete failed";
+            return this.createResponse(0, msg, false, 500);
         }
     }
 }

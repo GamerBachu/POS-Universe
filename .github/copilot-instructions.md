@@ -5,6 +5,7 @@
 ## Critical Architecture
 
 ### Data Storage: Dexie.js (IndexedDB) First
+
 - All data persists to IndexedDB via `db` (imported from `src/libs/db/appDb`)
 - API layer (`src/api/*.ts`) uses static methods for Dexie operations
 - **Example:** `productApi.post()` → adds to `db.products` collection
@@ -12,6 +13,7 @@
 - See: [productApi.ts](src/api/productApi.ts) for pattern
 
 ### Class-Based API Static Methods
+
 ```typescript
 export class productApi {
   static async get(id: number) { return db.products.get(id); }
@@ -21,51 +23,64 @@ export class productApi {
 ```
 
 ### Component Patterns (Real Implementation)
+
 **Form Pattern:** Use state + onSubmit, not `useActionState`
+
 ```tsx
 const [data, setData] = useState<IProduct>(initialData);
-<form onSubmit={(e) => { e.preventDefault(); onSubmit(data); }}>
-  <input defaultValue={data.name} onChange={e => setData({...data, name: e.target.value})} />
-</form>
+<form
+  onSubmit={(e) => {
+    e.preventDefault();
+    onSubmit(data);
+  }}
+>
+  <Input
+    defaultValue={data.name}
+    onChange={(e) => setData({ ...data, name: e.target.value })}
+  />
+</form>;
 ```
 
 ## Styling & Layout
 
-### Predefined Tailwind Components (globals.css)
-Use these for consistency: `.w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none`, `.input-label-style`, `.btn-primary`, `.status-success`, `.status-error`
-- Dark mode: Always use `dark:` prefix (enabled via class strategy)
-- Root element has: `min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100`
-
 ## Context & State
 
 ### Auth Context Pattern
+
 Path: `src/contexts/authorize/` with files: `AuthProvider.tsx`, `AuthProviderContext.tsx`, `useAuth.ts`, `type.ts`, `const.ts`
+
 - Stores auth info + token in storage (applicationStorage)
 - Use `useAuth()` hook to access
 
 ### Storage Keys
+
 Import from `@/utils`: `StorageKeys.USER`, `StorageKeys.TOKEN`, `StorageKeys.THEME`
 Use applicationStorage wrapper: `new applicationStorage(StorageKeys.USER).set(value)`
 
 ## Routing & Page Structure
 
 ### Route Protection
+
 - ProtectedRoute: Wraps authenticated pages, redirects to login if not authorized
 - PublicRoute: For login/register, redirects home if already authenticated
 - See: [routes/index.tsx](src/routes/index.tsx)
 
 ### Page Organization
+
 Feature-based subdirs: `src/pages/products/`, `src/pages/masterAttribute/`, `src/pages/systemLog/`, `src/pages/user/`
 Each feature has list/form/view components; import types from `@/types/`
 
 ## Types & Conventions
 
 ### Type Files Location
+
 `src/types/`: `product.ts`, `user.ts`, `serviceResponse.ts`, `actionState.ts`, `menuItem.ts`, `systemLog.ts`, `masters.ts`
+
 - Interfaces for objects (prefixed `I`), types for unions
 - All API responses return `ServiceResponse<T>` with `{ status, success, message, data }`
 
 ### Naming
+
 - Files: PascalCase (components), camelCase (utils/api)
 - Interfaces: `I` prefix (e.g., `IProduct`)
 - Hooks: `use` prefix (e.g., `useAuth`)
@@ -75,6 +90,7 @@ Each feature has list/form/view components; import types from `@/types/`
 ## Development Workflow
 
 ### Commands
+
 - `npm run dev` — Start dev server (port 3690)
 - `npm run build` — Build with TypeScript checking + minify
 - `npm run lint` — Check ESLint
@@ -113,12 +129,14 @@ src/
 ### 3.1 Naming Conventions
 
 **Files & Directories:**
+
 - Components: PascalCase (e.g., `Header.tsx`, `ProductForm.tsx`)
 - Functions/Utilities: camelCase (e.g., `dateUtils.ts`, `formatString.ts`)
 - Types: PascalCase for interface/type names (e.g., `IProduct.ts`)
 - Constants: UPPER_SNAKE_CASE (e.g., `MAX_PAGE_SIZE`)
 
 **Code Identifiers:**
+
 - Component props interfaces: Append `Props` (e.g., `HeaderProps`)
 - Context types: Meaningful names (e.g., `AuthProviderState`, `ThemeContextType`)
 - API classes: camelCase (e.g., `productApi`, `userApi`)
@@ -127,6 +145,7 @@ src/
 ### 3.2 Clean Code Principles
 
 **Do:**
+
 - Write self-documenting code with clear variable names
 - Keep functions small and single-responsibility
 - Use TypeScript types to augment code documentation
@@ -134,6 +153,7 @@ src/
 - Add JSDoc comments for complex functions
 
 **Don't:**
+
 - Use single-letter variable names (except for loop counters: `i`, `j`)
 - Create deeply nested conditionals (max depth: 2-3 levels)
 - Mutate state directly in React components
@@ -143,12 +163,14 @@ src/
 ### 3.3 TypeScript Standards (Strict Mode)
 
 **Always:**
+
 - Define explicit types for function parameters and return values
 - Export interfaces/types from `src/types/` directory
 - Use `interface` for object shapes, `type` for unions/literals
 - Implement proper object typing for API responses
 
 **Example - Correct Type Definition:**
+
 ```typescript
 // src/types/product.ts
 export interface IProduct {
@@ -169,6 +191,7 @@ export interface ServiceResponse<T> {
 ```
 
 **Example - Correct Function Typing:**
+
 ```typescript
 // Function with explicit return type
 function calculateTax(price: number, taxRate: number): number {
@@ -197,16 +220,22 @@ static async getProduct(id: number): Promise<ServiceResponse<IProduct>> {
 Dark mode is enabled via `darkMode: 'class'` strategy in `tailwind.config.js`.
 
 **Root Element:**
+
 ```html
 <!-- index.html -->
-<div id="root" class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"></div>
+<div
+  id="root"
+  class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+></div>
 ```
 
 **Dark Mode Prefix Usage:**
+
 - Apply `dark:` prefix to all theme-dependent classes
 - Always pair light and dark variants for readability
 
 **Example - Styled Component:**
+
 ```typescript
 export const Card = ({ children }: { children: React.ReactNode }) => (
   <div className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-md">
@@ -216,6 +245,7 @@ export const Card = ({ children }: { children: React.ReactNode }) => (
 ```
 
 **Common Pattern - Input Styling:**
+
 ```tsx
 <input
   type="text"
@@ -226,10 +256,12 @@ export const Card = ({ children }: { children: React.ReactNode }) => (
 ### 4.3 Responsive Layout
 
 **Mobile-First Approach:**
+
 - Design for mobile first, then enhance for larger screens
 - Use Tailwind breakpoints: `sm`, `md`, `lg`, `xl`, `2xl`
 
 **Example - Responsive Grid:**
+
 ```tsx
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
   {/* Grid items */}
@@ -237,6 +269,7 @@ export const Card = ({ children }: { children: React.ReactNode }) => (
 ```
 
 **Example - Responsive Flexbox:**
+
 ```tsx
 <header className="flex flex-col md:flex-row justify-between items-start md:items-center p-3 gap-2 md:gap-4">
   {/* Header content */}
@@ -244,10 +277,9 @@ export const Card = ({ children }: { children: React.ReactNode }) => (
 ```
 
 **Responsive Padding/Margins:**
+
 ```tsx
-<section className="p-2 sm:p-4 md:p-6 lg:p-8">
-  {/* Section content */}
-</section>
+<section className="p-2 sm:p-4 md:p-6 lg:p-8">{/* Section content */}</section>
 ```
 
 ### 4.4 Predefined Component Classes
@@ -255,20 +287,15 @@ export const Card = ({ children }: { children: React.ReactNode }) => (
 Located in `src/styles/globals.css`, use these for common patterns:
 
 ```css
-@layer components {
-  .w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none { /* Full-width input with dark mode support */ }
-  .input-label-style { /* Label for form inputs */ }
-  .btn-primary { /* Primary action button */ }
-  .status-success { /* Success status badge */ }
-  .status-error { /* Error status badge */ }
-}
+
 ```
 
 **Usage Example:**
+
 ```tsx
-<label className="input-label-style">Email Address</label>
-<input type="email" className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
-<button className="btn-primary">Submit</button>
+<label >Email Address</label>
+<Input type="email" className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
+<Button >Submit</Button>
 ```
 
 ---
@@ -278,8 +305,9 @@ Located in `src/styles/globals.css`, use these for common patterns:
 ### 5.1 Functional Components with TypeScript
 
 **Template:**
+
 ```tsx
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface ComponentNameProps {
   title: string;
@@ -298,14 +326,7 @@ export const ComponentName = ({
         {title}
       </h2>
       {children && <div className="mt-4">{children}</div>}
-      {onClick && (
-        <button
-          onClick={onClick}
-          className="btn-primary mt-4"
-        >
-          Action
-        </button>
-      )}
+      {onClick && <Button onClick={onClick}>Action</Button>}
     </div>
   );
 };
@@ -343,8 +364,9 @@ contexts/
 **Example - ThemeProvider Context:**
 
 `src/contexts/theme/type.ts`:
+
 ```typescript
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
 export interface ThemeContextType {
   theme: Theme;
@@ -359,15 +381,16 @@ export interface ThemeProviderProps {
 ```
 
 `src/contexts/theme/ThemeProvider.tsx`:
+
 ```tsx
-import { useEffect, useState } from 'react';
-import type { Theme, ThemeProviderProps } from './type';
-import { ThemeProviderContext } from './ThemeProviderContext';
-import { applicationStorage, StorageKeys } from '@/utils';
+import { useEffect, useState } from "react";
+import type { Theme, ThemeProviderProps } from "./type";
+import { ThemeProviderContext } from "./ThemeProviderContext";
+import { applicationStorage, StorageKeys } from "@/utils";
 
 export function ThemeProvider({
   children,
-  defaultTheme = 'system',
+  defaultTheme = "system",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -377,11 +400,12 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
+    root.classList.remove("light", "dark");
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
       root.classList.add(systemTheme);
       return;
     }
@@ -406,14 +430,15 @@ export function ThemeProvider({
 ```
 
 `src/contexts/theme/useTheme.ts`:
+
 ```typescript
-import { useContext } from 'react';
-import { ThemeProviderContext } from './ThemeProviderContext';
+import { useContext } from "react";
+import { ThemeProviderContext } from "./ThemeProviderContext";
 
 export function useTheme() {
   const context = useContext(ThemeProviderContext);
   if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
+    throw new Error("useTheme must be used within ThemeProvider");
   }
   return context;
 }
@@ -431,9 +456,9 @@ All API interactions are handled through static methods in class-based API modul
 
 ```typescript
 // src/api/productApi.ts
-import type { ServiceResponse } from '@/types/serviceResponse';
-import db from '../libs/db/appDb';
-import type { IProduct } from '@/types/product';
+import type { ServiceResponse } from "@/types/serviceResponse";
+import db from "../libs/db/appDb";
+import type { IProduct } from "@/types/product";
 
 export class productApi {
   /**
@@ -482,7 +507,7 @@ export class productApi {
     return {
       status: 200,
       success: true,
-      message: 'Get all products completed successfully',
+      message: "Get all products completed successfully",
       data: products,
     };
   }
@@ -497,7 +522,7 @@ export class productApi {
   static async search(
     queryModel: Partial<IProduct>,
     page: number = 1,
-    pageSize: number = 20
+    pageSize: number = 20,
   ): Promise<ServiceResponse<{ items: IProduct[]; total: number }>> {
     try {
       const currentPage = Math.max(1, page);
@@ -505,14 +530,14 @@ export class productApi {
       return {
         status: 200,
         success: true,
-        message: 'Search completed successfully',
+        message: "Search completed successfully",
         data: { items: [], total: 0 },
       };
     } catch (error) {
       return {
         status: 500,
         success: false,
-        message: 'Search failed',
+        message: "Search failed",
         data: { items: [], total: 0 },
       };
     }
@@ -556,6 +581,7 @@ src/types/
 ### 8.2 Type Definition Standards
 
 **Use Interfaces for Objects:**
+
 ```typescript
 export interface IProduct {
   id: number;
@@ -568,15 +594,17 @@ export interface IProduct {
 ```
 
 **Use Types for Unions & Literals:**
-```typescript
-export type Theme = 'light' | 'dark' | 'system';
 
-export type ActionStatus = 'idle' | 'loading' | 'success' | 'error';
+```typescript
+export type Theme = "light" | "dark" | "system";
+
+export type ActionStatus = "idle" | "loading" | "success" | "error";
 ```
 
 **Extend Types as Needed:**
+
 ```typescript
-export interface IProductForm extends Omit<IProduct, 'id'> {
+export interface IProductForm extends Omit<IProduct, "id"> {
   imageFile?: File;
 }
 ```
@@ -613,7 +641,7 @@ src/utils/
  * @returns ISO formatted date string
  */
 export function formatDateToISO(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 /**
@@ -635,13 +663,13 @@ export function isValidEmail(email: string): boolean {
 Routes are defined in `src/routes/index.tsx` using React Router v7:
 
 ```tsx
-import { createBrowserRouter, Outlet } from 'react-router-dom';
-import ProtectedRoute from './ProtectedRoute';
-import PublicRoute from './PublicRoute';
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Outlet />,
     errorElement: <ErrorPage />,
     children: [
@@ -649,14 +677,14 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { index: true, element: <HomePage /> },
-          { path: 'dashboard', element: <Dashboard /> },
+          { path: "dashboard", element: <Dashboard /> },
         ],
       },
       {
         element: <PublicRoute />,
         children: [
-          { path: 'login', element: <Login /> },
-          { path: 'register', element: <Register /> },
+          { path: "login", element: <Login /> },
+          { path: "register", element: <Register /> },
         ],
       },
     ],
@@ -676,7 +704,7 @@ export const router = createBrowserRouter([
 ### 11.1 Input Component Example
 
 ```tsx
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -685,13 +713,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = ({ label, error, id, ...props }: InputProps) => (
   <div>
-    {label && <label htmlFor={id} className="input-label-style">{label}</label>}
+    {label && (
+      <label htmlFor={id} >
+        {label}
+      </label>
+    )}
     <input
       id={id}
       {...props}
-      className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${error ? 'border-red-500 dark:border-red-500' : ''}`}
+      className={`w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none ${error ? "border-red-500 dark:border-red-500" : ""}`}
     />
-    {error && <p className="text-red-600 dark:text-red-400 text-sm mt-1">{error}</p>}
+    {error && (
+      <p className="text-red-600 dark:text-red-400 text-sm mt-1">{error}</p>
+    )}
   </div>
 );
 ```
@@ -699,8 +733,8 @@ export const Input = ({ label, error, id, ...props }: InputProps) => (
 ### 11.2 Form Component Pattern
 
 ```tsx
-import { useState } from 'react';
-import type { IProduct } from '@/types/product';
+import { useState } from "react";
+import type { IProduct } from "@/types/product";
 
 interface ProductFormProps {
   initialProduct?: IProduct;
@@ -708,12 +742,14 @@ interface ProductFormProps {
 }
 
 export const ProductForm = ({ initialProduct, onSubmit }: ProductFormProps) => {
-  const [data, setData] = useState<IProduct>(initialProduct || getDefaultProduct());
+  const [data, setData] = useState<IProduct>(
+    initialProduct || getDefaultProduct(),
+  );
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<IProduct>>({});
 
   const handleChange = (field: keyof IProduct, value: unknown) => {
-    setData(prev => ({ ...prev, [field]: value }));
+    setData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -729,9 +765,9 @@ export const ProductForm = ({ initialProduct, onSubmit }: ProductFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Form fields */}
-      <button type="submit" className="btn-primary" disabled={loading}>
-        {loading ? 'Saving...' : 'Save'}
-      </button>
+      <Button type="submit" disabled={loading}>
+        {loading ? "Saving..." : "Save"}
+      </Button>
     </form>
   );
 };
@@ -770,14 +806,19 @@ static async search(query: string): Promise<ServiceResponse<unknown[]>> {
 Use error boundaries for components that might fail:
 
 ```tsx
-export const SafeComponent = ({ component: Component }: { component: React.ComponentType }) => {
+export const SafeComponent = ({
+  component: Component,
+}: {
+  component: React.ComponentType;
+}) => {
   try {
     return <Component />;
   } catch (error) {
     return (
       <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
         <p className="text-red-700 dark:text-red-400">
-          Error loading component: {error instanceof Error ? error.message : 'Unknown error'}
+          Error loading component:{" "}
+          {error instanceof Error ? error.message : "Unknown error"}
         </p>
       </div>
     );
@@ -852,7 +893,10 @@ Add JSDoc comments for complex functions:
  * const total = calculateTotalWithTax(100, 0.10);
  * // Returns 110
  */
-export function calculateTotalWithTax(basePrice: number, taxRate: number): number {
+export function calculateTotalWithTax(
+  basePrice: number,
+  taxRate: number,
+): number {
   return basePrice * (1 + taxRate);
 }
 ```
@@ -890,8 +934,8 @@ i++;
 // Good
 <form onSubmit={handleSubmit}>
   <label htmlFor="email">Email</label>
-  <input id="email" type="email" />
-  <button type="submit">Submit</button>
+  <Input id="email" type="email" />
+  <Button type="submit">Submit</Button>
 </form>
 
 // Avoid
@@ -904,13 +948,13 @@ i++;
 ### 17.2 ARIA Labels
 
 ```tsx
-<button
+<Button
   aria-label="Close menu"
   onClick={handleClose}
   className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
 >
   ✕
-</button>
+</Button>
 ```
 
 ---
@@ -949,26 +993,32 @@ When writing code for POS Universe, ensure:
 ## 20. Quick Reference
 
 ### Import Alias
+
 Use path alias `@/` for absolute imports:
+
 ```typescript
-import { useAuth } from '@/contexts/authorize';
-import type { IProduct } from '@/types/product';
-import { productApi } from '@/api/productApi';
+import { useAuth } from "@/contexts/authorize";
+import type { IProduct } from "@/types/product";
+import { productApi } from "@/api/productApi";
 ```
 
 ### Storage Keys
+
 Always use predefined keys from `@/utils/keys.ts`:
+
 ```typescript
 const storage = new applicationStorage(StorageKeys.USER);
 ```
 
 ### Context Usage
+
 Always check if context is available:
+
 ```typescript
 const useFeature = () => {
   const context = useContext(FeatureContext);
   if (!context) {
-    throw new Error('useFeature must be used within FeatureProvider');
+    throw new Error("useFeature must be used within FeatureProvider");
   }
   return context;
 };
@@ -979,4 +1029,3 @@ const useFeature = () => {
 ## Questions & Updates
 
 For questions or updates to these guidelines, refer to the project's `README.md` and `GEMINI.md` documentation.
-

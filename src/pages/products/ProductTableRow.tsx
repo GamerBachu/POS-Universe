@@ -10,26 +10,32 @@ interface Props {
 
 const ProductTableRow = ({ item }: Props) => {
   const currencySymbol = useCurrencySymbol();
-  // Logic to determine stock health
   const isLowStock = item.stock <= item.reorderLevel;
+  const editPath = `${PATHS.PRODUCT_EDIT}/${item.id}`;
 
   return (
     <tr className="group hover:bg-gray-50/80 dark:hover:bg-gray-800/40 transition-colors">
-      {/* ID - Small and Dimmed */}
-      <td className="p-3 text-xs font-mono text-gray-400 dark:text-gray-500">
-        {item.id}
+
+      <td className="p-3">
+        <NavLink
+          to={editPath}
+          className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          {item.id}
+        </NavLink>
       </td>
 
-      {/* Product Name & Code */}
+
       <td className="p-3">
         <div className="flex flex-col">
-          <span
-            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px]"
+          <NavLink
+            to={editPath}
+            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px] hover:text-blue-600 transition-colors"
             title={item.name}
           >
             {item.name}
-          </span>
-          <span className="text-[10px] font-mono uppercase ">{item.code}</span>
+          </NavLink>
+          <span className="text-[10px] uppercase ">{item.code}</span>
         </div>
       </td>
 
@@ -37,7 +43,7 @@ const ProductTableRow = ({ item }: Props) => {
       <td className="p-3 text-sm text-gray-600 dark:text-gray-300 font-mono">
         <div className="flex flex-col">
           <span>{item.sku}</span>
-          <span className="text-[10px] font-mono uppercase">
+          <span className="text-[10px] uppercase">
             {item.barcode}
           </span>
         </div>
@@ -84,7 +90,7 @@ const ProductTableRow = ({ item }: Props) => {
           </NavLink>
 
           <NavLink
-            to={`${PATHS.PRODUCT_EDIT}/${item.id}`}
+            to={editPath}
             className="px-2 py-1 text-[11px] font-bold uppercase text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
           >
             {resource.common.edit}

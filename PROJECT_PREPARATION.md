@@ -82,13 +82,13 @@ export const Button = ({
   };
 
   return (
-    <button
+    <Button
       {...props}
       disabled={isLoading || disabled}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${props.className || ''}`}
     >
       {isLoading ? 'Loading...' : children}
-    </button>
+    </Button>
   );
 };
 
@@ -563,12 +563,12 @@ export const ResponsiveHeader = () => {
         </h1>
 
         {/* Mobile Menu Button */}
-        <button
+        <Button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
         >
           Menu
-        </button>
+        </Button>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex gap-8">
@@ -725,7 +725,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Code */}
         <div>
-          <label className="input-label-style">Product Code</label>
+          <label >Product Code</label>
           <input
             type="text"
             value={formData.code}
@@ -738,7 +738,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
 
         {/* SKU */}
         <div>
-          <label className="input-label-style">SKU</label>
+          <label >SKU</label>
           <input
             type="text"
             value={formData.sku}
@@ -750,7 +750,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
 
         {/* Name */}
         <div className="md:col-span-2">
-          <label className="input-label-style">Product Name</label>
+          <label >Product Name</label>
           <input
             type="text"
             value={formData.name}
@@ -763,7 +763,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
 
         {/* Selling Price */}
         <div>
-          <label className="input-label-style">Selling Price</label>
+          <label >Selling Price</label>
           <input
             type="number"
             value={formData.sellingPrice}
@@ -777,7 +777,7 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
 
         {/* Stock */}
         <div>
-          <label className="input-label-style">Stock</label>
+          <label >Stock</label>
           <input
             type="number"
             value={formData.stock}
@@ -790,13 +790,13 @@ export const ProductForm = ({ initialProduct, onSuccess }: ProductFormProps) => 
       </div>
 
       {/* Submit Button */}
-      <button
+      <Button
         type="submit"
         disabled={isLoading}
-        className="btn-primary"
+    x
       >
         {isLoading ? 'Saving...' : 'Save Product'}
-      </button>
+      </Button>
     </form>
   );
 };
@@ -886,7 +886,7 @@ export const ProductFormAction = () => {
 
       {/* Product Code */}
       <div>
-        <label htmlFor="code" className="input-label-style">
+        <label htmlFor="code" >
           Product Code
         </label>
         <input
@@ -902,7 +902,7 @@ export const ProductFormAction = () => {
 
       {/* Product Name */}
       <div>
-        <label htmlFor="name" className="input-label-style">
+        <label htmlFor="name" >
           Product Name
         </label>
         <input
@@ -918,7 +918,7 @@ export const ProductFormAction = () => {
 
       {/* Price */}
       <div>
-        <label htmlFor="price" className="input-label-style">
+        <label htmlFor="price" >
           Selling Price
         </label>
         <input
@@ -935,13 +935,13 @@ export const ProductFormAction = () => {
       </div>
 
       {/* Submit Button */}
-      <button
+      <Button
         type="submit"
         disabled={isPending}
-        className="btn-primary"
+    
       >
         {isPending ? 'Submitting...' : 'Create Product'}
-      </button>
+      </Button>
     </form>
   );
 };
@@ -1055,7 +1055,7 @@ export const ProductTable = ({ products }: { products: IProduct[] }) => {
       {/* Pagination */}
       <div className="flex justify-center gap-2">
         {Array.from({ length: Math.ceil(sortedProducts.length / state.pageSize) }, (_, i) => (
-          <button
+          <Button
             key={i}
             onClick={() => setState(prev => ({ ...prev, currentPage: i + 1 }))}
             className={`px-3 py-1 rounded ${
@@ -1065,7 +1065,7 @@ export const ProductTable = ({ products }: { products: IProduct[] }) => {
             }`}
           >
             {i + 1}
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -1119,12 +1119,12 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-red-600 dark:text-red-300 mb-4">
               {this.state.error.message}
             </p>
-            <button
+            <Button
               onClick={() => this.setState({ hasError: false })}
               className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
             >
               Try again
-            </button>
+            </Button>
           </div>
         )
       );
@@ -1363,7 +1363,7 @@ export const ProductList = () => {
         {/* Search & Action Bar */}
         <div className="flex flex-col md:flex-row gap-4 items-end">
           <div className="flex-1">
-            <label className="input-label-style">Search Products</label>
+            <label >Search Products</label>
             <input
               type="text"
               value={searchQuery}

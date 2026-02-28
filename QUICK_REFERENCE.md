@@ -198,8 +198,8 @@ export const MyForm = () => {
 
   return (
     <form action={formAction} className="space-y-4">
-      {state.error && <div className="status-error">{state.error}</div>}
-      {state.success && <div className="status-success">{state.message}</div>}
+      {state.error && <div className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800">{state.error}</div>}
+      {state.success && <div className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800">{state.message}</div>}
 
       <input
         name="name"
@@ -217,13 +217,13 @@ export const MyForm = () => {
         disabled={isPending}
       />
 
-      <button
+      <Button
         type="submit"
         disabled={isPending}
-        className="btn-primary"
+     
       >
         {isPending ? 'Submitting...' : 'Submit'}
-      </button>
+      </Button>
     </form>
   );
 };
@@ -391,9 +391,9 @@ export const SimpleForm = ({ onSubmit }: FormProps) => {
         />
         {errors.name && <p className="text-red-600">{errors.name}</p>}
       </div>
-      <button type="submit" className="btn-primary" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? 'Submitting...' : 'Submit'}
-      </button>
+      </Button>
     </form>
   );
 };
@@ -414,7 +414,7 @@ export const SimpleForm = ({ onSubmit }: FormProps) => {
 <div className="border border-gray-300 dark:border-gray-600">
 
 // Hover states
-<button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+<Button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
 
 // Text colors
 <p className="text-gray-600 dark:text-gray-400">
@@ -438,17 +438,17 @@ export const SimpleForm = ({ onSubmit }: FormProps) => {
 ### Common Component Classes
 ```tsx
 // Input
-<input className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
+<Input className="w-full px-3 py-1.5 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 outline-none" />
 
 // Label
-<label className="input-label-style">Label</label>
+<label className="">Label</label>
 
 // Button
-<button className="btn-primary">Submit</button>
+<Button>Submit</Button>
 
 // Status badge
-<div className="status-success">Success</div>
-<div className="status-error">Error</div>
+<div className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800">Success</div>
+<div className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800">Error</div>
 
 // Card
 <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
@@ -540,11 +540,11 @@ const newArray = array.map(item =>
 <div className={isActive ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-900'}>
 
 // Best practice
-const buttonClass = isActive 
+const ButtonClass = isActive 
   ? 'bg-blue-600 hover:bg-blue-700 text-white'
   : 'bg-gray-200 hover:bg-gray-300 text-gray-900';
 
-<button className={buttonClass}>
+<Button className={ButtonClass}>
 ```
 
 ---
