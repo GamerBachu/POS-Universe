@@ -12,6 +12,7 @@ import type { IActionState } from "@/types/actionState";
 import LoggerUtils from "@/utils/logger";
 import InputWithLabel from "@/components/InputWithLabel";
 import { Button } from "@/components/Button";
+import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 
 
 
@@ -108,7 +109,7 @@ const Login: React.FC = () => {
       navigate(getSafeRedirectUrl(), { replace: true });
     }
   }, [state, navigate, getSafeRedirectUrl]);
-
+  console.log("Login render", state);
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">
       <div className="relative w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
@@ -137,17 +138,9 @@ const Login: React.FC = () => {
             placeholder={resource.common.ph_password}
             required={true}
           />
-          {state?.message && (
-            <div
-              role="alert"
-              className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success === true
-                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800"
-                : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800"
-                }`}
-            >
-              {state.message}
-            </div>
-          )}
+
+          {(state?.success === true) && <AlertSuccess message={state?.message} />}
+          {(state?.success === false) && <AlertError message={state?.message} />}
 
           <div className="flex flex-col gap-3 pt-4">
             <Button

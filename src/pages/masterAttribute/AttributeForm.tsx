@@ -7,7 +7,10 @@ import type { IActionState } from "@/types/actionState";
 import CommonLayout from "@/layouts/CommonLayout";
 import { PATHS } from "@/routes/paths";
 import LoggerUtils from "@/utils/logger";
- 
+import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
+import PageHeader from "@/components/PageHeader";
+import Button from "@/components/Button";
+
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -151,23 +154,18 @@ const AttributeForm = () => {
   return (
     <CommonLayout h1={resource.navigation.master_pro__attr_label}>
 
-      <div className="flex justify-between items-center mb-4 px-1">
-        <h1 className="text-lg font-bold text-gray-800 dark:text-white capitalize">
-          {action} {resource.navigation.master_pro__attr_label}
-        </h1>
-        <button
-          onClick={onSendBack}
-          className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
-        >
-          {resource.common.back_page}
-        </button>
-      </div>
+      <PageHeader
+        subtitle={`${action} ${resource.navigation.master_pro__attr_label}`}
+        btnClass="bg-gray-600 hover:bg-gray-700"
+        btnLabel={resource.common.back_page}
+        onClick={onSendBack}
+      />
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <form
           key={initialData.id}
           action={formAction}
-          className="p-5 space-y-6">
+          className="p-3 space-y-3">
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -212,34 +210,25 @@ const AttributeForm = () => {
               </div>
             </label>
           </div>
-          {state?.message && (
-            <div
-              role="alert"
-              className={`p-2 rounded text-sm text-center font-medium border ${state.success
-                ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-900"
-                : "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/10 dark:text-red-400 dark:border-red-900"
-                }`}
-            >
-              {state.message}
-            </div>
-          )}
+          {(state?.success === true) && <AlertSuccess message={state?.message} />}
+          {(state?.success === false) && <AlertError message={state?.message} />}
+
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <button
+            <Button
               type="button"
               onClick={onSendBack}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm transition-all"
+              className="bg-gray-600 hover:bg-gray-700"
             >
               {resource.common.back_page}
-            </button>
+            </Button>
             {action !== "view" && (
-              <button
+              <Button
                 type="submit"
                 disabled={isPending}
-                className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                  } disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all`}
+                className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"} disabled:opacity-50 `}
               >
                 {isPending ? "..." : action === "delete" ? resource.common.delete : resource.common.save}
-              </button>
+              </Button>
             )}
           </div>
         </form>

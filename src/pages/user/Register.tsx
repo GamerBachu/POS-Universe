@@ -8,6 +8,7 @@ import AppPurchase from "@/components/AppPurchase";
 import LoggerUtils from "@/utils/logger";
 import InputWithLabel from "@/components/InputWithLabel";
 import Button from "@/components/Button";
+import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 
 // Defined the form interface for strict typing
 interface RegisterFormPayload {
@@ -109,16 +110,8 @@ const Register = () => {
                         placeholder={resource.common.ph_password}
                         required={true}
                     />
-
-                    {state?.message && (
-                        <div
-                            role="alert"
-                            className={`p-3 rounded-sm text-sm text-center font-medium animate-in fade-in duration-300 ${state.success ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-200 dark:border-green-800" : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800"
-                                }`}
-                        >
-                            {state.message}
-                        </div>
-                    )}
+                    {(state?.success === true) && <AlertSuccess message={state?.message} />}
+                    {(state?.success === false) && <AlertError message={state?.message} />}
 
                     <div className="flex flex-col gap-3 pt-4">
                         <Button

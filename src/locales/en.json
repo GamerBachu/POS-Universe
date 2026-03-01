@@ -164,7 +164,8 @@
     "no_keywords": "No keywords added.",
     "add_keyword": "Add New Keyword",
     "description": "Product Description",
-    "ph_description": "Description Content"
+    "ph_description": "Description Content",
+    "delete_info": "Deleting this product will permanently remove all associated records. If you need to keep historical data for reports but want to hide it from your POS and inventory lists, change the status to Inactive instead."
   },
   "mst_product_attribute": {
     "toggle_active": "Active attributes are visible and selectable during product setup.",

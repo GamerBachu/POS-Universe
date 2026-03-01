@@ -48,6 +48,7 @@ POS Universe is a modern, type-safe Point of Sale web system built with React 19
 ## References
 - See `README.md` for tech stack and getting started.
 - See `src/types/` for shared types.
+- See `src/pages/systemLog/SystemLogTable.tsx` for reference implementation of responsive tables.
 
 ---
 _This file is for GitHub Copilot and contributors. Please follow these guidelines for a consistent, type-safe, and modern codebase._

@@ -79,10 +79,10 @@ const ProductTable: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
 
       <div
-        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2  p-3 border border-gray-200 dark:border-gray-700">
+        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center p-3 border border-gray-200 dark:border-gray-700">
         <Input
           type="text"
           placeholder={resource.product_inventory.ph_name}
@@ -119,24 +119,24 @@ const ProductTable: React.FC = () => {
         <Select
           value={localFilters.active}
           onChange={(e) => handleInputChange('active', e.target.value)}
-          className="px-3 py-1.5 text-sm border rounded bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="">{resource.common.all_status}</option>
           <option value="true">{resource.product_inventory.active}</option>
           <option value="false">{resource.product_inventory.inactive}</option>
         </Select>
 
-        <div className="flex gap-1">
+        <div className="flex gap-1 lg:justify-end">
           <Button
             onClick={handleApplyFilters}
             isLoading={isLoading}
+            className="bg-blue-600 hover:bg-blue-700 py-1.5"
           >
             {resource.common.search}
           </Button>
           <Button
             onClick={handleClear}
             isLoading={isLoading}
-            className="bg-gray-600 hover:bg-gray-700"
+            className="bg-gray-600 hover:bg-gray-700 py-1.5"
           >
             {resource.common.reset}
           </Button>
@@ -145,7 +145,7 @@ const ProductTable: React.FC = () => {
 
       {/* Table Section */}
       <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
-        <table className="w-full text-left border-collapse table-auto sm:table-fixed">
+        <table className="w-full min-w-[700px] text-left border-collapse table-auto">
           <thead>
             <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
               <th className="p-3 w-16">{resource.common.id}</th>
@@ -176,7 +176,7 @@ const ProductTable: React.FC = () => {
       </div>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
+      {totalPages >= 1 && (
         <div className="flex items-center justify-between px-1 py-2">
           <span className="text-xs font-mono text-gray-500">
             {formatString(

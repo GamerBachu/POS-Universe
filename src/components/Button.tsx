@@ -20,7 +20,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <button
                 ref={ref}
                 type={type}
-                className={`inline-flex items-center justify-center text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm active:scale-95 transition-all ${className} ${disabled || isLoading ? "opacity-90 cursor-not-allowed active:scale-100" : ""}`}
+                className={`inline-flex items-center justify-center text-white px-3 py-1 rounded text-sm font-medium shadow-sm active:scale-95 transition-all ${className} ${disabled || isLoading ? "opacity-90 cursor-not-allowed active:scale-100" : ""}`}
                 disabled={disabled || isLoading}
                 {...props}
             >

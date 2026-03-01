@@ -13,7 +13,7 @@ import { ProductFinancialSection } from "./ProductFinancialSection";
 import { ProductAttributesSection } from "./ProductAttributesSection";
 import { ProductImagesSection } from "./ProductImagesSection";
 import { ProductFormFooter } from "./ProductFormFooter";
-import { ActionStatusMessage } from "@/components/ActionStatusMessage";
+import { AlertSuccess, AlertError, AlertWarning } from "@/components/ActionStatusMessage";
 import type { IMasterProductAttribute } from "@/types/masters";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonLayout from "@/layouts/CommonLayout";
@@ -448,7 +448,7 @@ const ProductForm: React.FC = () => {
         key={`${item.id}-${action}-${formVersion}`}
         data-testid={`${item.id}-${action}-${formVersion}`}
         action={formAction}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-3 space-y-3"
       >
         {/* SECTION 1: General Identifiers */}
         <ProductDetailsSection item={item} isReadOnly={isReadOnly} />
@@ -504,10 +504,11 @@ const ProductForm: React.FC = () => {
           onChangeRow={handleKeywordRowChange}
         />
         {/* SECTION 8: Action Status Message */}
-        <ActionStatusMessage
-          message={state?.message}
-          success={state?.success ?? false}
-        />
+        {(state?.success === true) && <AlertSuccess message={state?.message} />}
+        {(state?.success === false) && <AlertError message={state?.message} />}
+
+        {/* SECTION 9: Delete Confirmation Message */}
+        {action === "delete" && <AlertWarning message={resource.product_inventory.delete_info} />}
 
         {/* SECTION 9:Action Footer */}
         <ProductFormFooter
