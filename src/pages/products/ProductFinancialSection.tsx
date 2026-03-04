@@ -7,7 +7,7 @@ interface ProductFinancialSectionProps {
   isReadOnly: boolean;
 }
 
-export const ProductFinancialSection = ({ item, isReadOnly }: ProductFinancialSectionProps) => {
+export const ProductFinancialSection: React.FC<ProductFinancialSectionProps> = ({ item, isReadOnly }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
 

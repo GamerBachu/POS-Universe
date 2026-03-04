@@ -19,8 +19,11 @@ export interface IProduct {
     reorderLevel: number; // Alert when stock < this value 
 
     // State
-    isActive: boolean;    // Soft delete instead of hard delete
+    isActive: boolean;    // Soft delete instead of hard delete 
+
 }
+
+
 
 export interface IProductAttribute {
     id?: number;           // Internal DB Auto-increment
@@ -61,13 +64,9 @@ export interface IProductKeywordView extends IProductKeyWord {
     rowid?: string; // Temporary ID for frontend management of new rows
 }
 
-//   // Tracking
-//     serial?: string;      // Only for serialized items
-//     model: string;
-//     batch: string;
-//     expiry: string;       // ISO Date string
-
-//     // Categorization
-//     category: string;
-//     manufacturer: string;
-//     description: string;
+export interface IProductTimeStamp {
+    id?: number;          // Internal DB Auto-increment
+    productId: number; // foreign key to Product 
+    lastUpdatedBy: number; // User ID or name who made the last update
+    lastUpdatedAt: string;
+}

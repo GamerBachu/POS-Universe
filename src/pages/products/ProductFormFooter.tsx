@@ -8,7 +8,7 @@ interface ProductFormFooterProps {
   onBack: () => void;
 }
 
-export const ProductFormFooter = ({
+export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
   action,
   isPending,
   isReadOnly,

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ProductTable from "./ProductTable";
 import PageHeader from "@/components/PageHeader";
 
-const ProductList = () => {
+const ProductList: React.FC = () => {
   const navigate = useNavigate();
   return (
     <CommonLayout h1={resource.navigation.product_list_label}>

@@ -3,6 +3,11 @@ import db from "../libs/db/appDb";
 import { type IProduct } from "@/types/product";
 
 export class productApi {
+
+    private static getErrorMessage(error: unknown): string {
+        return error instanceof Error ? error.message : "Operation failed";
+    }
+
     /**
      * Unified response factory
      */
@@ -85,10 +90,12 @@ export class productApi {
     }
 
     static async delete(id: number): Promise<ServiceResponse<boolean>> {
-        const count = await db.products.where("id").equals(id).modify({ isActive: false });
-        return count
-            ? this.createResponse(true, "Product deleted.")
-            : this.createResponse(false, "Product not found.", false, 404);
+        try {
+            await db.products.delete(id);
+            return this.createResponse(true, "Product deleted successfully.");
+        } catch (error: unknown) {
+            return this.createResponse(false, this.getErrorMessage(error), false, 500);
+        }
     };
 
 
