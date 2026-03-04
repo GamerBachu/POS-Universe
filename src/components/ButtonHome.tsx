@@ -7,11 +7,12 @@ type ButtonHomeProps = {
 
 const ButtonHome = ({ className = "" }: ButtonHomeProps) => {
     const navigate = useNavigate();
+
     return (
         <button
             onClick={() => navigate(PATHS.DASHBOARD)}
             className={`${className} group relative flex items-center justify-center p-1 rounded-sm border border-gray-200 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm transition-all duration-300 ease-in-out active:scale-90`}
-            aria-label="Toggle Theme"
+            aria-label="Go to Dashboard"
         >
             <div
                 className={`transition-all duration-500  group-hover:text-blue-600 dark:group-hover:text-blue-400 `}
@@ -23,7 +24,7 @@ const ButtonHome = ({ className = "" }: ButtonHomeProps) => {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 >
