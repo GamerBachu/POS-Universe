@@ -4,6 +4,7 @@ import { productApi } from "@/api/productApi";
 import type { IProduct, IProductAttributeView, IProductImageView } from "@/types/product";
 import { generateGuid } from "@/utils/helper/guid";
 import type { ServiceResponse } from "@/types/serviceResponse";
+import { productDescriptionApi, productKeywordApi } from "@/api";
 
 /**
  * Collect attribute data from form inputs
@@ -11,8 +12,8 @@ import type { ServiceResponse } from "@/types/serviceResponse";
 export function collectAttributesFromForm(
   attributeRows: IProductAttributeView[],
   formData: FormData
-): { attributeId: number; value: string }[] {
-  const attributes: { attributeId: number; value: string }[] = [];
+): { attributeId: number; value: string; }[] {
+  const attributes: { attributeId: number; value: string; }[] = [];
   attributeRows.forEach((r) => {
     const attributeId = Number(formData.get(`attributeId_${r.rowid}`));
     const value = String(formData.get(`attributeValue_${r.rowid}`) ?? "");
@@ -49,7 +50,7 @@ export function formatProductPayload(
 /**
  * Validate required product fields
  */
-export function validateProductPayload(payload: Record<string, string>): { valid: boolean; error?: string } {
+export function validateProductPayload(payload: Record<string, string>): { valid: boolean; error?: string; } {
   if (!payload.name?.trim() || !payload.sku?.trim()) {
     return { valid: false, error: "Name and SKU are required." };
   }
@@ -62,7 +63,7 @@ export function validateProductPayload(payload: Record<string, string>): { valid
 export async function handleAttributesSave(
   action: string,
   productId: number,
-  attributes: { attributeId: number; value: string }[]
+  attributes: { attributeId: number; value: string; }[]
 ): Promise<IProductAttributeView[]> {
   // For edit, delete all existing attributes first
   if (action === "edit") {
@@ -98,12 +99,17 @@ export async function handleAttributesSave(
  * Handle product deletion with attributes and images cleanup
  */
 export async function handleProductDeletion(productId: number): Promise<ServiceResponse<boolean>> {
+
+  await productDescriptionApi.deleteByProductId(productId);
+
+  await productKeywordApi.deleteByProductId(productId);
+
   // Delete all attributes first
   await productAttributeApi.deleteByProductId(productId);
   // Delete all images
   await productImageApi.deleteByProductId(productId);
   // Delete the product
-  return productApi.delete(productId);
+  return await productApi.delete(productId);
 }
 
 /**
@@ -112,7 +118,7 @@ export async function handleProductDeletion(productId: number): Promise<ServiceR
 export function handleApiResponse(
   response: ServiceResponse<unknown>,
   errorMessages: Record<number, string>
-): { success: boolean; message: string } {
+): { success: boolean; message: string; } {
   if (errorMessages[response.status]) {
     return { success: false, message: errorMessages[response.status] };
   }
@@ -126,7 +132,7 @@ export function handleApiResponse(
  * Transform product attributes to view format
  */
 export function transformAttributesToView(
-  attributes: Array<{ id?: number; productId: number; attributeId: number; value: string }>
+  attributes: Array<{ id?: number; productId: number; attributeId: number; value: string; }>
 ): IProductAttributeView[] {
   return attributes
     .filter((a) => a.id && a.id > 0) // Filter out attributes without valid ID
@@ -145,8 +151,8 @@ export function transformAttributesToView(
 export function collectImagesFromForm(
   imageRows: IProductImageView[],
   formData: FormData
-): { title: string; description: string; url: string }[] {
-  const images: { title: string; description: string; url: string }[] = [];
+): { title: string; description: string; url: string; }[] {
+  const images: { title: string; description: string; url: string; }[] = [];
   imageRows.forEach((row) => {
     const rowId = row.rowid || `id-${row.id}`;
     const title = String(formData.get(`imageTitle_${rowId}`) ?? "").trim();
@@ -165,7 +171,7 @@ export function collectImagesFromForm(
 export async function handleImagesSave(
   action: string,
   productId: number,
-  images: { title: string; description: string; url: string }[]
+  images: { title: string; description: string; url: string; }[]
 ): Promise<IProductImageView[]> {
   // For edit, delete all existing images first
   if (action === "edit") {

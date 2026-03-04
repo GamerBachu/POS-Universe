@@ -279,11 +279,7 @@ const ProductForm: React.FC = () => {
       const images = collectImagesFromForm(imageRows, formData);
 
       // Handle product deletion
-      if (action === "delete") {
-        await productDescriptionApi.deleteByProductId(id);
-        await productKeywordApi.deleteByProductId(id);
-        await productAttributeApi.deleteByProductId(id);
-        await productImageApi.deleteByProductId(id);
+      if (action === "delete") {        
         const res = await handleProductDeletion(id);
         if (res.success) {
           onSendBack();

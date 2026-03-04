@@ -134,7 +134,7 @@
     "ph_cost_price": "0.00",
     "selling_price": "Selling Price",
     "ph_selling_price": "0.00",
-    "tax_rate": "Tax Rate (%)",
+    "tax_rate": "Tax Rate/GST(IGST/SGST/CGST)",
     "ph_tax_rate": "e.g., 10",
     "stock": "Current Stock",
     "ph_stock": "0",

@@ -16,6 +16,7 @@ import Loader from "@/components/Loader";
 import { ProductList, ProductForm } from "@/pages/products";
 import { AttributeList, AttributeForm } from "@/pages/masterAttribute";
 import { SystemLogForm, SystemLogList } from "@/pages/systemLog/";
+import SeedDataPage from "@/pages/SeedDataPage";
 
 export const router = createBrowserRouter([
     {
@@ -81,6 +82,11 @@ export const router = createBrowserRouter([
             // Explicit Error & Catch-all
             { path: "error", element: <ErrorPage /> },
             { path: "*", element: <NotFoundPage /> },
+
+            // app configuration page
+            { path: "config/seed-data", element: <SeedDataPage /> },
+
+
         ],
     },
 ]);

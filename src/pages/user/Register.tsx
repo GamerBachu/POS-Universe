@@ -116,7 +116,7 @@ const Register = () => {
                     <div className="flex flex-col gap-3 pt-4">
                         <Button
                             type="submit"
-                            className="w-full bg-indigo-600 hover:bg-indigo-700"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 py-2"
                             disabled={isPending}
                             isLoading={isPending}
                         >
