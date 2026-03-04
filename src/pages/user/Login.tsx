@@ -109,7 +109,7 @@ const Login: React.FC = () => {
       navigate(getSafeRedirectUrl(), { replace: true });
     }
   }, [state, navigate, getSafeRedirectUrl]);
-  console.log("Login render", state);
+ 
   return (
     <div className="flex items-center justify-center p-6 min-h-[inherit]">
       <div className="relative w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
