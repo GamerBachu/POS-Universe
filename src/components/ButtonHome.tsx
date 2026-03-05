@@ -11,7 +11,7 @@ const ButtonHome = ({ className = "" }: ButtonHomeProps) => {
     return (
         <button
             onClick={() => navigate(PATHS.DASHBOARD)}
-            className={`${className} group relative flex items-center justify-center p-1 rounded-sm border border-gray-200 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm transition-all duration-300 ease-in-out active:scale-90`}
+            className={`${className} group relative flex items-center justify-center p-1 rounded-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 shadow-sm transition-all active:scale-90`}
             aria-label="Go to Dashboard"
         >
             <div

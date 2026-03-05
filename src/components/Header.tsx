@@ -14,17 +14,21 @@ const Header = ({ label = "Loading..." }: { label?: string; }) => {
     return (
         <header className="flex justify-between items-center px-4 py-2 bg-white dark:bg-gray-800 flex-shrink-0 transition-colors duration-200">
             {/* Left Side: Breadcrumb Style */}
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+            <div className="flex items-center text-gray-500 dark:text-gray-400">
                 {/* 2. Double Right Icon (Separator) */}
-                {isMinimized === true && (
+                <div
+                    className={`flex items-center overflow-hidden transition-all duration-500 ease-in-out ${isMinimized ? "max-w-[60px] opacity-100 mr-2" : "max-w-0 opacity-0 mr-0"
+                        }`}
+                >
                     <SideBarToggle onClick={maximizeWindow} isMinimized={isMinimized} />
-                )}
+                    <span className="text-gray-300 dark:text-gray-600 font-light select-none ml-2">|</span>
+                </div>
 
                 {/* 1. Home Icon - Sized to h-4 w-4 to match Toggle */}
-                <ButtonHome></ButtonHome>
+                <ButtonHome className="mr-2" />
 
                 {/* 2. Slash Separator (Breadcrumb style) */}
-                <span className="text-gray-300 dark:text-gray-600 font-light select-none">
+                <span className="text-gray-300 dark:text-gray-600 font-light select-none mr-2">
                     /
                 </span>
 
