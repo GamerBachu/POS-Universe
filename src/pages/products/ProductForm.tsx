@@ -26,6 +26,7 @@ import type {
   IProductDescription,
   IProductImageView,
   IProductKeywordView,
+  IProductView,
 } from "@/types/product";
 import { LoggerUtils } from "@/utils";
 import type { IActionState } from "@/types/actionState";
@@ -45,11 +46,14 @@ import PageHeader from "@/components/PageHeader";
 import RadioActiveToggle from "@/components/RadioActiveToggle";
 import ProductDescriptionSection from "./ProductDescriptionSection";
 import ProductKeywordsSection from "./ProductKeywordsSection";
+import { productsApi } from "@/api/productsApi";
+import { useAuth } from "@/contexts/authorize";
 
 const initialState = { success: false, message: "", status: 0 };
 
 const ProductForm: React.FC = () => {
   const { id: rawId, action: rawAction } = useParams<{ id: string; action: string; }>();
+  const auth = useAuth();
   const navigate = useNavigate();
   const id = Number(rawId);
   const action = rawAction?.toLowerCase() || "add";
@@ -57,9 +61,24 @@ const ProductForm: React.FC = () => {
   // Master Attribute State
   const [masterAttributes, setMasterAttributes] = useState<IMasterProductAttribute[]>([]);
 
-  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>(
-    [],
-  );
+  const [item, setItem] = useState<IProduct>({
+    id: 0,
+    code: "",
+    sku: "",
+    barcode: "",
+    name: "",
+
+    costPrice: 0,
+    sellingPrice: 0,
+    taxRate: 0,
+
+    stock: 0,
+    reorderLevel: 5,
+
+    isActive: true,
+  });
+
+  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>([],);
 
   const [imageRows, setImageRows] = useState<IProductImageView[]>([]);
 
@@ -74,51 +93,7 @@ const ProductForm: React.FC = () => {
   // Form versioning - increments after successful save to force remount
   const [formVersion, setFormVersion] = useState<number>(0);
 
-  // Load product attributes for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productAttributeApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setAttributeRows(transformAttributesToView(res.data));
-        }
-      });
-    }
-  }, [id, action]);
 
-  // Load product images for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productImageApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setImageRows(res.data);
-        }
-      });
-    }
-  }, [id, action]);
-
-  // Load product descriptions for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productDescriptionApi.getByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setDescriptionItem(res.data);
-        }
-      });
-    }
-  }, [id, action]);
-
-  // Load product keywords for edit/view
-  useEffect(() => {
-    if (id && action !== "add") {
-      productKeywordApi.getAllByProductId(id).then((res) => {
-        if (res.success && res.data) {
-          setKeywordRows(
-            res.data.map((k) => ({ ...k, rowid: generateGuid() + "-" + id })),
-          );
-        }
-      });
-    }
-  }, [id, action]);
 
   // Fetch master attributes on mount
   useEffect(() => {
@@ -127,6 +102,46 @@ const ProductForm: React.FC = () => {
         setMasterAttributes(res.data.filter((a) => a.isActive));
     });
   }, []);
+
+  useEffect(() => {
+    if (id && action !== "add") {
+      productsApi.getById(id).then((res) => {
+        if (res.success && res.data) {
+          const result: IProductView = res.data;
+          setItem({
+            id: result.id,
+            code: result.code,
+            sku: result.sku,
+            barcode: result.barcode,
+            name: result.name,
+
+            costPrice: result.costPrice,
+            sellingPrice: result.sellingPrice,
+            taxRate: result.taxRate,
+
+            stock: result.stock,
+            reorderLevel: result.reorderLevel,
+
+            isActive: result.isActive,
+          });
+          if (result.productAttributes) {
+            setAttributeRows(transformAttributesToView(result.productAttributes));
+          }
+          if (result.productImages) {
+            setImageRows(result.productImages);
+          }
+          if (result.productDescription) {
+            setDescriptionItem(result.productDescription);
+          }
+          if (result.productKeywords) {
+            setKeywordRows(result.productKeywords);
+          }
+
+
+        };
+      });
+    }
+  }, [id, action]);
 
   // Handlers for dynamic attribute rows (memoized with useCallback)
   const handleAddAttributeRow = useCallback(() => {
@@ -235,22 +250,7 @@ const ProductForm: React.FC = () => {
     );
   }, []);
 
-  const [item, setItem] = useState<IProduct>({
-    id: 0,
-    code: "",
-    sku: "",
-    barcode: "",
-    name: "",
 
-    costPrice: 0,
-    sellingPrice: 0,
-    taxRate: 0,
-
-    stock: 0,
-    reorderLevel: 5,
-
-    isActive: true,
-  });
 
   const onSendBack = useCallback(() => {
     if (window.history.length > 1 && window.history.state?.idx > 0) {
@@ -260,16 +260,11 @@ const ProductForm: React.FC = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (id && action !== "add") {
-      productApi.getById(id).then((res) => {
-        if (res.success && res.data) setItem(res.data);
-      });
-    }
-  }, [id, action]);
+
 
   const handleAction = async (_: IActionState | null, formData: FormData) => {
     try {
+      const userId = auth.info.authUser?.userId ? auth.info.authUser?.userId : 0;
       const payload = Object.fromEntries(formData) as Record<string, string>;
 
       // Collect attribute rows
@@ -279,8 +274,8 @@ const ProductForm: React.FC = () => {
       const images = collectImagesFromForm(imageRows, formData);
 
       // Handle product deletion
-      if (action === "delete") {        
-        const res = await handleProductDeletion(id);
+      if (action === "delete") {
+        const res = await handleProductDeletion(id, userId);
         if (res.success) {
           onSendBack();
           return { success: true, message: resource.common.success_delete };
@@ -312,8 +307,8 @@ const ProductForm: React.FC = () => {
       // Save product
       const response =
         action === "edit"
-          ? await productApi.update(id, formattedPayload)
-          : await productApi.add(formattedPayload);
+          ? await productApi.update(id, formattedPayload, userId)
+          : await productApi.add(formattedPayload, userId);
 
       // Handle API response errors
       const errorMap = {

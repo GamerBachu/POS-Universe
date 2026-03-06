@@ -1,6 +1,7 @@
 import type { ServiceResponse } from "@/types/serviceResponse";
 import db from "../libs/db/appDb";
 import { type IProduct } from "@/types/product";
+import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 
 export class productApi {
 
@@ -41,7 +42,7 @@ export class productApi {
             : this.createResponse(null, "Product not found.", false, 404);
     }
 
-    static async add(payload: IProduct): Promise<ServiceResponse<number | undefined | null>> {
+    static async add(payload: IProduct, userId: number): Promise<ServiceResponse<number | undefined | null>> {
 
         if (payload.id !== undefined && payload.id !== null && payload.id <= 0) {
             delete payload.id;
@@ -66,10 +67,13 @@ export class productApi {
             stock: payload.stock || 0
         });
 
+        db.productTimeStamps.add({ productId: newId ? newId : 0, lastUpdatedBy: userId, lastUpdatedAt: toUTCNowForDB() });
+
+
         return this.createResponse(newId, "Product created successfully.", true, 201);
     }
 
-    static async update(id: number, payload: Partial<IProduct>): Promise<ServiceResponse<boolean>> {
+    static async update(id: number, payload: Partial<IProduct>, userId: number): Promise<ServiceResponse<boolean>> {
         const existingRecord = await db.products.get(id);
         if (!existingRecord) return this.createResponse(false, "Product not found.", false, 404);
 
@@ -86,12 +90,16 @@ export class productApi {
         }
 
         await db.products.update(id, payload);
+
+        db.productTimeStamps.add({ productId: id, lastUpdatedBy: userId, lastUpdatedAt: toUTCNowForDB() }); // log
+
         return this.createResponse(true, "Product updated successfully.");
     }
 
-    static async delete(id: number): Promise<ServiceResponse<boolean>> {
+    static async delete(id: number, userId: number): Promise<ServiceResponse<boolean>> {
         try {
             await db.products.delete(id);
+            await db.productTimeStamps.add({ productId: id, lastUpdatedBy: userId, lastUpdatedAt: toUTCNowForDB() }); // Log the deletion
             return this.createResponse(true, "Product deleted successfully.");
         } catch (error: unknown) {
             return this.createResponse(false, this.getErrorMessage(error), false, 500);

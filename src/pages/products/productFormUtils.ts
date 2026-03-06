@@ -98,7 +98,7 @@ export async function handleAttributesSave(
 /**
  * Handle product deletion with attributes and images cleanup
  */
-export async function handleProductDeletion(productId: number): Promise<ServiceResponse<boolean>> {
+export async function handleProductDeletion(productId: number, userId: number): Promise<ServiceResponse<boolean>> {
 
   await productDescriptionApi.deleteByProductId(productId);
 
@@ -109,7 +109,7 @@ export async function handleProductDeletion(productId: number): Promise<ServiceR
   // Delete all images
   await productImageApi.deleteByProductId(productId);
   // Delete the product
-  return await productApi.delete(productId);
+  return await productApi.delete(productId, userId);
 }
 
 /**

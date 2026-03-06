@@ -70,3 +70,11 @@ export interface IProductTimeStamp {
     lastUpdatedBy: number; // User ID or name who made the last update
     lastUpdatedAt: string;
 }
+
+export interface IProductView extends IProduct {
+    productAttributes?: IProductAttribute[];
+    productImages?: IProductImage[];
+    productDescription?: IProductDescription;
+    productKeywords?: IProductKeyWord[];
+    productTimeStamp?: IProductTimeStamp;
+}

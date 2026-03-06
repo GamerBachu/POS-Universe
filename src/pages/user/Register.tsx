@@ -76,7 +76,7 @@ const Register = () => {
     return (
         <div className="flex items-center justify-center p-6 min-h-[inherit]">
             <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
-                <ThemeToggleIcon className="absolute top-4 right-4" />
+                <div className="absolute top-4 right-4"><ThemeToggleIcon /></div>
 
                 <header className="text-center mb-8">
                     <h1 className="text-2xl font-bold tracking-tight">

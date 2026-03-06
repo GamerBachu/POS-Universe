@@ -9,7 +9,7 @@ const Header = ({ label = "Loading..." }: { label?: string; }) => {
     const name = auth.info.isAuthorized
         ? auth.info.authUser?.displayName || ""
         : "...";
-
+ 
     const { isMinimized, maximizeWindow } = useSideBar();
     return (
         <header className="flex justify-between items-center px-4 py-2 bg-white dark:bg-gray-800 flex-shrink-0 transition-colors duration-200">

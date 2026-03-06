@@ -5,7 +5,7 @@ type ThemeToggleIconProps = {
   className?: string;
 };
 
-const ThemeToggleIcon: React.FC<ThemeToggleIconProps> = ({ className = "fixed top-4 right-4 p-2 rounded-sm border border-gray-300 dark:border-gray-600" }) => {
+const ThemeToggleIcon: React.FC<ThemeToggleIconProps> = ({ className = "" }) => {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -15,7 +15,7 @@ const ThemeToggleIcon: React.FC<ThemeToggleIconProps> = ({ className = "fixed to
   return (
     <button
       onClick={toggleTheme}
-      className={`${className} group relative flex items-center justify-center bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm transition-all duration-300 ease-in-out active:scale-90`}
+      className={`group relative flex items-center justify-center bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm transition-all duration-300 ease-in-out active:scale-90 ${className}`}
       aria-label="Toggle Theme"
     >
       <div

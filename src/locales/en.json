@@ -186,5 +186,8 @@
     "ph_message": "Message...",
     "stack_trace": "Stack Trace",
     "ph_stack_trace": "Stack Trace..."
+  },
+  "pos_t1":{
+    "title":"Quick Checkout"
   }
 }

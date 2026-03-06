@@ -16,15 +16,15 @@ export class productDescriptionApi {
         return { status, success, message, data };
     }
 
-    static async getById(id: number): Promise<ServiceResponse<IProductDescription | null>> {
+    static async getById(id: number): Promise<ServiceResponse<IProductDescription | undefined>> {
         try {
             const result = await db.productDescriptions.get(id);
             if (!result) {
-                return this.createResponse(null, "Description not found", false, 404);
+                return this.createResponse(undefined, "Description not found", false, 404);
             }
             return this.createResponse(result, "Description retrieved");
         } catch (error: unknown) {
-            return this.createResponse(null, this.getErrorMessage(error), false, 500);
+            return this.createResponse(undefined, this.getErrorMessage(error), false, 500);
         }
     }
 
@@ -71,18 +71,18 @@ export class productDescriptionApi {
     }
 
 
-    static async getByProductId(productId: number): Promise<ServiceResponse<IProductDescription | null>> {
+    static async getByProductId(productId: number): Promise<ServiceResponse<IProductDescription | undefined>> {
         try {
             const result = await db.productDescriptions
                 .where("productId")
                 .equals(productId)
                 .first();
             if (!result) {
-                return this.createResponse(null, "Description not found", false, 404);
+                return this.createResponse(undefined, "Description not found", false, 404);
             }
             return this.createResponse(result, "Description retrieved");
         } catch (error: unknown) {
-            return this.createResponse(null, this.getErrorMessage(error), false, 500);
+            return this.createResponse(undefined, this.getErrorMessage(error), false, 500);
         }
     }
 
