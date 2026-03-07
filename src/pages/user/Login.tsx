@@ -1,4 +1,4 @@
-import React, { useActionState, useCallback, useEffect, useMemo } from "react";
+import  { useActionState, useCallback, useEffect, useMemo } from "react";
 import resource from "@/locales/en.json";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";

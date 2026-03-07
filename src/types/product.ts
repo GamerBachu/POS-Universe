@@ -78,3 +78,27 @@ export interface IProductView extends IProduct {
     productKeywords?: IProductKeyWord[];
     productTimeStamp?: IProductTimeStamp;
 }
+
+
+export interface IProductFilter {
+
+    code?: string;         // Product Uniq Code 
+    sku?: string;          // Internal SKU (e.g., "XPO-MX3S-BLK")
+    barcode?: string;      // EAN/UPC for scanner
+    name?: string;
+
+    // Financial
+    sellingPrice?: number; // Current retail price
+    taxRate?: number;      // e.g., 0.10 for 10%
+
+    // Inventory
+    stock?: number;
+    reorderLevel?: number; // Alert when stock < this value 
+
+    // State
+    isActive?: string;    // "true", "false", or "" for all
+
+    // Pagination
+    currentPage: number;
+    pageSize: number;
+}
