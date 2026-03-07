@@ -40,7 +40,6 @@ import {
   handleImagesSave,
   handleProductDeletion,
   handleApiResponse,
-  transformAttributesToView,
 } from "./productFormUtils";
 import PageHeader from "@/components/PageHeader";
 import RadioActiveToggle from "@/components/RadioActiveToggle";
@@ -125,19 +124,17 @@ const ProductForm: React.FC = () => {
             isActive: result.isActive,
           });
           if (result.productAttributes) {
-            setAttributeRows(transformAttributesToView(result.productAttributes));
+            setAttributeRows(result.productAttributes.map((a) => ({ ...a, rowid: 'at' + "-" + a.id })));
           }
           if (result.productImages) {
-            setImageRows(result.productImages);
+            setImageRows(result.productImages.map((a) => ({ ...a, rowid: 'is' + "-" + a.id })));
           }
           if (result.productDescription) {
             setDescriptionItem(result.productDescription);
           }
           if (result.productKeywords) {
-            setKeywordRows(result.productKeywords);
+            setKeywordRows(result.productKeywords.map((a) => ({ ...a, rowid: 'kw' + "-" + a.id })));
           }
-
-
         };
       });
     }

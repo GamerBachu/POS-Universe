@@ -160,20 +160,44 @@ export class productApi {
     }
 
     static async generateUniqueCode(product: IProduct): Promise<string> {
-        const nameParts = product.name?.trim().split(/\s+/) || [];
-        const prefix = (nameParts.length >= 2 ? nameParts[0][0] + nameParts[1][0] : product.name?.substring(0, 2) || 'XX').toUpperCase().padEnd(2, 'X');
-        const mid = (product.sku?.[0] || '0').toUpperCase();
-        const base = `${prefix}${mid}`;
+        // Helper: Convert char to 2-digit string (A->01, B->02). Non-letters -> 00.
+        const getPos = (char: string | undefined): string => {
+            if (!char) return "00";
+            const code = char.toUpperCase().charCodeAt(0);
+            return (code >= 65 && code <= 90) ? (code - 64).toString().padStart(2, '0') : "00";
+        };
 
-        // Optimization: Get the count once
-        const count = await db.products.where("code").startsWithIgnoreCase(base).count();
-        let sequence = count + 1;
+        const words = product.name?.trim().split(/\s+/) || [];
+        let namePart = "";
 
-        while (true) {
-            const code = `${base}${sequence.toString(36).toUpperCase().padStart(3, '0')}`;
-            const exists = await db.products.where("code").equalsIgnoreCase(code).first();
-            if (!exists) return code;
-            sequence++;
+        // Build 6-digit suffix from name
+        if (words.length >= 3) {
+            namePart = getPos(words[0][0]) + getPos(words[1][0]) + getPos(words[2][0]);
+        } else if (words.length === 2) {
+            namePart = getPos(words[0][0]) + getPos(words[1][0]) + getPos(words[1][1]);
+        } else if (words.length === 1) {
+            const w = words[0];
+            namePart = getPos(w[0]) + getPos(w[1]) + getPos(w[2]);
+        } else {
+            namePart = "000000";
         }
+
+        // Ensure it's exactly 6 digits
+        namePart = namePart.padEnd(6, '0').slice(0, 6);
+
+        // Sequence Check (01-99)`
+        const count = await db.products.filter(p => p.code.endsWith(namePart)).count();
+        let seq = count + 1;
+
+        // Find next available sequence
+        while (seq <= 99) {
+            const finalCode = `${seq.toString().padStart(2, '0')}${namePart}`;
+            const exists = await db.products.where("code").equals(finalCode).first();
+
+            if (!exists) return finalCode;
+            seq++;
+        }
+
+        return `99${namePart}`; // Safety fallback
     }
 }
