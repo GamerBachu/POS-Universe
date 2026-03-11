@@ -160,7 +160,6 @@ export class productApi {
     }
 
     static async generateUniqueCode(product: IProduct): Promise<string> {
-        // Helper: Convert char to 2-digit string (A->01, B->02). Non-letters -> 00.
         const getPos = (char: string | undefined): string => {
             if (!char) return "00";
             const code = char.toUpperCase().charCodeAt(0);
@@ -170,26 +169,36 @@ export class productApi {
         const words = product.name?.trim().split(/\s+/) || [];
         let namePart = "";
 
-        // Build 6-digit suffix from name
+        // 1. Build 6-digit suffix
         if (words.length >= 3) {
             namePart = getPos(words[0][0]) + getPos(words[1][0]) + getPos(words[2][0]);
         } else if (words.length === 2) {
-            namePart = getPos(words[0][0]) + getPos(words[1][0]) + getPos(words[1][1]);
+            namePart = getPos(words[0][0]) + getPos(words[1][0]) + (words[1][1] ? getPos(words[1][1]) : "00");
         } else if (words.length === 1) {
             const w = words[0];
-            namePart = getPos(w[0]) + getPos(w[1]) + getPos(w[2]);
+            namePart = getPos(w[0]) + (w[1] ? getPos(w[1]) : "00") + (w[2] ? getPos(w[2]) : "00");
         } else {
             namePart = "000000";
         }
 
-        // Ensure it's exactly 6 digits
         namePart = namePart.padEnd(6, '0').slice(0, 6);
 
-        // Sequence Check (01-99)`
-        const count = await db.products.filter(p => p.code.endsWith(namePart)).count();
-        let seq = count + 1;
+        // 2. Fix: Get all existing codes ending with this namePart
+        const existingProducts = await db.products
+            .filter(p => p.code.endsWith(namePart))
+            .toArray();
 
-        // Find next available sequence
+        // 3. Extract sequences and find the max
+        const existingSequences = existingProducts.map(p => parseInt(p.code.slice(0, 2), 10));
+
+        let seq = 1;
+        if (existingSequences.length > 0) {
+            // Find the first available gap or increment the max
+            const maxSeq = Math.max(...existingSequences);
+            seq = maxSeq + 1;
+        }
+
+        // 4. Final safety loop to prevent race conditions/collisions
         while (seq <= 99) {
             const finalCode = `${seq.toString().padStart(2, '0')}${namePart}`;
             const exists = await db.products.where("code").equals(finalCode).first();
@@ -198,6 +207,9 @@ export class productApi {
             seq++;
         }
 
-        return `99${namePart}`; // Safety fallback
+        // 5. Ultimate Fallback: If 01-99 are all full, use a random 2-digit prefix
+        // (This only happens if you have 99 products with the exact same name initials)
+        const randomPrefix = Math.floor(Math.random() * 90 + 10);
+        return `${randomPrefix}${namePart}`;
     }
 }

@@ -3,14 +3,17 @@ import Header from "@/components/Header";
 import SectionLeft from "./SectionLeft";
 import SectionCenter from "./SectionCenter";
 import SectionRight from "./SectionRight";
-import { useTerminalDispatch } from "./TerminalContext";
+import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { IProductView, IProductFilter } from "@/types/product";
 import { productsApi } from "@/api/productsApi";
 import { generateGuid } from "@/utils/helper/guid";
+import FloatingAlert from "@/components/FloatingAlert";
 
 const TerminalContent = () => {
 
     const dispatch = useTerminalDispatch();
+    const { alert } = useTerminalState();
+
 
     const [products, setProducts] = useState<IProductView[]>([]);
     const [filter, setFilter] = useState<IProductFilter>({ isActive: "true", currentPage: 1, pageSize: 20 } as IProductFilter);
@@ -42,8 +45,7 @@ const TerminalContent = () => {
             item: {
                 id: 0,
                 rowId: generateGuid(),
-                product,
-                quantity: 1
+                product
             }
         });
     }, [dispatch]);
@@ -66,26 +68,31 @@ const TerminalContent = () => {
         setInputCode(nextCode);
 
         // 3. AUTO-ADD LOGIC (Inside the event)
-        if (nextCode.length >= 8) {
-            const exactMatch = products.find(p => p.code === nextCode);
-            if (exactMatch) {
-                handleProductClick(exactMatch);
-                // Clear everything in one batch
-                setInputCode("");
-                setFilter(prev => ({ ...prev, code: "" }));
-                return; // Exit early so we don't set the filter to the 8-digit code
-            }
-        }
+        // if (nextCode.length >= 8) {
+        //     const exactMatch = products.find(p => p.code === nextCode);
+        //     if (exactMatch) {
+        //         handleProductClick(exactMatch);
+        //         // Clear everything in one batch
+        //         setInputCode("");
+        //         setFilter(prev => ({ ...prev, code: "" }));
+        //         return; // Exit early so we don't set the filter to the 8-digit code
+        //     }
+        // }
 
         // Update the list filter as they type
         setFilter(prev => ({ ...prev, code: nextCode }));
 
-    }, [inputCode, products, handleProductClick]);
+    }, [inputCode]);
+
+    const onInputType = useCallback((val: string) => {
+        setInputCode(val);
+        setFilter(prev => ({ ...prev, code: val }));
+    }, []);
 
 
-
-
-
+    const hideAlert = () => {
+        dispatch({ type: "SET_ALERT", alert: null });
+    };
 
 
     return (
@@ -102,7 +109,7 @@ const TerminalContent = () => {
 
                 <SectionRight
                     inputCode={inputCode}
-                    setInputCode={setInputCode}
+                    onInputType={onInputType}
 
                     onNumpad={handleNumpad}
 
@@ -110,6 +117,14 @@ const TerminalContent = () => {
                     setFilter={setFilter}
                 />
             </div>
+
+            {alert && (
+                <FloatingAlert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={hideAlert}
+                />
+            )}
         </div>
     );
 };

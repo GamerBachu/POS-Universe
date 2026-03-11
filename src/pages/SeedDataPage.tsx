@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
 import SeedData, { masterProductData } from "@/libs/db/seedData";
-import type { IProductView } from "@/types/product";
+
 import { LoggerUtils } from "@/utils";
 import { useState } from "react";
 
@@ -88,7 +88,8 @@ const SeedDataPage = () => {
         setSuccessMsg(null);
         setErrorMsg(null);
         try {
-            masterProductData.forEach(async (product: IProductView) => {
+            for (const product of masterProductData) {
+                // masterProductData.forEach(async (product: IProductView) => {
                 const response = await productApi.add(
                     {
                         code: product.code,
@@ -145,7 +146,10 @@ const SeedDataPage = () => {
                         }
                     }
                 }
-            });
+                //   });
+
+
+            }
             setSuccessMsg(`Successfully added ${masterProductData.length}`);
         } catch (err) {
             LoggerUtils.logCatch(err, "SeedDataPage", "MultiAddFailure");

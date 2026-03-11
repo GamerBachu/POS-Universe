@@ -6,7 +6,7 @@ import type { IProductFilter } from "@/types/product";
 
 type Props = {
     inputCode: string;
-    setInputCode: (val: string) => void;
+    onInputType: (val: string) => void;
 
     onNumpad: (val: string) => void;
 
@@ -16,7 +16,7 @@ type Props = {
 
 const SectionRight = ({
     inputCode,
-    setInputCode,
+    onInputType,
     onNumpad,
     filter,
     setFilter
@@ -36,6 +36,8 @@ const SectionRight = ({
         setPaymentMethod(method);
     };
 
+
+
     return (
         <section className="w-72 flex flex-col bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700">
             <div className="p-3 border-b border-gray-200 dark:border-gray-700">
@@ -44,8 +46,9 @@ const SectionRight = ({
                         type="text"
                         placeholder="Search item..."
                         value={inputCode}
-                        onChange={(e) => setInputCode(e.target.value)}
+                        onChange={(e) => onInputType(e.target.value)}
                         className="w-full pl-8 pr-2 py-2 text-xs bg-gray-100 dark:bg-gray-700 border-none rounded-sm focus:ring-1 focus:ring-teal-500 transition-all"
+                        
                     />
                     <svg
                         className="absolute left-2 top-2 h-4 w-4 text-gray-400"
@@ -108,7 +111,12 @@ const SectionRight = ({
                     </PaymentMethodButton>
                     <PaymentMethodButton>Split</PaymentMethodButton>
                 </div>
-                <button className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest">
+                <button
+                    onClick={() => {
+                        dispatch({ type: "SET_ALERT", alert: { type: "success", message: "complete order" } });
+                    }}
+                    className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest"
+                >
                     Complete Order
                 </button>
             </div>
