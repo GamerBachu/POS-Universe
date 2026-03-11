@@ -57,7 +57,7 @@ export const ProductImagesSection = ({
                 rows={2}
               />
               <Input
-                type="url"
+                type="text"
                 name={`imageUrl_${key}`}
                 value={row.url || ""}
                 disabled={isReadOnly}

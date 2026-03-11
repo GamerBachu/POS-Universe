@@ -1,3 +1,5 @@
+import type { IProductView } from "@/types/product";
+
 class SeedData {
 
 
@@ -113,8 +115,8 @@ const categories = [
 const brands = ["Samsung", "Apple", "Nike", "Dell", "Nestle", "Sony", "Adidas", "Logitech", "Puma", "HP"];
 const colors = ["Black", "White", "Silver", "Midnight Blue", "Space Gray", "Red", "Olive Green"];
 
-const generateSeedProducts = () => {
-    const products: unknown[] = [];
+const generateSeedProducts = (): IProductView[] => {
+    const products: IProductView[] = [];
     let globalAttrId = 1;
 
     for (let i = 1; i <= 100; i++) {
@@ -122,7 +124,7 @@ const generateSeedProducts = () => {
         const brand = brands[i % brands.length];
         const productId = 100 + i;
 
-        const product = {
+        const product: IProductView = {
             id: productId,
             code: `${category.prefix}-${brand.substring(0, 3).toUpperCase()}-${1000 + i}`,
             sku: `${brand.toUpperCase()}-${i * 7}-POS`,
@@ -134,12 +136,7 @@ const generateSeedProducts = () => {
             stock: Math.floor(Math.random() * 200),
             reorderLevel: 10,
             isActive: true,
-            description: {
-                id: productId,
-                productId: productId,
-                description: `High-quality ${category.name} product from ${brand}. Reliable and industry-standard.`
-            },
-            attributes: category.attrs.map((attrId) => {
+            productAttributes: category.attrs.map((attrId) => {
                 let value = "Standard";
                 // Logic to give realistic values based on Master IDs
                 if (attrId === 10) value = brand;
@@ -155,18 +152,30 @@ const generateSeedProducts = () => {
                     value: value
                 };
             }),
-            images: [
+            productImages: [
                 {
                     id: i,
                     productId: productId,
                     title: "Primary Image",
+                    description: `A high-quality image showcasing the ${brand} ${category.name} product.`,
                     url: `/images/products/placeholder-${i % 10}.jpg`
                 }
             ],
-            keywords: [
+            productDescription: {
+                id: productId,
+                productId: productId,
+                description: `High-quality ${category.name} product from ${brand}. Reliable and industry-standard.`
+            },
+            productKeywords: [
                 { id: i * 2, productId: productId, keyword: category.name.toLowerCase() },
                 { id: i * 2 + 1, productId: productId, keyword: brand.toLowerCase() }
-            ]
+            ],
+            productTimeStamp: {
+                id: productId,
+                productId: productId,
+                lastUpdatedBy: 1,
+                lastUpdatedAt: new Date().toISOString()
+            }
         };
 
         product.sellingPrice = parseFloat((product.costPrice * 1.4).toFixed(2));
@@ -175,4 +184,4 @@ const generateSeedProducts = () => {
     return products;
 };
 
-export const masterProductData = generateSeedProducts();
+export const masterProductData: IProductView[] = generateSeedProducts();

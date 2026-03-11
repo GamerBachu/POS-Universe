@@ -1,9 +1,11 @@
+import { productApi } from "@/api";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
 import SeedData, { masterProductData } from "@/libs/db/seedData";
+
 import { LoggerUtils } from "@/utils";
 import { useState } from "react";
 
@@ -22,7 +24,6 @@ const SeedDataPage = () => {
         // 1. Create promises that resolve with custom metadata (name + status)
         const promises = seedData.masterProductAttribute.map(async (attr) => {
             try {
-
                 await db.masterProductAttributes.add({
                     id: attr.id,
                     name: attr.name,
@@ -33,7 +34,11 @@ const SeedDataPage = () => {
                 return { name: attr.name, success: true };
             } catch (error) {
                 // Reject with the name and the error message
-                throw { name: attr.name, success: false, error: error instanceof Error ? error.message : "Unknown error" };
+                throw {
+                    name: attr.name,
+                    success: false,
+                    error: error instanceof Error ? error.message : "Unknown error",
+                };
             }
         });
 
@@ -61,10 +66,15 @@ const SeedDataPage = () => {
             }
 
             if (failedDetails.length > 0) {
-                setErrorMsg(`Failed to add ${failedDetails.length} items: ${failedDetails.join(" | ")}`);
-                LoggerUtils.logError(undefined, "MultiAddFailure", failedDetails.join());
+                setErrorMsg(
+                    `Failed to add ${failedDetails.length} items: ${failedDetails.join(" | ")}`,
+                );
+                LoggerUtils.logError(
+                    undefined,
+                    "MultiAddFailure",
+                    failedDetails.join(),
+                );
             }
-
         } catch (err) {
             LoggerUtils.logCatch(err, "SeedDataPage", "MultiAddFailure");
             setErrorMsg("A system error occurred during execution.");
@@ -77,77 +87,70 @@ const SeedDataPage = () => {
         setProcessing(true);
         setSuccessMsg(null);
         setErrorMsg(null);
-
-        // 1. Create promises that resolve with custom metadata (name + status)
-        const promises = masterProductData.map(async (product: any) => {
-            try {
-                await db.transaction('rw', [
-                    db.products,
-                    db.productDescriptions,
-                    db.productAttributes,
-                    db.productImages,
-                    db.productKeywords
-                ], async () => {
-                    // 1. Destructure the product object
-                    const { description, attributes, images, keywords, ...productBase } = product;
-
-                    // 2. Spread productBase so the properties (id, name, etc.) are at the top level
-                    await db.products.add({ ...productBase });
-
-                    // 3. Add associated data if they exist
-                    if (description) {
-                        await db.productDescriptions.add(description);
-                    }
-
-                    if (attributes && attributes.length > 0) {
-                        await db.productAttributes.bulkAdd(attributes);
-                    }
-
-                    if (images && images.length > 0) {
-                        await db.productImages.bulkAdd(images);
-                    }
-
-                    if (keywords && keywords.length > 0) {
-                        await db.productKeywords.bulkAdd(keywords);
-                    }
-                });
-
-                // Resolve with name so we can count it later
-                return { name: product.name, success: true };
-            } catch (error) {
-                // Reject with the name and the error message
-                throw { name: product.name, success: false, error: error instanceof Error ? error.message : "Unknown error" };
-            }
-        });
-
         try {
-            // 2. Wait for all to finish
-            const results = await Promise.allSettled(promises);
-
-            // 3. Separate results using our custom resolution structure
-            const successfulNames: string[] = [];
-            const failedDetails: string[] = [];
-
-            results.forEach((result) => {
-                if (result.status === "fulfilled") {
-                    successfulNames.push(result.value.name);
-                } else {
-                    // Access the custom object we threw in the catch block
-                    const reason = result.reason;
-                    failedDetails.push(`${reason.name} (${reason.error})`);
+            for (const product of masterProductData) {
+                // masterProductData.forEach(async (product: IProductView) => {
+                const response = await productApi.add(
+                    {
+                        code: product.code,
+                        sku: product.sku,
+                        barcode: product.barcode,
+                        name: product.name,
+                        costPrice: product.costPrice,
+                        sellingPrice: product.sellingPrice,
+                        taxRate: product.taxRate,
+                        stock: product.stock,
+                        reorderLevel: product.reorderLevel,
+                        isActive: true,
+                    },
+                    1,
+                );
+                if (response.success) {
+                    const productId = Number(response.data);
+                    if (productId > 0) {
+                        if (
+                            product.productAttributes &&
+                            product.productAttributes.length > 0
+                        ) {
+                            product.productAttributes.forEach(async (attribute) => {
+                                db.productAttributes.add({
+                                    productId: productId,
+                                    attributeId: attribute.attributeId,
+                                    value: attribute.value,
+                                });
+                            });
+                        }
+                        if (product.productImages && product.productImages.length > 0) {
+                            product.productImages.forEach(async (image) => {
+                                db.productImages.add({
+                                    productId: productId,
+                                    title: image.title,
+                                    description: image.description,
+                                    url: image.url,
+                                });
+                            });
+                        }
+                        if (product.productDescription) {
+                            db.productDescriptions.add({
+                                productId: productId,
+                                description: product.productDescription.description,
+                            });
+                        }
+                        if (product.productKeywords && product.productKeywords.length > 0) {
+                            product.productKeywords.forEach(async (keyword) => {
+                                db.productKeywords.add({
+                                    productId: productId,
+                                    keyword: keyword.keyword,
+                                });
+                            });
+                        }
+                    }
                 }
-            });
+                //   });
 
-            // 4. Update UI States
-            if (successfulNames.length > 0) {
-                setSuccessMsg(`Successfully added ${successfulNames.length} products.`);
+
             }
-
-            if (failedDetails.length > 0) {
-                setErrorMsg(`Failed to add ${failedDetails.length} products: ${failedDetails.join(" | ")}`);
-                LoggerUtils.logError(undefined, "MultiAddFailure", failedDetails.join());
-            }
-
+            setSuccessMsg(`Successfully added ${masterProductData.length}`);
         } catch (err) {
             LoggerUtils.logCatch(err, "SeedDataPage", "MultiAddFailure");
             setErrorMsg("A system error occurred during execution.");
@@ -155,7 +158,6 @@ const SeedDataPage = () => {
             setProcessing(false);
         }
     };
-
 
     return (
         <div className="fixed inset-0 flex overflow-hidden">

@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
-import React from "react";
+
 interface CommonLayoutProps {
     children: React.ReactNode;
     h1: string;

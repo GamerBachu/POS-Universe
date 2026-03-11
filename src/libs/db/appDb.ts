@@ -5,6 +5,7 @@ import {
     type IProductDescription,
     type IProductImage,
     type IProductKeyWord,
+    type IProductTimeStamp,
 } from "@/types/product";
 import { type IMasterProductAttribute } from "@/types/masters";
 import { type IUser, type IRefreshToken } from "@/types/user";
@@ -22,6 +23,8 @@ class POSUniversalDexie extends Dexie {
     productImages!: EntityTable<IProductImage, "id">;
     productDescriptions!: EntityTable<IProductDescription, "id">;
     productKeywords!: EntityTable<IProductKeyWord, "id">;
+    productTimeStamps!: EntityTable<IProductTimeStamp, "id">;
+
 
     constructor() {
         super("POS_UniversalDB_0012");
@@ -42,6 +45,7 @@ class POSUniversalDexie extends Dexie {
             productImages: "++id, productId",
             productDescriptions: "++id, productId",
             productKeywords: "++id, productId",
+            productTimeStamps: "++id, productId",
         });
     }
 }
