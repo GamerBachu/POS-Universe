@@ -69,6 +69,7 @@ const ProductForm: React.FC = () => {
 
     costPrice: 0,
     sellingPrice: 0,
+    discountInPercent: 0,
     taxRate: 0,
 
     stock: 0,
@@ -116,6 +117,7 @@ const ProductForm: React.FC = () => {
 
             costPrice: result.costPrice,
             sellingPrice: result.sellingPrice,
+            discountInPercent: result.discountInPercent,
             taxRate: result.taxRate,
 
             stock: result.stock,

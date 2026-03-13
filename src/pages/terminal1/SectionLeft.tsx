@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import OrderItem from './OrderItem';
-import { useTerminalState } from './TerminalContext';
-import { displayPrice } from '@/utils/helper/numberUtils';
-import type { CartItem } from '@/types/terminal1';
+import { useMemo } from "react";
+import OrderItem from "./OrderItem";
+import { useTerminalState } from "./TerminalContext";
+import { displayPrice } from "@/utils/helper/numberUtils";
+import type { CartItem } from "@/types/terminal1";
 
 const SectionLeft = () => {
     const state = useTerminalState();
@@ -10,8 +10,9 @@ const SectionLeft = () => {
 
     // Memoized Calculations for Total, Line Count, and Total Quantity
     const totals = useMemo(() => {
-        const lineTotal = cart.reduce((sum, item) =>
-            sum + (item.product.sellingPrice * item.quantity), 0
+        const lineTotal = cart.reduce(
+            (sum, item) => sum + item.product.sellingPrice * item.quantity,
+            0,
         );
 
         const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -20,7 +21,7 @@ const SectionLeft = () => {
         return {
             totalPayable: displayPrice(lineTotal),
             totalQty,
-            lineCount
+            lineCount,
         };
     }, [cart]);
 
@@ -41,23 +42,26 @@ const SectionLeft = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-50 dark:divide-gray-700/50">
                         {cart.length === 0 ? (
-                            <tr><td colSpan={3} className="p-2 text-center text-gray-400">No items</td></tr>
+                            <tr>
+                                <td colSpan={3} className="p-2 text-center text-gray-400">
+                                    No items
+                                </td>
+                            </tr>
                         ) : (
                             cart.map((item: CartItem) => (
-                                <OrderItem
-                                    key={item.rowId}
-                                    item={item}
-                                />
+                                <OrderItem key={item.rowId} item={item} />
                             ))
                         )}
                     </tbody>
-
-                    {/* New Summary Row */}
                     {cart.length > 0 && (
                         <tfoot className="sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
                             <tr className="font-bold text-gray-600 dark:text-gray-300">
-                                <td className="p-2">Items: {totals.lineCount}</td>
-                                <td className="p-2 text-center" colSpan={2}>Qty: {totals.totalQty}</td>
+                                <td className="p-2">
+                                    Items: {totals.lineCount}
+                                </td>
+                                <td className="p-2 text-center" colSpan={2}>
+                                    Qty: {totals.totalQty}
+                                </td>
                             </tr>
                         </tfoot>
                     )}
@@ -66,8 +70,12 @@ const SectionLeft = () => {
 
             <div className="p-4 bg-teal-600 text-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
                 <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold opacity-80 uppercase">Total Payable</span>
-                    <span className="text-xl font-black">{totals.totalPayable}</span>
+                    <span className="text-xs font-bold opacity-80 uppercase">
+                        Total Payable
+                    </span>
+                    <span className="text-xl font-black">
+                        {displayPrice(totals.totalPayable)}
+                    </span>
                 </div>
             </div>
         </section>

@@ -40,6 +40,7 @@ export function formatProductPayload(
     name: formData.name || "",
     costPrice: Number(formData.costPrice),
     sellingPrice: Number(formData.sellingPrice),
+    discountInPercent: Number(formData.discountInPercent),
     taxRate: Number(formData.taxRate),
     stock: Number(formData.stock),
     reorderLevel: Number(formData.reorderLevel),

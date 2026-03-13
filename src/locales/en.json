@@ -136,6 +136,11 @@
     "ph_selling_price": "0.00",
     "tax_rate": "Tax Rate/GST(IGST/SGST/CGST)",
     "ph_tax_rate": "e.g., 10",
+    "discount_in_percent": "Discount In %",
+    "ph_discount_in_percent": "0.0%",
+    "final_price": "Final Price",
+    "ph_final_price": "0.00",
+    "ph_final_price_tc": "discount applies before tax",
     "stock": "Current Stock",
     "ph_stock": "0",
     "reorder_level": "Reorder Level",
@@ -187,7 +192,7 @@
     "stack_trace": "Stack Trace",
     "ph_stack_trace": "Stack Trace..."
   },
-  "pos_t1":{
-    "title":"Quick Checkout"
+  "pos_t1": {
+    "title": "Quick Checkout"
   }
 }
