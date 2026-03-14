@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import OrderItem from "./OrderItem";
 import { useTerminalState } from "./TerminalContext";
 import { displayPrice } from "@/utils/helper/numberUtils";
-import type { CartItem } from "@/types/terminal1";
+import type { ICartItem } from "@/types/terminal1";
 import { calculateFinalPrice } from "./utils";
 
 const SectionLeft = () => {
@@ -48,7 +48,7 @@ const SectionLeft = () => {
                                 </td>
                             </tr>
                         ) : (
-                            cart.map((item: CartItem) => (
+                            cart.map((item: ICartItem) => (
                                 <OrderItem key={item.rowId} item={item} />
                             ))
                         )}

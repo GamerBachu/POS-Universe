@@ -123,6 +123,7 @@ const TerminalContent = () => {
                     message={alert.message}
                     type={alert.type}
                     onClose={hideAlert}
+                    
                 />
             )}
         </div>

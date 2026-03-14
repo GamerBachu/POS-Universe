@@ -1,6 +1,6 @@
-import { initialState, type TerminalAction, type TerminalState } from "@/types/terminal1";
+import { initialState, type TerminalAction, type ITerminalState } from "@/types/terminal1";
 
-export function terminalReducer(state: TerminalState, action: TerminalAction): TerminalState {
+export function terminalReducer(state: ITerminalState, action: TerminalAction): ITerminalState {
     switch (action.type) {
         case "ADD_ITEM": {
             const { product } = action.item;
@@ -63,11 +63,9 @@ export function terminalReducer(state: TerminalState, action: TerminalAction): T
         case "SET_PAYMENT_METHOD":
             return { ...state, paymentMethod: action.method };
 
-        case "PAY":
-            return { ...state, isPaid: true, alert: { message: "Transaction completed!", type: "success" } };
 
-        case "RESET":
-            return initialState;
+        case "COMPLETE":
+            return { ...initialState, alert: state.alert };
 
         default:
             return state;

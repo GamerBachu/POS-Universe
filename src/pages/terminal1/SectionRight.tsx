@@ -2,8 +2,7 @@
 import type { IProductFilter } from "@/types/product";
 import ProductSearch from "./ProductSearch";
 import CustomerLink from "./CustomerLink";
-import ProductPayment from "./ProductPayment";
-
+import PaymentProcess from "./PaymentProcess";
 type Props = {
     inputCode: string;
     onInputType: (val: string) => void;
@@ -24,8 +23,8 @@ const SectionRight = ({ inputCode, onInputType, onNumpad, filter, setFilter }: P
                 filter={filter}
                 setFilter={setFilter}
             ></ProductSearch>
-            <CustomerLink></CustomerLink>
-            <ProductPayment></ProductPayment>
+            <CustomerLink />
+            <PaymentProcess />
         </section>
     );
 };

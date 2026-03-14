@@ -1,8 +1,8 @@
 import { createContext, useContext, type Dispatch } from "react";
-import type { TerminalAction, TerminalState } from "@/types/terminal1";
+import type { TerminalAction, ITerminalState } from "@/types/terminal1";
 
 // Contexts
-export const TerminalStateContext = createContext<TerminalState | undefined>(undefined);
+export const TerminalStateContext = createContext<ITerminalState | undefined>(undefined);
 export const TerminalDispatchContext = createContext<Dispatch<TerminalAction> | undefined>(undefined);
 
 // Custom hooks

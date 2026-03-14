@@ -96,4 +96,18 @@ export interface IOrderCancellation {
 
 
 
+export interface IOrderView {
+    order: IOrder;
+    items: IOrderItem[];
+    adjustments: IOrderAdjustment[];
+    discounts: IOrderDiscount[];
+    payments: IOrderPayment[];
+    cancellation?: IOrderCancellation;
+}
+
+
+
 //Would you like me to write a saveFullOrder transaction function that ensures all 5 tables are updated at once(Atomicity) ?;
+
+
+//create a "Z-Report" function that sums up these tables for the end-of-day closing

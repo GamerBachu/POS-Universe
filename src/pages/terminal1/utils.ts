@@ -1,4 +1,6 @@
+import type { IOrderView } from "@/types/orders";
 import type { IProduct, IProductView } from "@/types/product";
+import type { ITerminalState } from "@/types/terminal1";
 import { roundNumber } from "@/utils/helper/numberUtils";
 
 /**
@@ -82,4 +84,11 @@ export { calculateFinalPrice };
 
 
 export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "⌫", "↵"];
-export const WALK_IN_CUSTOMER_TEXT = "Walk-in Customer"; 
+export const WALK_IN_CUSTOMER_TEXT = "Walk-in Customer";
+
+
+
+export const MapPayload = (payload: ITerminalState): IOrderView => {
+
+
+};

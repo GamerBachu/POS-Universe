@@ -1,11 +1,11 @@
-import type { CartItem } from "@/types/terminal1";
+import type { ICartItem } from "@/types/terminal1";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { useTerminalDispatch } from "./TerminalContext";
 import { calculateFinalPrice } from "./utils";
 
 
 type OrderItemProps = {
-    item: CartItem;
+    item: ICartItem;
 };
 
 const OrderItem = ({ item }: OrderItemProps) => {
