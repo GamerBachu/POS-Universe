@@ -11,6 +11,18 @@ import { type IMasterProductAttribute } from "@/types/masters";
 import { type IUser, type IRefreshToken } from "@/types/user";
 import type { ISystemLog } from "@/types/systemLog";
 
+import {
+    type IOrder,
+    type IOrderItem,
+    type IOrderAdjustment,
+    type IOrderDiscount,
+    type IOrderPayment,
+    type IOrderCancellation
+} from "@/types/orders";
+
+import { type ICustomer } from "@/types/customer";
+
+
 class POSUniversalDexie extends Dexie {
     users!: EntityTable<IUser, "id">;
     refreshTokens!: EntityTable<IRefreshToken, "id">;
@@ -24,6 +36,20 @@ class POSUniversalDexie extends Dexie {
     productDescriptions!: EntityTable<IProductDescription, "id">;
     productKeywords!: EntityTable<IProductKeyWord, "id">;
     productTimeStamps!: EntityTable<IProductTimeStamp, "id">;
+
+
+
+
+    // Orders set
+    orders!: EntityTable<IOrder, "id">;
+    orderItems!: EntityTable<IOrderItem, "id">;
+    orderAdjustments!: EntityTable<IOrderAdjustment, "id">;
+    orderDiscounts!: EntityTable<IOrderDiscount, "id">;
+    orderPayments!: EntityTable<IOrderPayment, "id">;
+    orderCancellations!: EntityTable<IOrderCancellation, "id">;
+    customers!: EntityTable<ICustomer, "id">;
+
+
 
 
     constructor() {
@@ -46,6 +72,17 @@ class POSUniversalDexie extends Dexie {
             productDescriptions: "++id, productId",
             productKeywords: "++id, productId",
             productTimeStamps: "++id, productId",
+
+
+            // Order tables - Indexing foreign keys for fast relational queries
+            orders: "++id, orderNumber, customerId, status, createdAt",
+            orderItems: "++id, orderId, productId",
+            orderAdjustments: "++id, orderId, category",
+            orderDiscounts: "++id, orderId, type",
+            orderPayments: "++id, orderId, method",
+            orderCancellations: "++id, orderId, orderNumber",
+            customers: "++id, guid, name, email, phone",
+
         });
     }
 }

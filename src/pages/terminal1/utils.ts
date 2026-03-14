@@ -82,3 +82,4 @@ export { calculateFinalPrice };
 
 
 export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "⌫", "↵"];
+export const WALK_IN_CUSTOMER_TEXT = "Walk-in Customer"; 

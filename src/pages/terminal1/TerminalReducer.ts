@@ -57,6 +57,9 @@ export function terminalReducer(state: TerminalState, action: TerminalAction): T
         case "SET_ALERT":
             return { ...state, alert: action.alert || undefined };
 
+        case "SET_CUSTOMER":
+            return { ...state, customer: action.customer };
+
         case "SET_PAYMENT_METHOD":
             return { ...state, paymentMethod: action.method };
 
