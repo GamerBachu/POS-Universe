@@ -1,4 +1,4 @@
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
@@ -36,12 +36,23 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
         onClose();
         return { success: true, message: "Customer saved." };
     };
+    // Keyboard Shortcuts Logic
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                onClose();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [onClose]);
 
     // FIX: React 19 useActionState returns [state, action, isPending]
-    const [state, formAction, isPending] = useActionState(handleAction, null);
+    const [_, formAction, isPending] = useActionState(handleAction, null);
 
     const handleClear = () => {
-        dispatch({ type: "SET_CUSTOMER", customer:s null });
+        dispatch({ type: "SET_CUSTOMER", customer: null });
         onClose();
     };
     return (
