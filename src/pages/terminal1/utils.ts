@@ -42,7 +42,7 @@ export { calculateFinalPrice };
 
 //     // 1. Price after discount (Taxable amount per unit)
 //     const taxableUnit = basePrice * (1 - discountPercent / 100);
-    
+
 //     // 2. Tax amount per unit
 //     const taxAmountUnit = taxableUnit * (taxRate / 100);
 
@@ -64,7 +64,7 @@ export { calculateFinalPrice };
 // return (
 //     <tr>
 //         {/* ... name and quantity columns ... */}
-        
+
 //         <td className="p-2 text-right">
 //             <div className="flex flex-col">
 //                 <span className="font-black text-gray-700 dark:text-gray-200 tabular-nums">
@@ -79,3 +79,6 @@ export { calculateFinalPrice };
 //         </td>
 //     </tr>
 // );
+
+
+export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "⌫", "↵"];

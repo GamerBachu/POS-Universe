@@ -1,5 +1,6 @@
 import NumpadButton from "./NumpadButton";
 import type { IProductFilter } from "@/types/product";
+import { NUMPAD_KEYS } from "./utils";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -46,23 +47,21 @@ const ProductSearch = ({
             </div>
 
             <div className="p-3 grid grid-cols-3 gap-2 flex-1 content-center">
-                {["1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫", "0", "↵"].map(
-                    (val) => (
-                        <NumpadButton
-                            key={val}
-                            className={
-                                val === "⌫"
-                                    ? "bg-red-50 dark:bg-red-900/20 text-red-600"
-                                    : val === "↵"
-                                        ? "bg-teal-600 text-white"
-                                        : ""
-                            }
-                            onClick={() => onNumpad(val)}
-                        >
-                            {val}
-                        </NumpadButton>
-                    ),
-                )}
+                {NUMPAD_KEYS.map((val) => (
+                    <NumpadButton
+                        key={val}
+                        className={
+                            val === "⌫"
+                                ? "bg-red-50 dark:bg-red-900/20 text-red-600"
+                                : val === "↵"
+                                    ? "bg-teal-600 text-white"
+                                    : ""
+                        }
+                        onClick={() => onNumpad(val)}
+                    >
+                        {val}
+                    </NumpadButton>
+                ))}
             </div>
         </>
     );

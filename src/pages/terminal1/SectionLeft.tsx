@@ -3,6 +3,7 @@ import OrderItem from "./OrderItem";
 import { useTerminalState } from "./TerminalContext";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import type { CartItem } from "@/types/terminal1";
+import { calculateFinalPrice } from "./utils";
 
 const SectionLeft = () => {
     const state = useTerminalState();
@@ -11,8 +12,7 @@ const SectionLeft = () => {
     // Memoized Calculations for Total, Line Count, and Total Quantity
     const totals = useMemo(() => {
         const lineTotal = cart.reduce(
-            (sum, item) => sum + item.product.sellingPrice * item.quantity,
-            0,
+            (sum, item) => sum + calculateFinalPrice(item.product) * item.quantity, 0,
         );
 
         const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);

@@ -1,6 +1,7 @@
 import type { CartItem } from "@/types/terminal1";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { useTerminalDispatch } from "./TerminalContext";
+import { calculateFinalPrice } from "./utils";
 
 
 type OrderItemProps = {
@@ -74,7 +75,7 @@ const OrderItem = ({ item }: OrderItemProps) => {
             </td>
 
             <td className="py-2 px-1 text-right font-black text-gray-700 dark:text-gray-200">
-                {displayPrice(item.product.sellingPrice * item.quantity)}
+                {displayPrice(calculateFinalPrice(item.product) * item.quantity)}
             </td>
         </tr>
     );
