@@ -1,3 +1,5 @@
+import type { ICustomer } from "./customer";
+
 /**
  * 1. THE ORDER HEADER
  * Summarizes the entire transaction.
@@ -65,7 +67,8 @@ export interface IOrderDiscount {
 export interface IOrderPayment {
     id?: number;
     orderId: number;
-    method: string;              //'CASH' | 'CARD' | 'UPI' | 'GIFT_CARD';
+    category: string;              //'CASH' | 'ELECTRONIC';
+    method: string;              //'CREDIT_CARD' | 'DEBIT_CARD' | 'UPI' | 'GIFT_CARD';
     amount: number;
     reference?: string;         // Transaction ID // Card Auth ID or Wallet Txn ID
 }
@@ -103,6 +106,7 @@ export interface IOrderView {
     discounts: IOrderDiscount[];
     payments: IOrderPayment[];
     cancellation?: IOrderCancellation;
+    customer?: ICustomer;
 }
 
 

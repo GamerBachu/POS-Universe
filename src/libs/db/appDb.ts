@@ -79,7 +79,7 @@ class POSUniversalDexie extends Dexie {
             orderItems: "++id, orderId, productId",
             orderAdjustments: "++id, orderId, category",
             orderDiscounts: "++id, orderId, type",
-            orderPayments: "++id, orderId, method",
+            orderPayments: "++id, orderId, category,method",
             orderCancellations: "++id, orderId, orderNumber",
             customers: "++id, guid, name, email, phone",
 

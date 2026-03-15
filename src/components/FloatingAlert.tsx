@@ -1,10 +1,10 @@
-import type { IStatusType } from "@/types/actionState";
+import type { TStatusType } from "@/types/actionState";
 import { useEffect } from "react";
 
 
 type FloatingAlertProps = {
     message: string;
-    type: IStatusType;
+    type: TStatusType;
     onClose: () => void;
     duration?: number;
 };

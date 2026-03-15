@@ -36,7 +36,7 @@ export class orderServiceApi {
      */
     static async addFullOrder(payload: IOrderView): Promise<ServiceResponse<IOrder | null>> {
         try {
-            const { order, items, adjustments, discounts, payments } = payload;
+            const { order, items, adjustments, discounts, payments, customer } = payload;
 
             // 1. Prepare Order Header
             order.orderNumber = await this.generateUniqueOrderNumber();
@@ -48,6 +48,25 @@ export class orderServiceApi {
             discounts.forEach(disc => delete disc.id);
             payments.forEach(pay => delete pay.id);
             //
+
+
+            //logic to get customer id 
+
+            if (customer) {
+                if (customer.id || customer.id !== 0) {
+                    const existingCustomer = await db.customers.get(customer.id);
+                    if (existingCustomer) {
+                        order.customerId = existingCustomer.id;
+                    }
+                }
+                else if (customer.id === 0 || !customer.id) { // New customer or customer without an ID
+                    delete customer.id;
+                    const newCustomerId = await db.customers.add(customer);
+                    if (newCustomerId) {
+                        order.customerId = newCustomerId;
+                    }
+                }
+            }
 
             const result = await db.transaction(
                 'rw',

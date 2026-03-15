@@ -23,9 +23,9 @@ const TerminalContent = () => {
     useEffect(() => {
         let isMounted = true;
         const loadData = async () => {
-            console.log("filter", filter);
+           
             const res = await productsApi.getFiltered(filter);
-            console.log("res", res);
+           
             if (isMounted && res.success && res.data) {
                 setProducts(res.data.items);
             }

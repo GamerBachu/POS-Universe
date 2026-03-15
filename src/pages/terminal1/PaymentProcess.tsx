@@ -1,60 +1,69 @@
 import PaymentMethodButton from "./PaymentMethodButton";
-import { useCallback, useMemo } from "react";
+import { useCallback, } from "react";
 import { useTerminalState, useTerminalDispatch } from "./TerminalContext";
-import { paymentMethods } from "@/types/terminal1";
+import { TPaymentCategory } from "@/types/terminal1";
 import { orderServiceApi } from "@/api/orderServiceApi";
-import { MapPayload } from "./utils";
+import { mapTerminalStateToOrder } from "./utils";
 import { LoggerUtils } from "@/utils";
+import { useAuth } from "@/contexts/authorize";
 
 
 const PaymentProcess = () => {
+    const auth = useAuth();
+
     const state = useTerminalState();
     const dispatch = useTerminalDispatch();
 
+
     const setPaymentMethod = useCallback(
-        (method: string) => {
-            dispatch({ type: "SET_PAYMENT_METHOD", method });
+        (paymentCategory: TPaymentCategory | null) => {
+            dispatch({ type: "SET_PAYMENT_CATEGORY", paymentCategory });
         },
         [dispatch],
     );
 
-    const paymentType = useMemo(() => {
-        return paymentMethods.sort((a, b) => a.id - b.id);
-    }, []);
-
 
     const onCompletingOrder = useCallback(async () => {
+
+        const userId = auth.info.authUser?.userId ? auth.info.authUser?.userId : 0;
+
+        if (!userId || userId === 0) {
+            dispatch({
+                type: "SET_ALERT",
+                alert: { type: "warning", message: "invalid user login again." },
+            });
+            return;
+        }
+
         // 1. Validate Cart
         if (state.cart.length === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "error", message: "Cart is empty." },
+                alert: { type: "warning", message: "Cart is empty." },
             });
             return;
         }
 
         // 2. Validate Payment Selection
-        if (!state.paymentMethod) {
+        if (!state.paymentCategory) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "error", message: "Select a payment method." },
+                alert: { type: "warning", message: "Select a payment method / category." },
             });
             return;
         }
 
         // 3. Validate Payment Status (Non-Cash Check)
         // Assuming paymentType[0].name is "CASH"
-        // 1. Ensure state.paymentMethod is not null/undefined
-        // 2. Ensure paymentType[0] exists before accessing .name
-        // 3. Fallback to empty strings to avoid "toLowerCase of null" errors
+        //-----// 1. Ensure state.paymentCategory is not null/undefined
+        //-----// 2. Ensure paymentType[0] exists before accessing .name
+        //-----// 3. Fallback to empty strings to avoid "toLowerCase of null" errors
 
-        const isCash =
-            (state.paymentMethod?.toString().toLowerCase() ?? "") === (paymentType?.[0]?.name?.toString().toLowerCase() ?? "_");
-
+        const isCash = state.paymentCategory === TPaymentCategory.CASH;
         if (!isCash && !state.isPaid) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "error", message: "Electronic payment pending." },
+                alert: { type: "warning", message: "Electronic payment pending." },
             });
             return;
         }
@@ -62,10 +71,10 @@ const PaymentProcess = () => {
         try {
             // 4. Map and Send to API
             // Mapping happens here to keep the API call clean
-            const payload = MapPayload(state);
-            const response = await orderServiceApi.addFullOrder(
-                payload
-            );
+            const payload = mapTerminalStateToOrder(state, userId);
+            console.log("payload", payload);
+
+            const response = await orderServiceApi.addFullOrder(payload);
 
             if (response.success && response.data) {
                 // 5. Success Flow: Show Order Number and Reset
@@ -102,21 +111,25 @@ const PaymentProcess = () => {
             });
             LoggerUtils.logCatch(error, "PaymentProcess", "onCompletingOrder");
         }
-    }, [state, dispatch, paymentType]); // Simplified dependencies
-
+    }, [state, dispatch, auth.info.authUser?.userId]);
 
     return (
         <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
             <div className="flex gap-2">
-                {paymentType.map((method) => (
-                    <PaymentMethodButton
-                        key={method.id}
-                        onClick={() => setPaymentMethod(method.name)}
-                        active={state.paymentMethod === method.name}
-                    >
-                        {method.name}
-                    </PaymentMethodButton>
-                ))}
+
+                <PaymentMethodButton
+                    onClick={() => setPaymentMethod(TPaymentCategory.CASH)}
+                    active={state.paymentCategory === TPaymentCategory.CASH}
+                >
+                    {TPaymentCategory.CASH}
+                </PaymentMethodButton>
+
+                <PaymentMethodButton
+                    onClick={() => setPaymentMethod(TPaymentCategory.ELECTRONIC)}
+                    active={state.paymentCategory === TPaymentCategory.ELECTRONIC}
+                >
+                    {TPaymentCategory.ELECTRONIC}
+                </PaymentMethodButton>
             </div>
             <button
                 onClick={onCompletingOrder}

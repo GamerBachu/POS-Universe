@@ -60,8 +60,8 @@ export function terminalReducer(state: ITerminalState, action: TerminalAction): 
         case "SET_CUSTOMER":
             return { ...state, customer: action.customer };
 
-        case "SET_PAYMENT_METHOD":
-            return { ...state, paymentMethod: action.method };
+        case "SET_PAYMENT_CATEGORY":
+            return { ...state, paymentCategory: action.paymentCategory };
 
 
         case "COMPLETE":

@@ -4,4 +4,4 @@ export interface IActionState {
 }
 
 
-export type IStatusType = "success" | "error" | "warning" | "info";
+export type TStatusType = "success" | "error" | "warning" | "info";
