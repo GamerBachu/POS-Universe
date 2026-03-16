@@ -7,6 +7,7 @@ export const initialState: ITerminalState = {
     cart: [],
     customer: null,
     paymentCategory: null,
+    adjustment: [],
     paymentMethod: null,
     isPaid: false,
 };
@@ -24,9 +25,11 @@ export interface ITerminalState {
     cart: ICartItem[];
     customer?: ICustomer | null,
     paymentCategory: TPaymentCategory | null;
+    adjustment: IAdjustment[];
     paymentMethod: TPaymentMethod | null;
     isPaid: boolean;
 }
+
 
 
 export type TerminalAction =
@@ -36,6 +39,9 @@ export type TerminalAction =
     | { type: "SET_CUSTOMER"; customer: ICustomer | null; }
     | { type: "SET_PAYMENT_CATEGORY"; paymentCategory: TPaymentCategory | null; }
     | { type: "SET_PAYMENT_METHOD"; paymentMethod: TPaymentMethod | null; }
+    | { type: "ADD_ADJUSTMENT"; adjustment: IAdjustment; }
+    | { type: "REMOVE_ADJUSTMENT"; rowId: string; }
+    | { type: "SET_IS_PAID"; sPaid: boolean; }
     | { type: "CHECK_PAYMENT_STATUS"; }
     | { type: "COMPLETE"; };
 
@@ -94,3 +100,26 @@ export const TPaymentMethod = {
 
 /** Type alias derived from TPaymentMethod object */
 export type TPaymentMethod = (typeof TPaymentMethod)[keyof typeof TPaymentMethod];
+
+
+
+/**
+ * ADJUSTMENT CATEGORIES
+ */
+export const TAdjustmentCategory = {
+    SERVICE_CHARGE: 'CHARGE',
+    DISCOUNT: 'DISCOUNT',
+} as const;
+
+export type TAdjustmentCategory = (typeof TAdjustmentCategory)[keyof typeof TAdjustmentCategory];
+
+/**
+ * STRUCTURE FOR DISCOUNTS AND CHARGES
+ */
+export interface IAdjustment {
+    rowId: string;       // Unique ID for deletion (e.g., ADJ-X123)
+    category: TAdjustmentCategory;
+    label: string;       // Display name (e.g., "Seasonal Discount")
+    value: number;       // The numeric input (e.g., 10)
+    valueType: 'PERCENT' | 'FIXED';
+}

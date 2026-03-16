@@ -6,6 +6,7 @@ import { orderServiceApi } from "@/api/orderServiceApi";
 import { mapTerminalStateToOrder } from "./utils";
 import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
+import AdjustmentButtons from "./AdjustmentButtons";
 
 
 const PaymentProcess = () => {
@@ -115,6 +116,7 @@ const PaymentProcess = () => {
 
     return (
         <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
+            <AdjustmentButtons></AdjustmentButtons>
             <div className="flex gap-2">
 
                 <PaymentMethodButton

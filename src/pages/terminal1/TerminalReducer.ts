@@ -60,6 +60,19 @@ export function terminalReducer(state: ITerminalState, action: TerminalAction): 
         case "SET_CUSTOMER":
             return { ...state, customer: action.customer };
 
+        case "ADD_ADJUSTMENT":
+            return { ...state, adjustment: [...state.adjustment, action.adjustment] };
+
+        case "REMOVE_ADJUSTMENT":
+            return {
+                ...state,
+                adjustment: state.adjustment.filter((adj) => adj.rowId !== action.rowId)
+            };
+
+
+
+
+
         case "SET_PAYMENT_CATEGORY":
             return { ...state, paymentCategory: action.paymentCategory };
 
