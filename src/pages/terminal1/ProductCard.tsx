@@ -3,6 +3,7 @@ import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import type { IProductView } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { calculateFinalPrice } from "./utils";
+import { PlusIcon } from "@/libs/icons";
 
 type ProductCardProps = {
     product: IProductView;
@@ -22,19 +23,7 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
         >
             {/* Icon Area: Changed shrink-0 to shrink to allow it to give space to text if needed */}
             <div className="aspect-[5/4] w-full bg-gray-100 dark:bg-gray-700/50 rounded-md mb-2 flex items-center justify-center shrink">
-                <svg
-                    className="w-5 h-5 text-gray-300 dark:text-gray-500 group-hover:text-teal-500 transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                </svg>
+                <PlusIcon className="w-5 h-5 text-gray-300 dark:text-gray-500 group-hover:text-teal-500 transition-colors" />
             </div>
 
             {/* Name: Added min-h to ensure it always occupies 2 lines of space */}
@@ -53,8 +42,8 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
             {/* Stock: Simple text */}
             <span
                 className={`text-[10px] font-bold mt-0.5 shrink-0 ${isLowStock
-                        ? "text-red-500 dark:text-red-400"
-                        : "text-gray-500 dark:text-gray-400"
+                    ? "text-red-500 dark:text-red-400"
+                    : "text-gray-500 dark:text-gray-400"
                     }`}
             >
                 {product.stock} in stock

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
+import { CloseIcon } from "@/libs/icons";
 
 
 interface AdjustmentModalProps {
@@ -76,9 +77,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                         </h3>
                     </div>
                     <button type="button" onClick={onClose} className="text-gray-400 hover:text-red-500">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <CloseIcon className="w-4 h-4" />
                     </button>
                 </div>
 

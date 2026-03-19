@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AdjustmentModal from "./AdjustmentModal";
 import type { TAdjustmentCategory } from "@/types/terminal1";
+import { PercentageIcon, PlusIcon } from "@/libs/icons";
 
 const AdjustmentButtons = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,19 +33,7 @@ const AdjustmentButtons = () => {
                     onClick={onAddDiscount}
                     className="flex-1 h-9 px-2 rounded-sm border border-amber-200 bg-amber-50 dark:bg-amber-900/10 text-amber-700 dark:text-amber-500 text-[10px] font-black uppercase flex items-center justify-center gap-1.5 transition-all active:scale-95 hover:bg-amber-100"
                 >
-                    <svg
-                        className="w-3.5 h-3.5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="19" y1="5" x2="5" y2="19"></line>
-                        <circle cx="6.5" cy="6.5" r="2.5"></circle>
-                        <circle cx="17.5" cy="17.5" r="2.5"></circle>
-                    </svg>
+                    <PercentageIcon className="w-3.5 h-3.5" />
                     <span>Add Discount</span>
                 </button>
 
@@ -54,18 +43,7 @@ const AdjustmentButtons = () => {
                     onClick={onAddServiceCharge}
                     className="flex-1 h-9 px-2 rounded-sm border border-indigo-200 bg-indigo-50 dark:bg-indigo-900/10 text-indigo-700 dark:text-indigo-400 text-[10px] font-black uppercase flex items-center justify-center gap-1.5 transition-all active:scale-95 hover:bg-indigo-100"
                 >
-                    <svg
-                        className="w-3.5 h-3.5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
+                    <PlusIcon className="w-3.5 h-3.5" />
                     <span>Service Charge</span>
                 </button>
             </div>

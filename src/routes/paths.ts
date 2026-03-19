@@ -29,6 +29,15 @@ export const PATHS = {
     SYSTEM_LOG_DELETE: "/sys_log/page/delete/",
 
 
+    TERMINAL_1_POS: "/pos/v1/checkout",
+    TERMINAL_1_LIST: "/sys_log/list",
+    TERMINAL_1_ADD: "/sys_log/page/add/",
+    TERMINAL_1_EDIT: "/sys_log/page/edit/",
+    TERMINAL_1_VIEW: "/sys_log/page/view/",
+    TERMINAL_1_DELETE: "/sys_log/page/delete/",
+
+
+
 } as const;
 
 type AppPath = (typeof PATHS)[keyof typeof PATHS];

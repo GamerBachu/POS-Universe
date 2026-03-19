@@ -4,6 +4,7 @@ import { useTerminalState, useTerminalDispatch } from "./TerminalContext";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import type { ICartItem } from "@/types/terminal1";
 import { calculateFinalPrice } from "./utils";
+import { CloseIcon } from "@/libs/icons";
 
 const SectionLeft = () => {
     const state = useTerminalState();
@@ -99,9 +100,7 @@ const SectionLeft = () => {
                                         onClick={() => handleRemoveAdjustment(adj.rowId)}
                                         className="w-6 h-6 rounded-md flex items-center justify-center bg-white dark:bg-gray-600 shadow-sm border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-200 hover:text-red-500 transition-all active:scale-90 flex-shrink-0"
                                     >
-                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                  <CloseIcon className="w-3 h-3" />
 
                                     </button>
                                     <span className="font-bold text-xs text-gray-800 dark:text-gray-200 line-clamp-1">

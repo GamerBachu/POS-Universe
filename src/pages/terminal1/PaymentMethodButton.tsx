@@ -1,3 +1,4 @@
+import { CheckIcon } from "@/libs/icons";
 import React from "react";
 
 const PaymentMethodButton = ({
@@ -21,15 +22,7 @@ const PaymentMethodButton = ({
     >
         <div className="flex items-center justify-center gap-1">
             {active && (
-                <svg
-                    className="w-3 h-3 shrink-0 animate-in fade-in zoom-in duration-200"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="4.5"
-                >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+                <CheckIcon className="w-3 h-3 shrink-0 animate-in fade-in zoom-in duration-200" strokeWidth="4.5" />
             )}
             <span className="leading-[0] mt-[1px]">{children}</span>
         </div>

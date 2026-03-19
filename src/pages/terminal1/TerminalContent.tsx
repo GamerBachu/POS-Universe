@@ -8,6 +8,7 @@ import type { IProductView, IProductFilter } from "@/types/product";
 import { productsApi } from "@/api/productsApi";
 import { generateGuid } from "@/utils/helper/guid";
 import FloatingAlert from "@/components/FloatingAlert";
+import resource from "@/locales/en.json";
 
 const TerminalContent = () => {
 
@@ -99,7 +100,7 @@ const TerminalContent = () => {
 
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-800 dark:text-gray-200">
-            <Header label="POS UNIVERSE" />
+            <Header label={resource.navigation.terminal1_label} />
 
             <div className="flex flex-1 overflow-hidden border border-gray-200 dark:border-gray-700">
                 <SectionLeft />

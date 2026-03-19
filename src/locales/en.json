@@ -89,6 +89,12 @@
     "home_label": "Home",
     "home_desc": "Quick access to primary POS functions.",
 
+    "terminal1_label": "Checkout",
+    "terminal1_desc": "Quick Checkout POS functions.",
+
+    "terminal1_order_label": "Orders",
+    "terminal1_order_desc": "Quick access to primary Orders functions.",
+
     "logIn_label": "Sign In",
     "logIn_desc": "Log in to synchronize local data.",
 

@@ -17,6 +17,9 @@ import { ProductList, ProductForm } from "@/pages/products";
 import { AttributeList, AttributeForm } from "@/pages/masterAttribute";
 import { SystemLogForm, SystemLogList } from "@/pages/systemLog/";
 import SeedDataPage from "@/pages/SeedDataPage";
+import Main from "@/pages/terminal1/Main";
+import OrderList from "@/pages/terminal1Order/OrderList";
+import OrderForm from "@/pages/terminal1Order/OrderForm";
 
 export const router = createBrowserRouter([
     {
@@ -76,6 +79,17 @@ export const router = createBrowserRouter([
                     { path: "register", element: <Register /> },
                     { path: "logout", element: <Logout /> },
                     { path: "verify", element: <Verify /> },
+                ],
+            },
+
+            {
+                path: "pos/v1",
+                element: <PublicRoute />,
+                children: [
+                    { path: "checkout", element: <Main /> },
+                    { index: true, element: <OrderList /> },
+                    { path: "list", element: <OrderList /> },
+                    { path: "page/:action/:id", element: <OrderForm /> },
                 ],
             },
 

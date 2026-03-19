@@ -2,6 +2,7 @@ import { useActionState, useEffect } from "react";
 import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
+import { CloseIcon } from "@/libs/icons";
 
 interface CustomerFormProps {
     onClose: () => void;
@@ -71,19 +72,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                         onClick={onClose}
                         className="text-gray-400 hover:text-red-500"
                     >
-                        <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <CloseIcon className="w-4 h-4" />
                     </button>
                 </div>
 

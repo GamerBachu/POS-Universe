@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTerminalState } from "./TerminalContext";
 import CustomerForm from "./CustomerForm";
 import { WALK_IN_CUSTOMER_TEXT } from "./utils";
+import { PersonCircleIcon } from "@/libs/icons";
 
 const CustomerLink = () => {
     const state = useTerminalState();
@@ -16,19 +17,7 @@ const CustomerLink = () => {
                         onClick={() => setIsModalOpen(true)}
                         className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-teal-500 text-gray-400 hover:text-teal-500 transition-all shadow-sm active:scale-90"
                     >
-                        <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                            />
-                        </svg>
+                        <PersonCircleIcon className="w-4 h-4" />
                     </button>
                     <div
                         className="flex-1 cursor-pointer group"
