@@ -1,4 +1,5 @@
-import { initialState, type TerminalAction, type ITerminalState } from "@/types/terminal1";
+import { type TerminalAction, type ITerminalState } from "@/types/terminal1";
+import { newOrderState } from "./utils";
 
 export function terminalReducer(state: ITerminalState, action: TerminalAction): ITerminalState {
     switch (action.type) {
@@ -78,7 +79,7 @@ export function terminalReducer(state: ITerminalState, action: TerminalAction): 
 
 
         case "COMPLETE":
-            return { ...initialState, alert: state.alert };
+            return { ...newOrderState, alert: state.alert };
 
         default:
             return state;

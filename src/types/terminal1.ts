@@ -2,15 +2,6 @@ import type { TStatusType } from "./actionState";
 import type { ICustomer } from "./customer";
 import type { IProduct } from "./product";
 
-export const initialState: ITerminalState = {
-    alert: undefined,
-    cart: [],
-    customer: null,
-    paymentCategory: null,
-    adjustment: [],
-    paymentMethod: null,
-    isPaid: false,
-};
 
 
 export interface ICartItem {
@@ -21,7 +12,7 @@ export interface ICartItem {
 }
 
 export interface ITerminalState {
-    alert: { message: string; type: TStatusType; } | undefined;
+    alert: { message: string; type: TStatusType; duration?: number; } | undefined;
     cart: ICartItem[];
     customer?: ICustomer | null,
     paymentCategory: TPaymentCategory | null;
@@ -35,7 +26,9 @@ export interface ITerminalState {
 export type TerminalAction =
     | { type: "ADD_ITEM"; item: Omit<ICartItem, "quantity">; }
     | { type: "REMOVE_ITEM"; item: Omit<ICartItem, "quantity">; }
-    | { type: "SET_ALERT"; alert: { message: string; type: TStatusType; } | null; }
+
+    | { type: "SET_ALERT"; alert: { message: string; type: TStatusType; duration?: number; } | null; }
+
     | { type: "SET_CUSTOMER"; customer: ICustomer | null; }
     | { type: "SET_PAYMENT_CATEGORY"; paymentCategory: TPaymentCategory | null; }
     | { type: "SET_PAYMENT_METHOD"; paymentMethod: TPaymentMethod | null; }
@@ -56,6 +49,7 @@ export type TerminalAction =
  * - PARTIALLY_REFUNDED: Partial return of specific items or value.
  */
 export const TOrderStatus = {
+    NEW: 'NEW',
     PENDING: 'PENDING',
     COMPLETED: 'COMPLETED',
     VOIDED: 'VOIDED',
@@ -123,3 +117,4 @@ export interface IAdjustment {
     value: number;       // The numeric input (e.g., 10)
     valueType: 'PERCENT' | 'FIXED';
 }
+

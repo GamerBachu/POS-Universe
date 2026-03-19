@@ -4,6 +4,28 @@ import { TOrderStatus, type ITerminalState } from "@/types/terminal1";
 import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 import { roundNumber } from "@/utils/helper/numberUtils";
 
+
+
+/** 
+ *  newOrderState
+ * 
+ * 
+ * **/
+
+export const newOrderState: ITerminalState = {
+    alert: undefined,
+    cart: [],
+    customer: null,
+    paymentCategory: null,
+    adjustment: [],
+    paymentMethod: null,
+    isPaid: false,
+
+};
+
+
+
+
 /**
  * Calculates the final price after applying discount and then tax.
  * Follows standard government regulation: Discount -> Taxable Amount -> Tax.
@@ -84,7 +106,10 @@ export { calculateFinalPrice };
 // );
 
 
-export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "⌫", "↵"];
+//NUMPAD_KEYS -2= Enter / Apply Button 
+//NUMPAD_KEYS -1 = Backspace Button
+export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "-1", "-2"];
+
 export const WALK_IN_CUSTOMER_TEXT = "Walk-in Customer";
 
 /**
@@ -92,7 +117,7 @@ export const WALK_IN_CUSTOMER_TEXT = "Walk-in Customer";
  * Note: 'id' fields are omitted or handled as undefined to allow Dexie auto-increment.
  */
 export const mapTerminalStateToOrder = (state: ITerminalState, userId: number): IOrderView => {
-    const { cart, customer, paymentCategory, paymentMethod, } = state;
+    const { cart, customer, paymentCategory, paymentMethod, adjustment } = state;
 
     let subtotal = 0;
     let totalDiscount = 0;
@@ -118,10 +143,48 @@ export const mapTerminalStateToOrder = (state: ITerminalState, userId: number): 
         };
     });
 
-    // 2. Final Financial Snapshot
+    // 2. Apply Adjustments (Discounts, Surcharges) Construct Sub-tables (Only if values exist)
+
+    const adjustments: IOrderAdjustment[] = [];
+
+    const discounts: IOrderDiscount[] = [];
+    adjustment.forEach((adj) => {
+        // Calculate the actual numeric amount based on the valueType
+        const amount = adj.valueType === 'PERCENT'
+            ? roundNumber((subtotal * adj.value) / 100)
+            : adj.value;
+
+        if (adj.category === 'DISCOUNT') {
+            totalDiscount += amount;
+
+            // Push to discounts sub-table
+            discounts.push({
+                orderId: 0,
+                category: adj.category,
+                label: adj.label,
+                value: adj.value,
+                valueType: adj.valueType,
+            });
+        } else {
+            // Handle Charges / Taxes
+            totalTax += amount;
+
+            // Push to adjustments/charges sub-table
+            adjustments.push({
+                orderId: 0,
+                category: adj.category,
+                label: adj.label,
+                value: adj.value,
+                valueType: adj.valueType,
+            });
+        }
+    });
+
+    // 3. Final Financial Snapshot
+    // Subtract discounts and add taxes/charges
     const grandTotal = roundNumber(subtotal - totalDiscount + totalTax);
 
-    // 3. Construct Order Header
+    // 4. Construct Order Header
     // 'orderNumber' is set to empty string here; OrderService.saveFullOrder will replace it.
     const order: IOrder = {
         orderNumber: "",
@@ -130,16 +193,11 @@ export const mapTerminalStateToOrder = (state: ITerminalState, userId: number): 
         subtotal: roundNumber(subtotal),
         totalDiscount: roundNumber(totalDiscount),
         totalTax: roundNumber(totalTax),
-        totalCharge: 0,
         grandTotal: grandTotal,
         status: TOrderStatus.COMPLETED,
         createdAt: toUTCNowForDB()
     };
 
-    // 4. Construct Sub-tables (Only if values exist)
-    const adjustments: IOrderAdjustment[] = [];
-
-    const discounts: IOrderDiscount[] = [];
 
     // Map Payment Method safely
     const payments: IOrderPayment[] = paymentCategory ? [{

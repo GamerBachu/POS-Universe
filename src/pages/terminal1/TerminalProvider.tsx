@@ -1,10 +1,10 @@
 import { useReducer, type ReactNode } from "react";
 import { terminalReducer } from "./TerminalReducer";
-import { TerminalStateContext, TerminalDispatchContext } from "./TerminalContext";
-import { initialState } from "@/types/terminal1";
+import { TerminalStateContext, TerminalDispatchContext } from "./TerminalContext"; 
+import { newOrderState } from "./utils";
 
 const TerminalProvider = ({ children }: { children: ReactNode; }) => {
-    const [state, dispatch] = useReducer(terminalReducer, initialState);
+    const [state, dispatch] = useReducer(terminalReducer, newOrderState);
     return (
         <TerminalStateContext.Provider value={state}>
             <TerminalDispatchContext.Provider value={dispatch}>

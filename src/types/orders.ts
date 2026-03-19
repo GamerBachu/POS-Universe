@@ -13,8 +13,7 @@ export interface IOrder {
     // Financial Summary
     subtotal: number;       // Sum of all items before any adjustments
     totalDiscount: number;  // Total of all rows in IOrderDiscount
-    totalTax: number;       // Total of all rows in IOrderTax
-    totalCharge: number;    // Total of service/maintenance charges
+    totalTax: number;       // Total of all rows in service/maintenance charges IOrderTax 
     grandTotal: number;     // Subtotal - Discount + Tax + Charges
 
     status: string;          //'completed' | 'voided' | 'refunded';
@@ -44,8 +43,9 @@ export interface IOrderAdjustment {
     id?: number;
     orderId: number;
     category: string;           // TAX = Govt, CHARGE = Service/Maintenance
-    label: string;              // e.g. "VAT 5%", "Service Charge"
-    amount: number;             // The calculated value
+    label: string;        // e.g. "Redeemed 100 points"
+    value: number;             // value to subtract
+    valueType: 'PERCENT' | 'FIXED';
 }
 
 /**
@@ -55,9 +55,10 @@ export interface IOrderAdjustment {
 export interface IOrderDiscount {
     id?: number;
     orderId: number;
-    type: string;                //'COUPON' | 'POINTS' | 'GIFT_CARD';
-    description: string;        // e.g. "Redeemed 100 points"
-    amount: number;             // Total value to subtract
+    category: string;                //'COUPON' | 'POINTS' | 'GIFT_CARD';
+    label: string;        // e.g. "Redeemed 100 points"
+    value: number;             // value to subtract
+    valueType: 'PERCENT' | 'FIXED';
 }
 
 /**

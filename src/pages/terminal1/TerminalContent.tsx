@@ -23,9 +23,9 @@ const TerminalContent = () => {
     useEffect(() => {
         let isMounted = true;
         const loadData = async () => {
-           
+
             const res = await productsApi.getFiltered(filter);
-           
+
             if (isMounted && res.success && res.data) {
                 setProducts(res.data.items);
             }
@@ -53,10 +53,12 @@ const TerminalContent = () => {
     // 2. Updated handleNumpad
     const handleNumpad = useCallback((val: string) => {
         let nextCode = "";
+        //NUMPAD_KEYS -2= Enter / Apply Button 
+        //NUMPAD_KEYS -1 = Backspace Button
 
-        if (val === "⌫") {
+        if (val === "-1") {
             nextCode = inputCode.slice(0, -1);
-        } else if (val === "↵") {
+        } else if (val === "-2") {
             // Manual enter: trigger search
             setFilter(prev => ({ ...prev, code: inputCode }));
             return;
@@ -123,7 +125,7 @@ const TerminalContent = () => {
                     message={alert.message}
                     type={alert.type}
                     onClose={hideAlert}
-                    
+                    duration={alert.duration === undefined ? 3000 : alert.duration}
                 />
             )}
         </div>

@@ -83,7 +83,8 @@ const PaymentProcess = () => {
                     type: "SET_ALERT",
                     alert: {
                         type: "success",
-                        message: `Order ${response.data.orderNumber} saved successfully!`
+                        message: `Order ${response.data.orderNumber} saved successfully!`,
+                        duration: 10000,
                     },
                 });
                 //Note :add logic to show Order Number till user close it.
