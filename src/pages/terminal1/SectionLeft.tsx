@@ -40,10 +40,7 @@ const SectionLeft = () => {
 
     return (
         <section className="w-80 flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
-            <div className="p-3 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-200 dark:border-gray-700 font-bold text-xs uppercase tracking-wider text-gray-500">
-                Order Detail
-            </div>
-
+           
             <div className="flex-1 overflow-y-auto">
                 <table className="w-full text-left text-xs border-collapse">
                     <thead className="sticky top-0 bg-white dark:bg-gray-800 shadow-sm z-10">

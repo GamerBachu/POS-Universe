@@ -8,8 +8,12 @@ import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
 
+type PaymentProcessProps = {
+    resetFilter: () => void;
+};
 
-const PaymentProcess = () => {
+
+const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
     const auth = useAuth();
 
     const state = useTerminalState();
@@ -31,7 +35,7 @@ const PaymentProcess = () => {
         if (!userId || userId === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: "invalid user login again." },
+                alert: { type: "warning", message: "invalid user, please login again." },
             });
             return;
         }
@@ -90,6 +94,7 @@ const PaymentProcess = () => {
                 //Note :add logic to show Order Number till user close it.
                 // Trigger the clear/complete action to reset terminal state
                 dispatch({ type: "COMPLETE" });
+                resetFilter();
 
             } else {
                 // 6. API Logical Failure (e.g., validation in service)
@@ -113,7 +118,7 @@ const PaymentProcess = () => {
             });
             LoggerUtils.logCatch(error, "PaymentProcess", "onCompletingOrder");
         }
-    }, [state, dispatch, auth.info.authUser?.userId]);
+    }, [state, dispatch, auth.info.authUser?.userId, resetFilter]);
 
     return (
         <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
@@ -136,7 +141,7 @@ const PaymentProcess = () => {
             </div>
             <button
                 onClick={onCompletingOrder}
-                className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest"
+                className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest hover:bg-teal-700"
             >
                 Complete Order
             </button>

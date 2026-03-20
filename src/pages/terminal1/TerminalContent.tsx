@@ -17,7 +17,7 @@ const TerminalContent = () => {
 
 
     const [products, setProducts] = useState<IProductView[]>([]);
-    const [filter, setFilter] = useState<IProductFilter>({ isActive: "true", currentPage: 1, pageSize: 20 } as IProductFilter);
+    const [filter, setFilter] = useState<IProductFilter>({ isActive: "true", currentPage: 1, pageSize: 200 } as IProductFilter);
     const [inputCode, setInputCode] = useState("");
 
     // 1. Optimized API Fetching
@@ -39,7 +39,7 @@ const TerminalContent = () => {
         };
     }, [filter]);
 
-    // 3. Stable Handlers
+    // 2. Stable Handlers
     const handleProductClick = useCallback((product: IProductView) => {
         dispatch({
             type: "ADD_ITEM",
@@ -51,7 +51,7 @@ const TerminalContent = () => {
         });
     }, [dispatch]);
 
-    // 2. Updated handleNumpad
+    // 3. Updated handleNumpad
     const handleNumpad = useCallback((val: string) => {
         let nextCode = "";
         //NUMPAD_KEYS -2= Enter / Apply Button 
@@ -87,6 +87,14 @@ const TerminalContent = () => {
 
     }, [inputCode]);
 
+    // 4. Reset and Load again. 
+
+    const resetFilter = useCallback(async () => {
+        setInputCode("");
+        setFilter(prev => ({ ...prev, code: "", isActive: "true", currentPage: 1, pageSize: 200 }));
+    }, []);
+
+
     const onInputType = useCallback((val: string) => {
         setInputCode(val);
         setFilter(prev => ({ ...prev, code: val }));
@@ -96,6 +104,7 @@ const TerminalContent = () => {
     const hideAlert = () => {
         dispatch({ type: "SET_ALERT", alert: null });
     };
+
 
 
     return (
@@ -118,6 +127,7 @@ const TerminalContent = () => {
 
                     filter={filter}
                     setFilter={setFilter}
+                    resetFilter={resetFilter}
                 />
             </div>
 

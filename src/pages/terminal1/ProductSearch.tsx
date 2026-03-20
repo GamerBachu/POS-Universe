@@ -22,9 +22,8 @@ const ProductSearch = ({
 }: ProductSearchProps) => {
     return (
         <>
-            <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                 <div className="relative group flex items-center">
-                    {/* Search Icon (Left) */}
                     <div className="absolute left-2.5 flex items-center justify-center pointer-events-none">
                         <SearchIcon className="w-3 h-3" />
                     </div>
@@ -37,7 +36,6 @@ const ProductSearch = ({
                         className="w-full pl-9 pr-9 py-2 text-xs bg-gray-100 dark:bg-gray-700 border-none rounded-sm focus:ring-1 focus:ring-teal-500 transition-all"
                     />
 
-                    {/* Clear Icon (Right) */}
                     {inputCode && (
                         <button
                             type="button"
@@ -50,19 +48,20 @@ const ProductSearch = ({
                 </div>
             </div>
 
-            <div className="p-3 grid grid-cols-3 gap-2 flex-1 content-center">
+            {/* Middle Section: Stays at the top and scrolls if content overflows */}
+            <div className="p-3 grid grid-cols-3 gap-2 flex-1 content-start overflow-y-auto scrollbar-hide">
                 {NUMPAD_KEYS.map((val: string) =>
                     val === "-1" ? (
-                        //   {/* Backspace Button */ }
                         <NumpadButton
+                            key="backspace"
                             onClick={() => onNumpad(val)}
                             className="text-red-500 dark:text-red-400 active:bg-red-500"
                         >
                             <BackspaceIcon className="w-6 h-6 stroke-[3]" />
                         </NumpadButton>
                     ) : val === "-2" ? (
-                        //       {/* Enter / Apply Button */}
                         <NumpadButton
+                            key="check"
                             onClick={() => onNumpad(val)}
                             className="bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 active:bg-teal-600"
                         >
