@@ -5,6 +5,8 @@ import { SIDEBAR_MENU } from "@/routes/navigationMenu";
 import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
+import { CloseIcon } from "@/libs/icons";
+import Input from "./Input";
 
 const SideBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,42 +24,63 @@ const SideBar = () => {
 
   // Filter menu logic
   const filteredMenu = useMemo(() => {
-    if (!searchTerm.trim()) return SIDEBAR_MENU;
-    const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
-    return SIDEBAR_MENU.filter((item) => {
-      const contentToSearch = `${item.label} ${item.description}`.toLowerCase();
-      return searchWords.every((word) => contentToSearch.includes(word));
+    // 1. Get the base filtered list
+    let items = SIDEBAR_MENU;
+
+    if (searchTerm.trim()) {
+      const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+      items = SIDEBAR_MENU.filter((item) => {
+        const contentToSearch = `${item.label} ${item.description || ""}`.toLowerCase();
+        return searchWords.every((word) => contentToSearch.includes(word));
+      });
+    }
+
+    // 2. Remove Duplicates based on the 'label' property
+    const seenPaths = new Set();
+    return items.filter((item) => {
+      if (seenPaths.has(item.label)) {
+        return false; // Skip if we've already seen this label
+      }
+      seenPaths.add(item.label);
+      return true;
     });
   }, [searchTerm]);
+
   return (
     <>
       <aside
         className={`${!isMinimized ? "w-64" : "w-0 overflow-hidden border-none"} bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out`}
       >
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 relative">
-          <div className="flex items-center justify-between mb-4">
+        <div className="px-3 py-2  border-b border-gray-200 dark:border-gray-700 relative">
+          <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold truncate">
               {resource.common.app_name}
             </h2>
             <SideBarToggle isMinimized={isMinimized} onClick={minimizeWindow} />
           </div>
-
-          <div className="relative">
-            <input
+          <div className="relative group mt-3">
+            <Input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={resource.sidebar.ph_search_menu}
-              className="w-full px-3 py-1.5 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className=""
             />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
-            )}
+            <div className="absolute right-0 top-0 h-full w-9 flex items-center justify-center">
+              {searchTerm ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all active:scale-90"
+                >
+                  <CloseIcon className="w-3 h-3" />
+                </button>
+              ) : (
+                <span className="text-[9px] font-bold text-gray-300 dark:text-gray-600 pointer-events-none group-hover:opacity-0 transition-opacity">
+                  ESC
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -69,11 +92,10 @@ const SideBar = () => {
                 <li key={item.path} title={item.description}>
                   <Link
                     to={item.path}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${
-                      isActive
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
+                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                      }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>
                     <span className="text-sm truncate">{item.label}</span>
