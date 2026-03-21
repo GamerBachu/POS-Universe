@@ -1,6 +1,7 @@
-import { initialState, type TerminalAction, type TerminalState } from "@/types/terminal1";
+import { type TerminalAction, type ITerminalState } from "@/types/terminal1";
+import { newOrderState } from "./utils";
 
-export function terminalReducer(state: TerminalState, action: TerminalAction): TerminalState {
+export function terminalReducer(state: ITerminalState, action: TerminalAction): ITerminalState {
     switch (action.type) {
         case "ADD_ITEM": {
             const { product } = action.item;
@@ -57,14 +58,28 @@ export function terminalReducer(state: TerminalState, action: TerminalAction): T
         case "SET_ALERT":
             return { ...state, alert: action.alert || undefined };
 
-        case "SET_PAYMENT_METHOD":
-            return { ...state, paymentMethod: action.method };
+        case "SET_CUSTOMER":
+            return { ...state, customer: action.customer };
 
-        case "PAY":
-            return { ...state, isPaid: true, alert: { message: "Transaction completed!", type: "success" } };
+        case "ADD_ADJUSTMENT":
+            return { ...state, adjustment: [...state.adjustment, action.adjustment] };
 
-        case "RESET":
-            return initialState;
+        case "REMOVE_ADJUSTMENT":
+            return {
+                ...state,
+                adjustment: state.adjustment.filter((adj) => adj.rowId !== action.rowId)
+            };
+
+
+
+
+
+        case "SET_PAYMENT_CATEGORY":
+            return { ...state, paymentCategory: action.paymentCategory };
+
+
+        case "COMPLETE":
+            return { ...newOrderState, alert: state.alert };
 
         default:
             return state;

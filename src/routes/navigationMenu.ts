@@ -12,13 +12,22 @@ const NavigationMenu: IMenuItem[] = [
         isVisible: true,
         icon: "📊",
     },
+
     {
-        path: PATHS.HOME,
-        label: resource.navigation.home_label,
-        description: resource.navigation.home_desc,
+        path: PATHS.TERMINAL_1_POS,
+        label: resource.navigation.terminal1_label,
+        description: resource.navigation.terminal1_desc,
         category: "main",
         isVisible: true,
-        icon: "🏠",
+        icon: "🖥️",
+    },
+    {
+        path: PATHS.TERMINAL_1_LIST,
+        label: resource.navigation.terminal1_order_label,
+        description: resource.navigation.terminal1_order_desc,
+        category: "main",
+        isVisible: true,
+        icon: "🧾",
     },
 
     // --- Product list ----
@@ -36,27 +45,7 @@ const NavigationMenu: IMenuItem[] = [
         description: resource.navigation.master_pro__attr_desc,
         category: "product",
         isVisible: true,
-        icon: "🛒",
-    },
-
-    // --- Account & Auth Routes ---
-    {
-        path: PATHS.LOGIN,
-        label: resource.navigation.logIn_label,
-        description: resource.navigation.logIn_desc,
-        category: "account",
-
-        isVisible: false,
-        icon: "🔐",
-    },
-    {
-        path: PATHS.REGISTER,
-        label: resource.navigation.register_label,
-        description: resource.navigation.register_desc,
-        category: "account",
-
-        isVisible: false,
-        icon: "📝",
+        icon: "🏷️",
     },
 
     // --- System & Info Routes ---
@@ -67,22 +56,6 @@ const NavigationMenu: IMenuItem[] = [
         category: "system",
         isVisible: true,
         icon: "ℹ️",
-    },
-    {
-        path: PATHS.ERROR,
-        label: resource.navigation.error_label,
-        description: resource.navigation.error_desc,
-        category: "system",
-        isVisible: false,
-        icon: "⚠️",
-    },
-    {
-        path: PATHS.NOT_FOUND,
-        label: resource.navigation.not_found_label,
-        description: resource.navigation.not_found_desc,
-        category: "system",
-        isVisible: false,
-        icon: "🔍",
     },
 
 

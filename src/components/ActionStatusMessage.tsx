@@ -1,12 +1,12 @@
-import type { IStatusType } from "@/types/actionState";
+import type { TStatusType } from "@/types/actionState";
 
 
 type ActionStatusMessageProps = {
   message?: string | null;
-  type?: IStatusType;
+  type?: TStatusType;
 };
 
-const statusStyles: Record<IStatusType, string> = {
+const statusStyles: Record<TStatusType, string> = {
   success: "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-800",
   error: "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/10 dark:text-red-400 dark:border-red-800",
   warning: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/10 dark:text-amber-400 dark:border-amber-800",

@@ -13,6 +13,8 @@ export interface IProduct {
     costPrice: number;    // For profit reporting
     sellingPrice: number; // Current retail price
     taxRate: number;      // e.g., 0.10 for 10%
+    discountInPercent: number; // e.g. 10 20 25.5
+
 
     // Inventory
     stock: number;

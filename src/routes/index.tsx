@@ -17,6 +17,9 @@ import { ProductList, ProductForm } from "@/pages/products";
 import { AttributeList, AttributeForm } from "@/pages/masterAttribute";
 import { SystemLogForm, SystemLogList } from "@/pages/systemLog/";
 import SeedDataPage from "@/pages/SeedDataPage";
+import Main from "@/pages/terminal1/Main";
+import OrderList from "@/pages/terminal1Order/OrderList";
+import OrderForm from "@/pages/terminal1Order/OrderForm";
 
 export const router = createBrowserRouter([
     {
@@ -67,6 +70,17 @@ export const router = createBrowserRouter([
                 ],
             },
 
+            {
+                path: "pos/v1",
+                element: <ProtectedRoute />,
+                children: [
+                    { path: "checkout", element: <Main /> },
+                    { index: true, element: <OrderList /> },
+                    { path: "list", element: <OrderList /> },
+                    { path: "page/:action/:id", element: <OrderForm /> },
+                ],
+            },
+            
             // Grouped Account Routes
             {
                 path: "account",
@@ -78,6 +92,8 @@ export const router = createBrowserRouter([
                     { path: "verify", element: <Verify /> },
                 ],
             },
+
+
 
             // Explicit Error & Catch-all
             { path: "error", element: <ErrorPage /> },

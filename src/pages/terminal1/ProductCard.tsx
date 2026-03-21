@@ -2,6 +2,9 @@ import { memo } from "react";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import type { IProductView } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
+import { calculateFinalPrice } from "./utils";
+import { PlusIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 type ProductCardProps = {
     product: IProductView;
@@ -15,20 +18,13 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
 
     return (
         <button
-            title={`${product.name} - ${currencySymbol}${displayPrice(product.sellingPrice)} - ${product.code || "N/A"}`}
-            className="group flex flex-col w-full min-w-[80px] h-full bg-white dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-teal-500 hover:shadow-lg transition-all text-center active:scale-95"
+            title={`${product.name} - ${currencySymbol}${displayPrice(product.sellingPrice)} - ${product.code || resource.pos_t1.txt_na}`}
+            className="group flex flex-col w-full min-w-[80px] h-full bg-white dark:bg-gray-800 p-1 rounded-sm border border-gray-200 dark:border-gray-700 hover:border-teal-500 hover:shadow-sm transition-all text-center active:scale-95"
             onClick={() => onProductClick(product)}
         >
             {/* Icon Area: Changed shrink-0 to shrink to allow it to give space to text if needed */}
             <div className="aspect-[5/4] w-full bg-gray-100 dark:bg-gray-700/50 rounded-md mb-2 flex items-center justify-center shrink">
-                <svg
-                    className="w-5 h-5 text-gray-300 dark:text-gray-500 group-hover:text-teal-500 transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+                <PlusIcon className="w-5 h-5 text-gray-300 dark:text-gray-500 group-hover:text-teal-500 transition-colors" />
             </div>
 
             {/* Name: Added min-h to ensure it always occupies 2 lines of space */}
@@ -40,7 +36,8 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
 
             {/* Price: Using flex-shrink-0 so price NEVER hides */}
             <span className="text-sm font-bold text-teal-600 dark:text-teal-400 shrink-0">
-                {currencySymbol}{displayPrice(product.sellingPrice)}
+                {currencySymbol}
+                {displayPrice(calculateFinalPrice(product))}
             </span>
 
             {/* Stock: Simple text */}
@@ -50,12 +47,12 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
                     : "text-gray-500 dark:text-gray-400"
                     }`}
             >
-                {product.stock} in stock
+                {product.stock} {resource.pos_t1.txt_in_stock}
             </span>
 
             {/* Product Code: mt-auto pushes it to the bottom, px-1 handles horizontal overflow */}
             <span className="mt-auto pt-1 text-[10px] font-medium w-full px-1 shrink-0">
-                {product.code || "N/A"}
+                {product.code || resource.pos_t1.txt_na}
             </span>
         </button>
     );

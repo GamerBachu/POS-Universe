@@ -9,6 +9,8 @@ type InputWithLabelProps = {
     name: string;
     placeholder: string;
     classBox?: string;
+    value?: string | number;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 
 };
 
@@ -20,21 +22,36 @@ const InputWithLabel = ({
     defaultValue = "",
     name,
     placeholder,
-    classBox = ""
+    classBox = "",
+    onChange,
+    value
 }: InputWithLabelProps) => {
     return (
         <div className={`space-y-1 ${classBox}`}>
             <label className="text-xs font-bold uppercase text-gray-500" >
                 {label}
             </label>
-            <Input
-                type={type}
-                name={name}
-                defaultValue={defaultValue}
-                readOnly={readOnly}
-                placeholder={placeholder}
-                required={required}
-            />
+            {onChange !== undefined ?
+                <Input
+                    type={type}
+                    name={name}
+                    value={value}
+                    readOnly={readOnly}
+                    placeholder={placeholder}
+                    required={required}
+                    onChange={onChange}
+                /> :
+                <Input
+                    type={type}
+                    name={name}
+                    defaultValue={defaultValue}
+                    readOnly={readOnly}
+                    placeholder={placeholder}
+                    required={required}
+                    onChange={onChange}
+                />
+            }
+
         </div>
     );
 };

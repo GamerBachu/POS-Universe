@@ -1,10 +1,13 @@
-import type { CartItem } from "@/types/terminal1";
+import type { ICartItem } from "@/types/terminal1";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { useTerminalDispatch } from "./TerminalContext";
+import { calculateFinalPrice } from "./utils";
+import PlusIcon from "@/libs/icons/PlusIcon";
+import { MinusIcon } from "@/libs/icons";
 
 
 type OrderItemProps = {
-    item: CartItem;
+    item: ICartItem;
 };
 
 const OrderItem = ({ item }: OrderItemProps) => {
@@ -52,9 +55,7 @@ const OrderItem = ({ item }: OrderItemProps) => {
                         onClick={handleDecrement}
                         className="w-6 h-6 rounded-md flex items-center justify-center bg-white dark:bg-gray-600 shadow-sm border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-200 hover:text-red-500 hover:border-red-200 dark:hover:text-red-400 transition-all active:scale-90"
                     >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M20 12H4" />
-                        </svg>
+                        <MinusIcon className="w-3 h-3" />
                     </button>
 
                     <span className="w-6 text-center font-black text-sm text-gray-700 dark:text-gray-200">
@@ -66,15 +67,13 @@ const OrderItem = ({ item }: OrderItemProps) => {
                         onClick={handleIncrement}
                         className="w-6 h-6 rounded-md flex items-center justify-center bg-teal-600 shadow-sm text-white hover:bg-teal-700 transition-all active:scale-90"
                     >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
+                        <PlusIcon className="w-3 h-3" />
                     </button>
                 </div>
             </td>
 
             <td className="py-2 px-1 text-right font-black text-gray-700 dark:text-gray-200">
-                {displayPrice(item.product.sellingPrice * item.quantity)}
+                {displayPrice(calculateFinalPrice(item.product) * item.quantity)}
             </td>
         </tr>
     );

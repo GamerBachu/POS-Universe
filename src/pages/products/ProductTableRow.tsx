@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type IProduct } from "@/types/product";
+import { displayPrice } from "@/utils/helper/numberUtils";
 import resource from "@/locales/en.json";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
+import { calculateFinalPrice } from "../terminal1/utils";
 
 interface Props {
   item: IProduct;
@@ -52,7 +54,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
       {/* Selling Price - Formatted */}
       <td className="p-3 text-sm text-right font-medium text-gray-700 dark:text-gray-200">
         {currencySymbol}
-        {item.sellingPrice.toFixed(2)}
+        {displayPrice(calculateFinalPrice(item))}
       </td>
 
       {/* Stock Status Badge */}
