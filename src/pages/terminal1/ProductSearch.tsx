@@ -3,6 +3,7 @@ import type { IProductFilter } from "@/types/product";
 import { NUMPAD_KEYS } from "./utils";
 import { BackspaceIcon, CheckIcon, CloseIcon, SearchIcon } from "@/libs/icons";
 import resource from "@/locales/en.json";
+import Input from "@/components/Input";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -29,12 +30,12 @@ const ProductSearch = ({
                         <SearchIcon className="w-3 h-3" />
                     </div>
 
-                    <input
+                    <Input
                         type="text"
                         placeholder={resource.pos_t1.ph_search_item}
                         value={inputCode}
                         onChange={(e) => onInputType(e.target.value)}
-                        className="w-full pl-9 pr-9 py-2 text-xs bg-gray-100 dark:bg-gray-700 border-none rounded-sm focus:ring-1 focus:ring-teal-500 transition-all"
+                        className="pl-9 pr-9 py-2"
                     />
 
                     {inputCode && (

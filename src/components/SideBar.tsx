@@ -64,7 +64,7 @@ const SideBar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={resource.sidebar.ph_search_menu}
-              className=""
+              className="pr-9"
             />
             <div className="absolute right-0 top-0 h-full w-9 flex items-center justify-center">
               {searchTerm ? (
