@@ -109,7 +109,7 @@ const TerminalContent = () => {
 
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-800 dark:text-gray-200">
-            <Header label={resource.navigation.terminal1_label} />
+            <Header label={resource.pos_t1.title} />
 
             <div className="flex flex-1 overflow-hidden border border-gray-200 dark:border-gray-700">
                 <SectionLeft />

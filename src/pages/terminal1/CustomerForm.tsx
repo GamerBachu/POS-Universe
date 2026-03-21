@@ -3,6 +3,7 @@ import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
 import { CloseIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 interface CustomerFormProps {
     onClose: () => void;
@@ -30,12 +31,12 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
             type: "SET_ALERT",
             alert: {
                 type: "success",
-                message: "Save successful",
+                message: resource.pos_t1.success_save,
             },
         });
 
         onClose();
-        return { success: true, message: "Customer saved." };
+        return { success: true, message: resource.pos_t1.msg_customer_saved };
     };
     // Keyboard Shortcuts Logic
     useEffect(() => {
@@ -64,7 +65,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
                         <h3 className="font-bold text-xs uppercase tracking-widest text-gray-600 dark:text-gray-300">
-                            Customer Profile
+                            {resource.pos_t1.customer_profile}
                         </h3>
                     </div>
                     <button
@@ -81,47 +82,47 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                     <div className="space-y-3">
                         <div>
                             <label className="text-[10px] font-bold text-gray-400 uppercase">
-                                Full Name
+                                {resource.pos_t1.full_name}
                             </label>
                             <input
                                 name="name"
                                 defaultValue={currentCustomer?.name}
                                 autoFocus
-                                placeholder="Guest / Walk-in"
+                                placeholder={resource.pos_t1.ph_guest_walk_in}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
                         <div>
                             <label className="text-[10px] font-bold text-gray-400 uppercase">
-                                Phone
+                                {resource.pos_t1.phone}
                             </label>
                             <input
                                 name="phone"
                                 defaultValue={currentCustomer?.phone}
-                                placeholder="Contact number"
+                                placeholder={resource.pos_t1.ph_contact_number}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
                         <div>
                             <label className="text-[10px] font-bold text-gray-400 uppercase">
-                                Email
+                                {resource.pos_t1.email}
                             </label>
                             <input
                                 name="email"
                                 type="email"
                                 defaultValue={currentCustomer?.email}
-                                placeholder="Email address"
+                                placeholder={resource.pos_t1.ph_email}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
                         <div>
                             <label className="text-[10px] font-bold text-gray-400 uppercase">
-                                Address
+                                {resource.pos_t1.address}
                             </label>
                             <input
                                 name="address"
                                 defaultValue={currentCustomer?.address}
-                                placeholder="Shipping/Billing address"
+                                placeholder={resource.pos_t1.ph_address}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
@@ -134,14 +135,14 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                             onClick={handleClear}
                             className="flex-1 py-2 text-[10px] font-black rounded border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all uppercase"
                         >
-                            Clear
+                            {resource.pos_t1.clear}
                         </button>
                         <button
                             type="submit"
                             disabled={isPending}
                             className="flex-[2] py-2 text-[10px] font-black rounded bg-teal-600 text-white  hover:bg-teal-700 transition-all disabled:opacity-50 uppercase"
                         >
-                            {isPending ? "Saving..." : "Save"}
+                            {isPending ? resource.pos_t1.saving : resource.pos_t1.save}
                         </button>
                     </div>
                 </form>

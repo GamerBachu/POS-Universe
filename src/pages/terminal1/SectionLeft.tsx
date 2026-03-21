@@ -5,6 +5,7 @@ import { displayPrice } from "@/utils/helper/numberUtils";
 import type { ICartItem } from "@/types/terminal1";
 import { calculateFinalPrice } from "./utils";
 import { CloseIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 const SectionLeft = () => {
     const state = useTerminalState();
@@ -45,15 +46,15 @@ const SectionLeft = () => {
                 <table className="w-full text-left text-xs border-collapse">
                     <thead className="sticky top-0 bg-white dark:bg-gray-800 shadow-sm z-10">
                         <tr className="text-gray-400 border-b border-gray-100 dark:border-gray-700">
-                            <th className="p-2 font-medium">Item</th>
-                            <th className="p-2 font-medium text-center">Qty</th>
-                            <th className="p-2 font-medium text-right">Price</th>
+                            <th className="p-2 font-medium">{resource.pos_t1.col_item}</th>
+                            <th className="p-2 font-medium text-center">{resource.pos_t1.col_qty}</th>
+                            <th className="p-2 font-medium text-right">{resource.pos_t1.col_price}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 dark:divide-gray-700/50">
                         {cart.length === 0 && adjustment.length === 0 ? (
                             <tr>
-                                <td colSpan={3} className="p-2 text-center text-gray-400">No items</td>
+                                <td colSpan={3} className="p-2 text-center text-gray-400">{resource.pos_t1.msg_no_items}</td>
                             </tr>
                         ) : (
                             cart.map((item: ICartItem) => (
@@ -65,8 +66,8 @@ const SectionLeft = () => {
                         /* FIXED: bg-white / bg-gray-900 (Non-transparent) */
                         <tfoot className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-10">
                             <tr className="font-bold text-gray-600 dark:text-gray-300">
-                                <td className="p-2">Items: {totals.lineCount}</td>
-                                <td className="p-2 text-center" colSpan={2}>Qty: {totals.totalQty}</td>
+                                <td className="p-2">{resource.pos_t1.txt_items} {totals.lineCount}</td>
+                                <td className="p-2 text-center" colSpan={2}>{resource.pos_t1.txt_qty} {totals.totalQty}</td>
                             </tr>
                         </tfoot>
                     )}
@@ -78,7 +79,7 @@ const SectionLeft = () => {
 
                 {/* Subtotal - Always visible above the scroll area */}
                 <div className="flex justify-between items-center font-bold text-xs uppercase tracking-wider text-gray-500">
-                    <span>Subtotal</span>
+                    <span>{resource.pos_t1.subtotal}</span>
                     <span>{displayPrice(totals.subtotal)}</span>
                 </div>
 
@@ -117,7 +118,7 @@ const SectionLeft = () => {
             {/* Total Footer */}
             <div className="p-3 bg-teal-600 text-white ">
                 <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold opacity-80 uppercase">Total Payable</span>
+                    <span className="text-xs font-bold opacity-80 uppercase">{resource.pos_t1.total_payable}</span>
                     <span className="text-xl font-black">{displayPrice(totals.totalPayable)}</span>
                 </div>
             </div>

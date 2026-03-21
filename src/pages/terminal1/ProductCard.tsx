@@ -4,6 +4,7 @@ import type { IProductView } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { calculateFinalPrice } from "./utils";
 import { PlusIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 type ProductCardProps = {
     product: IProductView;
@@ -17,7 +18,7 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
 
     return (
         <button
-            title={`${product.name} - ${currencySymbol}${displayPrice(product.sellingPrice)} - ${product.code || "N/A"}`}
+            title={`${product.name} - ${currencySymbol}${displayPrice(product.sellingPrice)} - ${product.code || resource.pos_t1.txt_na}`}
             className="group flex flex-col w-full min-w-[80px] h-full bg-white dark:bg-gray-800 p-1 rounded-sm border border-gray-200 dark:border-gray-700 hover:border-teal-500 hover:shadow-sm transition-all text-center active:scale-95"
             onClick={() => onProductClick(product)}
         >
@@ -46,12 +47,12 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
                     : "text-gray-500 dark:text-gray-400"
                     }`}
             >
-                {product.stock} in stock
+                {product.stock} {resource.pos_t1.txt_in_stock}
             </span>
 
             {/* Product Code: mt-auto pushes it to the bottom, px-1 handles horizontal overflow */}
             <span className="mt-auto pt-1 text-[10px] font-medium w-full px-1 shrink-0">
-                {product.code || "N/A"}
+                {product.code || resource.pos_t1.txt_na}
             </span>
         </button>
     );

@@ -7,6 +7,7 @@ import { mapTerminalStateToOrder } from "./utils";
 import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
+import resource from "@/locales/en.json";
 
 type PaymentProcessProps = {
     resetFilter: () => void;
@@ -35,7 +36,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!userId || userId === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: "invalid user, please login again." },
+                alert: { type: "warning", message: resource.pos_t1.msg_invalid_user },
             });
             return;
         }
@@ -44,7 +45,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (state.cart.length === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: "Cart is empty." },
+                alert: { type: "warning", message: resource.pos_t1.msg_cart_empty },
             });
             return;
         }
@@ -53,7 +54,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!state.paymentCategory) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: "Select a payment method / category." },
+                alert: { type: "warning", message: resource.pos_t1.msg_select_payment },
             });
             return;
         }
@@ -68,7 +69,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!isCash && !state.isPaid) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: "Electronic payment pending." },
+                alert: { type: "warning", message: resource.pos_t1.msg_payment_pending },
             });
             return;
         }
@@ -87,7 +88,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     type: "SET_ALERT",
                     alert: {
                         type: "success",
-                        message: `Order ${response.data.orderNumber} saved successfully!`,
+                        message: resource.pos_t1.msg_order_saved.replace("{orderNumber}", response.data.orderNumber),
                         duration: 10000,
                     },
                 });
@@ -102,7 +103,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     type: "SET_ALERT",
                     alert: {
                         type: "error",
-                        message: response.message || "Failed to save order."
+                        message: response.message || resource.pos_t1.msg_save_failed
                     },
                 });
                 LoggerUtils.logError(response, "PaymentProcess", "onCompletingOrder");
@@ -113,7 +114,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 type: "SET_ALERT",
                 alert: {
                     type: "error",
-                    message: "Critical system error occurred."
+                    message: resource.pos_t1.msg_critical_error
                 },
             });
             LoggerUtils.logCatch(error, "PaymentProcess", "onCompletingOrder");
@@ -143,7 +144,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 onClick={onCompletingOrder}
                 className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest hover:bg-teal-700"
             >
-                Complete Order
+                {resource.pos_t1.complete_order}
             </button>
         </div>
     );

@@ -3,6 +3,7 @@ import { useTerminalState } from "./TerminalContext";
 import CustomerForm from "./CustomerForm";
 import { WALK_IN_CUSTOMER_TEXT } from "./utils";
 import { PersonCircleIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 const CustomerLink = () => {
     const state = useTerminalState();
@@ -24,7 +25,7 @@ const CustomerLink = () => {
                         onClick={() => setIsModalOpen(true)}
                     >
                         <p className="text-[10px] uppercase font-bold text-gray-400 group-hover:text-teal-500 transition-colors">
-                            Customer
+                            {resource.pos_t1.lbl_customer}
                         </p>
                         <p className="text-[12px] font-black text-gray-700 dark:text-gray-200 truncate">
                             {state.customer?.name || WALK_IN_CUSTOMER_TEXT}

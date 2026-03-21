@@ -3,6 +3,7 @@ import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
 import { CloseIcon } from "@/libs/icons";
+import resource from "@/locales/en.json";
 
 
 interface AdjustmentModalProps {
@@ -87,11 +88,11 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
 
                         {/* Label */}
                         <div>
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">Label</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.label}</label>
                             <input
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
-                                placeholder="e.g. Seasonal Discount"
+                                placeholder={resource.pos_t1.ph_label}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
@@ -99,7 +100,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                         {/* Value & Type Toggle */}
                         <div className="flex gap-2">
                             <div className="flex-[2]">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase">Value ({valueType === 'PERCENT' ? '%' : 'FIX'})</label>
+                                <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.value} ({valueType === 'PERCENT' ? '%' : resource.pos_t1.txt_fix})</label>
                                 <input
                                     type="number"
                                     value={value}
@@ -109,7 +110,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                                 />
                             </div>
                             <div className="flex-1">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase">Unit</label>
+                                <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.unit}</label>
                                 <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded border border-gray-200 dark:border-gray-700 h-[38px]">
                                     <button
                                         type="button"
@@ -120,7 +121,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                                         type="button"
                                         onClick={() => setValueType('FIXED')}
                                         className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'FIXED' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                    >FIX</button>
+                                    >{resource.pos_t1.txt_fix}</button>
                                 </div>
                             </div>
                         </div>
@@ -133,13 +134,13 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                             onClick={onClose}
                             className="flex-1 py-2 text-[10px] font-black rounded border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all uppercase"
                         >
-                            Cancel
+                            {resource.pos_t1.cancel}
                         </button>
                         <button
                             type="submit"
                             className="flex-[2] py-2 text-[10px] font-black rounded bg-teal-600 text-white hover:bg-teal-700 transition-all uppercase"
                         >
-                            Add
+                            {resource.pos_t1.add}
                         </button>
                     </div>
                 </form>
