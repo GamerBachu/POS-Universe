@@ -116,3 +116,14 @@ export interface IOrderView {
 
 
 //create a "Z-Report" function that sums up these tables for the end-of-day closing
+
+
+
+export interface IOrderFilter {
+
+    orderNumber?: string;   // Copied for quick searching
+
+    // Pagination
+    currentPage: number;
+    pageSize: number;
+}

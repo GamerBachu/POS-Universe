@@ -48,6 +48,7 @@
     "delete": "Delete",
     "save": "Save",
     "update": "Update",
+    "print": "Print",
     "cancel": "Cancel",
     "next": "Next",
     "previous": "Previous",
@@ -56,7 +57,12 @@
     "fail_delete": "Delete failed. Please try again",
 
     "success_delete": "Delete successful",
-    "success_save": "Save successful"
+    "success_save": "Save successful",
+
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "results": "results"
   },
 
   "login": {
@@ -245,6 +251,40 @@
     "txt_in_stock": "in stock",
     "txt_na": "N/A",
     "lbl_customer": "Customer",
-    "txt_fix": "FIX"
+    "txt_fix": "FIX",
+
+    "order_list_title": "Order List",
+    "ph_search_order_no": "Search Order No",
+    "col_order_no": "Order No",
+    "col_date": "Date",
+    "col_status": "Status",
+    "col_total": "Total",
+    "col_actions": "Actions",
+    "view_order": "View",
+    "edit_order": "Edit",
+    "cancel_order": "Cancel",
+    "order_details_title": "Order Details",
+    "back_to_order_list": "Back to Order List",
+    "order_items": "Order Items",
+
+    "col_unit_price": "Unit Price",
+    "col_row_total": "Row Total",
+
+    "grand_total": "Grand Total",
+    "order_information": "Order Information",
+    "cashier": "Cashier",
+
+    "payment_details": "Payment Details",
+    "payment_method": "Payment Method",
+    "amount_paid": "Amount Paid",
+    "error_order_not_found": "Order not found.",
+    "error_cancellation_reason_required": "Please provide a reason for cancellation.",
+
+    "title_cancel_order": "Cancel Order: {orderNumber}",
+    "confirm_cancel_order_message": "Are you sure you want to cancel this order? This action will restock items and cannot be undone.",
+    "ph_cancellation_reason": "Enter cancellation reason...",
+
+    "cancelling": "Cancelling...",
+    "confirm_cancellation": "Confirm Cancellation"
   }
 }

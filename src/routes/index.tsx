@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
                 path: "pos/v1",
                 element: <ProtectedRoute />,
                 children: [
-                    { path: "checkout", element: <Main /> },
+                    { path: "checkout/:id", element: <Main /> },
                     { index: true, element: <OrderList /> },
                     { path: "list", element: <OrderList /> },
                     { path: "page/:action/:id", element: <OrderForm /> },
