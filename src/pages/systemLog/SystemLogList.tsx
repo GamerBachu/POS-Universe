@@ -13,7 +13,7 @@ const SystemLogList = () => {
       <PageHeader
         subtitle={undefined}
         btnClass="bg-green-600 hover:bg-green-700"
-        btnLabel={resource.common.add}
+        btnLabel={resource.common.addNew}
         onClick={() => navigate(PATHS.SYSTEM_LOG_ADD + "/0")}
       />
 

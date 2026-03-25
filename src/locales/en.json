@@ -31,6 +31,8 @@
     "inactive": "Inactive",
     "yes": "Yes",
     "no": "No",
+    "manage_status": "Manage Status",
+    "select": "Select",
     "status": "Status",
     "system_generated": "system will generate",
     "px_search": "Search for",
@@ -42,7 +44,8 @@
     "all_status": "All Status",
     "action": "Action",
     "back_page": "Back to list",
-    "add": "Add New",
+    "addNew": "Add New",
+    "add": "Add",
     "view": "View",
     "edit": "Edit",
     "delete": "Delete",
@@ -233,7 +236,7 @@
     "ph_label": "e.g. Seasonal Discount",
     "value": "Value",
     "unit": "Unit",
-    "cancel": "Cancel",
+
     "add": "Add",
     "ph_search_item": "Search item...",
     "col_item": "Item",
@@ -262,7 +265,7 @@
     "col_actions": "Actions",
     "view_order": "View",
     "edit_order": "Edit",
-    "cancel_order": "Cancel",
+
     "order_details_title": "Order Details",
     "back_to_order_list": "Back to Order List",
     "order_items": "Order Items",
@@ -280,11 +283,9 @@
     "error_order_not_found": "Order not found.",
     "error_cancellation_reason_required": "Please provide a reason for cancellation.",
 
-    "title_cancel_order": "Cancel Order: {orderNumber}",
-    "confirm_cancel_order_message": "Are you sure you want to cancel this order? This action will restock items and cannot be undone.",
-    "ph_cancellation_reason": "Enter cancellation reason...",
-
-    "cancelling": "Cancelling...",
-    "confirm_cancellation": "Confirm Cancellation"
+    "manage_title": "MANAGE ORDER STATUS: {orderNumber}",
+    "manage_desc": "Are you sure you want to change this order? This action will restock items and cannot be undone.",
+    "manage_reason": "Reason",
+    "manage_ph_reason": "Enter reason..."
   }
 }

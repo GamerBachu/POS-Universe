@@ -6,7 +6,7 @@ import { displayPrice } from "@/utils/helper/numberUtils";
 import { toDisplayString } from "@/utils/helper/dateUtils";
 import resource from "@/locales/en.json";
 import Loader from "@/components/Loader";
-import OrderCancellationModal from "./OrderCancellationModal";
+import OrderStatusManage from "./OrderStatusManage";
 import CommonLayout from "@/layouts/CommonLayout";
 import PageHeader from "@/components/PageHeader";
 import { PATHS } from "@/routes/paths";
@@ -237,18 +237,18 @@ const OrderForm = () => {
                         <Button
                             type="button"
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-red-600 hover:bg-red-700"
-                            title={resource.pos_t1.cancel_order}
+                            className="bg-green-600 hover:bg-green-700"
+                            title={resource.common.manage_status}
                             isLoading={loading}
                         >
-                            {resource.pos_t1.cancel_order}
+                            {resource.common.manage_status}
                         </Button>
                     </div>
                 </div>
             </div>
 
             {isModalOpen && (
-                <OrderCancellationModal
+                <OrderStatusManage
                     order={order}
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}

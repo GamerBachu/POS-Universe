@@ -12,7 +12,7 @@ const AttributeList = () => {
             <PageHeader
                 subtitle={resource.navigation.master_pro__attr_label}
                 btnClass="bg-green-600 hover:bg-green-700"
-                btnLabel={resource.common.add}
+                btnLabel={resource.common.addNew}
                 onClick={() => navigate(PATHS.MASTER_ATTRIBUTE_ADD + "/0")}
             />
             <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">

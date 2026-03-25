@@ -4,6 +4,7 @@ import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
 import { CloseIcon } from "@/libs/icons";
 import resource from "@/locales/en.json";
+import Button from "@/components/Button";
 
 
 interface AdjustmentModalProps {
@@ -129,19 +130,23 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
 
                     {/* Footer Actions */}
                     <div className="flex gap-2 pt-2">
-                        <button
+
+                        <Button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 py-2 text-[10px] font-black rounded border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all uppercase"
+                            className="flex-1 bg-gray-600 hover:bg-gray-700 py-2"
+                            title={resource.common.cancel}
                         >
-                            {resource.pos_t1.cancel}
-                        </button>
-                        <button
+                            {resource.common.cancel}
+                        </Button>
+
+                        <Button
                             type="submit"
-                            className="flex-[2] py-2 text-[10px] font-black rounded bg-teal-600 text-white hover:bg-teal-700 transition-all uppercase"
+                            className="flex-[2] bg-teal-600 hover:bg-teal-700 py-2"
+                            title={resource.common.add}
                         >
-                            {resource.pos_t1.add}
-                        </button>
+                            {resource.common.add}
+                        </Button>
                     </div>
                 </form>
             </div>

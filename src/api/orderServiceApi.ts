@@ -219,51 +219,46 @@ export class orderServiceApi {
     /**
      * Cancels an order, logs the cancellation, and restocks items.
      */
-    static async cancelOrder(
+    static async updateStatus(
         orderId: number,
+        status: string,
         reason: string,
         userId: number,
     ): Promise<ServiceResponse<boolean>> {
         try {
-            // const result = await db.transaction(
-            //     "rw",
-            //     [db.orders, db.orderItems, db.products, db.orderCancellations],
-            //     async () => {
-            //         const order = await db.orders.get(orderId);
-            //         if (!order || order.status !== "COMPLETED") {
-            //             throw new Error("Order cannot be cancelled or does not exist.");
-            //         }
+            const order = await db.orders.get(orderId);
+            if (!order?.id) {
+                return this.createResponse(false, 404, "Order not found", false);
+            }
 
-            //         await db.orders.update(orderId, { status: "VOIDED" });
+            order.status = status;
 
-            //         const items = await db.orderItems.where({ orderId }).toArray();
-            //         const stockUpdates = items.map((item) =>
-            //             db.products
-            //                 .where("id")
-            //                 .equals(item.productId)
-            //                 .modify((p) => {
-            //                     p.stock += item.quantity;
-            //                 }),
-            //         );
-            //         await Promise.all(stockUpdates);
+            const updatedCount = await db.orders.update(order.id, order);
+            if (updatedCount === 0) {
+                return this.createResponse(false, 404, "Order not found", false);
+            }
 
-            //         const cancellation: IOrderCancellation = {
-            //             orderId,
-            //             orderNumber: order.orderNumber,
-            //             reason,
-            //             cancelledBy: userId,
-            //             refundedAmount: order.grandTotal,
-            //             refundMethod: "ORIGINAL_PAYMENT",
-            //             restocked: true,
-            //             createdAt: toUTCNowForDB(),
-            //         };
-            //         await db.orderCancellations.add(cancellation);
-            //     },
-            // );
+            const payload: IOrderCancellation = {
+                orderId: orderId,
+                orderNumber: order.orderNumber,
+
+                reason: reason,
+                cancelledBy: userId,
+
+                refundedAmount: order.grandTotal,
+                refundMethod: "ORIGINAL_PAYMENT",
+
+                restocked: true,
+                status: status,
+                createdAt: toUTCNowForDB()
+            };
+
+            await db.orderCancellations.add(payload);
+
             return this.createResponse(
                 true,
                 200,
-                "Order cancelled successfully.",
+                "Order status update successfully.",
                 true,
             );
         } catch (error) {

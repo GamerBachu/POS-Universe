@@ -94,8 +94,9 @@ export interface IOrderCancellation {
 
     // Inventory Management
     restocked: boolean;     // Were the items put back into the inventory?
-
+    status: string;          //'completed' | 'voided' | 'refunded';
     createdAt: string;      // When the cancellation happened
+
 }
 
 

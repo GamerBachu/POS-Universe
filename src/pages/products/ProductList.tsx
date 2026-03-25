@@ -13,7 +13,7 @@ const ProductList: React.FC = () => {
       <PageHeader
         subtitle={undefined}
         btnClass="bg-green-600 hover:bg-green-700"
-        btnLabel={resource.common.add}
+        btnLabel={resource.common.addNew}
         onClick={() => navigate(PATHS.PRODUCT_ADD + "/0")}
       />
 
