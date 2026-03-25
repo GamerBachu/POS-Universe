@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
+import Pagination from "@/components/Pagination";
 
 const AttributeTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -63,14 +64,7 @@ const AttributeTable = () => {
         setSearchParams({ q: searchTerm, active: activeFilter, page: newPage.toString() });
     };
 
-    const totalPages = Math.ceil(totalCount / pageSize);
-
-    const formatString = (template: string, ...args: (string | number)[]) => {
-        return template.replace(/{(\d+)}/g, (match, number) => {
-            return typeof args[number] !== 'undefined' ? String(args[number]) : match;
-        });
-    };
-
+  
     return (
         <div className="space-y-2">
             <div
@@ -135,34 +129,14 @@ const AttributeTable = () => {
                     </tbody>
                 </table>
             </div>
-            {totalPages >= 1 && (
-                <div className="flex items-center justify-between px-1 py-2">
-                    <span className="text-xs font-mono text-gray-500">
-                        {formatString(
-                            resource.common.pagination_info,
-                            (currentPage - 1) * pageSize + 1,
-                            Math.min(currentPage * pageSize, totalCount),
-                            totalCount
-                        )}
-                    </span>
-                    <div className="flex gap-2">
-                        <button
-                            disabled={currentPage === 1 || isLoading}
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
-                        >
-                            {resource.common.previous}
-                        </button>
-                        <button
-                            disabled={currentPage === totalPages || isLoading}
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
-                        >
-                            {resource.common.next}
-                        </button>
-                    </div>
-                </div>
-            )}
+            {/* Pagination Controls */}
+            <Pagination
+                currentPage={currentPage}
+                totalCount={totalCount}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                isLoading={isLoading}
+            ></Pagination>
         </div>
     );
 };

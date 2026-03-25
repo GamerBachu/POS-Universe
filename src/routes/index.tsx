@@ -40,13 +40,25 @@ export const router = createBrowserRouter([
                     { path: "dashboard", element: <Dashboard /> },
                 ],
             },
+
             {
-                path: "product_v1",
+                path: "product/v1",
                 element: <ProtectedRoute />,
                 children: [
                     { index: true, element: <ProductList /> },
                     { path: "list", element: <ProductList /> },
                     { path: "page/:action/:id", element: <ProductForm /> },
+                ],
+            },
+
+            {
+                path: "pos/v1",
+                element: <ProtectedRoute />,
+                children: [
+                    { path: "checkout/:id", element: <Main /> },
+                    { index: true, element: <OrderList /> },
+                    { path: "list", element: <OrderList /> },
+                    { path: "page/:action/:id", element: <OrderForm /> },
                 ],
             },
 
@@ -70,17 +82,6 @@ export const router = createBrowserRouter([
                 ],
             },
 
-            {
-                path: "pos/v1",
-                element: <ProtectedRoute />,
-                children: [
-                    { path: "checkout/:id", element: <Main /> },
-                    { index: true, element: <OrderList /> },
-                    { path: "list", element: <OrderList /> },
-                    { path: "page/:action/:id", element: <OrderForm /> },
-                ],
-            },
-            
             // Grouped Account Routes
             {
                 path: "account",
@@ -93,16 +94,12 @@ export const router = createBrowserRouter([
                 ],
             },
 
-
-
             // Explicit Error & Catch-all
             { path: "error", element: <ErrorPage /> },
             { path: "*", element: <NotFoundPage /> },
 
             // app configuration page
             { path: "config/seed-data", element: <SeedDataPage /> },
-
-
         ],
     },
 ]);
