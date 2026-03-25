@@ -12,6 +12,7 @@ import PageHeader from "@/components/PageHeader";
 import { PATHS } from "@/routes/paths";
 import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
+import OrderStatusLabel from "./OrderStatusLabel";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -165,6 +166,44 @@ const OrderForm = () => {
                             <span className="font-mono">{displayPrice(order.grandTotal)}</span>
                         </div>
                     </div>
+
+                    {/* Mini History Table */}
+                    {orderView?.cancellation && orderView.cancellation.length > 0 && (
+                        <div className="space-y-1 mb-4">
+                            <label className="text-[10px] font-black uppercase text-gray-400 ml-1">
+                                {resource.common.status}
+                            </label>
+                            <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden max-h-32 overflow-y-auto custom-scrollbar">
+                                <table className="w-full text-[10px] text-left">
+                                    <thead className="sticky top-0 bg-gray-100 dark:bg-gray-900 text-gray-500 uppercase font-black border-b dark:border-gray-700">
+                                        <tr>
+                                            <th className="px-2 py-1.5">{resource.pos_t1.col_status}</th>
+                                            <th className="px-2 py-1.5">{resource.pos_t1.manage_reason}</th>
+                                            <th className="px-2 py-1.5 text-right">{resource.pos_t1.col_date}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y dark:divide-gray-700 bg-white dark:bg-gray-800/50">
+                                        {orderView.cancellation.map((log, idx) => (
+                                            <tr key={log.id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                <td className="px-2 py-2">
+                                                    <span className="font-bold text-red-600 dark:text-red-400">{log.status}</span>
+                                                </td>
+                                                <td className="px-2 py-2 text-gray-600 dark:text-gray-300 truncate max-w-[100px]" title={log.reason}>
+                                                    {log.reason}
+                                                </td>
+                                                <td className="px-2 py-2 text-right text-gray-400 font-mono">
+                                                    {new Date(log.createdAt).toLocaleDateString()}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+
+
                 </div>
 
                 {/* Right Column: Meta Info */}
@@ -176,11 +215,12 @@ const OrderForm = () => {
                         </div>
                         <div className="p-4 space-y-4 text-sm">
                             <div className="flex justify-between">
+                                <span className="">{resource.pos_t1.col_order_no}</span>
+                                <span className="font-medium">{order.orderNumber}</span>
+                            </div>
+                            <div className="flex justify-between">
                                 <span className="">{resource.pos_t1.col_status}</span>
-                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${order.status === "COMPLETED" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700"
-                                    }`}>
-                                    {order.status}
-                                </span>
+                                <OrderStatusLabel order={order} />
                             </div>
                             <div className="flex justify-between">
                                 <span className="">{resource.pos_t1.col_date}</span>

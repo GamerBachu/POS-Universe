@@ -107,7 +107,7 @@ export interface IOrderView {
     adjustments: IOrderAdjustment[];
     discounts: IOrderDiscount[];
     payments: IOrderPayment[];
-    cancellation?: IOrderCancellation;
+    cancellation?: IOrderCancellation[];
     customer?: ICustomer;
 }
 

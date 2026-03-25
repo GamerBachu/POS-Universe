@@ -161,7 +161,7 @@ export class orderServiceApi {
                 db.orderAdjustments.where("orderId").equals(order.id).toArray(),
                 db.orderDiscounts.where("orderId").equals(order.id).toArray(),
                 db.orderPayments.where("orderId").equals(order.id).toArray(),
-                db.orderCancellations.where("orderId").equals(order.id).first(),
+                db.orderCancellations.where("orderId").equals(order.id).toArray(),
                 // Only query customer if an ID exists and isn't 0
                 order.customerId ? db.customers.get(order.customerId) : Promise.resolve(undefined),
             ]);

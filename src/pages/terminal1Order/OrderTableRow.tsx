@@ -6,8 +6,8 @@ import { displayPrice } from "@/utils/helper/numberUtils";
 import resource from "@/locales/en.json";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import { toDisplayString } from "@/utils/helper/dateUtils";
-import { useMemo } from "react";
-import { getIsDangerousAction } from "./utils";
+import OrderStatusLabel from "./OrderStatusLabel";
+
 
 interface Props {
     item: IOrder;
@@ -17,11 +17,6 @@ const OrderTableRow: React.FC<Props> = ({ item }) => {
     const currencySymbol = useCurrencySymbol();
 
     const editPath = `${PATHS.TERMINAL_1_EDIT}/${item.id}`;
-
-    const isDangerousAction = useMemo(
-        () => getIsDangerousAction(item.status),
-        [item.status],
-    );
 
 
     return (
@@ -64,14 +59,7 @@ const OrderTableRow: React.FC<Props> = ({ item }) => {
 
             {/* Active/Inactive Status */}
             <td className="p-3 text-center">
-                <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${isDangerousAction
-                        ? "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20"
-                        : "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20"
-                        }`}
-                >
-                    {item.status}
-                </span>
+                <OrderStatusLabel order={item} />
             </td>
 
             {/* Small Action Button Group */}
