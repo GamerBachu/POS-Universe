@@ -31,7 +31,7 @@ export const newOrderState: ITerminalState = {
  * Calculates the final price after applying discount and then tax.
  * Follows standard government regulation: Discount -> Taxable Amount -> Tax.
  */
-const calculateFinalPrice = (product: IProductView | IProduct): number => {
+export const calculateFinalPrice = (product: IProductView | IProduct): number => {
     const {
         sellingPrice = 0,
         taxRate = 0,
@@ -52,59 +52,20 @@ const calculateFinalPrice = (product: IProductView | IProduct): number => {
     return roundNumber(finalPrice, 2);
 };
 
-export { calculateFinalPrice };
 
 
 
-// import { calculateFinalPrice } from "@/utils/priceUtils"; // Using the function we optimized
+export const calculateRowAmount = (order: IOrder, adj: IOrderAdjustment | IOrderDiscount) => {
 
-// // Inside your OrderItem component logic:
+    if (adj.valueType === "PERCENT") {
+        return (order.subtotal * adj.value) / 100;
+    }
+    return adj.value;
+};
 
-// const getPriceBreakdown = (item: CartItem) => {
-//     const { product, quantity } = item;
-//     const basePrice = product.sellingPrice ?? 0;
-//     const discountPercent = product.discountInPercent ?? 0;
-//     const taxRate = product.taxRate ?? 0;
 
-//     // 1. Price after discount (Taxable amount per unit)
-//     const taxableUnit = basePrice * (1 - discountPercent / 100);
 
-//     // 2. Tax amount per unit
-//     const taxAmountUnit = taxableUnit * (taxRate / 100);
 
-//     // 3. Totals for the whole row
-//     const rowTaxableTotal = taxableUnit * quantity;
-//     const rowTaxTotal = taxAmountUnit * quantity;
-//     const rowFinalTotal = (taxableUnit + taxAmountUnit) * quantity;
-
-//     return {
-//         taxableUnit: taxableUnit.toFixed(2),
-//         rowTaxTotal: rowTaxTotal.toFixed(2),
-//         rowFinalTotal: rowFinalTotal.toFixed(2)
-//     };
-// };
-
-// // Example usage in your Table Row:
-// const breakdown = getPriceBreakdown(item);
-
-// return (
-//     <tr>
-//         {/* ... name and quantity columns ... */}
-
-//         <td className="p-2 text-right">
-//             <div className="flex flex-col">
-//                 <span className="font-black text-gray-700 dark:text-gray-200 tabular-nums">
-//                     ${breakdown.rowFinalTotal}
-//                 </span>
-//                 {item.product.discountInPercent > 0 && (
-//                     <span className="text-[9px] text-teal-600 font-bold uppercase">
-//                         Taxable: ${breakdown.taxableUnit}
-//                     </span>
-//                 )}
-//             </div>
-//         </td>
-//     </tr>
-// );
 
 
 //NUMPAD_KEYS -2= Enter / Apply Button 

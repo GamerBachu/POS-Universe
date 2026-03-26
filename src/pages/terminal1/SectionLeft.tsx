@@ -41,14 +41,14 @@ const SectionLeft = () => {
 
     return (
         <section className="w-80 flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
-           
+
             <div className="flex-1 overflow-y-auto">
                 <table className="w-full text-left text-xs border-collapse">
                     <thead className="sticky top-0 bg-white dark:bg-gray-800 shadow-sm z-10">
                         <tr className="text-gray-400 border-b border-gray-100 dark:border-gray-700">
-                            <th className="p-2 font-medium">{resource.pos_t1.col_item}</th>
-                            <th className="p-2 font-medium text-center">{resource.pos_t1.col_qty}</th>
-                            <th className="p-2 font-medium text-right">{resource.pos_t1.col_price}</th>
+                            <th className="p-2 font-medium uppercase">{resource.pos_t1.col_item}</th>
+                            <th className="p-2 font-medium uppercase text-center">{resource.pos_t1.col_qty}</th>
+                            <th className="p-2 font-medium uppercase text-right">{resource.pos_t1.col_price}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 dark:divide-gray-700/50">
@@ -66,8 +66,8 @@ const SectionLeft = () => {
                         /* FIXED: bg-white / bg-gray-900 (Non-transparent) */
                         <tfoot className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-10">
                             <tr className="font-bold text-gray-600 dark:text-gray-300">
-                                <td className="p-2">{resource.pos_t1.txt_items} {totals.lineCount}</td>
-                                <td className="p-2 text-center" colSpan={2}>{resource.pos_t1.txt_qty} {totals.totalQty}</td>
+                                <td className="p-2 uppercase">{resource.pos_t1.txt_items} {totals.lineCount}</td>
+                                <td className="p-2 text-center uppercase" colSpan={2}>{resource.pos_t1.txt_qty} {totals.totalQty}</td>
                             </tr>
                         </tfoot>
                     )}
@@ -98,7 +98,7 @@ const SectionLeft = () => {
                                         onClick={() => handleRemoveAdjustment(adj.rowId)}
                                         className="w-6 h-6 rounded-md flex items-center justify-center bg-white dark:bg-gray-600 shadow-sm border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-200 hover:text-red-500 transition-all active:scale-90 flex-shrink-0"
                                     >
-                                  <CloseIcon className="w-3 h-3" />
+                                        <CloseIcon className="w-3 h-3" />
 
                                     </button>
                                     <span className="font-bold text-xs text-gray-800 dark:text-gray-200 line-clamp-1">

@@ -13,6 +13,8 @@ import { PATHS } from "@/routes/paths";
 import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
 import OrderStatusLabel from "./OrderStatusLabel";
+import OrderPrint from "./OrderPrint";
+import { calculateRowAmount } from "../terminal1/utils";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -21,6 +23,17 @@ const OrderForm = () => {
     const [orderView, setOrderView] = useState<IOrderView | null>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPrinting, setIsPrinting] = useState(false);
+
+    const handlePrint = useCallback(() => {
+        setIsPrinting(true);
+        // We set a timeout to allow the print component to mount 
+        // and then reset the printing state after the print dialog is handled
+        setTimeout(() => {
+            window.print();
+            setIsPrinting(false);
+        }, 500);
+    }, []);
 
     const onSendBack = useCallback(() => {
         if (window.history.length > 1 && window.history.state?.idx > 0) {
@@ -86,17 +99,18 @@ const OrderForm = () => {
     }
 
     const { order, items, discounts, adjustments, payments, customer } = orderView;
-    // Helper to calculate specific amount for each adjustment/discount row
-    const getRowAmount = (adj: { value: number; valueType: string; }) => {
-        if (adj.valueType === "PERCENT") {
-            return (order.subtotal * adj.value) / 100;
-        }
-        return adj.value;
-    };
+
 
 
     return (
         <CommonLayout h1={resource.navigation.product_list_label}>
+            {/* Hidden Print Area */}
+            {isPrinting && orderView && (
+                <div className="fixed inset-0 z-[5000] bg-white flex justify-center items-start overflow-auto">
+                    <OrderPrint orderView={orderView} />
+                </div>
+            )}
+
             <PageHeader
                 subtitle={`${resource.pos_t1.order_details_title} ${order.orderNumber}`}
                 btnClass="bg-gray-600 hover:bg-gray-700"
@@ -149,7 +163,7 @@ const OrderForm = () => {
                         {discounts?.map((d, idx) => (
                             <div key={`${d.label}-${idx}`} className="flex justify-between text-red-500 text-sm italic">
                                 <span>{d.label} ({d.value}{d.valueType === "PERCENT" ? "%" : ""})</span>
-                                <span>-{displayPrice(getRowAmount(d))}</span>
+                                <span>-{displayPrice(calculateRowAmount(order, d))}</span>
                             </div>
                         ))}
 
@@ -157,7 +171,7 @@ const OrderForm = () => {
                         {adjustments?.map((a, idx) => (
                             <div key={`${a.label}-${idx}`} className="flex justify-between text-teal-600 dark:text-teal-400 text-sm">
                                 <span>{a.label} ({a.value}{a.valueType === "PERCENT" ? "%" : ""})</span>
-                                <span>+{displayPrice(getRowAmount(a))}</span>
+                                <span>+{displayPrice(calculateRowAmount(order, a))}</span>
                             </div>
                         ))}
 
@@ -192,7 +206,7 @@ const OrderForm = () => {
                                                     {log.reason}
                                                 </td>
                                                 <td className="px-2 py-2 text-right text-gray-400 font-mono">
-                                                    {new Date(log.createdAt).toLocaleDateString()}
+                                                    {toDisplayString(log.createdAt)}
                                                 </td>
                                             </tr>
                                         ))}
@@ -255,11 +269,11 @@ const OrderForm = () => {
                     </div>
 
                     {/* Actions Area */}
-                    <div className="grid grid-cols-3 gap-2 py-4 items-stretch">
+                    <div className="grid grid-cols-2 gap-2 items-stretch">
                         <Button
                             type="button"
                             onClick={onSendBack}
-                            className="bg-gray-600 hover:bg-gray-700"
+                            className="bg-gray-600 hover:bg-gray-700 py-2"
                             title={resource.common.back_page}
                             isLoading={loading}
                         >
@@ -267,7 +281,8 @@ const OrderForm = () => {
                         </Button>
                         <Button
                             type="button"
-                            className="bg-teal-600 hover:bg-teal-700 text-white"
+                            className="bg-teal-600 hover:bg-teal-700 text-white  py-2"
+                            onClick={handlePrint}
                             title={resource.common.print}
                             isLoading={loading}
                         >
@@ -277,7 +292,7 @@ const OrderForm = () => {
                         <Button
                             type="button"
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700  py-2"
                             title={resource.common.manage_status}
                             isLoading={loading}
                         >
