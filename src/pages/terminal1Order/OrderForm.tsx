@@ -31,7 +31,7 @@ const OrderForm = () => {
         // and then reset the printing state after the print dialog is handled
         setTimeout(() => {
             window.print();
-           // setIsPrinting(false);
+            setIsPrinting(false);
         }, 500);
     }, []);
 
@@ -98,7 +98,7 @@ const OrderForm = () => {
         );
     }
 
-    const { order, items, discounts, adjustments, payments, customer } = orderView;
+    const { order, items, discounts, adjustments, payments, customer, cashierName } = orderView;
 
 
 
@@ -135,7 +135,7 @@ const OrderForm = () => {
                                         <th className="px-4 py-3 text-left font-medium">{resource.pos_t1.col_item}</th>
                                         <th className="px-4 py-3 text-center font-medium">{resource.pos_t1.col_qty}</th>
                                         <th className="px-4 py-3 text-right font-medium">{resource.pos_t1.col_unit_price}</th>
-                                        <th className="px-4 py-3 text-right font-medium">{resource.pos_t1.col_row_total}</th>
+                                        <th className="px-4 py-3 text-right font-medium">{resource.pos_t1.col_price}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y dark:divide-gray-700">
@@ -242,7 +242,7 @@ const OrderForm = () => {
                             </div>
                             <div className="flex justify-between">
                                 <span className="">{resource.pos_t1.cashier}</span>
-                                <span className="font-medium">{order.cashierId}</span>
+                                <span className="font-medium">{(cashierName) ? cashierName : order.cashierId}</span>
                             </div>
                         </div>
                     </div>

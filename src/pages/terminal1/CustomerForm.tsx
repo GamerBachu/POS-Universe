@@ -99,7 +99,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                             <input
                                 name="phone"
                                 defaultValue={currentCustomer?.phone}
-                                placeholder={resource.pos_t1.ph_contact_number}
+                                placeholder={resource.pos_t1.phone}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
@@ -111,7 +111,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                                 name="email"
                                 type="email"
                                 defaultValue={currentCustomer?.email}
-                                placeholder={resource.pos_t1.ph_email}
+                                placeholder={resource.pos_t1.email}
                                 className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>

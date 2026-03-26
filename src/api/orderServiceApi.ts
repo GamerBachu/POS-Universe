@@ -156,7 +156,7 @@ export class orderServiceApi {
             }
 
             // Fetch all related data in parallel
-            const [items, adjustments, discounts, payments, cancellation, customer] = await Promise.all([
+            const [items, adjustments, discounts, payments, cancellation, customer, cashierName] = await Promise.all([
                 db.orderItems.where("orderId").equals(order.id).toArray(),
                 db.orderAdjustments.where("orderId").equals(order.id).toArray(),
                 db.orderDiscounts.where("orderId").equals(order.id).toArray(),
@@ -164,10 +164,12 @@ export class orderServiceApi {
                 db.orderCancellations.where("orderId").equals(order.id).toArray(),
                 // Only query customer if an ID exists and isn't 0
                 order.customerId ? db.customers.get(order.customerId) : Promise.resolve(undefined),
+                order.cashierId ? db.users.get(order.cashierId).then(user => user?.nameFirst || "") : Promise.resolve(""),
             ]);
 
+
             return this.createResponse(true, 200, "Success", {
-                order, items, adjustments, discounts, payments, cancellation, customer
+                order, items, adjustments, discounts, payments, cancellation, customer, cashierName
             });
         } catch (error) {
             return this.createResponse(false, 500, this.getErrorMessage(error), null);

@@ -15,7 +15,7 @@ interface OrderPrintProps {
  * Uses a monospace font and dashed borders for a standard receipt look.
  */
 const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false }) => {
-    const { order, items, discounts, adjustments, payments, customer } = orderView;
+    const { order, items, discounts, adjustments, payments, customer, cashierName } = orderView;
 
     useEffect(() => {
         if (autoPrint) {
@@ -48,7 +48,7 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
                 </div>
                 <div className="flex justify-between">
                     <span className="uppercase">{resource.pos_t1.cashier}:</span>
-                    <span>ID #{order.cashierId}</span>
+                    <span>{(cashierName) ? cashierName : order.cashierId}</span>
                 </div>
 
                 {customer && (
@@ -121,7 +121,7 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
             <div className="text-center mt-6 pt-4 border-t border-black border-dotted">
                 <p className="font-bold uppercase">{resource.pos_t1.print_greeting}</p>
                 <p className="">{resource.pos_t1.print_phone}</p>
-                <p className="text-[8px] text-gray-500 italic">{resource.pos_t1.print_address}</p>
+                <p className="text-[px] text-gray-500 italic">{resource.pos_t1.print_address}</p>
                 <div className="text-[8px] text-gray-400">{toDisplayString(toUTCNowForDB())}</div>
             </div>
         </div>

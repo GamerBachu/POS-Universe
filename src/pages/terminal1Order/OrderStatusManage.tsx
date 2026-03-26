@@ -158,13 +158,7 @@ const OrderStatusManage = ({
                     </div>
 
                     {/* Reason Textarea */}
-                    <div className="space-y-1">
-                        <label
-                            className="text-xs font-bold uppercase text-gray-500"
-                            htmlFor="descContent"
-                        >
-                            {resource.pos_t1.manage_reason}
-                        </label>
+                    <div className="space-y-1">                        
                         <TextArea
                             name="descContent"
                             value={reason}

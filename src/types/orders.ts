@@ -10,6 +10,7 @@ export interface IOrder {
     customerId?: number;    // foreign key to customer 
     cashierId: number;      // foreign key to user
 
+
     // Financial Summary
     subtotal: number;       // Sum of all items before any adjustments
     totalDiscount: number;  // Total of all rows in IOrderDiscount
@@ -109,6 +110,7 @@ export interface IOrderView {
     payments: IOrderPayment[];
     cancellation?: IOrderCancellation[];
     customer?: ICustomer;
+    cashierName?:string
 }
 
 
