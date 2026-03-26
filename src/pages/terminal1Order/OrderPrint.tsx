@@ -31,7 +31,7 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
         <div className="bg-white p-4 text-black font-mono text-[11px] leading-tight w-[80mm] mx-auto print:w-full print:m-0 print:shadow-none shadow-lg border border-gray-100">
             {/* Header / Store Info */}
             <div className="text-center mb-4">
-                <h1 className="text-sm font-bold uppercase tracking-tighter">{resource.common.app_name}</h1>
+                <h1 className="text-sm font-bold uppercase tracking-tighter">{resource.pos_t1.print_title}</h1>
                 <p className="text-[9px] uppercase">{resource.pos_t1.order_details_title}</p>
                 <div className="border-b border-black border-dashed my-2" />
             </div>
@@ -119,11 +119,10 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
 
             {/* Footer */}
             <div className="text-center mt-6 pt-4 border-t border-black border-dotted">
-                <p className="font-bold uppercase mb-1">{resource.common.welcome}</p>
-                <p className="text-[9px] text-gray-500 italic">Thank you for your business!</p>
-                <div className="mt-4 text-[8px] text-gray-400">
-                    {toDisplayString(toUTCNowForDB())}
-                </div>
+                <p className="font-bold uppercase">{resource.pos_t1.print_greeting}</p>
+                <p className="">{resource.pos_t1.print_phone}</p>
+                <p className="text-[8px] text-gray-500 italic">{resource.pos_t1.print_address}</p>
+                <div className="text-[8px] text-gray-400">{toDisplayString(toUTCNowForDB())}</div>
             </div>
         </div>
     );

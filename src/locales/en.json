@@ -286,6 +286,11 @@
     "manage_title": "MANAGE ORDER STATUS: {orderNumber}",
     "manage_desc": "Are you sure you want to change this order? This action will restock items and cannot be undone.",
     "manage_reason": "Reason",
-    "manage_ph_reason": "Enter reason..."
+    "manage_ph_reason": "Enter reason...",
+
+    "print_title": "MS.ABC TEST",
+    "print_greeting": "Thank you for your business!",
+    "print_phone": "0000000000",
+    "print_address": "1 2 3 4 5"
   }
 }

@@ -31,7 +31,7 @@ const OrderForm = () => {
         // and then reset the printing state after the print dialog is handled
         setTimeout(() => {
             window.print();
-            setIsPrinting(false);
+           // setIsPrinting(false);
         }, 500);
     }, []);
 
