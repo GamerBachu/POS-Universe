@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
-import { CloseIcon } from "@/libs/icons";
 import resource from "@/locales/en.json";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 
 interface AdjustmentModalProps {
@@ -68,89 +68,73 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
 
 
     return (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/30 backdrop-blur-[1px]">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-sm overflow-hidden border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in duration-150">
-                {/* Header */}
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/50">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-                        <h3 className="font-bold text-xs uppercase tracking-widest text-gray-600 dark:text-gray-300">
-                            {title}
-                        </h3>
+        <Modal className="w-full max-w-sm" title={title} onClose={onClose}>
+            <form onSubmit={handleSubmit} className="p-4 space-y-3">
+                <div className="space-y-3">
+
+                    {/* Label */}
+                    <div>
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.label}</label>
+                        <input
+                            value={label}
+                            onChange={(e) => setLabel(e.target.value)}
+                            placeholder={resource.pos_t1.ph_label}
+                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
+                        />
                     </div>
-                    <button type="button" onClick={onClose} className="text-gray-400 hover:text-red-500">
-                        <CloseIcon className="w-4 h-4" />
-                    </button>
-                </div>
 
-                {/* Form Body */}
-                <form onSubmit={handleSubmit} className="p-4 space-y-3">
-                    <div className="space-y-3">
-
-                        {/* Label */}
-                        <div>
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.label}</label>
+                    {/* Value & Type Toggle */}
+                    <div className="flex gap-2">
+                        <div className="flex-[2]">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.value} ({valueType === 'PERCENT' ? '%' : resource.pos_t1.txt_fix})</label>
                             <input
-                                value={label}
-                                onChange={(e) => setLabel(e.target.value)}
-                                placeholder={resource.pos_t1.ph_label}
-                                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
+                                type="number"
+                                value={value}
+                                onChange={(e) => setValue(e.target.value)}
+                                placeholder="0.00"
+                                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500 font-mono font-bold"
                             />
                         </div>
-
-                        {/* Value & Type Toggle */}
-                        <div className="flex gap-2">
-                            <div className="flex-[2]">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.value} ({valueType === 'PERCENT' ? '%' : resource.pos_t1.txt_fix})</label>
-                                <input
-                                    type="number"
-                                    value={value}
-                                    onChange={(e) => setValue(e.target.value)}
-                                    placeholder="0.00"
-                                    className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500 font-mono font-bold"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.unit}</label>
-                                <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded border border-gray-200 dark:border-gray-700 h-[38px]">
-                                    <button
-                                        type="button"
-                                        onClick={() => setValueType('PERCENT')}
-                                        className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'PERCENT' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                    >%</button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setValueType('FIXED')}
-                                        className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'FIXED' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                    >{resource.pos_t1.txt_fix}</button>
-                                </div>
+                        <div className="flex-1">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.unit}</label>
+                            <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded border border-gray-200 dark:border-gray-700 h-[38px]">
+                                <button
+                                    type="button"
+                                    onClick={() => setValueType('PERCENT')}
+                                    className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'PERCENT' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
+                                >%</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setValueType('FIXED')}
+                                    className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'FIXED' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
+                                >{resource.pos_t1.txt_fix}</button>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* Footer Actions */}
-                    <div className="flex gap-2 pt-2">
+                {/* Footer Actions */}
+                <div className="flex gap-2 pt-2">
 
-                        <Button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 bg-gray-600 hover:bg-gray-700 py-2"
-                            title={resource.common.cancel}
-                        >
-                            {resource.common.cancel}
-                        </Button>
+                    <Button
+                        type="button"
+                        onClick={onClose}
+                        className="flex-1 bg-gray-600 hover:bg-gray-700 py-2"
+                        title={resource.common.cancel}
+                    >
+                        {resource.common.cancel}
+                    </Button>
 
-                        <Button
-                            type="submit"
-                            className="flex-[2] bg-teal-600 hover:bg-teal-700 py-2"
-                            title={resource.common.add}
-                        >
-                            {resource.common.add}
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    <Button
+                        type="submit"
+                        className="flex-[2] bg-teal-600 hover:bg-teal-700 py-2"
+                        title={resource.common.add}
+                    >
+                        {resource.common.add}
+                    </Button>
+                </div>
+            </form>
+        </Modal>
     );
 };
 export default AdjustmentModal;

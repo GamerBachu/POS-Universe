@@ -8,9 +8,9 @@ import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
 import { getIsDangerousAction } from "./utils";
 import { AlertError } from "@/components/ActionStatusMessage";
-import { CloseIcon } from "@/libs/icons";
 import Select from "@/components/Select";
 import TextArea from "@/components/TextArea";
+import Modal from "@/components/Modal";
 
 interface OrderStatusManageProps {
     order: IOrder;
@@ -99,108 +99,90 @@ const OrderStatusManage = ({
     if (!isOpen) return null;
 
     return (
-        <div
-            className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/30 backdrop-blur-[1px]"
-            onKeyDown={(e) => e.key === "Escape" && onClose()}
+        <Modal
+            className="w-full max-w-sm"
+            title={resource.pos_t1.manage_title.replace(
+                "{orderNumber}",
+                order.orderNumber,
+            )}
+            onClose={onClose}
         >
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in duration-150">
-                {/* Header */}
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/50">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-                        <h3 className="font-bold text-xs uppercase tracking-widest text-gray-600 dark:text-gray-300">
-                            {resource.pos_t1.manage_title.replace(
-                                "{orderNumber}",
-                                order.orderNumber,
-                            )}
-                        </h3>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="text-gray-400 hover:text-red-500"
-                    >
-                        <CloseIcon className="w-4 h-4" />
-                    </button>
+            <div className="p-5 space-y-4">
+                {/* Informational Hint */}
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-100 dark:border-blue-800">
+                    <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-medium">
+                        {resource.pos_t1.manage_desc}
+                    </p>
                 </div>
 
-                <div className="p-5 space-y-4">
-                    {/* Informational Hint */}
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-100 dark:border-blue-800">
-                        <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-medium">
-                            {resource.pos_t1.manage_desc}
-                        </p>
-                    </div>
+                {/* Status Selection */}
+                <div className="space-y-1">
+                    <label
+                        className="text-xs font-bold uppercase text-gray-500"
+                        htmlFor="status"
+                    >
+                        {resource.common.status}
+                    </label>
 
-                    {/* Status Selection */}
-                    <div className="space-y-1">
-                        <label
-                            className="text-xs font-bold uppercase text-gray-500"
-                            htmlFor="status"
-                        >
-                            {resource.common.status}
-                        </label>
-
-                        <Select
-                            name="status"
-                            value={status}
-                            disabled={false}
-                            onChange={(e) => setStatus(e.target.value)}
-                            required
-                        >
-                            <option value="-1">{resource.common.select}</option>
-                            {statusOptions.map((opt) => (
-                                <option key={opt.key} value={opt.value}>
-                                    {opt.value}
-                                </option>
-                            ))}
-                        </Select>
-                    </div>
-
-                    {/* Reason Textarea */}
-                    <div className="space-y-1">                        
-                        <TextArea
-                            name="descContent"
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                            onKeyDown={(e) =>
-                                (e.ctrlKey || e.metaKey) &&
-                                e.key === "Enter" &&
-                                handleUpdateStatus()
-                            }
-                            placeholder={resource.pos_t1.manage_ph_reason}
-                            rows={3}
-                        />
-                    </div>
-
-                    {error && <AlertError message={error} />}
+                    <Select
+                        name="status"
+                        value={status}
+                        disabled={false}
+                        onChange={(e) => setStatus(e.target.value)}
+                        required
+                    >
+                        <option value="-1">{resource.common.select}</option>
+                        {statusOptions.map((opt) => (
+                            <option key={opt.key} value={opt.value}>
+                                {opt.value}
+                            </option>
+                        ))}
+                    </Select>
                 </div>
 
-                <div className="p-5 pt-0 grid grid-cols-2 gap-3">
-                    <Button
-                        type="button"
-                        onClick={onClose}
-                        disabled={isSubmitting}
-                        className="bg-gray-600 hover:bg-gray-700 py-2"
-                        title={resource.common.cancel}
-                    >
-                        {resource.common.cancel}
-                    </Button>
-                    <Button
-                        type="button"
-                        title={resource.common.update}
-                        onClick={handleUpdateStatus}
-                        isLoading={isSubmitting}
-                        className={` ${isDangerousAction
-                            ? "bg-red-600 hover:bg-red-700 py-2"
-                            : "bg-teal-600 hover:bg-teal-700 py-2"
-                            }`}
-                    >
-                        {resource.common.update}
-                    </Button>
+                {/* Reason Textarea */}
+                <div className="space-y-1">
+                    <TextArea
+                        name="descContent"
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                        onKeyDown={(e) =>
+                            (e.ctrlKey || e.metaKey) &&
+                            e.key === "Enter" &&
+                            handleUpdateStatus()
+                        }
+                        placeholder={resource.pos_t1.manage_ph_reason}
+                        rows={3}
+                    />
                 </div>
+
+                {error && <AlertError message={error} />}
             </div>
-        </div>
+
+            <div className="p-5 pt-0 grid grid-cols-2 gap-3">
+                <Button
+                    type="button"
+                    onClick={onClose}
+                    disabled={isSubmitting}
+                    className="bg-gray-600 hover:bg-gray-700 py-2"
+                    title={resource.common.cancel}
+                >
+                    {resource.common.cancel}
+                </Button>
+                <Button
+                    type="button"
+                    title={resource.common.update}
+                    onClick={handleUpdateStatus}
+                    isLoading={isSubmitting}
+                    className={` ${isDangerousAction
+                        ? "bg-red-600 hover:bg-red-700 py-2"
+                        : "bg-teal-600 hover:bg-teal-700 py-2"
+                        }`}
+                >
+                    {resource.common.update}
+                </Button>
+            </div>
+        </Modal>
     );
 };
 
