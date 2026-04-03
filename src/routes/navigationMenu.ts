@@ -48,6 +48,17 @@ const NavigationMenu: IMenuItem[] = [
         icon: "🏷️",
     },
 
+    // -- Reports
+
+    {
+        path: PATHS.REPORT,
+        label: resource.navigation.report_label,
+        description: resource.navigation.report_desc,
+        category: "report",
+        isVisible: true,
+        icon: "📊",
+    },
+
     // --- System & Info Routes ---
     {
         path: PATHS.ABOUT,

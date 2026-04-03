@@ -36,7 +36,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!userId || userId === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: resource.pos_t1.msg_invalid_user },
+                alert: { type: "warning", message:  resource.common.session_expired },
             });
             return;
         }
@@ -78,7 +78,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
             // 4. Map and Send to API
             // Mapping happens here to keep the API call clean
             const payload = mapTerminalStateToOrder(state, userId);
-            console.log("payload", payload);
+          
 
             const response = await orderServiceApi.addFullOrder(payload);
 

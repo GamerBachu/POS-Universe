@@ -6,3 +6,4 @@ export * from './productDescriptionApi';
 export * from './productKeywordApi';
 export * from './userApi';
 export * from './systemLogApi';
+export * from './reportApi';

@@ -1,4 +1,5 @@
 import type { IProductView } from "@/types/product";
+import type { IReport } from "@/types/reports";
 
 class SeedData {
 
@@ -185,3 +186,83 @@ const generateSeedProducts = (): IProductView[] => {
 };
 
 export const masterProductData: IProductView[] = generateSeedProducts();
+
+
+
+export const reportSeedData: IReport[] = [
+    {
+        id: 1,
+        name: 'Sales Summary',
+        description: 'Total sales, revenue, and growth trends.',
+        version: '1.0',
+        url: 'sales_summary',
+    },
+    {
+        id: 2,
+        name: 'Customer Insights',
+        description: 'Top customers, purchase frequency, and loyalty trends.',
+        version: '1.0',
+        url: 'customer_insights',
+    },
+    {
+        id: 3,
+        name: 'Employee Performance',
+        description: 'Sales by employee, hours worked, and performance metrics.',
+        version: '1.0',
+        url: 'employee_performance',
+    },
+    {
+        id: 4,
+        name: 'Financial Overview',
+        description: 'Profit margins, expenses, and cash flow analysis.',
+        version: '1.0',
+        url: 'financial_overview',
+    },
+
+    {
+        id: 5,
+        name: 'Inventory Management',
+        description: 'Stock levels, reorder points, and inventory turnover.',
+        version: '1.0',
+        url: 'inventory_management',
+    },
+    {
+        id: 6,
+        name: 'Sales Forecasting',
+        description: 'Predictive sales trends and future revenue projections.',
+        version: '1.0',
+        url: 'sales_forecasting',
+    },
+    {
+        id: 7,
+        name: "Z Report",
+        description: "End-of-day sales summary and cash register reconciliation.",
+        version: "1.0",
+        url: "z_report",
+    },
+    {
+
+        id: 8,
+        name: "Inventory Valuation",
+        description: "Current value of inventory for financial reporting and insurance.",
+        version: "1.0",
+        url: "inventory_valuation",
+    },
+    {
+        id: 9,
+        name: "Void/Cancellation Report",
+        description: "Details of voided transactions for security and loss prevention.",
+        version: "1.0",
+        url: "void_cancellation",
+
+    },
+    {
+        id: 10,
+        name: "Sales by Hour",
+        description: "Hourly sales data to optimize staffing and operations.",
+        version: "1.0",
+        url: "sales_by_hour",
+    },
+];
+
+

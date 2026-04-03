@@ -65,7 +65,11 @@
     "showing": "Showing",
     "to": "to",
     "of": "of",
-    "results": "results"
+    "results": "results",
+    "open": "Open",
+    "close": "Close",
+
+    "session_expired": "Session expired. Please login again."
   },
 
   "login": {
@@ -129,7 +133,10 @@
     "master_pro__attr_desc": "Product Attribute Master entry page",
 
     "system_log_list_label": "System Log",
-    "system_log_list_desc": "System Log entry page"
+    "system_log_list_desc": "System Log entry page",
+
+    "report_label": "Report",
+    "report_desc": "various reports for sales and inventory insights."
   },
   "product_inventory": {
     "btn_add": "+ Add New Product",
@@ -278,14 +285,30 @@
     "payment_details": "Payment Information",
 
     "manage_title": "MANAGE ORDER: {orderNumber}",
-    "manage_reason":"comment",
+    "manage_reason": "comment",
     "manage_desc": "Are you sure you want to update this status? This may affect inventory levels and cannot be undone.",
     "manage_ph_reason": "Provide a reason for this change...",
     "error_cancellation_reason_required": "Reason is required for status changes.",
-
     "print_title": "MS.ABC TEST",
     "print_greeting": "Thank you for shopping with us!",
     "print_phone": "000-000-0000",
     "print_address": "123 Business St, Suite 5"
+  },
+  "reports": {
+    "version": "v{version}",
+    "z_report_title": "Z-Report",
+    "z_report_desc": "Daily financial reconciliation and cash flow audit.",
+    "inventory_valuation_title": "Inventory Valuation",
+    "inventory_valuation_desc": "Valuation of current stock for tax and insurance purposes.",
+    "net_sales": "Net Sales",
+    "net_sales_desc": "Total revenue after adjustments.",
+    "cash_in_hand": "Cash-in-hand",
+    "cash_in_hand_desc": "Actual physical currency collected.",
+    "transactions": "Transactions",
+    "transactions_desc": "Total orders processed today.",
+    "total_asset_value": "Total Asset Value",
+    "total_asset_value_desc": "Sum of (Stock * Cost Price) for all items.",
+    "total_stock_count": "Total Stock Count",
+    "total_stock_count_desc": "Total units of products currently in warehouse."
   }
 }

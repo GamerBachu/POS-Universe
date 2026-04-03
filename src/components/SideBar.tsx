@@ -87,7 +87,9 @@ const SideBar = () => {
         <nav className="flex-1 overflow-y-auto p-2 [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {filteredMenu.map((item) => {
-              const isActive = location.pathname === item.path;
+              const isActive = item.path === "/"
+                ? location.pathname === "/"
+                : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
               return (
                 <li key={item.path} title={item.description}>
                   <Link

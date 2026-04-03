@@ -1,10 +1,10 @@
-import { productApi } from "@/api";
+import { productApi, reportApi } from "@/api";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
-import SeedData, { masterProductData } from "@/libs/db/seedData";
+import SeedData, { masterProductData, reportSeedData } from "@/libs/db/seedData";
 
 import { LoggerUtils } from "@/utils";
 import { useState } from "react";
@@ -13,6 +13,7 @@ const SeedDataPage = () => {
     const [processing, setProcessing] = useState(false);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const seedData = new SeedData();
 
     const handleAddMasterAttributeData = async () => {
         setProcessing(true);
@@ -20,8 +21,6 @@ const SeedDataPage = () => {
         setErrorMsg(null);
 
         const seedData = new SeedData();
-
-        // 1. Create promises that resolve with custom metadata (name + status)
         const promises = seedData.masterProductAttribute.map(async (attr) => {
             try {
                 await db.masterProductAttributes.add({
@@ -159,6 +158,29 @@ const SeedDataPage = () => {
         }
     };
 
+    const handleAddReportData = async () => {
+        setProcessing(true);
+        setSuccessMsg(null);
+        setErrorMsg(null);
+        try {
+            for (const report of reportSeedData) {
+                await reportApi.add({
+                    name: report.name,
+                    description: report.description,
+                    version: report.version,
+                    url: report.url,
+                });
+            }
+            setSuccessMsg(`Successfully added ${reportSeedData.length} reports.`);
+            
+        } catch (err) {
+            LoggerUtils.logCatch(err, "SeedDataPage", "AddReportData");
+            setErrorMsg("A system error occurred during report data addition.");
+        } finally {
+            setProcessing(false);
+        }
+    };
+
     return (
         <div className="fixed inset-0 flex overflow-hidden">
             <SideBar />
@@ -197,6 +219,21 @@ const SeedDataPage = () => {
                         </Button>
                     </div>
 
+
+                    <div className="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm max-w-md">
+                        <h2 className="text-[10px] font-black uppercase text-gray-400 mb-3 tracking-tight">
+                            Master Data Tools - Add Reports
+                        </h2>
+
+                        <Button
+                            isLoading={processing}
+                            disabled={processing}
+                            onClick={handleAddReportData}
+                            className="bg-blue-600 hover:bg-blue-700 w-full justify-center"
+                        >
+                            {processing ? "Adding Data..." : "Add Report Data"}
+                        </Button>
+                    </div>
                     <div className="max-w-md space-y-2">
                         {successMsg && <AlertSuccess message={successMsg} />}
                         {errorMsg && <AlertError message={errorMsg} />}

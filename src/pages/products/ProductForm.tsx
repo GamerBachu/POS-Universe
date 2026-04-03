@@ -399,6 +399,7 @@ const ProductForm: React.FC = () => {
           warningMessages.push(
             (error as Error).message || "Failed to save keywords.",
           );
+          LoggerUtils.logCatch(error, "ProductForm", "handleAction");
         }
       }
 

@@ -20,7 +20,10 @@ import {
     type IOrderCancellation
 } from "@/types/orders";
 
+
 import { type ICustomer } from "@/types/customer";
+
+import { type IReport } from "@/types/reports";
 
 
 class POSUniversalDexie extends Dexie {
@@ -49,6 +52,8 @@ class POSUniversalDexie extends Dexie {
     orderCancellations!: EntityTable<IOrderCancellation, "id">;
     customers!: EntityTable<ICustomer, "id">;
 
+
+    reports!: EntityTable<IReport, "id">;
 
 
 
@@ -82,6 +87,8 @@ class POSUniversalDexie extends Dexie {
             orderPayments: "++id, orderId, category,method",
             orderCancellations: "++id, orderId, orderNumber",
             customers: "++id, guid, name, email, phone",
+
+            reports: "++id, name, description, version, url",
 
         });
     }

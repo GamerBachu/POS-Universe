@@ -34,6 +34,10 @@ export const PATHS = {
     TERMINAL_1_EDIT: "/pos/v1/page/edit/",
     TERMINAL_1_VIEW: "/pos/v1/page/view/",
     TERMINAL_1_DELETE: "/pos/v1/page/delete/",
+
+    REPORT: "/report",
+
+
 } as const;
 
 type AppPath = (typeof PATHS)[keyof typeof PATHS];

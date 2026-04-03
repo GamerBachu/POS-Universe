@@ -20,6 +20,8 @@ import SeedDataPage from "@/pages/SeedDataPage";
 import Main from "@/pages/terminal1/Main";
 import OrderList from "@/pages/terminal1Order/OrderList";
 import OrderForm from "@/pages/terminal1Order/OrderForm";
+import Report from "@/pages/reports/Report";
+import DynamicReportPage from "@/pages/reports/DynamicReportPage";
 
 export const router = createBrowserRouter([
     {
@@ -59,6 +61,15 @@ export const router = createBrowserRouter([
                     { index: true, element: <OrderList /> },
                     { path: "list", element: <OrderList /> },
                     { path: "page/:action/:id", element: <OrderForm /> },
+                ],
+            },
+
+            {
+                path: "report",
+                element: <ProtectedRoute />,
+                children: [
+                    { index: true, element: <Report /> },
+                    { path: ":version/:page", element: <DynamicReportPage /> },
                 ],
             },
 

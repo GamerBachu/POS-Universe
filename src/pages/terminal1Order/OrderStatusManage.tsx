@@ -57,7 +57,7 @@ const OrderStatusManage = ({
 
         const userId = auth.info.authUser?.userId ?? 0;
         if (!userId) {
-            setError(resource.pos_t1.msg_invalid_user);
+            setError(resource.common.session_expired);
             return;
         }
 
