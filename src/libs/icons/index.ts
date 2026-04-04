@@ -7,7 +7,7 @@ export { default as PlusIcon } from "./PlusIcon";
 export { default as MinusIcon } from "./MinusIcon";
 export { default as PersonCircleIcon } from "./PersonCircleIcon";
 
-export { default as PrinterIcon } from "./PersonCircleIcon";
+
 export { default as CalendarIcon } from "./PersonCircleIcon";
 export { default as UserIcon } from "./PersonCircleIcon";
 export { default as ChevronRightIcon } from "./ChevronRightIcon";

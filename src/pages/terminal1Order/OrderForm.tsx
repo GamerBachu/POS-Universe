@@ -281,7 +281,7 @@ const OrderForm = () => {
                         </Button>
                         <Button
                             type="button"
-                            className="bg-teal-600 hover:bg-teal-700 text-white  py-2"
+                            className="bg-blue-600 hover:bg-blue-700 py-2"
                             onClick={handlePrint}
                             title={resource.common.print}
                             isLoading={loading}
