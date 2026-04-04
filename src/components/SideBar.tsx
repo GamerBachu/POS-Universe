@@ -24,7 +24,6 @@ const SideBar = () => {
 
   // Filter menu logic
   const filteredMenu = useMemo(() => {
-    // 1. Get the base filtered list
     let items = SIDEBAR_MENU;
 
     if (searchTerm.trim()) {
@@ -35,12 +34,9 @@ const SideBar = () => {
       });
     }
 
-    // 2. Remove Duplicates based on the 'label' property
     const seenPaths = new Set();
     return items.filter((item) => {
-      if (seenPaths.has(item.label)) {
-        return false; // Skip if we've already seen this label
-      }
+      if (seenPaths.has(item.label)) return false;
       seenPaths.add(item.label);
       return true;
     });
@@ -51,7 +47,7 @@ const SideBar = () => {
       <aside
         className={`${!isMinimized ? "w-64" : "w-0 overflow-hidden border-none"} bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out`}
       >
-        <div className="px-3 py-2  border-b border-gray-200 dark:border-gray-700 relative">
+        <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 relative">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold truncate">
               {resource.common.app_name}
@@ -87,16 +83,29 @@ const SideBar = () => {
         <nav className="flex-1 overflow-y-auto p-2 [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {filteredMenu.map((item) => {
+              // 1. Get the first real segment of the menu path (e.g., "product" or "report")
+              // We filter(Boolean) to remove empty strings from the leading slash
+              const itemSegments = item.path.split('/').filter(Boolean);
+              const itemModule = itemSegments[0];
+
+              // 2. Get the first real segment of the current browser location
+              const currentSegments = location.pathname.split('/').filter(Boolean);
+              const currentModule = currentSegments[0];
+
+              // 3. Logic:
+              // - If it's the dashboard ("/"), check for exact match.
+              // - Otherwise, if the first segments match (e.g., both are "product"), it's active.
               const isActive = item.path === "/"
                 ? location.pathname === "/"
-                : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+                : itemModule === currentModule;
+
               return (
                 <li key={item.path} title={item.description}>
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
-                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
-                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
                       }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>

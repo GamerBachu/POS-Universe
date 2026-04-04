@@ -29,11 +29,11 @@ export const PATHS = {
     SYSTEM_LOG_DELETE: "/sys_log/page/delete/",
 
     TERMINAL_1_POS: "/pos/v1/checkout/0",
-    TERMINAL_1_LIST: "/pos/v1/list",
-    TERMINAL_1_ADD: "/pos/v1/checkout/",
-    TERMINAL_1_EDIT: "/pos/v1/page/edit/",
-    TERMINAL_1_VIEW: "/pos/v1/page/view/",
-    TERMINAL_1_DELETE: "/pos/v1/page/delete/",
+    TERMINAL_1_LIST: "/order/v1/list",
+    TERMINAL_1_ADD: "/pos/v1/checkout/0",
+    TERMINAL_1_EDIT: "/order/v1/page/edit/",
+    TERMINAL_1_VIEW: "/order/v1/page/view/",
+    TERMINAL_1_DELETE: "/order/v1/page/delete/",
 
     REPORT: "/report",
 

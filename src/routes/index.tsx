@@ -54,14 +54,20 @@ export const router = createBrowserRouter([
             },
 
             {
-                path: "pos/v1",
+                path: "order/v1",
                 element: <ProtectedRoute />,
                 children: [
-                    { path: "checkout/:id", element: <Main /> },
                     { index: true, element: <OrderList /> },
                     { path: "list", element: <OrderList /> },
                     { path: "page/:action/:id", element: <OrderForm /> },
                 ],
+            },
+            {
+                path: "pos/v1",
+                element: <ProtectedRoute />,
+                children: [
+                    { path: "checkout/:id", element: <Main /> },
+                ]
             },
 
             {
