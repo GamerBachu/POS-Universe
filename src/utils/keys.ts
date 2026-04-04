@@ -4,7 +4,8 @@ export const StorageKeys = {
     USER: 'pos-u-user',
     THEME: 'pos-u-theme',
     TOKEN: 'pos-u-token',
-    SIDEBAR: 'pos-u-sidebar'
+    SIDEBAR: 'pos-u-sidebar',
+    LANGUAGE: 'pos-lang'
 } as const;
 
 

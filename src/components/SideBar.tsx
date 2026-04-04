@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
 import { SIDEBAR_MENU } from "@/routes/navigationMenu";
 import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
@@ -12,6 +12,8 @@ const SideBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const { isMinimized, minimizeWindow } = useSideBar();
+
+  const { t } = useTranslation();
 
   // Clear search on Escape
   useEffect(() => {
@@ -50,7 +52,7 @@ const SideBar = () => {
         <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 relative">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold truncate">
-              {resource.common.app_name}
+              {t("common.app_name")}
             </h2>
             <SideBarToggle isMinimized={isMinimized} onClick={minimizeWindow} />
           </div>
@@ -59,7 +61,7 @@ const SideBar = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={resource.sidebar.ph_search_menu}
+              placeholder={t("sidebar.ph_search_menu")}
               className="pr-9"
             />
             <div className="absolute right-0 top-0 h-full w-9 flex items-center justify-center">
@@ -104,8 +106,8 @@ const SideBar = () => {
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
                       }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>
@@ -116,7 +118,7 @@ const SideBar = () => {
             })}
             {filteredMenu.length === 0 && (
               <li className="text-center py-4 text-xs text-gray-500">
-                {resource.common.no_result}
+                {t("common.no_result")}
               </li>
             )}
           </ul>
