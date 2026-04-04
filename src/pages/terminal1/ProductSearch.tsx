@@ -2,7 +2,7 @@ import NumpadButton from "./NumpadButton";
 import type { IProductFilter } from "@/types/product";
 import { NUMPAD_KEYS } from "./utils";
 import { BackspaceIcon, CheckIcon, CloseIcon, SearchIcon } from "@/libs/icons";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
 import Input from "@/components/Input";
 
 type ProductSearchProps = {
@@ -22,6 +22,7 @@ const ProductSearch = ({
     filter,
     setFilter,
 }: ProductSearchProps) => {
+    const { t } = useTranslation();
     return (
         <>
             <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
@@ -32,7 +33,7 @@ const ProductSearch = ({
 
                     <Input
                         type="text"
-                        placeholder={resource.pos_t1.ph_search_item}
+                        placeholder={t("pos_t1.ph_search_item")}
                         value={inputCode}
                         onChange={(e) => onInputType(e.target.value)}
                         className="pl-9 pr-9 py-2"

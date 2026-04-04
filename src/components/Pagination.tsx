@@ -1,5 +1,5 @@
 import React from "react";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
 
 
 interface PaginationProps {
@@ -17,6 +17,7 @@ const Pagination: React.FC<PaginationProps> = ({
     onPageChange,
     isLoading,
 }) => {
+    const { t } = useTranslation();
     const totalPages = Math.ceil(totalCount / pageSize);
 
     if (totalPages <= 0) return null;
@@ -45,7 +46,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <div className="flex items-center justify-between px-1 py-2">
             <span className="text-xs font-mono text-gray-500">
                 {formatString(
-                    resource.common.pagination_info,
+                    t("common.pagination_info"),
                     (currentPage - 1) * pageSize + 1,
                     Math.min(currentPage * pageSize, totalCount),
                     totalCount
@@ -57,14 +58,14 @@ const Pagination: React.FC<PaginationProps> = ({
                     onClick={handlePrevious}
                     className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
                 >
-                    {resource.common.previous}
+                    {t("common.previous")}
                 </button>
                 <button
                     disabled={currentPage === totalPages || isLoading}
                     onClick={handleNext}
                     className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
                 >
-                    {resource.common.next}
+                    {t("common.next")}
                 </button>
             </div>
         </div>

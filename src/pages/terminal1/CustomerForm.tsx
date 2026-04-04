@@ -2,16 +2,18 @@ import { useActionState, useEffect } from "react";
 import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
 import Modal from "@/components/Modal";
 
 interface CustomerFormProps {
     onClose: () => void;
 }
 
+
 const CustomerForm = ({ onClose }: CustomerFormProps) => {
     const dispatch = useTerminalDispatch();
     const { customer: currentCustomer } = useTerminalState();
+    const { t } = useTranslation();
 
     const handleAction = async (
         _: IActionState | null,
@@ -31,12 +33,12 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
             type: "SET_ALERT",
             alert: {
                 type: "success",
-                message: resource.pos_t1.success_save,
+                message: t("pos_t1.success_save"),
             },
         });
 
         onClose();
-        return { success: true, message: resource.pos_t1.msg_customer_saved };
+        return { success: true, message: t("pos_t1.msg_customer_saved") };
     };
     // Keyboard Shortcuts Logic
     useEffect(() => {
@@ -58,52 +60,52 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
         onClose();
     };
     return (
-        <Modal className="w-full max-w-sm" title={resource.pos_t1.customer_profile} onClose={onClose}>
+        <Modal className="w-full max-w-sm" title={t("pos_t1.customer_profile")} onClose={onClose}>
             <form action={formAction} className="p-4 space-y-3">
                 <div className="space-y-3">
                     <div>
                         <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {resource.pos_t1.full_name}
+                            {t("pos_t1.full_name")}
                         </label>
                         <input
                             name="name"
                             defaultValue={currentCustomer?.name}
                             autoFocus
-                            placeholder={resource.pos_t1.ph_guest_walk_in}
+                            placeholder={t("pos_t1.ph_guest_walk_in")}
                             className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
                     <div>
                         <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {resource.pos_t1.phone}
+                            {t("pos_t1.phone")}
                         </label>
                         <input
                             name="phone"
                             defaultValue={currentCustomer?.phone}
-                            placeholder={resource.pos_t1.phone}
+                            placeholder={t("pos_t1.phone")}
                             className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
                     <div>
                         <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {resource.pos_t1.email}
+                            {t("pos_t1.email")}
                         </label>
                         <input
                             name="email"
                             type="email"
                             defaultValue={currentCustomer?.email}
-                            placeholder={resource.pos_t1.email}
+                            placeholder={t("pos_t1.email")}
                             className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
                     <div>
                         <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {resource.pos_t1.address}
+                            {t("pos_t1.address")}
                         </label>
                         <input
                             name="address"
                             defaultValue={currentCustomer?.address}
-                            placeholder={resource.pos_t1.ph_address}
+                            placeholder={t("pos_t1.ph_address")}
                             className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
@@ -116,14 +118,14 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                         onClick={handleClear}
                         className="flex-1 py-2 text-[10px] font-black rounded border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all uppercase"
                     >
-                        {resource.pos_t1.clear}
+                        {t("pos_t1.clear")}
                     </button>
                     <button
                         type="submit"
                         disabled={isPending}
                         className="flex-[2] py-2 text-[10px] font-black rounded bg-teal-600 text-white  hover:bg-teal-700 transition-all disabled:opacity-50 uppercase"
                     >
-                        {isPending ? resource.pos_t1.saving : resource.pos_t1.save}
+                        {isPending ? t("pos_t1.saving") : t("pos_t1.save")}
                     </button>
                 </div>
             </form>

@@ -3,7 +3,6 @@ import type { IProduct, IProductView } from "@/types/product";
 import { TOrderStatus, type ITerminalState } from "@/types/terminal1";
 import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 import { roundNumber } from "@/utils/helper/numberUtils";
-import resource from "@/locales/en.json";
 
 
 
@@ -72,7 +71,6 @@ export const calculateRowAmount = (order: IOrder, adj: IOrderAdjustment | IOrder
 //NUMPAD_KEYS -1 = Backspace Button
 export const NUMPAD_KEYS = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "-1", "-2"];
 
-export const WALK_IN_CUSTOMER_TEXT = resource.pos_t1.walk_in_customer;
 
 /**
  * Maps the frontend Terminal State into a structured relational order format.

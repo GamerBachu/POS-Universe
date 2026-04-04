@@ -8,9 +8,11 @@ import type { IProductView, IProductFilter } from "@/types/product";
 import { productsApi } from "@/api/productsApi";
 import { generateGuid } from "@/utils/helper/guid";
 import FloatingAlert from "@/components/FloatingAlert";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
+
 
 const TerminalContent = () => {
+    const { t } = useTranslation();
 
     const dispatch = useTerminalDispatch();
     const { alert } = useTerminalState();
@@ -109,7 +111,7 @@ const TerminalContent = () => {
 
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-800 dark:text-gray-200">
-            <Header label={resource.pos_t1.title} />
+            <Header label={t("pos_t1.title")} />
 
             <div className="flex flex-1 overflow-hidden border border-gray-200 dark:border-gray-700">
                 <SectionLeft />

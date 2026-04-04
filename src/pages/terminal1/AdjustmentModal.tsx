@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
-import resource from "@/locales/en.json";
+import { useTranslation } from "@/contexts/language";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 
@@ -15,8 +15,10 @@ interface AdjustmentModalProps {
 }
 
 
+
 const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalProps) => {
     const dispatch = useTerminalDispatch();
+    const { t } = useTranslation();
 
     const [label, setLabel] = useState("");
     const [value, setValue] = useState("");
@@ -74,11 +76,11 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
 
                     {/* Label */}
                     <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.label}</label>
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.label")}</label>
                         <input
                             value={label}
                             onChange={(e) => setLabel(e.target.value)}
-                            placeholder={resource.pos_t1.ph_label}
+                            placeholder={t("pos_t1.ph_label")}
                             className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
@@ -86,7 +88,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                     {/* Value & Type Toggle */}
                     <div className="flex gap-2">
                         <div className="flex-[2]">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.value} ({valueType === 'PERCENT' ? '%' : resource.pos_t1.txt_fix})</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.value")} ({valueType === 'PERCENT' ? '%' : t("pos_t1.txt_fix")})</label>
                             <input
                                 type="number"
                                 value={value}
@@ -96,7 +98,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                             />
                         </div>
                         <div className="flex-1">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">{resource.pos_t1.unit}</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.unit")}</label>
                             <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded border border-gray-200 dark:border-gray-700 h-[38px]">
                                 <button
                                     type="button"
@@ -107,7 +109,7 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                                     type="button"
                                     onClick={() => setValueType('FIXED')}
                                     className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'FIXED' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                >{resource.pos_t1.txt_fix}</button>
+                                >{t("pos_t1.txt_fix")}</button>
                             </div>
                         </div>
                     </div>
@@ -120,17 +122,17 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
                         type="button"
                         onClick={onClose}
                         className="flex-1 bg-gray-600 hover:bg-gray-700 py-2"
-                        title={resource.common.cancel}
+                        title={t("common.cancel")}
                     >
-                        {resource.common.cancel}
+                        {t("common.cancel")}
                     </Button>
 
                     <Button
                         type="submit"
                         className="flex-[2] bg-teal-600 hover:bg-teal-700 py-2"
-                        title={resource.common.add}
+                        title={t("common.add")}
                     >
-                        {resource.common.add}
+                        {t("common.add")}
                     </Button>
                 </div>
             </form>

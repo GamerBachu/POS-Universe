@@ -1,5 +1,5 @@
-import  { useActionState, useCallback, useEffect, useMemo } from "react";
-import resource from "@/locales/en.json";
+import { useActionState, useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "@/contexts/language";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -21,6 +21,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { t } = useTranslation();
   const loginAction = async (
     prevState: IActionState | null,
     formData: FormData,
@@ -30,12 +31,12 @@ const Login: React.FC = () => {
       const password = formData.get("password") as string;
 
       if (!username || !password) {
-        return { success: false, message: resource.login.invalid_credentials };
+        return { success: false, message: t("login.invalid_credentials") };
       }
       const response = await userApi.postLogin(username, password);
 
       if (!response) {
-        return { success: false, message: resource.common.error };
+        return { success: false, message: t("common.error") };
       }
 
       // Handling statuses based on our ServiceResponse structure
@@ -62,20 +63,20 @@ const Login: React.FC = () => {
 
           auth.setInfo(info);
 
-          return { success: true, message: resource.login.success_message };
+          return { success: true, message: t("login.success_message") };
         }
         case 400:
         case 401:
         case 404:
-          return { success: false, message: resource.login.invalid_credentials };
+          return { success: false, message: t("login.invalid_credentials") };
         default:
-          return { success: false, message: resource.common.error };
+          return { success: false, message: t("common.error") };
       }
     } catch (error: unknown) {
       LoggerUtils.logCatch(error, "Login", "handleAction", "76");
       return {
         success: false,
-        message: resource.common.error,
+        message: t("common.error"),
       };
     }
   };
@@ -116,26 +117,28 @@ const Login: React.FC = () => {
         <div className="absolute top-4 right-4"><ThemeToggleIcon /></div>
         <header className="text-center mb-8">
           <h1 className="text-2xl font-bold tracking-tight">
-            {resource.login.title}
+            {t("login.title")}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {resource.login.subtitle}
+            {t("login.subtitle")}
           </p>
         </header>
 
         <form action={formAction} className="space-y-4">
           <InputWithLabel
-            label={resource.common.username}
+            label={t("common.username")}
             name="username"
-            placeholder={resource.common.ph_username}
+            placeholder={
+              t("common.ph_username")}
             required={true}
           />
 
           <InputWithLabel
-            label={resource.common.password}
+            label={t("common.password")}
             type="password"
             name="password"
-            placeholder={resource.common.ph_password}
+            placeholder={
+              t("common.ph_password")}
             required={true}
           />
 
@@ -149,13 +152,13 @@ const Login: React.FC = () => {
               disabled={isPending}
               isLoading={isPending}
             >
-              {resource.login.submit}
+              {t("login.submit")}
             </Button>
             <Link
               to={PATHS.REGISTER}
               className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
             >
-              {resource.login.register}
+              {t("login.register")}
             </Link>
           </div>
         </form>
