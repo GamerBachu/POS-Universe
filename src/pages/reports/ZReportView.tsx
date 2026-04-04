@@ -1,13 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CalendarIcon, UserIcon } from '@/libs/icons';
-import { reportApi, type IZReportData } from '@/api/reportApi';
-import { displayPrice } from '@/utils/helper/numberUtils';
-import PrintService from '@/components/PrintService';
+import React, { useEffect, useRef, useState } from "react";
+import { CalendarIcon, UserIcon } from "@/libs/icons";
+import { reportApi, type IZReportData } from "@/api/reportApi";
+import { displayPrice } from "@/utils/helper/numberUtils";
+import PrintService from "@/components/PrintService";
+import Button from "@/components/Button";
+import resource from "@/locales/en.json";
+
 const ZReportView: React.FC = () => {
   const [data, setData] = useState<IZReportData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const reportRef = useRef<HTMLDivElement>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const printDiv = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -29,20 +32,25 @@ const ZReportView: React.FC = () => {
   }
 
   if (!data) {
-    return <div className="p-10 text-center text-red-500 text-xs uppercase font-bold">Error loading report data.</div>;
+    return (
+      <div className="p-10 text-center text-red-500 text-xs uppercase font-bold">
+        Error loading report data.
+      </div>
+    );
   }
 
   const { sales, payments, counters, businessDate, cashierName } = data;
 
-
   return (
     <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm overflow-hidden font-sans">
-      <div ref={reportRef}>
+      <div ref={printDiv}>
         <div className="p-6 text-center border-b border-dashed border-gray-200 dark:border-gray-700">
           <h1 className="text-lg font-black uppercase tracking-[0.2em] text-gray-800 dark:text-gray-100">
             Z-Report Summary
           </h1>
-          <p className="text-[10px] text-gray-500 uppercase mt-1 font-bold">Daily Financial Reconciliation</p>
+          <p className="text-[10px] text-gray-500 uppercase mt-1 font-bold">
+            Daily Financial Reconciliation
+          </p>
           <div className="mt-4 flex flex-wrap justify-center gap-4 text-[10px] text-gray-400 font-bold uppercase">
             <div className="flex items-center gap-1">
               <CalendarIcon className="w-3 h-3" /> {businessDate}
@@ -54,7 +62,9 @@ const ZReportView: React.FC = () => {
         </div>
         <div className="p-5 space-y-6">
           <section>
-            <h2 className="text-[10px] font-black uppercase text-teal-600 mb-2 tracking-wider">Revenue Breakdown</h2>
+            <h2 className="text-[10px] font-black uppercase text-teal-600 mb-2 tracking-wider">
+              Revenue Breakdown
+            </h2>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
                 <span>Gross Sales</span>
@@ -62,7 +72,9 @@ const ZReportView: React.FC = () => {
               </div>
               <div className="flex justify-between text-red-500">
                 <span>Discounts/Promos</span>
-                <span className="font-mono">({displayPrice(sales.discounts)})</span>
+                <span className="font-mono">
+                  ({displayPrice(sales.discounts)})
+                </span>
               </div>
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
                 <span>Tax Collected</span>
@@ -75,11 +87,15 @@ const ZReportView: React.FC = () => {
             </div>
           </section>
           <section className="bg-gray-50 dark:bg-gray-900/40 p-3 rounded-md border border-gray-100 dark:border-gray-700">
-            <h2 className="text-[10px] font-black uppercase text-gray-400 mb-2">Collection Methods</h2>
+            <h2 className="text-[10px] font-black uppercase text-gray-400 mb-2">
+              Collection Methods
+            </h2>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-gray-500 font-bold">CASH IN DRAWER</span>
-                <span className="font-black text-gray-800 dark:text-gray-200">{displayPrice(payments.cash)}</span>
+                <span className="font-black text-gray-800 dark:text-gray-200">
+                  {displayPrice(payments.cash)}
+                </span>
               </div>
               <div className="flex justify-between text-gray-500">
                 <span>CREDIT/DEBIT CARD</span>
@@ -93,27 +109,49 @@ const ZReportView: React.FC = () => {
           </section>
           <div className="grid grid-cols-3 gap-2 border-t border-dashed border-gray-200 dark:border-gray-700 pt-4">
             <div className="text-center">
-              <p className="text-[9px] font-bold text-gray-400 uppercase">Orders</p>
-              <p className="text-sm font-black dark:text-white">{counters.totalOrders}</p>
+              <p className="text-[9px] font-bold text-gray-400 uppercase">
+                Orders
+              </p>
+              <p className="text-sm font-black dark:text-white">
+                {counters.totalOrders}
+              </p>
             </div>
             <div className="text-center border-x border-gray-100 dark:border-gray-700">
-              <p className="text-[9px] font-bold text-gray-400 uppercase">Voids</p>
-              <p className="text-sm font-black text-red-500">{counters.voidedOrders}</p>
+              <p className="text-[9px] font-bold text-gray-400 uppercase">
+                Voids
+              </p>
+              <p className="text-sm font-black text-red-500">
+                {counters.voidedOrders}
+              </p>
             </div>
             <div className="text-center">
-              <p className="text-[9px] font-bold text-gray-400 uppercase">Refunds</p>
-              <p className="text-sm font-black text-orange-500">{counters.refundCount}</p>
+              <p className="text-[9px] font-bold text-gray-400 uppercase">
+                Refunds
+              </p>
+              <p className="text-sm font-black text-orange-500">
+                {counters.refundCount}
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div className="p-4 bg-gray-50 dark:bg-gray-900/20 border-t dark:border-gray-700">
-        <PrintService
-          contentRef={reportRef}
+        {isPrinting && (
+          <PrintService
+            contentRef={printDiv}
+            onComplete={() => setIsPrinting(false)}
+          />
+        )}
+        <Button
+          type="button"
+          className="bg-blue-600 hover:bg-blue-700 p-2 w-100"
+          disabled={isPrinting}
+          onClick={() => setIsPrinting(true)}
+          title={resource.common.print}
           isLoading={loading}
-          className='bg-blue-600 hover:bg-blue-700 p-2 w-100'
-          title=''
-        ></PrintService>
+        >
+          {resource.common.print}
+        </Button>
       </div>
     </div>
   );

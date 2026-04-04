@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { orderServiceApi } from "@/api/orderServiceApi";
 import type { IOrderView } from "@/types/orders";
@@ -15,6 +15,7 @@ import { LoggerUtils } from "@/utils";
 import OrderStatusLabel from "./OrderStatusLabel";
 import OrderPrint from "./OrderPrint";
 import { calculateRowAmount } from "../terminal1/utils";
+import PrintService from "@/components/PrintService";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -24,16 +25,7 @@ const OrderForm = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPrinting, setIsPrinting] = useState(false);
-
-    const handlePrint = useCallback(() => {
-        setIsPrinting(true);
-        // We set a timeout to allow the print component to mount 
-        // and then reset the printing state after the print dialog is handled
-        setTimeout(() => {
-            window.print();
-            setIsPrinting(false);
-        }, 500);
-    }, []);
+    const printDiv = useRef<HTMLDivElement>(null);
 
     const onSendBack = useCallback(() => {
         if (window.history.length > 1 && window.history.state?.idx > 0) {
@@ -104,12 +96,6 @@ const OrderForm = () => {
 
     return (
         <CommonLayout h1={resource.navigation.product_list_label}>
-            {/* Hidden Print Area */}
-            {isPrinting && orderView && (
-                <div className="fixed inset-0 z-[5000] bg-white flex justify-center items-start overflow-auto">
-                    <OrderPrint orderView={orderView} />
-                </div>
-            )}
 
             <PageHeader
                 subtitle={`${resource.pos_t1.order_details_title} ${order.orderNumber}`}
@@ -282,7 +268,7 @@ const OrderForm = () => {
                         <Button
                             type="button"
                             className="bg-blue-600 hover:bg-blue-700 py-2"
-                            onClick={handlePrint}
+                            onClick={() => setIsPrinting(true)}
                             title={resource.common.print}
                             isLoading={loading}
                         >
@@ -308,6 +294,20 @@ const OrderForm = () => {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     onSuccess={onSendBack}
+                />
+            )}
+
+            {isPrinting && orderView && (
+                <div
+                    ref={printDiv}
+                    className="fixed inset-0 z-[5000] bg-white flex justify-center items-start overflow-auto">
+                    <OrderPrint orderView={orderView} />
+                </div>
+            )}
+            {isPrinting && (
+                <PrintService
+                    contentRef={printDiv}
+                    onComplete={() => setIsPrinting(false)}
                 />
             )}
         </CommonLayout>
