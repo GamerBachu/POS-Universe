@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { type IMasterProductAttribute } from "@/types/masters";
 import { masterProductAttributeApi } from "@/api";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import AttributeTableRow from "./AttributeTableRow";
 import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
@@ -65,7 +65,7 @@ const AttributeTable = () => {
     };
 
 
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     return (
         <div className="space-y-2">
             <div

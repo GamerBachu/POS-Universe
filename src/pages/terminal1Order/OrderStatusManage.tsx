@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { orderServiceApi } from "@/api/orderServiceApi";
 import { useAuth } from "@/contexts/authorize";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import type { IOrder } from "@/types/orders";
 import { OrderStatusList } from "@/types/terminal1";
 import Button from "@/components/Button";
@@ -26,6 +26,7 @@ const OrderStatusManage = ({
     onSuccess,
 }: OrderStatusManageProps) => {
     const auth = useAuth();
+    const { t } = useLanguage();
 
     const [reason, setReason] = useState("");
     const [status, setStatus] = useState(String(order.status));
@@ -47,17 +48,17 @@ const OrderStatusManage = ({
     const handleUpdateStatus = useCallback(async () => {
         const trimmedReason = reason.trim();
         if (status === "-1" || !status) {
-            setError(resource.product_inventory.select_attribute);
+            setError(t("product_inventory.select_attribute"));
             return;
         }
         if (!trimmedReason) {
-            setError(resource.pos_t1.error_cancellation_reason_required);
+            setError(t("pos_t1.error_cancellation_reason_required"));
             return;
         }
 
         const userId = auth.info.authUser?.userId ?? 0;
         if (!userId) {
-            setError(resource.common.session_expired);
+            setError(t("common.session_expired"));
             return;
         }
 
@@ -77,7 +78,7 @@ const OrderStatusManage = ({
                 setError(response.message);
             }
         } catch (err) {
-            setError(resource.common.error);
+            setError(t("common.error"));
             LoggerUtils.logCatch(
                 err,
                 "OrderCancellationModal",
@@ -101,17 +102,14 @@ const OrderStatusManage = ({
     return (
         <Modal
             className="w-full max-w-sm"
-            title={resource.pos_t1.manage_title.replace(
-                "{orderNumber}",
-                order.orderNumber,
-            )}
+            title={t("pos_t1.manage_title").replace("{orderNumber}", order.orderNumber,)}
             onClose={onClose}
         >
             <div className="p-5 space-y-4">
                 {/* Informational Hint */}
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-100 dark:border-blue-800">
                     <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed font-medium">
-                        {resource.pos_t1.manage_desc}
+                        {t("pos_t1.manage_desc")}
                     </p>
                 </div>
 
@@ -121,7 +119,7 @@ const OrderStatusManage = ({
                         className="text-xs font-bold uppercase text-gray-500"
                         htmlFor="status"
                     >
-                        {resource.common.status}
+                        {t("common.status")}
                     </label>
 
                     <Select
@@ -131,7 +129,7 @@ const OrderStatusManage = ({
                         onChange={(e) => setStatus(e.target.value)}
                         required
                     >
-                        <option value="-1">{resource.common.select}</option>
+                        <option value="-1">{t("common.select")}</option>
                         {statusOptions.map((opt) => (
                             <option key={opt.key} value={opt.value}>
                                 {opt.value}
@@ -151,7 +149,7 @@ const OrderStatusManage = ({
                             e.key === "Enter" &&
                             handleUpdateStatus()
                         }
-                        placeholder={resource.pos_t1.manage_ph_reason}
+                        placeholder={t("pos_t1.manage_ph_reason")}
                         rows={3}
                     />
                 </div>
@@ -165,13 +163,13 @@ const OrderStatusManage = ({
                     onClick={onClose}
                     disabled={isSubmitting}
                     className="bg-gray-600 hover:bg-gray-700 py-2"
-                    title={resource.common.cancel}
+                    title={t("common.cancel")}
                 >
-                    {resource.common.cancel}
+                    {t("common.cancel")}
                 </Button>
                 <Button
                     type="button"
-                    title={resource.common.update}
+                    title={t("common.update")}
                     onClick={handleUpdateStatus}
                     isLoading={isSubmitting}
                     className={` ${isDangerousAction
@@ -179,7 +177,7 @@ const OrderStatusManage = ({
                         : "bg-teal-600 hover:bg-teal-700 py-2"
                         }`}
                 >
-                    {resource.common.update}
+                    {t("common.update")}
                 </Button>
             </div>
         </Modal>

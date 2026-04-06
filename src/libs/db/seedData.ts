@@ -137,6 +137,7 @@ const generateSeedProducts = (): IProductView[] => {
             stock: Math.floor(Math.random() * 200),
             reorderLevel: 10,
             isActive: true,
+            discountInPercent: 1,
             productAttributes: category.attrs.map((attrId) => {
                 let value = "Standard";
                 // Logic to give realistic values based on Master IDs

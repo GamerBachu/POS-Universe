@@ -1,9 +1,9 @@
 import React from "react";
-import { useTranslation, SUPPORTED_LANGUAGES } from "@/contexts/language";
+import { useLanguage, SUPPORTED_LANGUAGES } from "@/contexts/language";
 import Select from "./Select";
 
 const LanguageSelector: React.FC = () => {
-    const { locale, changeLanguage, isLoading } = useTranslation();
+    const { locale, changeLanguage, isLoading } = useLanguage();
 
     return (
         <Select

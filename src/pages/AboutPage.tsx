@@ -2,10 +2,10 @@
 import Header from "@/components/Header";
 import LanguageSelector from "@/components/LanguageSelector";
 import SideBar from "@/components/SideBar";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 function AboutPage() {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   return (
     <div className="fixed inset-0 flex overflow-hidden">

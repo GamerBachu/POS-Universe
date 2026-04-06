@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { type IOrderView } from "@/types/orders";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { toDisplayString, toUTCNowForDB } from "@/utils/helper/dateUtils";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import { calculateRowAmount } from "../terminal1/utils";
 
 interface OrderPrintProps {
@@ -15,6 +15,7 @@ interface OrderPrintProps {
  * Uses a monospace font and dashed borders for a standard receipt look.
  */
 const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false }) => {
+    const { t } = useLanguage();
     const { order, items, discounts, adjustments, payments, customer, cashierName } = orderView;
 
     useEffect(() => {
@@ -31,29 +32,29 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
         <div className="bg-white p-4 text-black font-mono text-[11px] leading-tight w-[80mm] mx-auto print:w-full print:m-0 print:shadow-none shadow-lg border border-gray-100">
             {/* Header / Store Info */}
             <div className="text-center mb-4">
-                <h1 className="text-sm font-bold uppercase tracking-tighter">{resource.pos_t1.print_title}</h1>
-                <p className="text-[9px] uppercase">{resource.pos_t1.order_details_title}</p>
+                <h1 className="text-sm font-bold uppercase tracking-tighter">{t("pos_t1.print_title")}</h1>
+                <p className="text-[9px] uppercase">{t("pos_t1.order_details_title")}</p>
                 <div className="border-b border-black border-dashed my-2" />
             </div>
 
             {/* Transaction Info */}
             <div className="space-y-1 mb-3">
                 <div className="flex justify-between">
-                    <span className="uppercase">{resource.pos_t1.col_order_no}:</span>
+                    <span className="uppercase">{t("pos_t1.col_order_no")}:</span>
                     <span className="font-bold">{order.orderNumber}</span>
                 </div>
                 <div className="flex justify-between">
-                    <span className="uppercase">{resource.pos_t1.col_date}:</span>
+                    <span className="uppercase">{t("pos_t1.col_date")}:</span>
                     <span>{toDisplayString(order.createdAt)}</span>
                 </div>
                 <div className="flex justify-between">
-                    <span className="uppercase">{resource.pos_t1.cashier}:</span>
+                    <span className="uppercase">{t("pos_t1.cashier")}:</span>
                     <span>{(cashierName) ? cashierName : order.cashierId}</span>
                 </div>
 
                 {customer && (
                     <div className="mt-2 pt-2 border-t border-black border-dotted">
-                        <div className="font-bold uppercase text-[9px]">{resource.pos_t1.lbl_customer}</div>
+                        <div className="font-bold uppercase text-[9px]">{t("pos_t1.lbl_customer")}</div>
                         <div className="uppercase">{customer.name}</div>
                         {customer.phone && <div>{customer.phone}</div>}
                     </div>
@@ -66,9 +67,9 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
             <table className="w-full text-[10px] border-collapse mb-3">
                 <thead>
                     <tr className="border-b border-black">
-                        <th className="text-left py-1 uppercase">{resource.pos_t1.col_item}</th>
-                        <th className="text-right py-1 uppercase w-8">{resource.pos_t1.col_qty}</th>
-                        <th className="text-right py-1 uppercase w-16">{resource.pos_t1.col_price}</th>
+                        <th className="text-left py-1 uppercase">{t("pos_t1.col_item")}</th>
+                        <th className="text-right py-1 uppercase w-8">{t("pos_t1.col_qty")}</th>
+                        <th className="text-right py-1 uppercase w-16">{t("pos_t1.col_price")}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,7 +86,7 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
             {/* Financial Summary */}
             <div className="border-t border-black border-dashed pt-2 space-y-1 mb-3">
                 <div className="flex justify-between">
-                    <span className="uppercase">{resource.pos_t1.subtotal}</span>
+                    <span className="uppercase">{t("pos_t1.subtotal")}</span>
                     <span>{displayPrice(order.subtotal)}</span>
                 </div>
                 {discounts?.map((d, idx) => (
@@ -101,14 +102,14 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
                     </div>
                 ))}
                 <div className="flex justify-between font-bold text-sm pt-1 border-t border-black mt-1">
-                    <span className="uppercase">{resource.pos_t1.grand_total}</span>
+                    <span className="uppercase">{t("pos_t1.grand_total")}</span>
                     <span>{displayPrice(order.grandTotal)}</span>
                 </div>
             </div>
 
             {/* Payments */}
             <div className="mb-4">
-                <div className="text-[9px] font-bold uppercase mb-1">{resource.pos_t1.payment_details}</div>
+                <div className="text-[9px] font-bold uppercase mb-1">{t("pos_t1.payment_details")}</div>
                 {payments?.map((p, idx) => (
                     <div key={idx} className="flex justify-between">
                         <span className="uppercase">{p.category} {p.method && `(${p.method})`}</span>
@@ -119,9 +120,9 @@ const OrderPrint: React.FC<OrderPrintProps> = ({ orderView, autoPrint = false })
 
             {/* Footer */}
             <div className="text-center mt-6 pt-4 border-t border-black border-dotted">
-                <p className="font-bold uppercase">{resource.pos_t1.print_greeting}</p>
-                <p className="">{resource.pos_t1.print_phone}</p>
-                <p className="text-[px] text-gray-500 italic">{resource.pos_t1.print_address}</p>
+                <p className="font-bold uppercase">{t("pos_t1.print_greeting")}</p>
+                <p className="">{t("pos_t1.print_phone")}</p>
+                <p className="text-[px] text-gray-500 italic">{t("pos_t1.print_address")}</p>
                 <div className="text-[8px] text-gray-400">{toDisplayString(toUTCNowForDB())}</div>
             </div>
         </div>

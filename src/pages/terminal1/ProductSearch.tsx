@@ -2,7 +2,7 @@ import NumpadButton from "./NumpadButton";
 import type { IProductFilter } from "@/types/product";
 import { NUMPAD_KEYS } from "./utils";
 import { BackspaceIcon, CheckIcon, CloseIcon, SearchIcon } from "@/libs/icons";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import Input from "@/components/Input";
 
 type ProductSearchProps = {
@@ -22,7 +22,7 @@ const ProductSearch = ({
     filter,
     setFilter,
 }: ProductSearchProps) => {
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     return (
         <>
             <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">

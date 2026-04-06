@@ -8,11 +8,11 @@ import type { IProductView, IProductFilter } from "@/types/product";
 import { productsApi } from "@/api/productsApi";
 import { generateGuid } from "@/utils/helper/guid";
 import FloatingAlert from "@/components/FloatingAlert";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 
 const TerminalContent = () => {
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     const dispatch = useTerminalDispatch();
     const { alert } = useTerminalState();

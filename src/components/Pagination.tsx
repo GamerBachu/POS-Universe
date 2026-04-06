@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 
 interface PaginationProps {
@@ -17,7 +17,7 @@ const Pagination: React.FC<PaginationProps> = ({
     onPageChange,
     isLoading,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     const totalPages = Math.ceil(totalCount / pageSize);
 
     if (totalPages <= 0) return null;

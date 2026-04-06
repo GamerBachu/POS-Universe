@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useTerminalState } from "./TerminalContext";
 import CustomerForm from "./CustomerForm";
 import { PersonCircleIcon } from "@/libs/icons";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 
 const CustomerLink = () => {
     const state = useTerminalState();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const walkInCustomerText = "Walk-in Customer";
 

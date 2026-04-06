@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { PATHS } from '@/routes/paths';
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/authorize';
@@ -11,7 +11,7 @@ const Logout = () => {
         userApi.postLogout(auth.info.authUser?.userId, auth.info.authUser?.refreshToken);
         auth.setInfo(undefined);
     }, [auth]);
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     return (
         <div className="flex flex-col items-center justify-center min-h-[inherit] text-center p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 

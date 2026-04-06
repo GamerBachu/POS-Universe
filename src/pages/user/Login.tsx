@@ -1,5 +1,5 @@
 import { useActionState, useCallback, useEffect, useMemo } from "react";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -21,9 +21,9 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const loginAction = async (
-    prevState: IActionState | null,
+    _: IActionState | null,
     formData: FormData,
   ): Promise<IActionState> => {
     try {

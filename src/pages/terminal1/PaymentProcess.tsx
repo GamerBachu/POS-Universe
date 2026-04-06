@@ -7,7 +7,7 @@ import { mapTerminalStateToOrder } from "./utils";
 import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 type PaymentProcessProps = {
     resetFilter: () => void;
@@ -19,7 +19,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
     const auth = useAuth();
     const state = useTerminalState();
     const dispatch = useTerminalDispatch();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
 
     const setPaymentMethod = useCallback(

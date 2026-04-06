@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import type { IMasterProductAttribute } from "@/types/masters";
 import type { IProductAttributeView } from "@/types/product";
 
@@ -23,7 +23,7 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
   onRemoveRow,
   onChangeRow,
 }: ProductAttributesSectionProps) => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   return (
     <div>
       <label className="text-xs font-bold uppercase text-gray-500" >

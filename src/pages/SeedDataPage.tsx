@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
 import SeedData, { masterProductData, reportSeedData } from "@/libs/db/seedData";
+import type { IProduct } from "@/types/product";
 
 import { LoggerUtils } from "@/utils";
 import { useState } from "react";
@@ -13,7 +14,6 @@ const SeedDataPage = () => {
     const [processing, setProcessing] = useState(false);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const seedData = new SeedData();
 
     const handleAddMasterAttributeData = async () => {
         setProcessing(true);
@@ -101,7 +101,7 @@ const SeedDataPage = () => {
                         stock: product.stock,
                         reorderLevel: product.reorderLevel,
                         isActive: true,
-                    },
+                    } as IProduct,
                     1,
                 );
                 if (response.success) {
@@ -172,7 +172,7 @@ const SeedDataPage = () => {
                 });
             }
             setSuccessMsg(`Successfully added ${reportSeedData.length} reports.`);
-            
+
         } catch (err) {
             LoggerUtils.logCatch(err, "SeedDataPage", "AddReportData");
             setErrorMsg("A system error occurred during report data addition.");

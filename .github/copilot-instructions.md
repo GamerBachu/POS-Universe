@@ -6,9 +6,9 @@ POS Universe is a modern, type-safe Point of Sale web system built with React 19
 
 
 ## i18n & Localization
-- All user-facing text (labels, placeholders, button text, etc.) in the product folder must use i18n keys from `src/locales/en.json` via the `useTranslation` hook.
+- All user-facing text (labels, placeholders, button text, etc.) in the product folder must use i18n keys from `src/locales/en.json` via the `useLanguage` hook.
 - **Do not import `resource` or use direct JSON imports for UI text.**
-- Always use `const { t } = useTranslation();` and reference text as `t("key.path")` (e.g., `t("common.app_name")`).
+- Always use `const { t } = useLanguage();` and reference text as `t("key.path")` (e.g., `t("common.app_name")`).
 - Do not hardcode visible text in JSX or TSX; always reference the appropriate key using `t()`.
 
 ## Key Guidelines

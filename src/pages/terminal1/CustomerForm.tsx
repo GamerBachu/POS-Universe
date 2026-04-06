@@ -2,7 +2,7 @@ import { useActionState, useEffect } from "react";
 import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import Modal from "@/components/Modal";
 
 interface CustomerFormProps {
@@ -13,7 +13,7 @@ interface CustomerFormProps {
 const CustomerForm = ({ onClose }: CustomerFormProps) => {
     const dispatch = useTerminalDispatch();
     const { customer: currentCustomer } = useTerminalState();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     const handleAction = async (
         _: IActionState | null,

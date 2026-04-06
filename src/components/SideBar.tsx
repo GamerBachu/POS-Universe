@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { SIDEBAR_MENU } from "@/routes/navigationMenu";
 import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
@@ -13,7 +13,7 @@ const SideBar = () => {
   const location = useLocation();
   const { isMinimized, minimizeWindow } = useSideBar();
 
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   // Clear search on Escape
   useEffect(() => {

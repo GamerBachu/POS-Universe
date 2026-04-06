@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { type IProduct } from "@/types/product";
 import { productApi } from "@/api/productApi";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import ProductTableRow from "./ProductTableRow";
 import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import Pagination from "@/components/Pagination";
 
 const ProductTable: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useLanguage();
 
   // URL States
   const name = searchParams.get("name") || "";
@@ -80,7 +81,7 @@ const ProductTable: React.FC = () => {
         className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center p-3 border border-gray-200 dark:border-gray-700">
         <Input
           type="text"
-          placeholder={resource.product_inventory.ph_name}
+          placeholder={t("product_inventory.ph_name")}
           value={localFilters.name}
           onChange={(e) => handleInputChange('name', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
@@ -88,7 +89,7 @@ const ProductTable: React.FC = () => {
         />
         <Input
           type="text"
-          placeholder={resource.product_inventory.ph_code}
+          placeholder={t("product_inventory.ph_code")}
           value={localFilters.code}
           onChange={(e) => handleInputChange('code', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
@@ -96,7 +97,7 @@ const ProductTable: React.FC = () => {
         />
         <Input
           type="text"
-          placeholder={resource.product_inventory.ph_sku}
+          placeholder={t("product_inventory.ph_sku")}
           value={localFilters.sku}
           onChange={(e) => handleInputChange('sku', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
@@ -104,7 +105,7 @@ const ProductTable: React.FC = () => {
         />
         <Input
           type="text"
-          placeholder={resource.product_inventory.ph_barcode}
+          placeholder={t("product_inventory.ph_barcode")}
           value={localFilters.barcode}
           onChange={(e) => handleInputChange('barcode', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
@@ -115,9 +116,9 @@ const ProductTable: React.FC = () => {
           value={localFilters.active}
           onChange={(e) => handleInputChange('active', e.target.value)}
         >
-          <option value="">{resource.common.all_status}</option>
-          <option value="true">{resource.product_inventory.active}</option>
-          <option value="false">{resource.product_inventory.inactive}</option>
+          <option value="">{t("common.all_status")}</option>
+          <option value="true">{t("product_inventory.active")}</option>
+          <option value="false">{t("product_inventory.inactive")}</option>
         </Select>
 
         <div className="flex gap-1 lg:justify-end">
@@ -126,14 +127,14 @@ const ProductTable: React.FC = () => {
             isLoading={isLoading}
             className="bg-blue-600 hover:bg-blue-700 py-1.5"
           >
-            {resource.common.search}
+            {t("common.search")}
           </Button>
           <Button
             onClick={handleClear}
             isLoading={isLoading}
             className="bg-gray-600 hover:bg-gray-700 py-1.5"
           >
-            {resource.common.reset}
+            {t("common.reset")}
           </Button>
         </div>
       </div>
@@ -143,13 +144,13 @@ const ProductTable: React.FC = () => {
         <table className="w-full min-w-[700px] text-left border-collapse table-auto">
           <thead>
             <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
-              <th className="p-3 w-16">{resource.common.id}</th>
-              <th className="p-3">{resource.product_inventory.name}</th>
-              <th className="p-3">{resource.product_inventory.sku}</th>
-              <th className="p-3 text-right">{resource.product_inventory.selling_price}</th>
-              <th className="p-3 text-center">{resource.product_inventory.stock}</th>
-              <th className="p-3 text-center">{resource.common.status}</th>
-              <th className="p-3 w-44 text-center">{resource.common.action}</th>
+              <th className="p-3 w-16">{t("common.id")}</th>
+              <th className="p-3">{t("product_inventory.name")}</th>
+              <th className="p-3">{t("product_inventory.sku")}</th>
+              <th className="p-3 text-right">{t("product_inventory.selling_price")}</th>
+              <th className="p-3 text-center">{t("product_inventory.stock")}</th>
+              <th className="p-3 text-center">{t("common.status")}</th>
+              <th className="p-3 w-44 text-center">{t("common.action")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-transparent">
@@ -158,7 +159,7 @@ const ProductTable: React.FC = () => {
             ) : data.length === 0 ? (
               <tr>
                 <td colSpan={7} className="p-8 text-center text-sm text-gray-500 italic">
-                  {resource.common.no_record}
+                  {t("common.no_record")}
                 </td>
               </tr>
             ) : (

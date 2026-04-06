@@ -6,14 +6,14 @@ import type { ICartItem } from "@/types/terminal1";
 import { calculateFinalPrice } from "./utils";
 import { CloseIcon } from "@/libs/icons";
 
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 
 const SectionLeft = () => {
     const state = useTerminalState();
     const dispatch = useTerminalDispatch();
     const { cart, adjustment = [] } = state;
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     const totals = useMemo(() => {
         // 1. Calculate base Subtotal

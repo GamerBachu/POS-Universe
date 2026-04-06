@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { type ISystemLog } from "@/types/systemLog";
 import { systemLogApi } from "@/api";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import SystemLogTableRow from "./SystemLogTableRow";
 
 import { useSearchParams } from "react-router-dom";
@@ -13,7 +13,7 @@ import Input from "@/components/Input";
 import Pagination from "@/components/Pagination";
 
 const SystemLogTable = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const typeTerm = searchParams.get("type") || "";

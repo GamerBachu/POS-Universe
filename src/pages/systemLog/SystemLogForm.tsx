@@ -1,6 +1,6 @@
 import { useActionState, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { systemLogApi } from "@/api";
 import { type ISystemLog } from "@/types/systemLog";
 import type { IActionState } from "@/types/actionState";
@@ -12,7 +12,7 @@ import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/Button";
 
 const SystemLogForm = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   // Directly extract and normalize params
   const { id: rawId, action: rawAction } = useParams();
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const SystemLogForm = () => {
   }, [id, action, onSendBack]);
 
   const handleAction = async (
-    prevState: IActionState | null,
+    _: IActionState | null,
     formData: FormData,
   ): Promise<IActionState> => {
     try {
@@ -116,17 +116,17 @@ const SystemLogForm = () => {
         setInitialData(payload);
         // Optional: you could navigate back here automatically
         // onSendBack("0");
-        return { success: true, message: resource.common.success_save };
+        return { success: true, message: t("common.success_save") };
       }
 
       return {
         success: false,
-        message: resource.common.error,
+        message: t("common.error"),
       };
     } catch {
       return {
         success: false,
-        message: resource.common.error,
+        message: t("common.error"),
       };
     }
   };

@@ -1,9 +1,10 @@
 import CommonLayout from '@/layouts/CommonLayout';
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 
 const Dashboard = () => {
+    const { t } = useLanguage();
     return (
-        <CommonLayout h1={resource.navigation.dashboard_label}>
+        <CommonLayout h1={t("navigation.dashboard_label")}>
             {/* Report Placeholders */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 {/* Summary Cards */}

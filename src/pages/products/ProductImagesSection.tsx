@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import type { IProductImageView } from "@/types/product";
 
 interface ProductImagesSectionProps {
@@ -19,7 +19,7 @@ export const ProductImagesSection = ({
   onRemoveRow,
   onChangeRow,
 }: ProductImagesSectionProps) => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   return (
     <div>
       <label className="text-xs font-bold uppercase text-gray-500" >

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { useLocation, useNavigate } from "react-router";
 import { userApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
@@ -91,7 +91,7 @@ const Verify = () => {
         handleVerification();
     }, [auth, navigate, getSafeRedirectUrl, location]);
 
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     return (<Loader label={t("common.verify_user")}></Loader>);
 };
 

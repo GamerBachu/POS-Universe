@@ -4,9 +4,10 @@ import { reportApi, type IZReportData } from "@/api/reportApi";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import PrintService from "@/components/PrintService";
 import Button from "@/components/Button";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 
 const ZReportView: React.FC = () => {
+  const { t } = useLanguage();
   const [data, setData] = useState<IZReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -147,10 +148,10 @@ const ZReportView: React.FC = () => {
           className="bg-blue-600 hover:bg-blue-700 p-2 w-100"
           disabled={isPrinting}
           onClick={() => setIsPrinting(true)}
-          title={resource.common.print}
+          title={t("common.print")}
           isLoading={loading}
         >
-          {resource.common.print}
+          {t("common.print")}
         </Button>
       </div>
     </div>

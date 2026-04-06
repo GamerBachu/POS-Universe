@@ -4,7 +4,7 @@ import type { IProductView } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { calculateFinalPrice } from "./utils";
 import { PlusIcon } from "@/libs/icons";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 type ProductCardProps = {
     product: IProductView;
@@ -14,7 +14,7 @@ type ProductCardProps = {
 
 const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
     const currencySymbol = useCurrencySymbol();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     const isLowStock = (product.stock || 0) <= (product.reorderLevel || 0);
 
     return (

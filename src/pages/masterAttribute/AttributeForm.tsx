@@ -1,6 +1,6 @@
 import { useActionState, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import resource from "@/locales/en.json";
+
 import { masterProductAttributeApi } from "@/api";
 import { type IMasterProductAttribute } from "@/types/masters";
 import type { IActionState } from "@/types/actionState";
@@ -10,12 +10,14 @@ import LoggerUtils from "@/utils/logger";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import PageHeader from "@/components/PageHeader";
 import Button from "@/components/Button";
+import { useLanguage } from "@/contexts/language";
 
 
 const AttributeForm = () => {
   // Directly extract and normalize params
   const { id: rawId, action: rawAction } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const id = Number(rawId);
   const action = rawAction?.toLowerCase() || "";
@@ -63,7 +65,7 @@ const AttributeForm = () => {
   }, [id, action, onSendBack]);
 
   const handleAction = async (
-    prevState: IActionState | null,
+    _: IActionState | null,
     formData: FormData,
   ): Promise<IActionState> => {
     try {
@@ -72,9 +74,9 @@ const AttributeForm = () => {
         const res = await masterProductAttributeApi.delete(id);
         if (res.success) {
           onSendBack();
-          return { success: true, message: resource.common.success_delete };
+          return { success: true, message: t("common.success_delete") };
         }
-        return { success: false, message: resource.common.fail_delete };
+        return { success: false, message: t("common.fail_delete") };
       }
 
       // 2. Add/Edit Logic
@@ -84,7 +86,7 @@ const AttributeForm = () => {
       if (!name?.trim()) {
         return {
           success: false,
-          message: resource.common.req_name,
+          message: t("common.req_name"),
         };
       }
 
@@ -103,19 +105,19 @@ const AttributeForm = () => {
       if (response.status === 400) {
         return {
           success: false,
-          message: resource.common.req_name,
+          message: t("common.req_name"),
         };
       }
       if (response.status === 409) {
         return {
           success: false,
-          message: resource.mst_product_attribute.already_exists,
+          message: t("mst_product_attribute.already_exists"),
         };
       }
 
       if ((response.status === 200 || response.status === 201) && response.success) {
         setInitialData(payload);
-        return { success: true, message: resource.common.success_save };
+        return { success: true, message: t("common.success_save") };
       }
       // Handle errors
 
@@ -123,13 +125,13 @@ const AttributeForm = () => {
       LoggerUtils.logError(response, "AttributeForm", "handleAction", JSON.stringify(payload));
       return {
         success: false,
-        message: resource.common.error,
+        message: t("common.error"),
       };
     } catch (error: unknown) {
       LoggerUtils.logCatch(error, "AttributeForm", "handleAction", "107");
       return {
         success: false,
-        message: resource.common.error,
+        message: t("common.error"),
       };
     }
   };
@@ -152,12 +154,12 @@ const AttributeForm = () => {
 
 
   return (
-    <CommonLayout h1={resource.navigation.master_pro__attr_label}>
+    <CommonLayout h1={t("navigation.master_pro__attr_label")}>
 
-      <PageHeader
-        subtitle={`${action} ${resource.navigation.master_pro__attr_label}`}
+      < PageHeader
+        subtitle={`${action} ${t("navigation.master_pro__attr_label")}`}
         btnClass="bg-gray-600 hover:bg-gray-700"
-        btnLabel={resource.common.back_page}
+        btnLabel={t("common.back_page")}
         onClick={onSendBack}
       />
 
@@ -169,7 +171,7 @@ const AttributeForm = () => {
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {resource.common.name}
+                {t("common.name")}
                 <span className="text-red-500 ml-1">*</span>
               </label>
               <input
@@ -179,7 +181,7 @@ const AttributeForm = () => {
                 disabled={isReadOnly}
                 defaultValue={initialData.name}
                 key={`name-${initialData.name}`}
-                placeholder={resource.common.ph_name}
+                placeholder={t("common.ph_name")}
                 className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
@@ -189,10 +191,10 @@ const AttributeForm = () => {
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                  {resource.common.active}
+                  {t("common.active")}
                 </span>
                 <span className="text-sm text-gray-500">
-                  {resource.mst_product_attribute.toggle_active}
+                  {t("mst_product_attribute.toggle_active")}
                 </span>
               </div>
 
@@ -219,7 +221,7 @@ const AttributeForm = () => {
               onClick={onSendBack}
               className="bg-gray-600 hover:bg-gray-700"
             >
-              {resource.common.back_page}
+              {t("common.back_page")}
             </Button>
             {action !== "view" && (
               <Button
@@ -227,7 +229,7 @@ const AttributeForm = () => {
                 disabled={isPending}
                 className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"} disabled:opacity-50 `}
               >
-                {isPending ? "..." : action === "delete" ? resource.common.delete : resource.common.save}
+                {isPending ? "..." : action === "delete" ? t("common.delete") : t("common.save")}
               </Button>
             )}
           </div>

@@ -1,5 +1,5 @@
 import { useActionState } from "react";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link } from "react-router-dom";
@@ -26,9 +26,9 @@ interface ActionState {
 }
 
 const Register = () => {
-    const { t } = useTranslation();
+    const { t } = useLanguage();
     const loginAction = async (
-        prevState: ActionState | null,
+        _: ActionState | null,
         formData: FormData,
     ): Promise<ActionState> => {
         try {

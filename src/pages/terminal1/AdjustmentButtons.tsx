@@ -2,14 +2,14 @@ import { useState } from "react";
 import AdjustmentModal from "./AdjustmentModal";
 import type { TAdjustmentCategory } from "@/types/terminal1";
 import { PercentageIcon, PlusIcon } from "@/libs/icons";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 
 const AdjustmentButtons = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState<TAdjustmentCategory | undefined>();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     const onAddDiscount = () => {
         setIsOpen(true);

@@ -1,12 +1,12 @@
 import CommonLayout from "@/layouts/CommonLayout";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { PATHS } from "@/routes/paths";
 import { useNavigate } from "react-router-dom";
 import SystemLogTable from "./SystemLogTable";
 import PageHeader from "@/components/PageHeader";
 
 const SystemLogList = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   return (
     <CommonLayout h1={t("navigation.system_log_list_label")}> 

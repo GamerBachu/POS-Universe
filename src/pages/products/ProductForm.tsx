@@ -17,7 +17,7 @@ import { AlertSuccess, AlertError, AlertWarning } from "@/components/ActionStatu
 import type { IMasterProductAttribute } from "@/types/masters";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonLayout from "@/layouts/CommonLayout";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import { PATHS } from "@/routes/paths";
 
 import type {
@@ -52,6 +52,7 @@ const initialState = { success: false, message: "", status: 0 };
 
 const ProductForm: React.FC = () => {
   const { id: rawId, action: rawAction } = useParams<{ id: string; action: string; }>();
+  const { t } = useLanguage();
   const auth = useAuth();
   const navigate = useNavigate();
   const id = Number(rawId);
@@ -277,9 +278,9 @@ const ProductForm: React.FC = () => {
         const res = await handleProductDeletion(id, userId);
         if (res.success) {
           onSendBack();
-          return { success: true, message: resource.common.success_delete };
+          return { success: true, message: t("common.success_delete") };
         }
-        return { success: false, message: resource.common.fail_delete };
+        return { success: false, message: t("common.fail_delete") };
       }
 
       // Validate payload
@@ -287,7 +288,7 @@ const ProductForm: React.FC = () => {
       if (!validation.valid) {
         return {
           success: false,
-          message: resource.product_inventory.required_fields,
+          message: t("product_inventory.required_fields"),
         };
       }
 
@@ -311,9 +312,9 @@ const ProductForm: React.FC = () => {
 
       // Handle API response errors
       const errorMap = {
-        400: resource.product_inventory.required_fields,
-        409: resource.product_inventory.already_exists,
-        404: resource.product_inventory.product_not_found,
+        400: t("product_inventory.required_fields"),
+        409: t("product_inventory.already_exists"),
+        404: t("product_inventory.product_not_found"),
       };
 
       const apiResult = handleApiResponse(response, errorMap);
@@ -410,13 +411,13 @@ const ProductForm: React.FC = () => {
       if (warningMessages.length > 0) {
         return {
           success: true,
-          message: `${resource.common.success_save} Warnings: ${warningMessages.join(", ")}`,
+          message: `${t("common.success_save")} Warnings: ${warningMessages.join(", ")}`,
         };
       }
-      return { success: true, message: resource.common.success_save };
+      return { success: true, message: t("common.success_save") };
     } catch (error) {
       LoggerUtils.logCatch(error, "ProductForm", "handleAction");
-      return { success: false, message: resource.common.error, status: 500 };
+      return { success: false, message: t("common.error"), status: 500 };
     }
   };
 
@@ -427,11 +428,11 @@ const ProductForm: React.FC = () => {
   const isReadOnly = action === "view" || action === "delete";
 
   return (
-    <CommonLayout h1={resource.navigation.product_list_label}>
+    <CommonLayout h1={t("navigation.product_list_label")}>
       <PageHeader
-        subtitle={`${action} ${resource.product_inventory.name}`}
+        subtitle={`${action} ${t("product_inventory.name")}`}
         btnClass="bg-gray-600  hover:bg-gray-700"
-        btnLabel={resource.common.back_page}
+        btnLabel={t("common.back_page")}
         onClick={() => navigate(PATHS.PRODUCT_LIST)}
       />
 
@@ -453,8 +454,8 @@ const ProductForm: React.FC = () => {
         <RadioActiveToggle
           isActive={item.isActive}
           isReadOnly={isReadOnly}
-          title={resource.common.active}
-          desc={resource.common.toggle_active}
+          title={t("common.active")}
+          desc={t("common.toggle_active")}
           name="isActive"
         />
 
@@ -499,7 +500,7 @@ const ProductForm: React.FC = () => {
         {(state?.success === false) && <AlertError message={state?.message} />}
 
         {/* SECTION 9: Delete Confirmation Message */}
-        {action === "delete" && <AlertWarning message={resource.product_inventory.delete_info} />}
+        {action === "delete" && <AlertWarning message={t("product_inventory.delete_info")} />}
 
         {/* SECTION 9:Action Footer */}
         <ProductFormFooter

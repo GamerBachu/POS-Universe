@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 
 interface ProductFormFooterProps {
   action: string;
@@ -15,7 +15,7 @@ export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
   isReadOnly,
   onBack,
 }: ProductFormFooterProps) => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   return (
     <div className="flex justify-end gap-2 border-t pt-4 dark:border-gray-700">
       <Button

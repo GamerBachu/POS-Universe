@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type ISystemLog } from "@/types/systemLog";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import { toDisplayString } from "@/utils/helper/dateUtils";
 
 interface RowProps {
@@ -9,7 +9,7 @@ interface RowProps {
 }
 
 const SystemLogTableRow = ({ item }: RowProps) => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   return (
     <tr className="group hover:bg-gray-50/80 dark:hover:bg-gray-800/40 transition-colors border-b last:border-0 border-gray-100 dark:border-gray-700/50">
 

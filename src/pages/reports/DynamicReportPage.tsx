@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import ZReportView from './ZReportView';
 import InventoryReport from './InventoryReport';
 import CommonLayout from '@/layouts/CommonLayout';
@@ -19,6 +19,7 @@ const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
 const DynamicReportPage = () => {
     const { page, version } = useParams<{ page: string; version: string; }>();
     const { info } = useAuth();
+    const { t } = useLanguage();
 
     const [reports, setReports] = useState<IReport[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +71,7 @@ const DynamicReportPage = () => {
     // UI Logic
     if (isLoading) {
         return (
-            <CommonLayout h1={resource.navigation.report_label}>
+            <CommonLayout h1={t("navigation.report_label")}>
                 <div className="p-10 flex justify-center items-center">
                     <Loader />
                 </div>
@@ -85,7 +86,7 @@ const DynamicReportPage = () => {
     const ActiveReport = validation.component;
 
     return (
-        <CommonLayout h1={resource.navigation.report_label}>
+        <CommonLayout h1={t("navigation.report_label")}>
             <div className="bg-white dark:bg-gray-800 rounded-md shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 {ActiveReport && <ActiveReport />}
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
-import { useTranslation } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 
@@ -18,7 +18,7 @@ interface AdjustmentModalProps {
 
 const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalProps) => {
     const dispatch = useTerminalDispatch();
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     const [label, setLabel] = useState("");
     const [value, setValue] = useState("");

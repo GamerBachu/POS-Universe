@@ -1,3 +1,3 @@
 export { LanguageProvider } from "./LanguageProvider";
-export { useTranslation } from "./useTranslation";
+export { useLanguage } from "./useLanguage";
 export * from "./languages";

@@ -4,7 +4,7 @@ import { orderServiceApi } from "@/api/orderServiceApi";
 import type { IOrderView } from "@/types/orders";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { toDisplayString } from "@/utils/helper/dateUtils";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import Loader from "@/components/Loader";
 import OrderStatusManage from "./OrderStatusManage";
 import CommonLayout from "@/layouts/CommonLayout";
@@ -19,6 +19,7 @@ import PrintService from "@/components/PrintService";
 
 const OrderForm = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const { id } = useParams<{ id: string; }>();
 
     const [orderView, setOrderView] = useState<IOrderView | null>(null);
@@ -60,11 +61,11 @@ const OrderForm = () => {
 
     // 1. Loader View (Centered)
     if (loading) return (
-        <CommonLayout h1={resource.navigation.product_list_label}>
+        <CommonLayout h1={t("navigation.product_list_label")}>
             <PageHeader
-                subtitle={`${resource.pos_t1.order_details_title}`}
+                subtitle={`${t("pos_t1.order_details_title")}`}
                 btnClass="bg-gray-600 hover:bg-gray-700"
-                btnLabel={resource.common.back_page}
+                btnLabel={t("common.back_page")}
                 onClick={onSendBack}
             />
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
@@ -76,15 +77,15 @@ const OrderForm = () => {
     // 2. Error View
     if (!orderView) {
         return (
-            <CommonLayout h1={resource.navigation.product_list_label}>
+            <CommonLayout h1={t("navigation.product_list_label")}>
                 <PageHeader
-                    subtitle={`${resource.pos_t1.order_details_title}`}
+                    subtitle={`${t("pos_t1.order_details_title")}`}
                     btnClass="bg-gray-600 hover:bg-gray-700"
-                    btnLabel={resource.common.back_page}
+                    btnLabel={t("common.back_page")}
                     onClick={onSendBack}
                 />
                 <div className="p-10 text-center text-red-500 font-bold">
-                    {resource.common.error}
+                    {t("common.error")}
                 </div>
             </CommonLayout>
         );
@@ -95,12 +96,12 @@ const OrderForm = () => {
 
 
     return (
-        <CommonLayout h1={resource.navigation.product_list_label}>
+        <CommonLayout h1={t("navigation.product_list_label")}>
 
             <PageHeader
-                subtitle={`${resource.pos_t1.order_details_title} ${order.orderNumber}`}
+                subtitle={`${t("pos_t1.order_details_title")} ${order.orderNumber}`}
                 btnClass="bg-gray-600 hover:bg-gray-700"
-                btnLabel={resource.common.back_page}
+                btnLabel={t("common.back_page")}
                 onClick={onSendBack}
             />
 
@@ -111,17 +112,17 @@ const OrderForm = () => {
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div className="p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
                             <h3 className="font-bold  uppercase text-xs tracking-wider">
-                                {resource.pos_t1.order_items}
+                                {t("pos_t1.order_items")}
                             </h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50 dark:bg-gray-900/20 ">
                                     <tr>
-                                        <th className="px-4 py-3 text-left font-medium">{resource.pos_t1.col_item}</th>
-                                        <th className="px-4 py-3 text-center font-medium">{resource.pos_t1.col_qty}</th>
-                                        <th className="px-4 py-3 text-right font-medium">{resource.pos_t1.col_unit_price}</th>
-                                        <th className="px-4 py-3 text-right font-medium">{resource.pos_t1.col_price}</th>
+                                        <th className="px-4 py-3 text-left font-medium">{t("pos_t1.col_item")}</th>
+                                        <th className="px-4 py-3 text-center font-medium">{t("pos_t1.col_qty")}</th>
+                                        <th className="px-4 py-3 text-right font-medium">{t("pos_t1.col_unit_price")}</th>
+                                        <th className="px-4 py-3 text-right font-medium">{t("pos_t1.col_price")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y dark:divide-gray-700">
@@ -141,7 +142,7 @@ const OrderForm = () => {
                     {/* Financial Summary */}
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-3">
                         <div className="flex justify-between">
-                            <span>{resource.pos_t1.subtotal}</span>
+                            <span>{t("pos_t1.subtotal")}</span>
                             <span className="font-medium">{displayPrice(order.subtotal)}</span>
                         </div>
 
@@ -162,7 +163,7 @@ const OrderForm = () => {
                         ))}
 
                         <div className="flex justify-between font-black text-2xl border-t pt-4 mt-4  dark:text-white border-dashed dark:border-gray-700">
-                            <span className="uppercase tracking-tighter text-lg font-bold ">{resource.pos_t1.grand_total}</span>
+                            <span className="uppercase tracking-tighter text-lg font-bold ">{t("pos_t1.grand_total")}</span>
                             <span className="font-mono">{displayPrice(order.grandTotal)}</span>
                         </div>
                     </div>
@@ -171,15 +172,15 @@ const OrderForm = () => {
                     {orderView?.cancellation && orderView.cancellation.length > 0 && (
                         <div className="space-y-1 mb-4">
                             <label className="text-[10px] font-black uppercase text-gray-400 ml-1">
-                                {resource.common.status}
+                                {t("common.status")}
                             </label>
                             <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden max-h-32 overflow-y-auto custom-scrollbar">
                                 <table className="w-full text-[10px] text-left">
                                     <thead className="sticky top-0 bg-gray-100 dark:bg-gray-900 text-gray-500 uppercase font-black border-b dark:border-gray-700">
                                         <tr>
-                                            <th className="px-2 py-1.5">{resource.pos_t1.col_status}</th>
-                                            <th className="px-2 py-1.5">{resource.pos_t1.manage_reason}</th>
-                                            <th className="px-2 py-1.5 text-right">{resource.pos_t1.col_date}</th>
+                                            <th className="px-2 py-1.5">{t("pos_t1.col_status")}</th>
+                                            <th className="px-2 py-1.5">{t("pos_t1.manage_reason")}</th>
+                                            <th className="px-2 py-1.5 text-right">{t("pos_t1.col_date")}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y dark:divide-gray-700 bg-white dark:bg-gray-800/50">
@@ -211,23 +212,23 @@ const OrderForm = () => {
                     {/* Order Meta */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div className="p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 font-bold text-xs uppercase ">
-                            {resource.pos_t1.order_information}
+                            {t("pos_t1.order_information")}
                         </div>
                         <div className="p-4 space-y-4 text-sm">
                             <div className="flex justify-between">
-                                <span className="">{resource.pos_t1.col_order_no}</span>
+                                <span className="">{t("pos_t1.col_order_no")}</span>
                                 <span className="font-medium">{order.orderNumber}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="">{resource.pos_t1.col_status}</span>
+                                <span className="">{t("pos_t1.col_status")}</span>
                                 <OrderStatusLabel order={order} />
                             </div>
                             <div className="flex justify-between">
-                                <span className="">{resource.pos_t1.col_date}</span>
+                                <span className="">{t("pos_t1.col_date")}</span>
                                 <span className="font-medium">{toDisplayString(order.createdAt)}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="">{resource.pos_t1.cashier}</span>
+                                <span className="">{t("pos_t1.cashier")}</span>
                                 <span className="font-medium">{(cashierName) ? cashierName : order.cashierId}</span>
                             </div>
                         </div>
@@ -236,7 +237,7 @@ const OrderForm = () => {
                     {/* Customer & Payment */}
                     {customer && (
                         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
-                            <h4 className="text-xs font-bold uppercase  mb-3 tracking-widest">{resource.pos_t1.customer_profile}</h4>
+                            <h4 className="text-xs font-bold uppercase  mb-3 tracking-widest">{t("pos_t1.customer_profile")}</h4>
                             <p className="font-bold ">{customer.name}</p>
                             {customer.phone && (<p className="text-xs ">{customer.phone}</p>)}
                             {customer.email && (<p className="text-xs ">{customer.email}</p>)}
@@ -245,7 +246,7 @@ const OrderForm = () => {
                     )}
 
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
-                        <h4 className="text-xs font-bold uppercase  mb-3 tracking-widest">{resource.pos_t1.payment_details}</h4>
+                        <h4 className="text-xs font-bold uppercase  mb-3 tracking-widest">{t("pos_t1.payment_details")}</h4>
                         {payments?.map((p, idx) => (
                             <div key={`${p.category}-${idx}`} className="flex justify-between items-center">
                                 <span className="text-sm font-medium">{p.category} {p.method ? `(${p.method})` : ""}</span>
@@ -260,29 +261,29 @@ const OrderForm = () => {
                             type="button"
                             onClick={onSendBack}
                             className="bg-gray-600 hover:bg-gray-700 py-2"
-                            title={resource.common.back_page}
+                            title={t("common.back_page")}
                             isLoading={loading}
                         >
-                            {resource.common.back_page}
+                            {t("common.back_page")}
                         </Button>
                         <Button
                             type="button"
                             className="bg-blue-600 hover:bg-blue-700 py-2"
                             onClick={() => setIsPrinting(true)}
-                            title={resource.common.print}
+                            title={t("common.print")}
                             isLoading={loading}
                         >
-                            {resource.common.print}
+                            {t("common.print")}
                         </Button>
 
                         <Button
                             type="button"
                             onClick={() => setIsModalOpen(true)}
                             className="bg-green-600 hover:bg-green-700  py-2"
-                            title={resource.common.manage_status}
+                            title={t("common.manage_status")}
                             isLoading={loading}
                         >
-                            {resource.common.manage_status}
+                            {t("common.manage_status")}
                         </Button>
                     </div>
                 </div>
