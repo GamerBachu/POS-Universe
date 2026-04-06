@@ -9,11 +9,11 @@ import { CloseIcon } from "@/libs/icons";
 import Input from "./Input";
 
 const SideBar = () => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const { isMinimized, minimizeWindow } = useSideBar();
 
-  const { t } = useLanguage();
 
   // Clear search on Escape
   useEffect(() => {
@@ -97,12 +97,11 @@ const SideBar = () => {
               // 3. Logic:
               // - If it's the dashboard ("/"), check for exact match.
               // - Otherwise, if the first segments match (e.g., both are "product"), it's active.
-              const isActive = item.path === "/"
-                ? location.pathname === "/"
-                : itemModule === currentModule;
+              const isActive = item.path === "/" ? location.pathname === "/" : itemModule === currentModule;
 
               return (
-                <li key={item.path} title={item.description}>
+                <li key={item.path}
+                  title={t(item.description)}>
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
@@ -111,7 +110,7 @@ const SideBar = () => {
                       }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>
-                    <span className="text-sm truncate">{item.label}</span>
+                    <span className="text-sm truncate">{t(item.label)}</span>
                   </Link>
                 </li>
               );

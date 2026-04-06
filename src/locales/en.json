@@ -69,7 +69,9 @@
     "open": "Open",
     "close": "Close",
 
-    "session_expired": "Session expired. Please login again."
+    "session_expired": "Session expired. Please login again.",
+
+    "Esc": "ESC"
   },
 
   "login": {
