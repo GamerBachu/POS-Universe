@@ -2,7 +2,7 @@ import { memo } from "react";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import type { IProductView } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
-import { calculateFinalPrice } from "./utils";
+import { calculateFinalPrice } from "@/utils/financial";
 import { PlusIcon } from "@/libs/icons";
 import { useLanguage } from "@/contexts/language";
 

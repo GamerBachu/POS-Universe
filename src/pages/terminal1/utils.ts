@@ -1,6 +1,7 @@
 import type { IOrder, IOrderAdjustment, IOrderDiscount, IOrderItem, IOrderPayment, IOrderView } from "@/types/orders";
-import type { IProduct, IProductView } from "@/types/product";
+import type { IProductFilter } from "@/types/product";
 import { TOrderStatus, type ITerminalState } from "@/types/terminal1";
+import { calculateFinalPrice } from "@/utils/financial";
 import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 import { roundNumber } from "@/utils/helper/numberUtils";
 
@@ -26,30 +27,6 @@ export const newOrderState: ITerminalState = {
 
 
 
-/**
- * Calculates the final price after applying discount and then tax.
- * Follows standard government regulation: Discount -> Taxable Amount -> Tax.
- */
-export const calculateFinalPrice = (product: IProductView | IProduct): number => {
-    const {
-        sellingPrice = 0,
-        taxRate = 0,
-        discountInPercent = 0
-    } = product;
-
-    // 1. Calculate Taxable Amount (Price after discount)
-    const discountAmount = sellingPrice * (discountInPercent / 100);
-    const taxableAmount = sellingPrice - discountAmount;
-
-    // 2. Calculate Tax on the discounted amount
-    const taxAmount = taxableAmount * (taxRate / 100);
-
-    // 3. Final Price
-    const finalPrice = taxableAmount + taxAmount;
-
-    // 4. Precision Rounding to 2 decimal places
-    return roundNumber(finalPrice, 2);
-};
 
 
 
@@ -170,3 +147,43 @@ export const mapTerminalStateToOrder = (state: ITerminalState, userId: number): 
 
     return { order, items, adjustments, discounts, payments, customer: customer ?? undefined };
 };
+
+export const INITIAL_FILTER: IProductFilter = {
+    code: undefined,
+    sku: undefined,
+    barcode: undefined,
+    name: undefined,
+    sellingPrice: undefined,
+    taxRate: undefined,
+    stock: undefined,
+    reorderLevel: undefined,
+    isActive: "",
+    currentPage: 1,
+    pageSize: 200,
+};
+
+/**
+ * Compares the current filter state against the initial default values.
+ * Returns true if all filter properties match the INITIAL_FILTER.
+ */
+export const isInitialFilter = (current: IProductFilter): boolean => {
+    // Helper to treat null, undefined, and empty strings as equivalent for comparison
+    const normalize = (val: string | number | null | undefined): string | number | undefined => {
+        if (val === "" || val === null) {
+            return undefined;
+        }
+        return val;
+    };
+
+    return (
+        normalize(current.code) === normalize(INITIAL_FILTER.code) &&
+        normalize(current.sku) === normalize(INITIAL_FILTER.sku) &&
+        normalize(current.barcode) === normalize(INITIAL_FILTER.barcode) &&
+        normalize(current.name) === normalize(INITIAL_FILTER.name) &&
+        normalize(current.sellingPrice) === normalize(INITIAL_FILTER.sellingPrice) &&
+        normalize(current.taxRate) === normalize(INITIAL_FILTER.taxRate) &&
+        normalize(current.stock) === normalize(INITIAL_FILTER.stock) &&
+        normalize(current.reorderLevel) === normalize(INITIAL_FILTER.reorderLevel) &&
+        normalize(current.isActive) === normalize(INITIAL_FILTER.isActive)
+    );
+}; 

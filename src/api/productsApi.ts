@@ -5,6 +5,7 @@ import { productAttributeApi } from "./productAttributeApi";
 import { productImageApi } from "./productImageApi";
 import { productDescriptionApi } from "./productDescriptionApi";
 import { productKeywordApi } from "./productKeywordApi";
+import { calculateFinalPrice } from "@/utils/financial";
 
 export class productsApi {
     private static getErrorMessage(error: unknown): string {
@@ -79,7 +80,7 @@ export class productsApi {
             const fIsActive = payload.isActive;
             const fCurrentPage = payload.currentPage;
             const fPageSize = payload.pageSize;
-
+            console.log(payload);
             // 1. Initiate collection using the 'id' index in reverse (DESC)
             // This ensures the newest products (higher IDs) are processed first
             const collection = db.products.orderBy("id").reverse().filter(item => {
@@ -91,7 +92,10 @@ export class productsApi {
                 const itemIsActive = !!item.isActive;
                 const matchesStatus = !fIsActive || (fIsActive === "true" && itemIsActive) || (fIsActive === "false" && !itemIsActive);
 
-                const matchesSellingPrice = fSellingPrice === undefined || fSellingPrice === null || item.sellingPrice === fSellingPrice;
+                // Use shared util for final price
+                const finalPrice = calculateFinalPrice(item);
+                const matchesSellingPrice = fSellingPrice === undefined || fSellingPrice === null || Math.floor(finalPrice) === Math.floor(fSellingPrice);
+
                 const matchesTaxRate = fTaxRate === undefined || fTaxRate === null || item.taxRate === fTaxRate;
                 const matchesStock = fStock === undefined || fStock === null || item.stock === fStock;
                 const matchesReorderLevel = fReorderLevel === undefined || fReorderLevel === null || item.reorderLevel === fReorderLevel;

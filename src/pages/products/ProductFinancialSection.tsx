@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
 import { useLanguage } from "@/contexts/language";
 import type { IProduct } from "@/types/product";
-import { calculateFinalPrice } from "../terminal1/utils";
+import { calculateFinalPrice } from "@/utils/financial";
 
 interface ProductFinancialSectionProps {
   item: IProduct;

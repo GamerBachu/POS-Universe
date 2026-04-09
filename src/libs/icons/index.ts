@@ -11,4 +11,5 @@ export { default as PersonCircleIcon } from "./PersonCircleIcon";
 export { default as CalendarIcon } from "./PersonCircleIcon";
 export { default as UserIcon } from "./PersonCircleIcon";
 export { default as ChevronRightIcon } from "./ChevronRightIcon";
+export { default as FilterIcon } from "./FilterIcon";
 

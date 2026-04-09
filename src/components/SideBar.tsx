@@ -1,7 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/language";
+import type { TranslationKey } from "@/contexts/language/type";
 import { SIDEBAR_MENU } from "@/routes/navigationMenu";
+import { PATHS } from "@/routes/paths";
 import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
@@ -31,7 +33,11 @@ const SideBar = () => {
     if (searchTerm.trim()) {
       const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
       items = SIDEBAR_MENU.filter((item) => {
-        const contentToSearch = `${item.label} ${item.description || ""}`.toLowerCase();
+        // Search against translated text for a better user experience
+        const translatedLabel = t(item.label as TranslationKey).toLowerCase();
+        const translatedDesc = item.description ? t(item.description as TranslationKey).toLowerCase() : "";
+        const contentToSearch = `${translatedLabel} ${translatedDesc}`;
+
         return searchWords.every((word) => contentToSearch.includes(word));
       });
     }
@@ -42,7 +48,7 @@ const SideBar = () => {
       seenPaths.add(item.label);
       return true;
     });
-  }, [searchTerm]);
+  }, [searchTerm, t]);
 
   return (
     <>
@@ -75,7 +81,7 @@ const SideBar = () => {
                 </button>
               ) : (
                 <span className="text-[9px] font-bold text-gray-300 dark:text-gray-600 pointer-events-none group-hover:opacity-0 transition-opacity">
-                  ESC
+                  {t("common.esc")}
                 </span>
               )}
             </div>
@@ -94,14 +100,19 @@ const SideBar = () => {
               const currentSegments = location.pathname.split('/').filter(Boolean);
               const currentModule = currentSegments[0];
 
-              // 3. Logic:
-              // - If it's the dashboard ("/"), check for exact match.
-              // - Otherwise, if the first segments match (e.g., both are "product"), it's active.
-              const isActive = item.path === "/" ? location.pathname === "/" : itemModule === currentModule;
+              /**
+               * 3. Logic:
+               * - If it's the dashboard item, mark active if on root "/" or the dashboard path itself.
+               * - Otherwise, match by the first segment of the path (module-based highlighting).
+               */
+              const isHomeItem = item.path === (PATHS.START as string);
+              const isActive = isHomeItem
+                ? (location.pathname === "/" || location.pathname === PATHS.START)
+                : (itemModule === currentModule && currentModule !== undefined);
 
               return (
                 <li key={item.path}
-                  title={t(item.description)}>
+                  title={item.description ? t(item.description as TranslationKey) : ""}>
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
@@ -110,7 +121,7 @@ const SideBar = () => {
                       }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>
-                    <span className="text-sm truncate">{t(item.label)}</span>
+                    <span className="text-sm truncate">{t(item.label as TranslationKey)}</span>
                   </Link>
                 </li>
               );

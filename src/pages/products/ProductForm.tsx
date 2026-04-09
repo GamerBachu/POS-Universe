@@ -45,7 +45,7 @@ import PageHeader from "@/components/PageHeader";
 import RadioActiveToggle from "@/components/RadioActiveToggle";
 import ProductDescriptionSection from "./ProductDescriptionSection";
 import ProductKeywordsSection from "./ProductKeywordsSection";
-import { productsApi } from "@/api/productsApi";
+import { productsApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
 
 const initialState = { success: false, message: "", status: 0 };

@@ -4,7 +4,7 @@ import { type IProduct } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { useLanguage } from "@/contexts/language";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
-import { calculateFinalPrice } from "../terminal1/utils";
+import { calculateFinalPrice } from "@/utils/financial";
 
 interface Props {
   item: IProduct;

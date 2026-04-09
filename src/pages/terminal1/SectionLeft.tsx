@@ -3,7 +3,7 @@ import OrderItem from "./OrderItem";
 import { useTerminalState, useTerminalDispatch } from "./TerminalContext";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import type { ICartItem } from "@/types/terminal1";
-import { calculateFinalPrice } from "./utils";
+import { calculateFinalPrice } from "@/utils/financial";
 import { CloseIcon } from "@/libs/icons";
 
 import { useLanguage } from "@/contexts/language";

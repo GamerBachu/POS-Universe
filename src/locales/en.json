@@ -36,6 +36,7 @@
     "status": "Status",
     "system_generated": "system will generate",
     "px_search": "Search for",
+    "filter": "Filter",
     "search": "Search",
     "clear": "Clear",
     "reset": "Reset",
@@ -71,7 +72,7 @@
 
     "session_expired": "Session expired. Please login again.",
 
-    "Esc": "ESC"
+    "esc": "ESC"
   },
 
   "login": {
