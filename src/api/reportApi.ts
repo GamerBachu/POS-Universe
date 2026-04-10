@@ -69,15 +69,15 @@ export class reportApi {
      * Z-Report: Daily financial reconciliation
      * Sums up today's net sales and actual cash collected.
      */
-    static async getZReportData(): Promise<ServiceResponse<IZReportData>> {
+    static async getZReportData(selectedDate: string): Promise<ServiceResponse<IZReportData>> {
         try {
-            const today = toUTCNowForDB().split("T")[0];
+            const today = selectedDate.split("T")[0];
             // Fetch all orders for today
             const orders = await db.orders
                 .where("createdAt").startsWith(today)
                 .and(o => o.id !== undefined && o.id > 44)
                 .toArray();
-           
+
             // Calculate sales metrics using the standardized Order Status
             const completedOrders = orders.filter(o => o.status === TOrderStatus.COMPLETED);
 
