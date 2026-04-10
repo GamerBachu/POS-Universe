@@ -32,7 +32,7 @@ const TerminalContent = () => {
             }
         };
 
-        const handler = setTimeout(loadData, 200); // Shorter debounce for snappy local DB
+        const handler = setTimeout(loadData, 400); // Shorter debounce for snappy local DB
         return () => {
             isMounted = false;
             clearTimeout(handler);

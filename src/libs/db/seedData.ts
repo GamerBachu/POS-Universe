@@ -160,7 +160,7 @@ const generateSeedProducts = (): IProductView[] => {
                     productId: productId,
                     title: "Primary Image",
                     description: `A high-quality image showcasing the ${brand} ${category.name} product.`,
-                    url: `/images/products/placeholder-${i % 10}.jpg`
+                    url: `/images/products/placeholder-${i % 10}.png`
                 }
             ],
             productDescription: {

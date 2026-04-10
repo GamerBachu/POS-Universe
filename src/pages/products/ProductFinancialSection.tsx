@@ -24,7 +24,7 @@ export const ProductFinancialSection: React.FC<
     value: string,
   ) => {
     const val = parseFloat(value);
-    setRunningPrice((prev) => ({ ...prev, [field]: isNaN(val) ? 0 : val }));
+    setRunningPrice((prev) => ({ ...prev, [field]: isNaN(val) ? 0 : Math.max(0, val) }));
   };
 
   const currentFinalPrice = calculateFinalPrice({

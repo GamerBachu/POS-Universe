@@ -65,18 +65,18 @@ export const ProductImagesSection = ({
                 onChange={(e) => onChangeRow(row.rowid || row.id?.toString() || "", "url", e.target.value)}
                 placeholder={t("product_inventory.image_url")}
               />
-              {row.url && (
-                <div className="mt-2 border border-gray-300 dark:border-gray-600 rounded overflow-hidden max-h-32">
+              <div className="mt-2 border border-gray-300 dark:border-gray-600 rounded overflow-hidden h-32">
+                {row.url && (
                   <img
                     src={row.url}
                     alt={row.title || "Product"}
-                    className="w-full h-32 object-cover"
+                    className="w-full h-32 object-contain"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none";
                     }}
                   />
-                </div>
-              )}
+                )}
+              </div>
             </div>
           );
         })}

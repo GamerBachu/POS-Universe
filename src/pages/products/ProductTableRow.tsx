@@ -22,7 +22,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
       <td className="p-3">
         <NavLink
           to={editPath}
-          className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors"
+          className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors hover:underline"
         >
           {item.id}
         </NavLink>
@@ -33,7 +33,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
         <div className="flex flex-col">
           <NavLink
             to={editPath}
-            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px] hover:text-blue-600 transition-colors"
+            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px] hover:text-blue-600 transition-colors underline"
             title={item.name}
           >
             {item.name}

@@ -11,6 +11,7 @@ const Input = ({ className = "", readOnly, ...props }: InputProps) => {
                     } ${className}`}
                 {...props}
                 step={"any"}
+                min="0"
             />
         );
     else
