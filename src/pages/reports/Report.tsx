@@ -30,7 +30,7 @@ const Report = () => {
         try {
             setIsLoading(true);
             const response = await reportApi.getReports(userId);
-
+console.log("Report API Response:", response);
             if (response.success && Array.isArray(response.data)) {
                 setReports(response.data);
             } else {
@@ -42,7 +42,7 @@ const Report = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [userId]);
+    }, [t, userId]);
 
     useEffect(() => {
         fetchReports();
@@ -77,7 +77,7 @@ const Report = () => {
                                     <h2 className="text-sm font-black uppercase tracking-tight text-gray-700 dark:text-gray-200 group-hover:text-teal-600 transition-colors">
                                         {report.name}
                                     </h2>
-                                    <ChevronRightIcon className="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-transform group-hover:translate-x-1" />
+                                    <ChevronRightIcon className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-teal-500 transition-transform group-hover:translate-x-1" />
                                 </div>
 
                                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-medium line-clamp-2 flex-grow">

@@ -31,6 +31,7 @@ const SideBarToggle: React.FC<SideBarToggleProps> = ({
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="text-gray-500 dark:text-gray-400"
                     >
                         <path d="m6 17 5-5-5-5" />
                         <path d="m13 17 5-5-5-5" />
@@ -46,6 +47,7 @@ const SideBarToggle: React.FC<SideBarToggleProps> = ({
                         strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="text-gray-500 dark:text-gray-400"
                     >
                         <path d="m15 18-6-6 6-6" />
                     </svg>

@@ -27,7 +27,7 @@ const ZReportView: React.FC = () => {
   if (loading) {
     return (
       <div className="p-10 text-center animate-pulse text-gray-400 font-mono text-xs uppercase tracking-widest">
-        Generating Z-Report...
+        {t("reports.generating_z_report")}
       </div>
     );
   }
@@ -35,7 +35,7 @@ const ZReportView: React.FC = () => {
   if (!data) {
     return (
       <div className="p-10 text-center text-red-500 text-xs uppercase font-bold">
-        Error loading report data.
+        {t("common.error")}
       </div>
     );
   }
@@ -47,63 +47,63 @@ const ZReportView: React.FC = () => {
       <div ref={printDiv}>
         <div className="p-6 text-center border-b border-dashed border-gray-200 dark:border-gray-700">
           <h1 className="text-lg font-black uppercase tracking-[0.2em] text-gray-800 dark:text-gray-100">
-            Z-Report Summary
+            {t("reports.z_report_title")}
           </h1>
           <p className="text-[10px] text-gray-500 uppercase mt-1 font-bold">
-            Daily Financial Reconciliation
+            {t("reports.z_report_desc")}
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-4 text-[10px] text-gray-400 font-bold uppercase">
             <div className="flex items-center gap-1">
-              <CalendarIcon className="w-3 h-3" /> {businessDate}
+              <CalendarIcon className="w-3 h-3 text-gray-500 dark:text-gray-400" /> {businessDate}
             </div>
             <div className="flex items-center gap-1">
-              <UserIcon className="w-3 h-3" /> {cashierName}
+              <UserIcon className="w-3 h-3 text-gray-500 dark:text-gray-400" /> {cashierName}
             </div>
           </div>
         </div>
         <div className="p-5 space-y-6">
           <section>
             <h2 className="text-[10px] font-black uppercase text-teal-600 mb-2 tracking-wider">
-              Revenue Breakdown
+              {t("reports.revenue_breakdown")}
             </h2>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
-                <span>Gross Sales</span>
+                <span>{t("reports.gross_sales")}</span>
                 <span className="font-mono">{displayPrice(sales.gross)}</span>
               </div>
               <div className="flex justify-between text-red-500">
-                <span>Discounts/Promos</span>
+                <span>{t("reports.discounts_promos")}</span>
                 <span className="font-mono">
                   ({displayPrice(sales.discounts)})
                 </span>
               </div>
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
-                <span>Tax Collected</span>
+                <span>{t("reports.tax_collected")}</span>
                 <span className="font-mono">{displayPrice(sales.tax)}</span>
               </div>
               <div className="pt-2 border-t border-gray-100 dark:border-gray-700 flex justify-between font-black text-gray-900 dark:text-white">
-                <span className="uppercase text-xs">Net Sales</span>
+                <span className="uppercase text-xs">{t("reports.net_sales")}</span>
                 <span className="text-base">{displayPrice(sales.net)}</span>
               </div>
             </div>
           </section>
           <section className="bg-gray-50 dark:bg-gray-900/40 p-3 rounded-md border border-gray-100 dark:border-gray-700">
             <h2 className="text-[10px] font-black uppercase text-gray-400 mb-2">
-              Collection Methods
+              {t("reports.collection_methods")}
             </h2>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-gray-500 font-bold">CASH IN DRAWER</span>
+                <span className="text-gray-500 font-bold">{t("reports.cash_in_drawer")}</span>
                 <span className="font-black text-gray-800 dark:text-gray-200">
                   {displayPrice(payments.cash)}
                 </span>
               </div>
               <div className="flex justify-between text-gray-500">
-                <span>CREDIT/DEBIT CARD</span>
+                <span>{t("reports.card_payment")}</span>
                 <span>{displayPrice(payments.card)}</span>
               </div>
               <div className="flex justify-between text-gray-500">
-                <span>DIGITAL PAYMENTS</span>
+                <span>{t("reports.digital_payments")}</span>
                 <span>{displayPrice(payments.digital)}</span>
               </div>
             </div>
@@ -111,7 +111,7 @@ const ZReportView: React.FC = () => {
           <div className="grid grid-cols-3 gap-2 border-t border-dashed border-gray-200 dark:border-gray-700 pt-4">
             <div className="text-center">
               <p className="text-[9px] font-bold text-gray-400 uppercase">
-                Orders
+                {t("reports.orders_count")}
               </p>
               <p className="text-sm font-black dark:text-white">
                 {counters.totalOrders}
@@ -119,7 +119,7 @@ const ZReportView: React.FC = () => {
             </div>
             <div className="text-center border-x border-gray-100 dark:border-gray-700">
               <p className="text-[9px] font-bold text-gray-400 uppercase">
-                Voids
+                {t("reports.voids_count")}
               </p>
               <p className="text-sm font-black text-red-500">
                 {counters.voidedOrders}
@@ -127,7 +127,7 @@ const ZReportView: React.FC = () => {
             </div>
             <div className="text-center">
               <p className="text-[9px] font-bold text-gray-400 uppercase">
-                Refunds
+                {t("reports.refunds_count")}
               </p>
               <p className="text-sm font-black text-orange-500">
                 {counters.refundCount}

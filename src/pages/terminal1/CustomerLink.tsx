@@ -19,7 +19,7 @@ const CustomerLink = () => {
                         onClick={() => setIsModalOpen(true)}
                         className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-teal-500 text-gray-400 hover:text-teal-500 transition-all shadow-sm active:scale-90"
                     >
-                        <PersonCircleIcon className="w-4 h-4" />
+                        <PersonCircleIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                     </button>
                     <div
                         className="flex-1 cursor-pointer group"

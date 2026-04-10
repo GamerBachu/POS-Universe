@@ -71,7 +71,7 @@
     "close": "Close",
 
     "session_expired": "Session expired. Please login again.",
-
+    "date": "Date",
     "esc": "ESC"
   },
 
@@ -299,10 +299,22 @@
   },
   "reports": {
     "version": "v{version}",
-    "z_report_title": "Z-Report",
-    "z_report_desc": "Daily financial reconciliation and cash flow audit.",
+    "z_report_title": "Z-Report Summary",
+    "z_report_desc": "Daily Financial Reconciliation",
+    "generating_z_report": "Generating Z-Report...",
+    "revenue_breakdown": "Revenue Breakdown",
+    "gross_sales": "Gross Sales",
+    "discounts_promos": "Discounts/Promos",
+    "tax_collected": "Tax Collected",
+    "collection_methods": "Collection Methods",
+    "cash_in_drawer": "CASH IN DRAWER",
+    "card_payment": "CREDIT/DEBIT CARD",
+    "digital_payments": "DIGITAL PAYMENTS",
+    "orders_count": "Orders",
+    "voids_count": "Voids",
+    "refunds_count": "Refunds",
     "inventory_valuation_title": "Inventory Valuation",
-    "inventory_valuation_desc": "Valuation of current stock for tax and insurance purposes.",
+    "inventory_valuation_desc": "Daily financial reconciliation and cash flow audit.",
     "net_sales": "Net Sales",
     "net_sales_desc": "Total revenue after adjustments.",
     "cash_in_hand": "Cash-in-hand",
@@ -311,6 +323,7 @@
     "transactions_desc": "Total orders processed today.",
     "total_asset_value": "Total Asset Value",
     "total_asset_value_desc": "Sum of (Stock * Cost Price) for all items.",
+    "valuation_summary": "Valuation Summary",
     "total_stock_count": "Total Stock Count",
     "total_stock_count_desc": "Total units of products currently in warehouse."
   }

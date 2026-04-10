@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useLanguage } from "@/contexts/language";
 import ZReportView from './ZReportView';
-import InventoryReport from './InventoryReport';
+import InventoryValuationReport from './InventoryValuationReport';
 import CommonLayout from '@/layouts/CommonLayout';
 import { useAuth } from '@/contexts/authorize';
 import type { IReport } from '@/types/reports';
@@ -13,7 +13,7 @@ import Loader from '@/components/Loader';
 // Registry of built report components
 const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
     'z_report': ZReportView,
-    'inventory': InventoryReport,
+    'inventory_valuation': InventoryValuationReport,
 };
 
 const DynamicReportPage = () => {
