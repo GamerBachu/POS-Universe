@@ -325,6 +325,20 @@
     "total_asset_value_desc": "Sum of (Stock * Cost Price) for all items.",
     "valuation_summary": "Valuation Summary",
     "total_stock_count": "Total Stock Count",
-    "total_stock_count_desc": "Total units of products currently in warehouse."
+    "total_stock_count_desc": "Total units of products currently in warehouse.",
+
+    "void_cancellation_title": "Void/Cancellation Report",
+    "void_cancellation_desc": "Details of voided transactions for security and loss prevention.",
+    "no_voids_found": "No voided or cancelled transactions found.",
+    "col_order_no": "Order No",
+    "col_reason": "Reason",
+    "col_authorized_by": "Authorized By",
+    "col_refund_amount": "Refunded Amount",
+    "total_void": "Total Voids",
+    "total_void_ph": "Items removed after payment",
+    "total_void_amount": "Voided Amount",
+    "total_void_amount_ph": "Potential revenue lost",
+    "total_void_users": "Authorized By",
+    "total_void_users_ph": "Primary security override"
   }
 }

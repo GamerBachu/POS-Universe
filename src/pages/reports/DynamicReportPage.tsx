@@ -3,6 +3,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { useLanguage } from "@/contexts/language";
 import ZReportView from './ZReportView';
 import InventoryValuationReport from './InventoryValuationReport';
+import VoidCancellationReport from './VoidCancellationReport';
 import CommonLayout from '@/layouts/CommonLayout';
 import { useAuth } from '@/contexts/authorize';
 import type { IReport } from '@/types/reports';
@@ -14,6 +15,7 @@ import Loader from '@/components/Loader';
 const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
     'z_report': ZReportView,
     'inventory_valuation': InventoryValuationReport,
+    'void_cancellation': VoidCancellationReport,
 };
 
 const DynamicReportPage = () => {

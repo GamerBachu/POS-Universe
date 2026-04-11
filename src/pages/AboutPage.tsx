@@ -1,5 +1,6 @@
 
 import DatePicker from "@/components/DatePicker";
+import DatePickerV2 from "@/components/DatePickerV2";
 import Header from "@/components/Header";
 import LanguageSelector from "@/components/LanguageSelector";
 import SideBar from "@/components/SideBar";
@@ -29,12 +30,25 @@ function AboutPage() {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date-select">
                 Date
               </label>
-              <DatePicker
+              <DatePickerV2
                 label={t("common.date")}
                 name="date-select"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 onClear={() => setSelectedDate("")}
+                min="2024-01-01" // Standard prop passed through ...props
+                classBox="flex-1"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date-select">
+                Date
+              </label>
+              <DatePicker
+                label={t("common.date")}
+                name="date-select"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)} 
                 min="2024-01-01" // Standard prop passed through ...props
                 classBox="flex-1"
               />
