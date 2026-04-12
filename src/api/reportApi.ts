@@ -55,7 +55,7 @@ export class reportApi {
      * Z-Report: Daily financial reconciliation
      * Sums up today's net sales and actual cash collected.
      */
-    static async getZReportData(
+    static async getZReport(
         selectedDate: string,
     ): Promise<ServiceResponse<IZReportData>> {
         try {
@@ -68,10 +68,21 @@ export class reportApi {
                 throw new Error("Invalid date provided");
             }
 
-            // Fetch all orders for today
+            // Fetch all orders for today with status in [COMPLETED, VOIDED, REFUNDED, PARTIALLY_REFUNDED]
+
             const orders = await db.orders
                 .where("createdAt")
-                .startsWith(f_date)
+                .between(f_date, f_date + "\uffff", true, true)
+                .and((order) =>
+                    (
+                        [
+                            TOrderStatus.COMPLETED,
+                            TOrderStatus.VOIDED,
+                            TOrderStatus.REFUNDED,
+                            TOrderStatus.PARTIALLY_REFUNDED,
+                        ] as string[]
+                    ).includes(order.status),
+                )
                 .toArray();
 
             // Calculate sales metrics using the standardized Order Status
@@ -119,16 +130,19 @@ export class reportApi {
             );
 
             const data: IZReportData = {
-                businessDate: f_date,
-                cashierName: "System Summary",
                 sales,
                 payments: paymentTotals,
                 counters: {
                     totalOrders: orders.length,
+                    completedOrders: orders.filter(
+                        (o) => o.status === TOrderStatus.COMPLETED,
+                    ).length,
                     voidedOrders: orders.filter((o) => o.status === TOrderStatus.VOIDED)
                         .length,
-                    refundCount: orders.filter((o) => o.status === TOrderStatus.REFUNDED)
-                        .length,
+                    refundCount:
+                        orders.filter((o) => o.status === TOrderStatus.REFUNDED).length +
+                        orders.filter((o) => o.status === TOrderStatus.PARTIALLY_REFUNDED)
+                            .length,
                 },
             };
 
@@ -182,18 +196,25 @@ export class reportApi {
 
             const cancellations = await db.orderCancellations
                 .where("createdAt")
-                .between(f_startDate, f_endDate + '\uffff', true, true)
+                .between(f_startDate, f_endDate + "\uffff", true, true)
                 .reverse()
                 .toArray();
 
             // Join logic: Fetch unique user profiles for the names
-            const userIds = Array.from(new Set(cancellations.map(c => c.cancelledBy)));
+            const userIds = Array.from(
+                new Set(cancellations.map((c) => c.cancelledBy)),
+            );
             const users = await db.users.where("id").anyOf(userIds).toArray();
-            const userMap = new Map(users.map(u => [u.id, getName(u.nameFirst, u.nameMiddle, u.nameLast)]));
+            const userMap = new Map(
+                users.map((u) => [
+                    u.id,
+                    getName(u.nameFirst, u.nameMiddle, u.nameLast),
+                ]),
+            );
 
-            const data: IVoidReport[] = cancellations.map(c => ({
+            const data: IVoidReport[] = cancellations.map((c) => ({
                 ...c,
-                username: userMap.get(c.cancelledBy) || `ID: ${c.cancelledBy}`
+                username: userMap.get(c.cancelledBy) || `ID: ${c.cancelledBy}`,
             }));
 
             return this.createResponse(data, "Void report generated successfully.");

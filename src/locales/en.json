@@ -3,6 +3,7 @@
     "app_name": "POS Universal",
     "welcome": "Welcome to POS Universal!",
 
+    "na": "N/A",
     "email": "Email",
     "ph_email": "Email@...",
 
@@ -72,7 +73,10 @@
 
     "session_expired": "Session expired. Please login again.",
     "date": "Date",
-    "esc": "ESC"
+    "esc": "ESC",
+
+    "end_of_report": "*** End Of Report ***",
+    "generating_report": "Generating Report..."
   },
 
   "login": {
@@ -310,9 +314,10 @@
     "cash_in_drawer": "CASH IN DRAWER",
     "card_payment": "CREDIT/DEBIT CARD",
     "digital_payments": "DIGITAL PAYMENTS",
-    "orders_count": "Orders",
-    "voids_count": "Voids",
-    "refunds_count": "Refunds",
+    "orders_count": "Total Orders",
+    "voids_count": "Total Voids",
+    "refunds_count": "Total Refunds",
+    "complete_count": "Total Completed ",
     "inventory_valuation_title": "Inventory Valuation",
     "inventory_valuation_desc": "Daily financial reconciliation and cash flow audit.",
     "net_sales": "Net Sales",

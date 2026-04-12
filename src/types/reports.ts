@@ -7,17 +7,12 @@ export interface IReport {
     version: string;
     url: string;
 }
-
-
-
 export interface IZReportData {
-    businessDate: string;
-    cashierName: string;
     sales: {
         gross: number;
         discounts: number;
         tax: number;
-        net: number;
+        net: number;// (Gross + Tax) - Discounts - Voids
     };
     payments: {
         cash: number;
@@ -26,6 +21,7 @@ export interface IZReportData {
     };
     counters: {
         totalOrders: number;
+        completedOrders: number;
         voidedOrders: number;
         refundCount: number;
     };
@@ -36,3 +32,4 @@ export interface IVoidReport extends IOrderCancellation {
     username: string;
 
 }
+

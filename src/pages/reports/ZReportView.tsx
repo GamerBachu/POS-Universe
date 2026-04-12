@@ -1,173 +1,224 @@
-import React, { useEffect, useRef, useState } from "react";
-import { reportApi } from "@/api";
-import { displayPrice } from "@/utils/helper/numberUtils";
-import PrintService from "@/components/PrintService";
-import Button from "@/components/Button";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/language";
-import { getTodayDateString, toISODateString } from "@/utils/helper/dateUtils";
 import DatePicker from "@/components/DatePicker";
+import Button from "@/components/Button";
+import { SearchIcon, PrinterIcon } from "@/libs/icons";
+import {
+  getTodayDateString,
+  toDisplayString,
+  toISODateString,
+} from "@/utils/helper/dateUtils";
+import { displayPrice } from "@/utils/helper/numberUtils";
+import { reportApi } from "@/api";
 import type { IZReportData } from "@/types/reports";
+import { LoggerUtils } from "@/utils";
+import PrintService from "@/components/PrintService";
+import { useAuth } from "@/contexts/authorize";
+import Loader from "@/components/Loader";
+import { AlertError } from "@/components/ActionStatusMessage";
 
-const ZReportView: React.FC = () => {
+const ZReport = () => {
   const { t } = useLanguage();
+  const { info } = useAuth();
+
+  // Logic Optimization: Memoize display name
+  const userName = info.isAuthorized
+    ? info.authUser?.displayName || t("common.na")
+    : "...";
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reportDate, setReportDate] = useState(getTodayDateString());
   const [data, setData] = useState<IZReportData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isPrinting, setIsPrinting] = useState(false);
   const printDiv = useRef<HTMLDivElement>(null);
-  const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
 
+  const fetchData = useCallback(async () => {
+    if (!reportDate) return;
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await reportApi.getZReport(toISODateString(reportDate));
+      if (response.success && response.data) {
+        setData(response.data);
+      } else {
+        setData(null);
+        setError(t("common.no_record"));
+      }
+    } catch (err) {
+      LoggerUtils.logCatch(err, "ZReport", "fetchData", `date: ${reportDate}`);
+      setError(t("common.error"));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [reportDate, t]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      const res = await reportApi.getZReportData(toISODateString(selectedDate));
-      if (res.success && res.data) {
-        setData(res.data);
-      }
-      setLoading(false);
-    };
-    if (selectedDate && selectedDate !== "") {
-      loadData();
-    }
-  }, [selectedDate]);
+    fetchData();
+  }, [fetchData]);
 
-
-
-  if (!data) {
-    return (
-      <div className="p-10 text-center text-red-500 text-xs uppercase font-bold">
-        {t("common.error")}
-      </div>
-    );
-  }
-
-  const { sales, payments, counters, cashierName } = data;
+  // Shared Tailwind classes for rows to keep it DRY without a component
+  const rowBase = "flex justify-between text-sm py-0.5 tabular-nums";
+  const rowLabel = "text-gray-600 dark:text-gray-400";
+  const rowValue = "text-gray-900 dark:text-white font-medium";
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm overflow-hidden font-sans">
-      <div ref={printDiv}>
-        <div className="p-6 text-center border-b border-dashed border-gray-200 dark:border-gray-700">
-          <h1 className="text-lg font-black uppercase tracking-[0.2em] text-gray-800 dark:text-gray-100">
+    <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
+      {/* Header Actions */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-end sm:items-center gap-3">
+        <div>
+          <h2 className="font-bold text-gray-800 dark:text-white">
             {t("reports.z_report_title")}
-          </h1>
-          <p className="text-[10px] text-gray-500 uppercase mt-1 font-bold">
+          </h2>
+          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">
             {t("reports.z_report_desc")}
           </p>
-          <div className="mt-2 flex flex-wrap justify-center text-sm">
-            <div className="flex items-center gap-1">
-              {cashierName}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <DatePicker
+            value={reportDate}
+            onChange={(e) => setReportDate(e.target.value)}
+            classInput="h-9"
+          />
+          <Button
+            onClick={fetchData}
+            className="bg-teal-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            <SearchIcon className="w-4 h-4" />
+            {t("common.search")}
+          </Button>
+          <Button
+            onClick={() => setIsPrinting(true)}
+            className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
+            disabled={!data || isLoading}
+            isLoading={isLoading}
+          >
+            <PrinterIcon className="w-4 h-4" />
+            {t("common.print")}
+          </Button>
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 opacity-50 p-10">
+          <Loader />
+        </div>
+      ) : error ? (
+        <div className="p-10">
+          <AlertError message={error} />
+        </div>
+      ) : (
+        <div className="flex-1 p-4 overflow-auto print:p-0" ref={printDiv}>
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-8 max-w-xl mx-auto print:border-none print:shadow-none">
+            {/* Receipt Header */}
+            <div className="text-center border-b border-dashed border-gray-300 dark:border-gray-600 pb-4 mb-6">
+              <h3 className="text-sm font-bold text-gray-800 dark:text-white uppercase">
+                {t("reports.z_report_title")}
+              </h3>
+              <div className="mt-2 text-[10px] text-gray-500 space-y-0.5 uppercase font-medium">
+                <p>
+                  {t("common.date")}: {toDisplayString(reportDate)}
+                </p>
+                <p>{userName}</p>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <DatePicker
-                name="date-select"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                min="2024-01-01"
-                classInput="border-0 bg-transparent dark:bg-transparent focus:ring-0 focus:border-0 cursor-pointer hover:none "
-              />
+
+            {/* Stats Breakdown */}
+            <div className="space-y-1">
+              <div className={rowBase}>
+                <span className={rowLabel}>{t("reports.complete_count")}</span>
+                <span className={rowValue}>
+                  {data?.counters.completedOrders}
+                </span>
+              </div>
+              <div className={rowBase}>
+                <span className={rowLabel}>{t("reports.voids_count")}</span>
+                <span className={rowValue}>{data?.counters.voidedOrders}</span>
+              </div>
+              <div className={rowBase}>
+                <span className={rowLabel}>{t("reports.refunds_count")}</span>
+                <span className={rowValue}>{data?.counters.refundCount}</span>
+              </div>
+
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-700 mt-2">
+                <div className={rowBase}>
+                  <span className={rowLabel}>{t("reports.gross_sales")}</span>
+                  <span className={rowValue}>
+                    {displayPrice(data?.sales.gross)}
+                  </span>
+                </div>
+                <div className={rowBase}>
+                  <span className={rowLabel}>{t("reports.tax_collected")}</span>
+                  <span className={rowValue}>
+                    {displayPrice(data?.sales.tax)}
+                  </span>
+                </div>
+                <div className={rowBase}>
+                  <span className={rowLabel}>
+                    {t("reports.discounts_promos")}
+                  </span>
+                  <span className={rowValue}>
+                    - {displayPrice(data?.sales.discounts)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t-2 border-double border-gray-200 dark:border-gray-700 mt-2">
+                <div className="flex justify-between text-base font-black text-gray-900 dark:text-white uppercase">
+                  <span>{t("reports.net_sales")}</span>
+                  <span>{displayPrice(data?.sales.net)}</span>
+                </div>
+              </div>
+
+              {/* Payments Section */}
+              <h4 className="text-[10px] font-black uppercase text-teal-600 dark:text-teal-400 mt-8 mb-2 tracking-widest">
+                {t("reports.collection_methods")}
+              </h4>
+              <div className="space-y-1 bg-gray-50 dark:bg-gray-700/30 p-3 rounded-md">
+                <div className={rowBase}>
+                  <span className={rowLabel}>
+                    {t("reports.cash_in_drawer")}
+                  </span>
+                  <span className={rowValue}>
+                    {displayPrice(data?.payments.cash)}
+                  </span>
+                </div>
+                <div className={rowBase}>
+                  <span className={rowLabel}>{t("reports.card_payment")}</span>
+                  <span className={rowValue}>
+                    {displayPrice(data?.payments.card)}
+                  </span>
+                </div>
+                <div className={rowBase}>
+                  <span className={rowLabel}>
+                    {t("reports.digital_payments")}
+                  </span>
+                  <span className={rowValue}>
+                    {displayPrice(data?.payments.digital)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12 pt-4 border-t border-dashed border-gray-300 dark:border-gray-600 text-center text-[10px] text-gray-400 uppercase font-bold tracking-[0.3em]">
+              {t("common.end_of_report")}
             </div>
           </div>
         </div>
-        {loading ? (
-          <div className="p-10 text-center animate-pulse font-mono text-xs uppercase tracking-widest">
-            {t("reports.generating_z_report")}
-          </div>
-        ) : (
-          <div className="px-5 py-2 space-y-2">
-            <section>
-              <h2 className="text-[10px] font-black uppercase text-teal-600 mb-2 tracking-wider">
-                {t("reports.revenue_breakdown")}
-              </h2>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between ">
-                  <span>{t("reports.gross_sales")}</span>
-                  <span className="font-mono">{displayPrice(sales.gross)}</span>
-                </div>
-                <div className="flex justify-between text-red-500">
-                  <span>{t("reports.discounts_promos")}</span>
-                  <span className="font-mono">
-                    ({displayPrice(sales.discounts)})
-                  </span>
-                </div>
-                <div className="flex justify-between ">
-                  <span>{t("reports.tax_collected")}</span>
-                  <span className="font-mono">{displayPrice(sales.tax)}</span>
-                </div>
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-700 flex justify-between font-black text-gray-900 dark:text-white">
-                  <span className="uppercase text-xs">{t("reports.net_sales")}</span>
-                  <span className="text-base">{displayPrice(sales.net)}</span>
-                </div>
-              </div>
-            </section>
-            <section className="bg-gray-50 dark:bg-gray-900/40 p-3 rounded-md border border-gray-100 dark:border-gray-700">
-              <h2 className="text-[10px] font-black uppercase mb-2">
-                {t("reports.collection_methods")}
-              </h2>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">{t("reports.cash_in_drawer")}</span>
-                  <span className="font-black text-gray-800 dark:text-gray-200">
-                    {displayPrice(payments.cash)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>{t("reports.card_payment")}</span>
-                  <span>{displayPrice(payments.card)}</span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>{t("reports.digital_payments")}</span>
-                  <span>{displayPrice(payments.digital)}</span>
-                </div>
-              </div>
-            </section>
-            <div className="grid grid-cols-3 gap-2 border-t border-dashed border-gray-200 dark:border-gray-700 pt-4">
-              <div className="text-center">
-                <p className="text-[9px] font-bold uppercase">
-                  {t("reports.orders_count")}
-                </p>
-                <p className="text-sm font-black dark:text-white">
-                  {counters.totalOrders}
-                </p>
-              </div>
-              <div className="text-center border-x border-gray-100 dark:border-gray-700">
-                <p className="text-[9px] font-bold uppercase">
-                  {t("reports.voids_count")}
-                </p>
-                <p className="text-sm font-black text-red-500">
-                  {counters.voidedOrders}
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="text-[9px] font-bold uppercase">
-                  {t("reports.refunds_count")}
-                </p>
-                <p className="text-sm font-black text-orange-500">
-                  {counters.refundCount}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="p-4 bg-gray-50 dark:bg-gray-900/20 border-t dark:border-gray-700">
-        {isPrinting && (
-          <PrintService
-            contentRef={printDiv}
-            onComplete={() => setIsPrinting(false)}
-          />
-        )}
-        <Button
-          type="button"
-          className="bg-blue-600 hover:bg-blue-700 p-2 w-100"
-          disabled={isPrinting}
-          onClick={() => setIsPrinting(true)}
-          title={t("common.print")}
-          isLoading={loading}
-        >
-          {t("common.print")}
-        </Button>
-      </div>
+      )}
+
+      {isPrinting && (
+        <PrintService
+          contentRef={printDiv}
+          onComplete={() => setIsPrinting(false)}
+        />
+      )}
     </div>
   );
 };
-export default ZReportView;
+
+export default ZReport;
