@@ -188,7 +188,9 @@ const VoidCancellationReport = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-4 text-sm italic text-gray-600 dark:text-gray-400">
-                                                    {item.reason}
+                                                    <div className="max-h-16 w-48 overflow-y-auto pr-2 break-words scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+                                                        {item.reason}
+                                                    </div>
                                                 </td>
                                                 <td className="px-4 py-4 text-sm">{item.username}</td>
                                                 <td className="px-4 py-4 text-sm text-right font-bold text-red-600 dark:text-red-400 tabular-nums">

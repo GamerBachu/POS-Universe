@@ -36,7 +36,7 @@
     "select": "Select",
     "status": "Status",
     "system_generated": "system will generate",
-    "px_search": "Search for",
+    "ph_search": "Search for ...",
     "filter": "Filter",
     "search": "Search",
     "clear": "Clear",
@@ -76,7 +76,9 @@
     "esc": "ESC",
 
     "end_of_report": "*** End Of Report ***",
-    "generating_report": "Generating Report..."
+    "generating_report": "Generating Report...",
+
+    "user": "Authorized By"
   },
 
   "login": {
@@ -302,6 +304,9 @@
     "print_address": "123 Business St, Suite 5"
   },
   "reports": {
+    "cash": "Cash",
+    "card": "Card",
+    "upi": "UPI",
     "version": "v{version}",
     "z_report_title": "Z-Report Summary",
     "z_report_desc": "Daily Financial Reconciliation",
@@ -319,7 +324,7 @@
     "refunds_count": "Total Refunds",
     "complete_count": "Total Completed ",
     "inventory_valuation_title": "Inventory Valuation",
-    "inventory_valuation_desc": "Daily financial reconciliation and cash flow audit.",
+    "inventory_valuation_desc": "Current value of inventory for financial reporting and insurance.",
     "net_sales": "Net Sales",
     "net_sales_desc": "Total revenue after adjustments.",
     "cash_in_hand": "Cash-in-hand",
@@ -344,6 +349,46 @@
     "total_void_amount": "Voided Amount",
     "total_void_amount_ph": "Potential revenue lost",
     "total_void_users": "Authorized By",
-    "total_void_users_ph": "Primary security override"
+    "total_void_users_ph": "Primary security override",
+
+    "inventory_management_title": "Inventory Management",
+    "inventory_management_desc": "Stock levels, reorder points, and inventory turnover.",
+    "inventory_status_low": "Low Stock",
+    "inventory_status_out": "Out of Stock",
+    "inventory_status_ok": "In Stock",
+    "inventory_inactive": "Inactive",
+    "sales_forecasting": "Predictive sales trends and future revenue projections.",
+
+    "sales_summary_title": "Sales Summary",
+    "sales_summary_desc": "Overview of total sales, revenue, and growth trends",
+    
+    "customer_insights_title": "Customer Insights",
+    "customer_insights_desc": "Top customers, purchase frequency, and loyalty trends.",
+    "col_total_spent": "Total Spent",
+    "col_purchase_freq": "Frequency",
+    "col_last_order": "Last Order",
+    "col_loyalty_score": "Loyalty Score",
+    "total_active_customers": "Active Customers",
+    "total_active_customers_ph": "Unique purchasers in period",
+    "top_spender": "Top Spender",
+    "top_spender_ph": "Highest total revenue",
+    "avg_customer_value": "Avg. Customer Value",
+    "avg_customer_value_ph": "Lifetime value per head",
+
+    "total_revenue": "Total Revenue",
+    "total_orders": "Total Orders",
+    "avg_order_value": "Avg. Order Value",
+    "growth_trend": "Growth Trend",
+
+    "hourly_sales_breakdown": "Hourly Sales Breakdown",
+    "revenue_vs_yesterday": "Vs. previous period",
+    "order_count_ph": "Successful transactions",
+    "aov_ph": "Average basket size",
+    "growth_period_ph": "Growth percentage vs. last period",
+    "col_time_period": "Time Period",
+    "col_sales_volume": "Sales Volume",
+    "col_contribution": "Contribution %",
+    "terminal_id": "Terminal ID",
+    "report_period": "Report Period"
   }
 }

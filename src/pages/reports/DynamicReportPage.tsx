@@ -4,18 +4,24 @@ import { useLanguage } from "@/contexts/language";
 import ZReportView from './ZReportView';
 import InventoryValuationReport from './InventoryValuationReport';
 import VoidCancellationReport from './VoidCancellationReport';
+import InventoryManagementReport from './InventoryManagementReport';
 import CommonLayout from '@/layouts/CommonLayout';
 import { useAuth } from '@/contexts/authorize';
 import type { IReport } from '@/types/reports';
 import { reportApi } from '@/api';
 import { LoggerUtils } from '@/utils';
 import Loader from '@/components/Loader';
+import SalesSummary from './SalesSummary';
+import CustomerInsightsReport from './CustomerInsightsReport';
 
 // Registry of built report components
 const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
     'z_report': ZReportView,
     'inventory_valuation': InventoryValuationReport,
     'void_cancellation': VoidCancellationReport,
+    'inventory_management': InventoryManagementReport,
+    "sales_summary": SalesSummary,
+    "customer_insights": CustomerInsightsReport
 };
 
 const DynamicReportPage = () => {

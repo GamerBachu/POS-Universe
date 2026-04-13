@@ -1,4 +1,5 @@
 import type { IOrderCancellation } from "./orders";
+import type { IProduct } from "./product";
 
 export interface IReport {
     id?: number;
@@ -33,3 +34,50 @@ export interface IVoidReport extends IOrderCancellation {
 
 }
 
+
+export interface IInventoryValuation {
+    totalAssetValue: number;
+    totalStock: number;
+    products: IProduct[];
+}
+
+
+
+
+/**
+ * Structure for inventory financial valuation
+ */
+export interface IInventoryValuation {
+    totalAssetValue: number;
+    totalStock: number;
+    products: IProduct[];
+}
+
+/**
+ * Structure for Sales Summary Report
+ */
+export interface ISalesSummaryData {
+    totalSales: number;
+    totalRevenue: number;
+    averageOrderValue: number;
+    growth: number; // percentage vs previous day
+    salesTrend: {
+        label: string;
+        value: number;
+    }[];
+}
+
+/**
+ * Structure for Customer Insights Report
+ */
+export interface ICustomerInsight {
+    customerId: number;
+    name: string;
+    email: string;
+    phone: string;
+    totalSpent: number;
+    orderCount: number;
+    avgOrderValue: number;
+    lastPurchaseDate: string;
+    loyaltyScore: number; // Calculated based on frequency and volume
+}

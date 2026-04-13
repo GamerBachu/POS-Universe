@@ -87,7 +87,7 @@ console.log("Report API Response:", response);
                                     <span className="text-[9px] font-black uppercase text-gray-400">
                                         {t("reports.version").replace('{version}', report.version || '1.0')}
                                     </span>
-                                    <span className="text-[9px] font-black uppercase text-teal-600 opacity-0 group-hover:opacity-100 transition-all transform translate-x-1 group-hover:translate-x-0">
+                                    <span className="text-[9px] font-black uppercase text-teal-600  transition-all transform translate-x-1 group-hover:translate-x-0 underline">
                                         {t("common.open")}
                                     </span>
                                 </div>

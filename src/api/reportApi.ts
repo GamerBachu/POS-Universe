@@ -1,4 +1,6 @@
-import type { IReport, IVoidReport, IZReportData } from "@/types/reports";
+import type { ICustomerInsight, IInventoryValuation, IReport, ISalesSummaryData, IVoidReport, IZReportData } from "@/types/reports";
+import type { ICustomer } from "@/types/customer";
+import type { IProduct } from "@/types/product";
 import { getName } from "@/utils";
 import db from "../libs/db/appDb";
 import type { ServiceResponse } from "@/types/serviceResponse";
@@ -160,10 +162,15 @@ export class reportApi {
      * Inventory Valuation: Total Asset Value
      * Calculates total stock value (Stock * Cost Price).
      */
-    static async getInventoryValuation(): Promise<
-        ServiceResponse<{ totalAssetValue: number; totalStock: number; }>
-    > {
-        const products = await db.products.where("isActive").equals(1).toArray();
+    static async getInventoryValuation(): Promise<ServiceResponse<IInventoryValuation>> {
+        // Rule 3: Always order by primary ID in reverse for reports.
+        // Using .filter with !! coercion to fix "no data" issues caused by boolean/number index mismatches.
+        const products = await db.products
+            .orderBy("id")
+            .reverse()
+            .filter((p) => !!p.isActive)
+            .toArray();
+
         const totalAssetValue = products.reduce(
             (acc, p) => acc + p.stock * (p.costPrice || 0),
             0,
@@ -171,7 +178,7 @@ export class reportApi {
         const totalStock = products.reduce((acc, p) => acc + p.stock, 0);
 
         return this.createResponse(
-            { totalAssetValue, totalStock },
+            { totalAssetValue, totalStock, products } as IInventoryValuation,
             "Inventory valuation completed.",
         );
     }
@@ -221,6 +228,168 @@ export class reportApi {
         } catch (error) {
             const msg =
                 error instanceof Error ? error.message : "Failed to load void report";
+            return this.createResponse([], msg, false);
+        }
+    }
+
+    /**
+     * Inventory Management: Current stock levels and reorder alerts
+     */
+    static async getInventoryManagementData(): Promise<ServiceResponse<IProduct[]>> {
+        try {
+            const products = await db.products // Show inactive products OR active products with low stock
+                .filter(p => !p.isActive || (p.isActive && p.stock <= (p.reorderLevel || 0)))
+                .reverse()
+                .toArray();
+            return this.createResponse(products, "Inventory data retrieved successfully.");
+        } catch (error) {
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Failed to load inventory",
+                false,
+            );
+        }
+    }
+
+    /**
+     * Sales Summary: High-level overview of daily performance
+     */
+    static async getSalesSummary(selectedDate: string): Promise<ServiceResponse<ISalesSummaryData>> {
+        try {
+            const f_date = selectedDate.split("T")[0];
+            const prev_date_obj = new Date(f_date);
+            prev_date_obj.setDate(prev_date_obj.getDate() - 1);
+            const f_prev_date = prev_date_obj.toISOString().split("T")[0];
+
+            // 1. Fetch Today's Completed Orders
+            const todayOrders = await db.orders
+                .where("createdAt")
+                .between(f_date, f_date + "\uffff", true, true)
+                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .toArray();
+
+            // 2. Fetch Yesterday's Revenue for Growth Calculation
+            const yesterdayOrders = await db.orders
+                .where("createdAt")
+                .between(f_prev_date, f_prev_date + "\uffff", true, true)
+                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .toArray();
+
+            const todayRevenue = todayOrders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+            const yesterdayRevenue = yesterdayOrders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+
+            // 3. Calculate Metrics
+            const totalSales = todayOrders.length;
+            const averageOrderValue = totalSales > 0 ? todayRevenue / totalSales : 0;
+
+            let growth = 0;
+            if (yesterdayRevenue > 0) {
+                growth = ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100;
+            } else if (todayRevenue > 0) {
+                growth = 100; // 100% growth if there were no sales yesterday
+            }
+
+            // 4. Hourly Trend Breakdown
+            const hourlyMap: Record<string, number> = {};
+            todayOrders.forEach(order => {
+                const hour = new Date(order.createdAt).getHours();
+                const label = `${hour.toString().padStart(2, '0')}:00`;
+                hourlyMap[label] = (hourlyMap[label] || 0) + (order.grandTotal || 0);
+            });
+
+            // Sort hours and format for UI
+            const salesTrend = Object.keys(hourlyMap)
+                .sort()
+                .map(label => ({
+                    label,
+                    value: hourlyMap[label]
+                }));
+
+            const data: ISalesSummaryData = {
+                totalSales,
+                totalRevenue: todayRevenue,
+                averageOrderValue,
+                growth: Number(growth.toFixed(2)),
+                salesTrend
+            };
+
+            return this.createResponse(data, "Sales summary generated successfully.");
+        } catch (error) {
+            return this.createResponse(
+                {} as ISalesSummaryData,
+                error instanceof Error ? error.message : "Failed to load sales summary",
+                false,
+            );
+        }
+    }
+
+    /**
+     * Customer Insights: Aggregates order data to find top customers and loyalty trends
+     */
+    static async getCustomerInsights(): Promise<ServiceResponse<ICustomerInsight[]>> {
+        try {
+            // 1. Get all completed orders that have a customer assigned
+            const orders = await db.orders
+                .filter(o => o.status === TOrderStatus.COMPLETED && !!o.customerId)
+                .toArray();
+
+            // 2. Resolve Customer Identities (Group by Phone to handle cases where IDs might differ)
+            const uniqueIds = Array.from(new Set(orders.map(o => o.customerId!)));
+            const customersList = await db.customers.where("id").anyOf(uniqueIds).toArray();
+
+            const idToPhoneKey = new Map<number, string>();
+            const phoneToProfileMap = new Map<string, ICustomer>();
+
+            customersList.forEach(c => {
+                const phoneKey = c.phone?.trim() || `ID_${c.id}`; // Fallback to ID if phone is missing
+                idToPhoneKey.set(c.id!, phoneKey);
+                if (!phoneToProfileMap.has(phoneKey)) {
+                    phoneToProfileMap.set(phoneKey, c);
+                }
+            });
+
+            // 3. Aggregate data by resolved Phone Key
+            const aggregation: Record<string, { spent: number; count: number; lastDate: string; }> = {};
+
+            orders.forEach(order => {
+                const key = idToPhoneKey.get(order.customerId!) || `ID_${order.customerId}`;
+                if (!aggregation[key]) {
+                    aggregation[key] = { spent: 0, count: 0, lastDate: order.createdAt };
+                }
+                aggregation[key].spent += (order.grandTotal || 0);
+                aggregation[key].count += 1;
+                if (new Date(order.createdAt) > new Date(aggregation[key].lastDate)) {
+                    aggregation[key].lastDate = order.createdAt;
+                }
+            });
+
+            const data: ICustomerInsight[] = Array.from(phoneToProfileMap.values()).map(c => {
+                const phoneKey = c.phone?.trim() || `ID_${c.id}`;
+                const agg = aggregation[phoneKey];
+                const avg = agg.count > 0 ? agg.spent / agg.count : 0;
+
+                // Simple Loyalty Calculation: (Spent * 0.4) + (Count * 10)
+                const loyaltyScore = (agg.spent * 0.1) + (agg.count * 5);
+
+                return {
+                    customerId: c.id!,
+                    name: (c.name === undefined || c.name === "") ? "--" : c.name,
+                    email: (c.email === undefined || c.email === "") ? "--" : c.email,
+                    phone: (c.phone === undefined || c.phone === "") ? "--" : c.phone,
+                    totalSpent: agg.spent,
+                    orderCount: agg.count,
+                    avgOrderValue: avg,
+                    lastPurchaseDate: agg.lastDate,
+                    loyaltyScore: Math.round(loyaltyScore)
+                };
+            });
+
+            // Sort by Total Spent descending
+            data.sort((a, b) => b.totalSpent - a.totalSpent);
+
+            return this.createResponse(data, "Customer insights generated.");
+        } catch (error) {
+            const msg = error instanceof Error ? error.message : "Failed to load insights";
             return this.createResponse([], msg, false);
         }
     }

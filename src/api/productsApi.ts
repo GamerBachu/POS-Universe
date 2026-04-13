@@ -80,7 +80,7 @@ export class productsApi {
             const fIsActive = payload.isActive;
             const fCurrentPage = payload.currentPage;
             const fPageSize = payload.pageSize;
-            console.log(payload);
+          
             // 1. Initiate collection using the 'id' index in reverse (DESC)
             // This ensures the newest products (higher IDs) are processed first
             const collection = db.products.orderBy("id").reverse().filter(item => {

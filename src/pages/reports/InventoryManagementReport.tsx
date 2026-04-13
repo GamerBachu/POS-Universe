@@ -1,40 +1,41 @@
-import { useCallback, useEffect, useRef, useState, useMemo } from "react";
-import { reportApi } from "@/api";
-import { displayPrice } from "@/utils/helper/numberUtils";
-import PrintService from "@/components/PrintService";
-import Button from "@/components/Button";
+import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { useLanguage } from "@/contexts/language";
+import Button from "@/components/Button";
 import { PrinterIcon, SearchIcon } from "@/libs/icons";
-import SummaryCard from "@/components/SummaryCard";
-
-import Loader from "@/components/Loader";
+import { reportApi } from "@/api";
 import { LoggerUtils } from "@/utils";
-import type { IInventoryValuation } from "@/types/reports";
+import SummaryCard from "@/components/SummaryCard";
+import type { IProduct } from "@/types/product";
+import Loader from "@/components/Loader";
+import PrintService from "@/components/PrintService";
 
-const InventoryValuationReport = () => {
+const InventoryManagementReport = () => {
     const { t } = useLanguage();
 
     // 1. State Management
-    const [data, setData] = useState<IInventoryValuation | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [data, setData] = useState<IProduct[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isPrinting, setIsPrinting] = useState(false);
     const printDiv = useRef<HTMLDivElement>(null);
 
     // 2. Fetch Logic
     const fetchData = useCallback(async () => {
-        setIsLoading(true);
         setError(null);
+        setIsLoading(true);
         try {
-            const res = await reportApi.getInventoryValuation();
-            if (res.success && res.data) {
-                setData(res.data);
+            const response = await reportApi.getInventoryManagementData();
+            if (response.success && Array.isArray(response.data)) {
+                setData(response.data);
             } else {
-                setError(res.message || t("common.no_record"));
+                setData([]);
+                LoggerUtils.logError(response, "InventoryManagementReport", "fetchData", `API error: ${response.message}`);
+                setError(t("common.error"));
             }
         } catch (err) {
-            LoggerUtils.logCatch(err, "InventoryValuationReport", "fetchData");
+            setData([]);
+            LoggerUtils.logCatch(err, "InventoryManagementReport", "fetchData");
             setError(t("common.error"));
         } finally {
             setIsLoading(false);
@@ -46,21 +47,25 @@ const InventoryValuationReport = () => {
     }, [fetchData]);
 
     // 3. Derived State & Filtering
-    const filteredProducts = useMemo(() => {
-        if (!data?.products) return [];
-        if (!searchTerm.trim()) return data.products;
-
+    const filteredData = useMemo(() => {
+        if (!searchTerm.trim()) return data;
         const term = searchTerm.toLowerCase().trim();
-        return data.products.filter(p =>
-            p.name.toLowerCase().includes(term) ||
-            p.sku?.toLowerCase().includes(term) ||
-            p.code?.toLowerCase().includes(term)
+        return data.filter(item =>
+            item.name.toLowerCase().includes(term) ||
+            item.sku?.toLowerCase().includes(term) ||
+            item.code?.toLowerCase().includes(term)
         );
     }, [data, searchTerm]);
 
-    const avgCost = useMemo(() => {
-        if (!data || data.totalStock === 0) return 0;
-        return data.totalAssetValue / data.totalStock;
+    const metrics = useMemo(() => {
+        const lowStock = data.filter(i => i.stock > 0 && i.stock <= i.reorderLevel).length;
+        const outOfStock = data.filter(i => i.stock <= 0).length;
+        const inactive = data.filter(i => !i.isActive).length;
+        return {
+            inactive,
+            lowStock,
+            outOfStock
+        };
     }, [data]);
 
     return (
@@ -70,10 +75,10 @@ const InventoryValuationReport = () => {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div>
                         <h2 className="font-bold text-gray-800 dark:text-white">
-                            {t("reports.inventory_valuation_title")}
+                            {t("reports.inventory_management_title")}
                         </h2>
-                        <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">
-                            {t("reports.inventory_valuation_desc")}
+                        <p className="text-[10px] text-gray-500 uppercase font-medium">
+                            {t("reports.inventory_management_desc")}
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -81,7 +86,7 @@ const InventoryValuationReport = () => {
                             <SearchIcon className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
-                                placeholder={t("common.ph_search") }
+                                placeholder={t("common.ph_search")}
                                 className="pl-9 pr-3 h-9 text-xs border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 focus:ring-1 focus:ring-teal-500 outline-none w-48 md:w-64 transition-all"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -90,7 +95,7 @@ const InventoryValuationReport = () => {
                         <Button
                             onClick={() => setIsPrinting(true)}
                             className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase transition-all active:scale-95"
-                            disabled={isLoading || !data}
+                            disabled={isLoading || data.length === 0}
                         >
                             <PrinterIcon className="w-4 h-4" />
                             {t("common.print")}
@@ -103,22 +108,22 @@ const InventoryValuationReport = () => {
                 {/* Summary Cards */}
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <SummaryCard
-                        label={t("reports.total_asset_value")}
-                        value={displayPrice(data?.totalAssetValue || 0)}
+                        label={t("reports.inventory_inactive")}
+                        value={metrics.inactive}
                         color="text-teal-600"
-                        sub={t("reports.total_asset_value_desc")}
+                        sub={t("common.all") + " SKU"}
                     />
                     <SummaryCard
-                        label={t("reports.total_stock_count")}
-                        value={data?.totalStock || 0}
-                        color="text-blue-500"
-                        sub={t("reports.total_stock_count_desc")}
-                    />
-                    <SummaryCard
-                        label={t("product_inventory.cost_price")}
-                        value={displayPrice(avgCost)}
+                        label={t("reports.inventory_status_low")}
+                        value={metrics.lowStock}
                         color="text-orange-500"
-                        sub={t("common.all") + " Avg."}
+                        sub={t("product_inventory.reorder_level")}
+                    />
+                    <SummaryCard
+                        label={t("reports.inventory_status_out")}
+                        value={metrics.outOfStock}
+                        color="text-red-500"
+                        sub={t("common.action") + " Required"}
                     />
                 </div>
 
@@ -131,20 +136,18 @@ const InventoryValuationReport = () => {
                                     <tr>
                                         <th className="px-4 py-3">{t("product_inventory.name")}</th>
                                         <th className="px-4 py-3">{t("product_inventory.sku")}</th>
-                                        <th className="px-4 py-3 text-right">{t("product_inventory.cost_price")}</th>
                                         <th className="px-4 py-3 text-center">{t("product_inventory.stock")}</th>
-                                        <th className="px-4 py-3 text-right">{t("common.id")} Extension</th>
+                                        <th className="px-4 py-3 text-center">{t("product_inventory.reorder_level")}</th>
+                                        <th className="px-4 py-3 text-right">{t("common.status")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                                     {isLoading ? (
                                         <tr><td colSpan={5} className="py-20 text-center"><Loader /></td></tr>
-                                    ) : error ? (
-                                        <tr><td colSpan={5} className="py-20 text-center text-red-500 text-xs uppercase font-bold">{error}</td></tr>
-                                    ) : filteredProducts.length === 0 ? (
-                                        <tr><td colSpan={5} className="py-20 text-center text-gray-400 text-xs uppercase">{t("common.no_result")}</td></tr>
+                                    ) : filteredData.length === 0 ? (
+                                        <tr><td colSpan={5} className="py-20 text-center text-gray-400 text-xs uppercase">{error || t("common.no_result")}</td></tr>
                                     ) : (
-                                        filteredProducts.map((item) => (
+                                        filteredData.map((item) => (
                                             <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                                                     <div className="flex flex-col">
@@ -153,10 +156,19 @@ const InventoryValuationReport = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-xs font-mono">{item.sku || "N/A"}</td>
-                                                <td className="px-4 py-3 text-right tabular-nums">{displayPrice(item.costPrice)}</td>
-                                                <td className="px-4 py-3 text-center tabular-nums">{item.stock}</td>
-                                                <td className="px-4 py-3 text-right font-bold tabular-nums text-teal-600 dark:text-teal-400">
-                                                    {displayPrice(item.stock * (item.costPrice || 0))}
+                                                <td className="px-4 py-3 text-center font-bold tabular-nums">{item.stock}</td>
+                                                <td className="px-4 py-3 text-center text-gray-500 tabular-nums">{item.reorderLevel}</td>
+                                                <td className="px-4 py-3 text-right">
+                                                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full
+                                                        ${!item.isActive ? "bg-gray-100 text-gray-700 dark:bg-gray-700/30 dark:text-gray-400" :
+                                                            item.stock <= 0 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
+                                                                item.stock <= item.reorderLevel ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" :
+                                                                    "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400"
+                                                        }`}>
+                                                        {!item.isActive ? t("common.inactive") :
+                                                            item.stock <= 0 ? t("reports.inventory_status_out") :
+                                                                item.stock <= item.reorderLevel ? t("reports.inventory_status_low") : t("reports.inventory_status_ok")}
+                                                    </span>
                                                 </td>
                                             </tr>
                                         ))
@@ -178,4 +190,4 @@ const InventoryValuationReport = () => {
     );
 };
 
-export default InventoryValuationReport;
+export default InventoryManagementReport;
