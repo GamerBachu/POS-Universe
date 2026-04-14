@@ -206,13 +206,6 @@ export const reportSeedData: IReport[] = [
         url: 'customer_insights',
     },
     {
-        id: 3,
-        name: 'Employee Performance',
-        description: 'Sales by employee, hours worked, and performance metrics.',
-        version: '1.0',
-        url: 'employee_performance',
-    },
-    {
         id: 4,
         name: 'Financial Overview',
         description: 'Profit margins, expenses, and cash flow analysis.',
@@ -226,13 +219,6 @@ export const reportSeedData: IReport[] = [
         description: 'Stock levels, reorder points, and inventory turnover.',
         version: '1.0',
         url: 'inventory_management',
-    },
-    {
-        id: 6,
-        name: 'Sales Forecasting',
-        description: 'Predictive sales trends and future revenue projections.',
-        version: '1.0',
-        url: 'sales_forecasting',
     },
     {
         id: 7,
@@ -256,14 +242,7 @@ export const reportSeedData: IReport[] = [
         version: "1.0",
         url: "void_cancellation",
 
-    },
-    {
-        id: 10,
-        name: "Sales by Hour",
-        description: "Hourly sales data to optimize staffing and operations.",
-        version: "1.0",
-        url: "sales_by_hour",
-    },
+    }
 ];
 
 

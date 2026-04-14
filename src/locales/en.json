@@ -361,7 +361,7 @@
 
     "sales_summary_title": "Sales Summary",
     "sales_summary_desc": "Overview of total sales, revenue, and growth trends",
-    
+
     "customer_insights_title": "Customer Insights",
     "customer_insights_desc": "Top customers, purchase frequency, and loyalty trends.",
     "col_total_spent": "Total Spent",
@@ -389,6 +389,17 @@
     "col_sales_volume": "Sales Volume",
     "col_contribution": "Contribution %",
     "terminal_id": "Terminal ID",
-    "report_period": "Report Period"
+    "report_period": "Report Period",
+
+    "overview_title": "Financial Overview",
+    "overview_desc": "Profit margins, expenses, and cash flow analysis.",
+    "total_cogs": "Total COGS",
+    "total_cogs_desc": "Cost of Goods Sold",
+    "gross_profit": "Gross Profit",
+    "gross_profit_desc": "Revenue - COGS",
+    "net_income": "Net Income",
+    "net_income_desc": "Final take-home profit",
+    "margin": "Margin %",
+    "cash_flow_summary": "Cash Flow Analysis"
   }
 }

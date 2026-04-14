@@ -30,7 +30,7 @@ const Report = () => {
         try {
             setIsLoading(true);
             const response = await reportApi.getReports(userId);
-console.log("Report API Response:", response);
+           
             if (response.success && Array.isArray(response.data)) {
                 setReports(response.data);
             } else {
@@ -97,7 +97,7 @@ console.log("Report API Response:", response);
                 ) : (
                     <div className="py-20 text-center border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-md">
                         <p className="text-xs font-black uppercase text-gray-400 tracking-widest italic">
-                            {t("common.no_record")}
+                            {t("common.no_result")}
                         </p>
                     </div>
                 )}

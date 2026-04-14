@@ -13,6 +13,7 @@ import { LoggerUtils } from '@/utils';
 import Loader from '@/components/Loader';
 import SalesSummary from './SalesSummary';
 import CustomerInsightsReport from './CustomerInsightsReport';
+import FinancialOverviewReport from './FinancialOverviewReport';
 
 // Registry of built report components
 const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
@@ -21,7 +22,8 @@ const REPORT_REGISTRY: Record<string, React.ComponentType<object>> = {
     'void_cancellation': VoidCancellationReport,
     'inventory_management': InventoryManagementReport,
     "sales_summary": SalesSummary,
-    "customer_insights": CustomerInsightsReport
+    "customer_insights": CustomerInsightsReport,
+    "financial_overview": FinancialOverviewReport
 };
 
 const DynamicReportPage = () => {

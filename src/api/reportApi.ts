@@ -1,4 +1,4 @@
-import type { ICustomerInsight, IInventoryValuation, IReport, ISalesSummaryData, IVoidReport, IZReportData } from "@/types/reports";
+import type { ICustomerInsight, IFinancialOverview, IInventoryValuation, IReport, ISalesSummaryData, IVoidReport, IZReportData } from "@/types/reports";
 import type { ICustomer } from "@/types/customer";
 import type { IProduct } from "@/types/product";
 import { getName } from "@/utils";
@@ -391,6 +391,56 @@ export class reportApi {
         } catch (error) {
             const msg = error instanceof Error ? error.message : "Failed to load insights";
             return this.createResponse([], msg, false);
+        }
+    }
+
+    /**
+     * Financial Overview: Profit margins and Cash flow
+     */
+    static async getFinancialOverview(startDate: string, endDate: string): Promise<ServiceResponse<IFinancialOverview>> {
+        try {
+            const f_start = startDate.split("T")[0];
+            const f_end = endDate.split("T")[0];
+
+            // 1. Get all completed orders in range
+            const orders = await db.orders
+                .where("createdAt")
+                .between(f_start, f_end + "\uffff", true, true)
+                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .toArray();
+
+            const orderIds = orders.map(o => o.id).filter((id): id is number => id !== undefined);
+            
+            // 2. Get all items for these orders to calculate COGS
+            const items = await db.orderItems.where("orderId").anyOf(orderIds).toArray();
+            const productIds = Array.from(new Set(items.map(i => i.productId)));
+            const products = await db.products.where("id").anyOf(productIds).toArray();
+            const productMap = new Map(products.map(p => [p.id, p]));
+
+            const totalRevenue = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+            
+            const totalCogs = items.reduce((sum, item) => {
+                const p = productMap.get(item.productId);
+                return sum + (item.quantity * (p?.costPrice || 0));
+            }, 0);
+
+            const grossProfit = totalRevenue - totalCogs;
+            const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+
+            const data: IFinancialOverview = {
+                totalRevenue,
+                totalCogs,
+                grossProfit,
+                grossMargin: Number(grossMargin.toFixed(2)),
+                totalExpenses: 0, // Placeholder: Expenses feature coming soon
+                netIncome: grossProfit, 
+                cashInflow: totalRevenue,
+                cashOutflow: totalCogs
+            };
+
+            return this.createResponse(data, "Financial overview generated.");
+        } catch (error) {
+            return this.createResponse({} as IFinancialOverview, error instanceof Error ? error.message : "Failed to load financials", false);
         }
     }
 }

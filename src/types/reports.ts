@@ -81,3 +81,17 @@ export interface ICustomerInsight {
     lastPurchaseDate: string;
     loyaltyScore: number; // Calculated based on frequency and volume
 }
+
+/**
+ * Structure for Financial Overview Report
+ */
+export interface IFinancialOverview {
+    totalRevenue: number;
+    totalCogs: number;
+    grossProfit: number;
+    grossMargin: number;
+    totalExpenses: number; 
+    netIncome: number;
+    cashInflow: number;
+    cashOutflow: number;
+}
