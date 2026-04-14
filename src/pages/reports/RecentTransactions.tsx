@@ -1,17 +1,49 @@
-import { useLanguage } from "@/contexts/language";
+import { useCallback, useEffect, useState } from "react";
 import { displayPrice } from "@/utils/helper/numberUtils";
+import { useLanguage } from "@/contexts/language";
+import { reportApi } from "@/api";
+import type { IRecentTransaction } from "@/types/reports";
+import Loader from "@/components/Loader";
+import { LoggerUtils } from "@/utils";
+import OrderStatusLabel from "../terminal1Order/OrderStatusLabel";
+import type { IOrder } from "@/types/orders";
+import { getIsDangerousAction } from "../terminal1Order/utils";
 
 const RecentTransactions = () => {
     const { t } = useLanguage();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [data, setData] = useState<IRecentTransaction[]>([]);
 
-    // Static Sample Data
-    const transactions = [
-        { id: 1, orderNo: "ORD-9921", time: "14:20", amount: 125.50, status: "completed", type: "Cash" },
-        { id: 2, orderNo: "ORD-9920", time: "14:15", amount: 45.00, status: "completed", type: "Card" },
-        { id: 3, orderNo: "ORD-9919", time: "14:02", amount: 89.99, status: "voided", type: "UPI" },
-        { id: 4, orderNo: "ORD-9918", time: "13:45", amount: 210.00, status: "completed", type: "Card" },
-        { id: 5, orderNo: "ORD-9917", time: "13:30", amount: 12.50, status: "completed", type: "Cash" },
-    ];
+    const fetchData = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const res = await reportApi.getRecentTransactions(5);
+            if (res.success && res.data) {
+                setData(res.data);
+            } else {
+                setData([]);
+                LoggerUtils.logError(
+                    res,
+                    "RecentTransactions",
+                    "fetchData",
+                    "API response error",
+                );
+                setError(t("common.no_record"));
+            }
+        } catch (err) {
+            setData([]);
+            LoggerUtils.logCatch(err, "RecentTransactions", "fetchData");
+            setError(t("common.error"));
+        } finally {
+            setIsLoading(false);
+        }
+    }, [t]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     return (
         <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-96 transition-colors flex flex-col">
@@ -28,48 +60,54 @@ const RecentTransactions = () => {
             </div>
 
             {/* Transaction List */}
-            <div className="flex-1 overflow-y-auto pr-1 -mr-1 scrollbar-thin">
-                <div className="space-y-2">
-                    {transactions.map((tx) => (
-                        <div
-                            key={tx.id}
-                            className="flex items-center justify-between p-3 rounded-md border border-gray-50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/20 hover:border-teal-200 dark:hover:border-teal-900 transition-colors group"
-                        >
-                            <div className="flex items-center gap-3">
-                                {/* Minimal Status Indicator */}
-                                <div className={`w-1.5 h-8 rounded-full ${tx.status === 'voided' ? 'bg-red-500' : 'bg-teal-500'}`} />
+            <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent hover:scrollbar-thumb-gray-300 dark:hover:scrollbar-thumb-gray-600">
+                {isLoading ? (
+                    <div className="h-full flex items-center justify-center">
+                        <Loader />
+                    </div>
+                ) : error ? (
+                    <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-red-500 text-center p-4">
+                        {error}
+                    </div>
+                ) : data.length === 0 ? (
+                    <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-gray-400">
+                        {t("common.no_record")}
+                    </div>
+                ) : (
+                    <div className="space-y-2">
+                        {data.map((tx) => (
+                            <div
+                                key={tx.id}
+                                className="flex items-center justify-between p-3 rounded-md border border-gray-50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/20 hover:border-teal-200 dark:hover:border-teal-900 transition-colors group"
+                            >
+                                <div className="flex items-center gap-3">
+                                    {/* Minimal Status Indicator */}
+                                    <div
+                                        className={`w-1.5 h-8 rounded-full ${getIsDangerousAction(tx.status) === true ? "bg-red-500" : "bg-teal-500"}`}
+                                    />
 
-                                <div className="flex flex-col">
-                                    <span className="text-xs font-black text-gray-800 dark:text-white uppercase tracking-tight">
-                                        {tx.orderNo}
-                                    </span>
-                                    <div className="flex items-center gap-2 text-[10px] text-gray-500 font-medium">
-                                        <span>{tx.time}</span>
-                                        <span className="w-1 h-1 rounded-full bg-gray-300" />
-                                        <span className="uppercase">{tx.type}</span>
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-black text-gray-800 dark:text-white uppercase tracking-tight">
+                                            {tx.orderNumber}
+                                        </span>
+                                        <div className="flex items-center gap-2 text-[10px] text-gray-500 font-medium">
+                                            <span>{tx.createdAt}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="text-right">
-                                <p className={`text-sm font-bold tabular-nums ${tx.status === 'voided' ? 'text-red-500 line-through' : 'text-gray-900 dark:text-white'}`}>
-                                    {displayPrice(tx.amount)}
-                                </p>
-                                <span className={`text-[9px] font-black uppercase tracking-tighter ${tx.status === 'voided' ? 'text-red-400' : 'text-teal-500'}`}>
-                                    {t(`common.${tx.status}`)}
-                                </span>
+                                <div className="text-right">
+                                    <p
+                                        className={`text-sm font-bold tabular-nums ${getIsDangerousAction(tx.status) === true ? "text-red-500 line-through" : "text-gray-900 dark:text-white"}`}
+                                    >
+                                        {displayPrice(tx.grandTotal)}
+                                    </p>
+                                    <OrderStatusLabel order={tx as IOrder} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Bottom Summary Footer */}
-            <div className="mt-4 pt-3 border-t border-dashed border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center text-[10px] font-black uppercase text-gray-400">
-                    <span>{t("reports.total_shown")}</span>
-                    <span className="text-gray-900 dark:text-white tabular-nums">5 {t("common.orders")}</span>
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

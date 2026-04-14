@@ -1,4 +1,4 @@
-import type { ICustomerInsight, IFinancialOverview, IHourlyHeatmapItem, IInventoryValuation, IPaymentMixItem, IReport, ISalesOverviewReport, ISalesSummaryData, ITopSellingProduct, IWeeklySalesData, IVoidReport, IZReportData } from "@/types/reports";
+import type { ICustomerInsight, IFinancialOverview, IHourlyHeatmapItem, IInventoryValuation, IPaymentMixItem, IReport, ISalesOverviewReport, ISalesSummaryData, ITopSellingProduct, IWeeklySalesData, IVoidReport, IZReportData, IRecentTransaction } from "@/types/reports";
 import type { ICustomer } from "@/types/customer";
 import type { IProduct } from "@/types/product";
 import { getName } from "@/utils";
@@ -641,6 +641,30 @@ export class reportApi {
             return this.createResponse(products, "Inventory alerts retrieved.");
         } catch (error) {
             return this.createResponse([], error instanceof Error ? error.message : "Error loading alerts", false);
+        }
+    }
+
+
+    static async getRecentTransactions(limit: number = 5): Promise<ServiceResponse<IRecentTransaction[]>> {
+        try {
+            const orders = await db.orders
+                .orderBy("createdAt")
+                .reverse()
+                .filter(o => o.status === TOrderStatus.COMPLETED || o.status === TOrderStatus.VOIDED)
+               // .limit(limit)
+                .toArray();
+
+            const data: IRecentTransaction[] = orders.map(o => ({
+                id: o.id!,
+                orderNumber: o.orderNumber,
+                createdAt: o.createdAt,
+                grandTotal: o.grandTotal || 0,
+                status: o.status
+            }));
+
+            return this.createResponse(data, "Recent transactions retrieved.");
+        } catch (error) {
+            return this.createResponse([], error instanceof Error ? error.message : "Error loading transactions", false);
         }
     }
 }

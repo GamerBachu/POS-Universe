@@ -104,7 +104,7 @@ export interface IFinancialOverview {
     totalCogs: number;
     grossProfit: number;
     grossMargin: number;
-    totalExpenses: number; 
+    totalExpenses: number;
     netIncome: number;
     cashInflow: number;
     cashOutflow: number;
@@ -129,4 +129,12 @@ export interface IHourlyHeatmapItem {
     count: number;
     revenue: number;
     intensity: number; // 0 to 1 scale
+}
+
+export interface IRecentTransaction {
+    id: number;
+    orderNumber: string;
+    createdAt: string;
+    grandTotal: number;
+    status: string;
 }
