@@ -82,6 +82,20 @@ export interface ICustomerInsight {
     loyaltyScore: number; // Calculated based on frequency and volume
 }
 
+export interface IWeeklySalesData {
+    date: string; // YYYY-MM-DD
+    dayLabel: string; // e.g., "Mon"
+    totalSales: number;
+}
+
+/**
+ * Structure for Sales Overview Report (e.g., for Dashboard)
+ */
+export interface ISalesOverviewReport {
+    totalRevenueLast7Days: number;
+    weeklySalesTrend: IWeeklySalesData[];
+}
+
 /**
  * Structure for Financial Overview Report
  */
@@ -94,4 +108,25 @@ export interface IFinancialOverview {
     netIncome: number;
     cashInflow: number;
     cashOutflow: number;
+}
+
+export interface ITopSellingProduct {
+    productId: number;
+    name: string;
+    soldCount: number;
+    totalRevenue: number;
+}
+
+export interface IPaymentMixItem {
+    label: string;
+    val: number; // Percentage
+    amount: number;
+    color: string;
+}
+
+export interface IHourlyHeatmapItem {
+    hour: number;
+    count: number;
+    revenue: number;
+    intensity: number; // 0 to 1 scale
 }

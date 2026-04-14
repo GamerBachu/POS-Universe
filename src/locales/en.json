@@ -36,7 +36,7 @@
     "select": "Select",
     "status": "Status",
     "system_generated": "system will generate",
-    "ph_search": "Search for ...",
+    "px_search": "Search for",
     "filter": "Filter",
     "search": "Search",
     "clear": "Clear",
@@ -390,6 +390,35 @@
     "col_contribution": "Contribution %",
     "terminal_id": "Terminal ID",
     "report_period": "Report Period",
+
+    "sales_overview_title": "Sales Overview",
+    "sales_overview_desc": "Weekly sales performance and trends.",
+    "weekly_performance": "Weekly Performance",
+
+    "top_selling_title": "Top Selling Products",
+    "top_selling_desc": "Highest volume products moving through the system.",
+    "top_selling_question": "  1.What is selling?",
+
+    "inventory_alerts_title": "Live Inventory Alerts",
+    "inventory_alerts_desc": "Items running below critical reorder levels.",
+    "inventory_alerts_question": "2. What is missing?",
+
+    "payment_mix_title": "Payment Mix",
+    "payment_mix_desc": "Distribution of revenue across payment channels.",
+    "payment_mix_question": "3. Where is the money coming from?",
+
+    "hourly_heatmap_title": "Hourly Heatmap",
+    "hourly_heatmap_desc": "Peak transaction periods over a 24-hour cycle.",
+    "hourly_heatmap_question": "4. When are we busy?",
+
+    "recent_transactions_title": "Recent Transactions",
+    "recent_transactions_desc": "A list of the most recent transactions, showing order details and status.",
+    "recent_transactions_question": "5. What just happened?",
+
+    "peak_hours_hint": "Darker cells indicate higher transaction volume.",
+    "sold": "Sold",
+    "total_volume": "Total Volume",
+    "low_stock": "Low Stock",
 
     "overview_title": "Financial Overview",
     "overview_desc": "Profit margins, expenses, and cash flow analysis.",

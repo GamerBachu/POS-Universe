@@ -1,4 +1,4 @@
-import type { ICustomerInsight, IFinancialOverview, IInventoryValuation, IReport, ISalesSummaryData, IVoidReport, IZReportData } from "@/types/reports";
+import type { ICustomerInsight, IFinancialOverview, IHourlyHeatmapItem, IInventoryValuation, IPaymentMixItem, IReport, ISalesOverviewReport, ISalesSummaryData, ITopSellingProduct, IWeeklySalesData, IVoidReport, IZReportData } from "@/types/reports";
 import type { ICustomer } from "@/types/customer";
 import type { IProduct } from "@/types/product";
 import { getName } from "@/utils";
@@ -410,7 +410,7 @@ export class reportApi {
                 .toArray();
 
             const orderIds = orders.map(o => o.id).filter((id): id is number => id !== undefined);
-            
+
             // 2. Get all items for these orders to calculate COGS
             const items = await db.orderItems.where("orderId").anyOf(orderIds).toArray();
             const productIds = Array.from(new Set(items.map(i => i.productId)));
@@ -418,7 +418,7 @@ export class reportApi {
             const productMap = new Map(products.map(p => [p.id, p]));
 
             const totalRevenue = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
-            
+
             const totalCogs = items.reduce((sum, item) => {
                 const p = productMap.get(item.productId);
                 return sum + (item.quantity * (p?.costPrice || 0));
@@ -433,7 +433,7 @@ export class reportApi {
                 grossProfit,
                 grossMargin: Number(grossMargin.toFixed(2)),
                 totalExpenses: 0, // Placeholder: Expenses feature coming soon
-                netIncome: grossProfit, 
+                netIncome: grossProfit,
                 cashInflow: totalRevenue,
                 cashOutflow: totalCogs
             };
@@ -441,6 +441,206 @@ export class reportApi {
             return this.createResponse(data, "Financial overview generated.");
         } catch (error) {
             return this.createResponse({} as IFinancialOverview, error instanceof Error ? error.message : "Failed to load financials", false);
+        }
+    }
+
+    /**
+     * Sales Overview: Weekly sales performance and trends for dashboard.
+     * Fetches sales data for the last 7 days.
+     */
+    static async getSalesOverviewData(): Promise<ServiceResponse<ISalesOverviewReport>> {
+        try {
+            const today = new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 6); // Get data for today and the past 6 days (7 days total)
+
+            const startDate = sevenDaysAgo.toISOString().split('T')[0];
+            const endDate = today.toISOString().split('T')[0];
+
+            const orders = await db.orders
+                .where("createdAt")
+                .between(startDate, endDate + "\uffff", true, true)
+                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .toArray();
+
+            const dailySalesMap: Record<string, number> = {};
+            const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+            // Initialize daily sales for the last 7 days to 0
+            for (let i = 0; i < 7; i++) {
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                dailySalesMap[dateKey] = 0;
+            }
+
+            orders.forEach(order => {
+                const orderDate = order.createdAt.split('T')[0];
+                dailySalesMap[orderDate] = (dailySalesMap[orderDate] || 0) + (order.grandTotal || 0);
+            });
+
+            let totalRevenueLast7Days = 0;
+            const weeklySalesTrend: IWeeklySalesData[] = [];
+
+            // Populate weeklySalesTrend, ensuring all 7 days are present and ordered from oldest to newest
+            for (let i = 6; i >= 0; i--) { // Iterate from 7 days ago to today
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                const dayOfWeek = d.getDay(); // 0 for Sunday, 1 for Monday, etc.
+                const salesForDay = dailySalesMap[dateKey] || 0;
+
+                totalRevenueLast7Days += salesForDay;
+                weeklySalesTrend.push({
+                    date: dateKey,
+                    dayLabel: dayLabels[dayOfWeek],
+                    totalSales: salesForDay
+                });
+            }
+
+            const data: ISalesOverviewReport = { totalRevenueLast7Days, weeklySalesTrend };
+            return this.createResponse(data, "Sales overview generated successfully.");
+        } catch (error) {
+            return this.createResponse({} as ISalesOverviewReport, error instanceof Error ? error.message : "Failed to load sales overview", false);
+        }
+    }
+
+    /**
+     * Aggregates top selling products based on completed orders
+     */
+    static async getTopSellingData(limit: number = 5): Promise<ServiceResponse<ITopSellingProduct[]>> {
+        try {
+            const items = await db.orderItems.toArray();
+            const aggregation: Record<number, { count: number; revenue: number; }> = {};
+
+            items.forEach(item => {
+                if (!aggregation[item.productId]) aggregation[item.productId] = { count: 0, revenue: 0 };
+                aggregation[item.productId].count += item.quantity;
+                aggregation[item.productId].revenue += (item.quantity * item.unitPrice);
+            });
+
+            const productIds = Object.keys(aggregation).map(Number);
+            const products = await db.products.where("id").anyOf(productIds).toArray();
+
+            const result: ITopSellingProduct[] = products.map(p => ({
+                productId: p.id!,
+                name: p.name,
+                soldCount: aggregation[p.id!].count,
+                totalRevenue: aggregation[p.id!].revenue
+            })).sort((a, b) => b.soldCount - a.soldCount).slice(0, limit);
+
+            return this.createResponse(result, "Top selling products retrieved.");
+        } catch (error) {
+            return this.createResponse([], error instanceof Error ? error.message : "Error loading top selling", false);
+        }
+    }
+
+    /**
+     * Fetches current payment method distribution
+     */
+    static async getPaymentMixData(): Promise<ServiceResponse<IPaymentMixItem[]>> {
+        try {
+
+            const map: Record<string, { amount: number; color: string; }> = {
+                "Cash": { amount: 0, color: "bg-teal-500" },
+                "Card": { amount: 0, color: "bg-blue-500" },
+                "UPI": { amount: 0, color: "bg-purple-500" }
+            };
+
+            const today = new Date().toISOString().split('T')[0];
+
+            // 1. Get completed orders for today (createdAt is indexed on orders)
+            const orders = await db.orders
+                .where("createdAt")
+                .between(today, today + "\uffff", true, true)
+                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .toArray();
+
+            const orderIds = orders.map(o => o.id).filter((id): id is number => id !== undefined);
+            if (orderIds.length === 0) {
+
+                const result: IPaymentMixItem[] = Object.entries(map).map(([label, data]) => ({
+                    label,
+                    amount: data.amount,
+                    color: data.color,
+                    val: 0
+                }));
+                return this.createResponse(result, "Payment mix generated.");
+            }
+
+
+            // 2. Fetch payments linked to those orders
+            const payments = await db.orderPayments
+                .where("orderId")
+                .anyOf(orderIds)
+                .toArray();
+
+            const total = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+
+
+            payments.forEach(p => {
+                if (p.category === TPaymentCategory.CASH) map["Cash"].amount += p.amount;
+                else if (p.category === TPaymentCategory.ELECTRONIC) map["UPI"].amount += p.amount;
+                else map["Card"].amount += p.amount;
+            });
+
+            const result: IPaymentMixItem[] = Object.entries(map).map(([label, data]) => ({
+                label,
+                amount: data.amount,
+                color: data.color,
+                val: total > 0 ? Math.round((data.amount / total) * 100) : 0
+            }));
+
+            return this.createResponse(result, "Payment mix generated.");
+        } catch (error) {
+            return this.createResponse([], error instanceof Error ? error.message : "Error loading payment mix", false);
+        }
+    }
+
+    /**
+     * Generates an hourly heatmap for the current day
+     */
+    static async getHourlyHeatmapData(): Promise<ServiceResponse<IHourlyHeatmapItem[]>> {
+        try {
+            const today = new Date().toISOString().split('T')[0];
+
+            const orders = await db.orders
+                .where("createdAt")
+                .between(today, today + "\uffff")
+                .toArray();
+
+            const hours = Array.from({ length: 24 }, (_, i) => ({
+                hour: i, count: 0, revenue: 0, intensity: 0
+            }));
+
+            orders.forEach(o => {
+                const hour = new Date(o.createdAt).getHours();
+                hours[hour].count += 1;
+                hours[hour].revenue += (o.grandTotal || 0);
+            });
+
+            const maxCount = Math.max(...hours.map(h => h.count), 1);
+            hours.forEach(h => h.intensity = h.count / maxCount);
+
+            return this.createResponse(hours, "Hourly heatmap generated.");
+        } catch (error) {
+            return this.createResponse([], error instanceof Error ? error.message : "Error loading heatmap", false);
+
+        }
+    }
+
+    /**
+     * Fetches top products with stock below reorder level
+     */
+    static async getInventoryAlertsData(): Promise<ServiceResponse<IProduct[]>> {
+        try {
+            const products = await db.products // Filter for active products with stock below reorder level
+                .filter(p => !!p.isActive && p.stock <= (p.reorderLevel || 0))
+                .limit(10)
+                .toArray();
+            return this.createResponse(products, "Inventory alerts retrieved.");
+        } catch (error) {
+            return this.createResponse([], error instanceof Error ? error.message : "Error loading alerts", false);
         }
     }
 }
