@@ -8,6 +8,7 @@ import SummaryCard from "@/components/SummaryCard";
 import type { IProduct } from "@/types/product";
 import Loader from "@/components/Loader";
 import PrintService from "@/components/PrintService";
+import InventoryStatus from "@/components/badge/InventoryStatus";
 
 const InventoryManagementReport = () => {
     const { t } = useLanguage();
@@ -86,7 +87,7 @@ const InventoryManagementReport = () => {
                             <SearchIcon className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
-                                placeholder={t("common.ph_search")}
+                                placeholder={t("common.search")}
                                 className="pl-9 pr-3 h-9 text-xs border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 focus:ring-1 focus:ring-teal-500 outline-none w-48 md:w-64 transition-all"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -152,23 +153,27 @@ const InventoryManagementReport = () => {
                                                 <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                                                     <div className="flex flex-col">
                                                         <span>{item.name}</span>
-                                                        <span className="text-[9px] text-gray-500 uppercase">{item.code}</span>
+                                                        <span className="text-[10px] uppercase ">{item.code}</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-4 py-3 text-xs font-mono">{item.sku || "N/A"}</td>
+                                                <td className="px-4 py-3 text-xs font-mono">
+                                                    <div className="flex flex-col">
+                                                        <span>{item.sku}</span>
+                                                        <span className="text-[10px] uppercase">
+                                                            {item.barcode}
+                                                        </span>
+                                                    </div>
+                                                </td>
                                                 <td className="px-4 py-3 text-center font-bold tabular-nums">{item.stock}</td>
                                                 <td className="px-4 py-3 text-center text-gray-500 tabular-nums">{item.reorderLevel}</td>
                                                 <td className="px-4 py-3 text-right">
-                                                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full
-                                                        ${!item.isActive ? "bg-gray-100 text-gray-700 dark:bg-gray-700/30 dark:text-gray-400" :
-                                                            item.stock <= 0 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
-                                                                item.stock <= item.reorderLevel ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" :
-                                                                    "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400"
-                                                        }`}>
-                                                        {!item.isActive ? t("common.inactive") :
-                                                            item.stock <= 0 ? t("reports.inventory_status_out") :
-                                                                item.stock <= item.reorderLevel ? t("reports.inventory_status_low") : t("reports.inventory_status_ok")}
-                                                    </span>
+
+                                                    <InventoryStatus
+                                                        isActive={item.isActive}
+                                                        stock={item.stock}
+                                                        reorderLevel={item.reorderLevel}
+                                                        showCount={false}
+                                                    />
                                                 </td>
                                             </tr>
                                         ))

@@ -83,7 +83,7 @@ const CustomerInsightsReport = () => {
                             <SearchIcon className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
-                                placeholder={t("common.ph_search")}
+                                placeholder={t("common.search")}
                                 className="pl-9 pr-3 h-9 text-xs border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 focus:ring-1 focus:ring-teal-500 outline-none w-48 md:w-64 transition-all"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}

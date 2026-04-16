@@ -5,6 +5,7 @@ import { displayPrice } from "@/utils/helper/numberUtils";
 import { useLanguage } from "@/contexts/language";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import { calculateFinalPrice } from "@/utils/financial";
+import { InventoryStatus, Status } from "@/components/badge";
 
 interface Props {
   item: IProduct;
@@ -13,7 +14,6 @@ interface Props {
 const ProductTableRow: React.FC<Props> = ({ item }) => {
   const { t } = useLanguage();
   const currencySymbol = useCurrencySymbol();
-  const isLowStock = item.stock <= item.reorderLevel;
   const editPath = `${PATHS.PRODUCT_EDIT}/${item.id}`;
 
   return (
@@ -60,26 +60,19 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
 
       {/* Stock Status Badge */}
       <td className="p-3 text-center">
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase ${isLowStock
-            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-            }`}
-        >
-          {item.stock}
-        </span>
+        <InventoryStatus
+          isActive={true}
+          stock={item.stock}
+          reorderLevel={item.reorderLevel}
+          showCount={true}
+        />
       </td>
 
       {/* Active/Inactive Status */}
       <td className="p-3 text-center">
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${item.isActive
-            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20"
-            : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20"
-            }`}
-        >
+        <Status isActive={item.isActive}>
           {item.isActive ? t("common.active") : t("common.inactive")}
-        </span>
+        </Status>
       </td>
 
       {/* Small Action Button Group */}

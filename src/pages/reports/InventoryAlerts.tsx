@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLanguage } from '@/contexts/language';
-import { reportApi } from '@/api';
-import type { IProduct } from '@/types/product';
-import Loader from '@/components/Loader';
+import { useLanguage } from "@/contexts/language";
+import { reportApi } from "@/api";
+import type { IProduct } from "@/types/product";
+import Loader from "@/components/Loader";
 import { LoggerUtils } from "@/utils";
+import { InventoryStatus } from "@/components/badge";
 
 const InventoryAlerts = () => {
     const { t } = useLanguage();
@@ -20,7 +21,12 @@ const InventoryAlerts = () => {
                 setData(res.data);
             } else {
                 setData([]);
-                LoggerUtils.logError(res, "InventoryAlerts", "fetchData", "API response error");
+                LoggerUtils.logError(
+                    res,
+                    "InventoryAlerts",
+                    "fetchData",
+                    "API response error",
+                );
                 setError(t("common.no_record"));
             }
         } catch (err) {
@@ -32,7 +38,9 @@ const InventoryAlerts = () => {
         }
     }, [t]);
 
-    useEffect(() => { fetchData(); }, [fetchData]);
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     return (
         <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-96 flex flex-col">
@@ -50,9 +58,13 @@ const InventoryAlerts = () => {
 
             <div className="space-y-2 flex-1 overflow-auto">
                 {isLoading ? (
-                    <div className="h-full flex items-center justify-center"><Loader /></div>
+                    <div className="h-full flex items-center justify-center">
+                        <Loader />
+                    </div>
                 ) : error ? (
-                    <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-red-500">{error}</div>
+                    <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-red-500">
+                        {error}
+                    </div>
                 ) : data.length === 0 ? (
                     <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-gray-400 italic">
                         {t("common.no_record")}
@@ -67,11 +79,17 @@ const InventoryAlerts = () => {
                                 <span className="text-xs font-black text-gray-800 dark:text-gray-200 uppercase leading-none">
                                     {item.name}
                                 </span>
-                                <span className="text-[9px] text-gray-500 uppercase font-bold mt-1">{item.sku}</span>
+                                <div className=" flex items-center gap-2">
+                                    <span className="text-[10px] uppercase ">{item.code}</span>
+                                    <span className="text-[10px] uppercase ">{t("product_inventory.sku")}: {item.sku}</span>
+                                </div>
                             </div>
-                            <span className="text-[10px] font-black text-orange-600 bg-orange-100 dark:bg-orange-900/30 px-2 py-0.5 rounded uppercase tabular-nums">
-                                {t("reports.low_stock")}: {item.stock}
-                            </span>
+                            <InventoryStatus
+                                isActive={item.isActive}
+                                stock={item.stock}
+                                reorderLevel={item.reorderLevel}
+                                showCount={true}
+                            />
                         </div>
                     ))
                 )}

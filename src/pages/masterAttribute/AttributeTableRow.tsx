@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type IMasterProductAttribute } from "@/types/masters";
 import { useLanguage } from "@/contexts/language";
+import Status from "@/components/badge/Status";
 
 interface RowProps {
     item: IMasterProductAttribute;
@@ -24,12 +25,9 @@ const AttributeTableRow = ({ item }: RowProps) => {
             </td>
 
             <td className="p-3 text-center">
-                <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${item.isActive
-                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20"
-                    : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20"
-                    }`}>
+                <Status isActive={item.isActive}>
                     {item.isActive ? t("common.active") : t("common.inactive")}
-                </span>
+                </Status>
             </td>
 
 

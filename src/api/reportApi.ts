@@ -1,4 +1,18 @@
-import type { ICustomerInsight, IFinancialOverview, IHourlyHeatmapItem, IInventoryValuation, IPaymentMixItem, IReport, ISalesOverviewReport, ISalesSummaryData, ITopSellingProduct, IWeeklySalesData, IVoidReport, IZReportData, IRecentTransaction } from "@/types/reports";
+import type {
+    ICustomerInsight,
+    IFinancialOverview,
+    IHourlyHeatmapItem,
+    IInventoryValuation,
+    IPaymentMixItem,
+    IReport,
+    ISalesOverviewReport,
+    ISalesSummaryData,
+    ITopSellingProduct,
+    IWeeklySalesData,
+    IVoidReport,
+    IZReportData,
+    IRecentTransaction,
+} from "@/types/reports";
 import type { ICustomer } from "@/types/customer";
 import type { IProduct } from "@/types/product";
 import { getName } from "@/utils";
@@ -162,7 +176,9 @@ export class reportApi {
      * Inventory Valuation: Total Asset Value
      * Calculates total stock value (Stock * Cost Price).
      */
-    static async getInventoryValuation(): Promise<ServiceResponse<IInventoryValuation>> {
+    static async getInventoryValuation(): Promise<
+        ServiceResponse<IInventoryValuation>
+    > {
         // Rule 3: Always order by primary ID in reverse for reports.
         // Using .filter with !! coercion to fix "no data" issues caused by boolean/number index mismatches.
         const products = await db.products
@@ -235,13 +251,21 @@ export class reportApi {
     /**
      * Inventory Management: Current stock levels and reorder alerts
      */
-    static async getInventoryManagementData(): Promise<ServiceResponse<IProduct[]>> {
+    static async getInventoryManagementData(): Promise<
+        ServiceResponse<IProduct[]>
+    > {
         try {
             const products = await db.products // Show inactive products OR active products with low stock
-                .filter(p => !p.isActive || (p.isActive && p.stock <= (p.reorderLevel || 0)))
+                .filter(
+                    (p) =>
+                        !p.isActive || (p.isActive && p.stock <= (p.reorderLevel || 0)),
+                )
                 .reverse()
                 .toArray();
-            return this.createResponse(products, "Inventory data retrieved successfully.");
+            return this.createResponse(
+                products,
+                "Inventory data retrieved successfully.",
+            );
         } catch (error) {
             return this.createResponse(
                 [],
@@ -254,7 +278,9 @@ export class reportApi {
     /**
      * Sales Summary: High-level overview of daily performance
      */
-    static async getSalesSummary(selectedDate: string): Promise<ServiceResponse<ISalesSummaryData>> {
+    static async getSalesSummary(
+        selectedDate: string,
+    ): Promise<ServiceResponse<ISalesSummaryData>> {
         try {
             const f_date = selectedDate.split("T")[0];
             const prev_date_obj = new Date(f_date);
@@ -265,18 +291,24 @@ export class reportApi {
             const todayOrders = await db.orders
                 .where("createdAt")
                 .between(f_date, f_date + "\uffff", true, true)
-                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .filter((o) => o.status === TOrderStatus.COMPLETED)
                 .toArray();
 
             // 2. Fetch Yesterday's Revenue for Growth Calculation
             const yesterdayOrders = await db.orders
                 .where("createdAt")
                 .between(f_prev_date, f_prev_date + "\uffff", true, true)
-                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .filter((o) => o.status === TOrderStatus.COMPLETED)
                 .toArray();
 
-            const todayRevenue = todayOrders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
-            const yesterdayRevenue = yesterdayOrders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+            const todayRevenue = todayOrders.reduce(
+                (sum, o) => sum + (o.grandTotal || 0),
+                0,
+            );
+            const yesterdayRevenue = yesterdayOrders.reduce(
+                (sum, o) => sum + (o.grandTotal || 0),
+                0,
+            );
 
             // 3. Calculate Metrics
             const totalSales = todayOrders.length;
@@ -291,18 +323,18 @@ export class reportApi {
 
             // 4. Hourly Trend Breakdown
             const hourlyMap: Record<string, number> = {};
-            todayOrders.forEach(order => {
+            todayOrders.forEach((order) => {
                 const hour = new Date(order.createdAt).getHours();
-                const label = `${hour.toString().padStart(2, '0')}:00`;
+                const label = `${hour.toString().padStart(2, "0")}:00`;
                 hourlyMap[label] = (hourlyMap[label] || 0) + (order.grandTotal || 0);
             });
 
             // Sort hours and format for UI
             const salesTrend = Object.keys(hourlyMap)
                 .sort()
-                .map(label => ({
+                .map((label) => ({
                     label,
-                    value: hourlyMap[label]
+                    value: hourlyMap[label],
                 }));
 
             const data: ISalesSummaryData = {
@@ -310,7 +342,7 @@ export class reportApi {
                 totalRevenue: todayRevenue,
                 averageOrderValue,
                 growth: Number(growth.toFixed(2)),
-                salesTrend
+                salesTrend,
             };
 
             return this.createResponse(data, "Sales summary generated successfully.");
@@ -326,21 +358,26 @@ export class reportApi {
     /**
      * Customer Insights: Aggregates order data to find top customers and loyalty trends
      */
-    static async getCustomerInsights(): Promise<ServiceResponse<ICustomerInsight[]>> {
+    static async getCustomerInsights(): Promise<
+        ServiceResponse<ICustomerInsight[]>
+    > {
         try {
             // 1. Get all completed orders that have a customer assigned
             const orders = await db.orders
-                .filter(o => o.status === TOrderStatus.COMPLETED && !!o.customerId)
+                .filter((o) => o.status === TOrderStatus.COMPLETED && !!o.customerId)
                 .toArray();
 
             // 2. Resolve Customer Identities (Group by Phone to handle cases where IDs might differ)
-            const uniqueIds = Array.from(new Set(orders.map(o => o.customerId!)));
-            const customersList = await db.customers.where("id").anyOf(uniqueIds).toArray();
+            const uniqueIds = Array.from(new Set(orders.map((o) => o.customerId!)));
+            const customersList = await db.customers
+                .where("id")
+                .anyOf(uniqueIds)
+                .toArray();
 
             const idToPhoneKey = new Map<number, string>();
             const phoneToProfileMap = new Map<string, ICustomer>();
 
-            customersList.forEach(c => {
+            customersList.forEach((c) => {
                 const phoneKey = c.phone?.trim() || `ID_${c.id}`; // Fallback to ID if phone is missing
                 idToPhoneKey.set(c.id!, phoneKey);
                 if (!phoneToProfileMap.has(phoneKey)) {
@@ -349,38 +386,44 @@ export class reportApi {
             });
 
             // 3. Aggregate data by resolved Phone Key
-            const aggregation: Record<string, { spent: number; count: number; lastDate: string; }> = {};
+            const aggregation: Record<
+                string,
+                { spent: number; count: number; lastDate: string; }
+            > = {};
 
-            orders.forEach(order => {
-                const key = idToPhoneKey.get(order.customerId!) || `ID_${order.customerId}`;
+            orders.forEach((order) => {
+                const key =
+                    idToPhoneKey.get(order.customerId!) || `ID_${order.customerId}`;
                 if (!aggregation[key]) {
                     aggregation[key] = { spent: 0, count: 0, lastDate: order.createdAt };
                 }
-                aggregation[key].spent += (order.grandTotal || 0);
+                aggregation[key].spent += order.grandTotal || 0;
                 aggregation[key].count += 1;
                 if (new Date(order.createdAt) > new Date(aggregation[key].lastDate)) {
                     aggregation[key].lastDate = order.createdAt;
                 }
             });
 
-            const data: ICustomerInsight[] = Array.from(phoneToProfileMap.values()).map(c => {
+            const data: ICustomerInsight[] = Array.from(
+                phoneToProfileMap.values(),
+            ).map((c) => {
                 const phoneKey = c.phone?.trim() || `ID_${c.id}`;
                 const agg = aggregation[phoneKey];
                 const avg = agg.count > 0 ? agg.spent / agg.count : 0;
 
                 // Simple Loyalty Calculation: (Spent * 0.4) + (Count * 10)
-                const loyaltyScore = (agg.spent * 0.1) + (agg.count * 5);
+                const loyaltyScore = agg.spent * 0.1 + agg.count * 5;
 
                 return {
                     customerId: c.id!,
-                    name: (c.name === undefined || c.name === "") ? "--" : c.name,
-                    email: (c.email === undefined || c.email === "") ? "--" : c.email,
-                    phone: (c.phone === undefined || c.phone === "") ? "--" : c.phone,
+                    name: c.name === undefined || c.name === "" ? "--" : c.name,
+                    email: c.email === undefined || c.email === "" ? "--" : c.email,
+                    phone: c.phone === undefined || c.phone === "" ? "--" : c.phone,
                     totalSpent: agg.spent,
                     orderCount: agg.count,
                     avgOrderValue: avg,
                     lastPurchaseDate: agg.lastDate,
-                    loyaltyScore: Math.round(loyaltyScore)
+                    loyaltyScore: Math.round(loyaltyScore),
                 };
             });
 
@@ -389,7 +432,8 @@ export class reportApi {
 
             return this.createResponse(data, "Customer insights generated.");
         } catch (error) {
-            const msg = error instanceof Error ? error.message : "Failed to load insights";
+            const msg =
+                error instanceof Error ? error.message : "Failed to load insights";
             return this.createResponse([], msg, false);
         }
     }
@@ -397,7 +441,10 @@ export class reportApi {
     /**
      * Financial Overview: Profit margins and Cash flow
      */
-    static async getFinancialOverview(startDate: string, endDate: string): Promise<ServiceResponse<IFinancialOverview>> {
+    static async getFinancialOverview(
+        startDate: string,
+        endDate: string,
+    ): Promise<ServiceResponse<IFinancialOverview>> {
         try {
             const f_start = startDate.split("T")[0];
             const f_end = endDate.split("T")[0];
@@ -406,26 +453,38 @@ export class reportApi {
             const orders = await db.orders
                 .where("createdAt")
                 .between(f_start, f_end + "\uffff", true, true)
-                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .filter((o) => o.status === TOrderStatus.COMPLETED)
                 .toArray();
 
-            const orderIds = orders.map(o => o.id).filter((id): id is number => id !== undefined);
+            const orderIds = orders
+                .map((o) => o.id)
+                .filter((id): id is number => id !== undefined);
 
             // 2. Get all items for these orders to calculate COGS
-            const items = await db.orderItems.where("orderId").anyOf(orderIds).toArray();
-            const productIds = Array.from(new Set(items.map(i => i.productId)));
-            const products = await db.products.where("id").anyOf(productIds).toArray();
-            const productMap = new Map(products.map(p => [p.id, p]));
+            const items = await db.orderItems
+                .where("orderId")
+                .anyOf(orderIds)
+                .toArray();
+            const productIds = Array.from(new Set(items.map((i) => i.productId)));
+            const products = await db.products
+                .where("id")
+                .anyOf(productIds)
+                .toArray();
+            const productMap = new Map(products.map((p) => [p.id, p]));
 
-            const totalRevenue = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+            const totalRevenue = orders.reduce(
+                (sum, o) => sum + (o.grandTotal || 0),
+                0,
+            );
 
             const totalCogs = items.reduce((sum, item) => {
                 const p = productMap.get(item.productId);
-                return sum + (item.quantity * (p?.costPrice || 0));
+                return sum + item.quantity * (p?.costPrice || 0);
             }, 0);
 
             const grossProfit = totalRevenue - totalCogs;
-            const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+            const grossMargin =
+                totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
 
             const data: IFinancialOverview = {
                 totalRevenue,
@@ -435,12 +494,16 @@ export class reportApi {
                 totalExpenses: 0, // Placeholder: Expenses feature coming soon
                 netIncome: grossProfit,
                 cashInflow: totalRevenue,
-                cashOutflow: totalCogs
+                cashOutflow: totalCogs,
             };
 
             return this.createResponse(data, "Financial overview generated.");
         } catch (error) {
-            return this.createResponse({} as IFinancialOverview, error instanceof Error ? error.message : "Failed to load financials", false);
+            return this.createResponse(
+                {} as IFinancialOverview,
+                error instanceof Error ? error.message : "Failed to load financials",
+                false,
+            );
         }
     }
 
@@ -448,19 +511,21 @@ export class reportApi {
      * Sales Overview: Weekly sales performance and trends for dashboard.
      * Fetches sales data for the last 7 days.
      */
-    static async getSalesOverviewData(): Promise<ServiceResponse<ISalesOverviewReport>> {
+    static async getSalesOverviewData(): Promise<
+        ServiceResponse<ISalesOverviewReport>
+    > {
         try {
             const today = new Date();
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(today.getDate() - 6); // Get data for today and the past 6 days (7 days total)
 
-            const startDate = sevenDaysAgo.toISOString().split('T')[0];
-            const endDate = today.toISOString().split('T')[0];
+            const startDate = sevenDaysAgo.toISOString().split("T")[0];
+            const endDate = today.toISOString().split("T")[0];
 
             const orders = await db.orders
                 .where("createdAt")
                 .between(startDate, endDate + "\uffff", true, true)
-                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .filter((o) => o.status === TOrderStatus.COMPLETED)
                 .toArray();
 
             const dailySalesMap: Record<string, number> = {};
@@ -470,23 +535,25 @@ export class reportApi {
             for (let i = 0; i < 7; i++) {
                 const d = new Date();
                 d.setDate(today.getDate() - i);
-                const dateKey = d.toISOString().split('T')[0];
+                const dateKey = d.toISOString().split("T")[0];
                 dailySalesMap[dateKey] = 0;
             }
 
-            orders.forEach(order => {
-                const orderDate = order.createdAt.split('T')[0];
-                dailySalesMap[orderDate] = (dailySalesMap[orderDate] || 0) + (order.grandTotal || 0);
+            orders.forEach((order) => {
+                const orderDate = order.createdAt.split("T")[0];
+                dailySalesMap[orderDate] =
+                    (dailySalesMap[orderDate] || 0) + (order.grandTotal || 0);
             });
 
             let totalRevenueLast7Days = 0;
             const weeklySalesTrend: IWeeklySalesData[] = [];
 
             // Populate weeklySalesTrend, ensuring all 7 days are present and ordered from oldest to newest
-            for (let i = 6; i >= 0; i--) { // Iterate from 7 days ago to today
+            for (let i = 6; i >= 0; i--) {
+                // Iterate from 7 days ago to today
                 const d = new Date();
                 d.setDate(today.getDate() - i);
-                const dateKey = d.toISOString().split('T')[0];
+                const dateKey = d.toISOString().split("T")[0];
                 const dayOfWeek = d.getDay(); // 0 for Sunday, 1 for Monday, etc.
                 const salesForDay = dailySalesMap[dateKey] || 0;
 
@@ -494,80 +561,109 @@ export class reportApi {
                 weeklySalesTrend.push({
                     date: dateKey,
                     dayLabel: dayLabels[dayOfWeek],
-                    totalSales: salesForDay
+                    totalSales: salesForDay,
                 });
             }
 
-            const data: ISalesOverviewReport = { totalRevenueLast7Days, weeklySalesTrend };
-            return this.createResponse(data, "Sales overview generated successfully.");
+            const data: ISalesOverviewReport = {
+                totalRevenueLast7Days,
+                weeklySalesTrend,
+            };
+            return this.createResponse(
+                data,
+                "Sales overview generated successfully.",
+            );
         } catch (error) {
-            return this.createResponse({} as ISalesOverviewReport, error instanceof Error ? error.message : "Failed to load sales overview", false);
+            return this.createResponse(
+                {} as ISalesOverviewReport,
+                error instanceof Error
+                    ? error.message
+                    : "Failed to load sales overview",
+                false,
+            );
         }
     }
 
     /**
      * Aggregates top selling products based on completed orders
      */
-    static async getTopSellingData(limit: number = 5): Promise<ServiceResponse<ITopSellingProduct[]>> {
+    static async getTopSellingData(
+        limit: number = 5,
+    ): Promise<ServiceResponse<ITopSellingProduct[]>> {
         try {
             const items = await db.orderItems.toArray();
-            const aggregation: Record<number, { count: number; revenue: number; }> = {};
+            const aggregation: Record<number, { count: number; revenue: number; }> =
+                {};
 
-            items.forEach(item => {
-                if (!aggregation[item.productId]) aggregation[item.productId] = { count: 0, revenue: 0 };
+            items.forEach((item) => {
+                if (!aggregation[item.productId])
+                    aggregation[item.productId] = { count: 0, revenue: 0 };
                 aggregation[item.productId].count += item.quantity;
-                aggregation[item.productId].revenue += (item.quantity * item.unitPrice);
+                aggregation[item.productId].revenue += item.quantity * item.unitPrice;
             });
 
             const productIds = Object.keys(aggregation).map(Number);
-            const products = await db.products.where("id").anyOf(productIds).toArray();
+            const products = await db.products
+                .where("id")
+                .anyOf(productIds)
+                .toArray();
 
-            const result: ITopSellingProduct[] = products.map(p => ({
-                productId: p.id!,
-                name: p.name,
-                soldCount: aggregation[p.id!].count,
-                totalRevenue: aggregation[p.id!].revenue
-            })).sort((a, b) => b.soldCount - a.soldCount).slice(0, limit);
+            const result: ITopSellingProduct[] = products
+                .map((p) => ({
+                    productId: p.id!,
+                    name: p.name,
+                    soldCount: aggregation[p.id!].count,
+                    totalRevenue: aggregation[p.id!].revenue,
+                }))
+                .sort((a, b) => b.soldCount - a.soldCount)
+                .slice(0, limit);
 
             return this.createResponse(result, "Top selling products retrieved.");
         } catch (error) {
-            return this.createResponse([], error instanceof Error ? error.message : "Error loading top selling", false);
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Error loading top selling",
+                false,
+            );
         }
     }
 
     /**
      * Fetches current payment method distribution
      */
-    static async getPaymentMixData(): Promise<ServiceResponse<IPaymentMixItem[]>> {
+    static async getPaymentMixData(): Promise<
+        ServiceResponse<IPaymentMixItem[]>
+    > {
         try {
-
             const map: Record<string, { amount: number; color: string; }> = {
-                "Cash": { amount: 0, color: "bg-teal-500" },
-                "Card": { amount: 0, color: "bg-blue-500" },
-                "UPI": { amount: 0, color: "bg-purple-500" }
+                Cash: { amount: 0, color: "bg-teal-500" },
+                Card: { amount: 0, color: "bg-blue-500" },
+                UPI: { amount: 0, color: "bg-purple-500" },
             };
 
-            const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toISOString().split("T")[0];
 
             // 1. Get completed orders for today (createdAt is indexed on orders)
             const orders = await db.orders
                 .where("createdAt")
                 .between(today, today + "\uffff", true, true)
-                .filter(o => o.status === TOrderStatus.COMPLETED)
+                .filter((o) => o.status === TOrderStatus.COMPLETED)
                 .toArray();
 
-            const orderIds = orders.map(o => o.id).filter((id): id is number => id !== undefined);
+            const orderIds = orders
+                .map((o) => o.id)
+                .filter((id): id is number => id !== undefined);
             if (orderIds.length === 0) {
-
-                const result: IPaymentMixItem[] = Object.entries(map).map(([label, data]) => ({
-                    label,
-                    amount: data.amount,
-                    color: data.color,
-                    val: 0
-                }));
+                const result: IPaymentMixItem[] = Object.entries(map).map(
+                    ([label, data]) => ({
+                        label,
+                        amount: data.amount,
+                        color: data.color,
+                        val: 0,
+                    }),
+                );
                 return this.createResponse(result, "Payment mix generated.");
             }
-
 
             // 2. Fetch payments linked to those orders
             const payments = await db.orderPayments
@@ -577,32 +673,41 @@ export class reportApi {
 
             const total = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
 
-
-            payments.forEach(p => {
-                if (p.category === TPaymentCategory.CASH) map["Cash"].amount += p.amount;
-                else if (p.category === TPaymentCategory.ELECTRONIC) map["UPI"].amount += p.amount;
+            payments.forEach((p) => {
+                if (p.category === TPaymentCategory.CASH)
+                    map["Cash"].amount += p.amount;
+                else if (p.category === TPaymentCategory.ELECTRONIC)
+                    map["UPI"].amount += p.amount;
                 else map["Card"].amount += p.amount;
             });
 
-            const result: IPaymentMixItem[] = Object.entries(map).map(([label, data]) => ({
-                label,
-                amount: data.amount,
-                color: data.color,
-                val: total > 0 ? Math.round((data.amount / total) * 100) : 0
-            }));
+            const result: IPaymentMixItem[] = Object.entries(map).map(
+                ([label, data]) => ({
+                    label,
+                    amount: data.amount,
+                    color: data.color,
+                    val: total > 0 ? Math.round((data.amount / total) * 100) : 0,
+                }),
+            );
 
             return this.createResponse(result, "Payment mix generated.");
         } catch (error) {
-            return this.createResponse([], error instanceof Error ? error.message : "Error loading payment mix", false);
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Error loading payment mix",
+                false,
+            );
         }
     }
 
     /**
      * Generates an hourly heatmap for the current day
      */
-    static async getHourlyHeatmapData(): Promise<ServiceResponse<IHourlyHeatmapItem[]>> {
+    static async getHourlyHeatmapData(): Promise<
+        ServiceResponse<IHourlyHeatmapItem[]>
+    > {
         try {
-            const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toISOString().split("T")[0];
 
             const orders = await db.orders
                 .where("createdAt")
@@ -610,22 +715,28 @@ export class reportApi {
                 .toArray();
 
             const hours = Array.from({ length: 24 }, (_, i) => ({
-                hour: i, count: 0, revenue: 0, intensity: 0
+                hour: i,
+                count: 0,
+                revenue: 0,
+                intensity: 0,
             }));
 
-            orders.forEach(o => {
+            orders.forEach((o) => {
                 const hour = new Date(o.createdAt).getHours();
                 hours[hour].count += 1;
-                hours[hour].revenue += (o.grandTotal || 0);
+                hours[hour].revenue += o.grandTotal || 0;
             });
 
-            const maxCount = Math.max(...hours.map(h => h.count), 1);
-            hours.forEach(h => h.intensity = h.count / maxCount);
+            const maxCount = Math.max(...hours.map((h) => h.count), 1);
+            hours.forEach((h) => (h.intensity = h.count / maxCount));
 
             return this.createResponse(hours, "Hourly heatmap generated.");
         } catch (error) {
-            return this.createResponse([], error instanceof Error ? error.message : "Error loading heatmap", false);
-
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Error loading heatmap",
+                false,
+            );
         }
     }
 
@@ -635,36 +746,50 @@ export class reportApi {
     static async getInventoryAlertsData(): Promise<ServiceResponse<IProduct[]>> {
         try {
             const products = await db.products // Filter for active products with stock below reorder level
-                .filter(p => !!p.isActive && p.stock <= (p.reorderLevel || 0))
+                .filter((p) => !!p.isActive && p.stock <= (p.reorderLevel || 0))
                 .limit(10)
+                .reverse()
                 .toArray();
             return this.createResponse(products, "Inventory alerts retrieved.");
         } catch (error) {
-            return this.createResponse([], error instanceof Error ? error.message : "Error loading alerts", false);
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Error loading alerts",
+                false,
+            );
         }
     }
 
-
-    static async getRecentTransactions(limit: number = 5): Promise<ServiceResponse<IRecentTransaction[]>> {
+    static async getRecentTransactions(
+        limit: number = 5,
+    ): Promise<ServiceResponse<IRecentTransaction[]>> {
         try {
             const orders = await db.orders
                 .orderBy("createdAt")
                 .reverse()
-                .filter(o => o.status === TOrderStatus.COMPLETED || o.status === TOrderStatus.VOIDED)
-               // .limit(limit)
+                .filter(
+                    (o) =>
+                        o.status === TOrderStatus.COMPLETED ||
+                        o.status === TOrderStatus.VOIDED,
+                )
+                .limit(limit)
                 .toArray();
 
-            const data: IRecentTransaction[] = orders.map(o => ({
+            const data: IRecentTransaction[] = orders.map((o) => ({
                 id: o.id!,
                 orderNumber: o.orderNumber,
                 createdAt: o.createdAt,
                 grandTotal: o.grandTotal || 0,
-                status: o.status
+                status: o.status,
             }));
 
             return this.createResponse(data, "Recent transactions retrieved.");
         } catch (error) {
-            return this.createResponse([], error instanceof Error ? error.message : "Error loading transactions", false);
+            return this.createResponse(
+                [],
+                error instanceof Error ? error.message : "Error loading transactions",
+                false,
+            );
         }
     }
 }
