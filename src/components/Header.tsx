@@ -4,12 +4,12 @@ import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
 import ButtonHome from "./ButtonHome";
 
-const Header = ({ label = "Loading..." }: { label?: string; }) => {
+const Header = ({ label = "" }: { label?: string; }) => {
     const auth = useAuth();
     const name = auth.info.isAuthorized
         ? auth.info.authUser?.displayName || ""
         : "...";
- 
+
     const { isMinimized, maximizeWindow } = useSideBar();
     return (
         <header className="flex justify-between items-center px-4 py-2 bg-white dark:bg-gray-800 flex-shrink-0 transition-colors duration-200">

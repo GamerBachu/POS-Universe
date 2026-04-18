@@ -130,7 +130,7 @@ const generateSeedProducts = (): IProductView[] => {
             code: `${category.prefix}-${brand.substring(0, 3).toUpperCase()}-${1000 + i}`,
             sku: `${brand.toUpperCase()}-${i * 7}-POS`,
             barcode: (8806090000000 + i).toString(),
-            name: `${brand} ${category.name} Item #${i}`,
+            name: `${brand} ${category.name} Item ${i}`,
             costPrice: parseFloat((Math.random() * 500 + 10).toFixed(2)),
             sellingPrice: 0, // Calculated below
             taxRate: i % 5 === 0 ? 0 : 8.0,

@@ -83,7 +83,7 @@ const DynamicReportPage = () => {
         return (
             <CommonLayout h1={t("navigation.report_label")}>
                 <div className="p-10 flex justify-center items-center">
-                    <Loader />
+                   <Loader label={t("common.loading")} />
                 </div>
             </CommonLayout>
         );

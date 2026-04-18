@@ -54,7 +54,7 @@ const TopSelling = () => {
             <div className="space-y-4 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent hover:scrollbar-thumb-gray-300 dark:hover:scrollbar-thumb-gray-600">
                 {isLoading ? (
                     <div className="h-full flex items-center justify-center">
-                        <Loader />
+                       <Loader label={t("common.loading")} />
                     </div>
                 ) : error ? (
                     <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-red-500 text-center p-4">

@@ -161,7 +161,7 @@ const VoidCancellationReport = () => {
                                     {isLoading ? (
                                         <tr>
                                             <td colSpan={6} className="py-20 text-center">
-                                                <Loader />
+                                               <Loader label={t("common.loading")} />
                                             </td>
                                         </tr>
                                     ) : error ? (
@@ -176,7 +176,7 @@ const VoidCancellationReport = () => {
                                         data.map((item) => (
                                             <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td className="px-4 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                                    #{item.orderNumber}
+                                                    {item.orderNumber}
                                                 </td>
                                                 <td className="px-4 py-4 text-sm whitespace-nowrap">
                                                     {toDisplayString(item.createdAt)}

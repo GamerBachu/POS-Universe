@@ -105,7 +105,7 @@ const ZReport = () => {
 
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-4 opacity-50 p-10">
-          <Loader />
+         <Loader label={t("common.loading")} />
         </div>
       ) : error ? (
         <div className="p-10">

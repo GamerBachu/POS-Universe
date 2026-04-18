@@ -103,7 +103,7 @@ const FinancialOverviewReport = () => {
             <div ref={printDiv} className="flex-1 flex flex-col overflow-auto">
                 {isLoading ? (
                     <div className="py-20 flex justify-center">
-                        <Loader />
+                       <Loader label={t("common.loading")} />
                     </div>
                 ) : error ? (
                     <div className="py-20 text-center text-gray-400 text-xs uppercase font-bold">

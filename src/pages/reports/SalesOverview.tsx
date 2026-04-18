@@ -59,7 +59,7 @@ const SalesOverview = () => {
 
             {isLoading ? (
                 <div className="flex-1 flex items-center justify-center">
-                    <Loader />
+                   <Loader label={t("common.loading")} />
                 </div>
             ) : error ? (
                 <div className="flex-1 flex items-center justify-center">

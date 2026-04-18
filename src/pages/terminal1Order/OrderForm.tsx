@@ -69,7 +69,7 @@ const OrderForm = () => {
                 onClick={onSendBack}
             />
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-                <Loader />
+               <Loader label={t("common.loading")} />
             </div>
         </CommonLayout>
     );

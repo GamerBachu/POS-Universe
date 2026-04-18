@@ -59,7 +59,7 @@ const InventoryAlerts = () => {
             <div className="space-y-2 flex-1 overflow-auto">
                 {isLoading ? (
                     <div className="h-full flex items-center justify-center">
-                        <Loader />
+                       <Loader label={t("common.loading")} />
                     </div>
                 ) : error ? (
                     <div className="h-full flex items-center justify-center text-[10px] uppercase font-bold text-red-500">

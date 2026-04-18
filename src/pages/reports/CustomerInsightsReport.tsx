@@ -151,7 +151,7 @@ const CustomerInsightsReport = () => {
                                     {isLoading ? (
                                         <tr>
                                             <td colSpan={6} className="py-20 text-center">
-                                                <Loader />
+                                                <Loader label={t("common.loading")} />
                                             </td>
                                         </tr>
                                     ) : error ? (

@@ -117,8 +117,8 @@ const ProductTable: React.FC = () => {
           onChange={(e) => handleInputChange('active', e.target.value)}
         >
           <option value="">{t("common.all_status")}</option>
-          <option value="true">{t("product_inventory.active")}</option>
-          <option value="false">{t("product_inventory.inactive")}</option>
+          <option value="true">{t("common.active")}</option>
+          <option value="false">{t("common.inactive")}</option>
         </Select>
 
         <div className="flex gap-1 lg:justify-end">
