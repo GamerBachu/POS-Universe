@@ -10,6 +10,7 @@ export interface IOrder {
     customerId?: number;    // foreign key to customer 
     cashierId: number;      // foreign key to user
 
+
     // Financial Summary
     subtotal: number;       // Sum of all items before any adjustments
     totalDiscount: number;  // Total of all rows in IOrderDiscount
@@ -94,8 +95,9 @@ export interface IOrderCancellation {
 
     // Inventory Management
     restocked: boolean;     // Were the items put back into the inventory?
-
+    status: string;          //'completed' | 'voided' | 'refunded';
     createdAt: string;      // When the cancellation happened
+
 }
 
 
@@ -106,8 +108,9 @@ export interface IOrderView {
     adjustments: IOrderAdjustment[];
     discounts: IOrderDiscount[];
     payments: IOrderPayment[];
-    cancellation?: IOrderCancellation;
+    cancellation?: IOrderCancellation[];
     customer?: ICustomer;
+    cashierName?:string
 }
 
 
@@ -116,3 +119,14 @@ export interface IOrderView {
 
 
 //create a "Z-Report" function that sums up these tables for the end-of-day closing
+
+
+
+export interface IOrderFilter {
+
+    orderNumber?: string;   // Copied for quick searching
+
+    // Pagination
+    currentPage: number;
+    pageSize: number;
+}

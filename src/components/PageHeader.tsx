@@ -28,6 +28,7 @@ const PageHeader = ({
                     type="button"
                     onClick={onClick}
                     className={`${btnClass}`}
+                    title={btnLabel}
                 >
                     {btnLabel}
                 </Button>

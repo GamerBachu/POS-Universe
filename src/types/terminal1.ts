@@ -60,6 +60,9 @@ export const TOrderStatus = {
 /** Type alias derived from TOrderStatus object */
 export type TOrderStatus = (typeof TOrderStatus)[keyof typeof TOrderStatus];
 
+export const OrderStatusList: TOrderStatus[] = Object.values(TOrderStatus);
+
+
 /**
  * PRIMARY PAYMENT CATEGORY
  * High-level classification used for daily sales reconciliation and physical cash counting.

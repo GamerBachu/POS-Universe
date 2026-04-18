@@ -70,7 +70,7 @@ class LoggerUtils {
      * Helper for general info logs (can also be saved to Dexie if needed)
      */
     static logInfo(message: string, context: string, saveToDb: boolean = false) {
-        console.info(`[${new Date().toISOString()}] [${context}]`, message);
+         
         if (saveToDb) {
             this.createLog(SystemLogType.Info, context, 'General', message);
         }

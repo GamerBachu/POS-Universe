@@ -1,7 +1,7 @@
 import type { ICartItem } from "@/types/terminal1";
 import { displayPrice } from "@/utils/helper/numberUtils";
 import { useTerminalDispatch } from "./TerminalContext";
-import { calculateFinalPrice } from "./utils";
+import { calculateFinalPrice } from "@/utils/financial";
 import PlusIcon from "@/libs/icons/PlusIcon";
 import { MinusIcon } from "@/libs/icons";
 

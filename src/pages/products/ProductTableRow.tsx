@@ -2,17 +2,18 @@ import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type IProduct } from "@/types/product";
 import { displayPrice } from "@/utils/helper/numberUtils";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
-import { calculateFinalPrice } from "../terminal1/utils";
+import { calculateFinalPrice } from "@/utils/financial";
+import { InventoryStatus, Status } from "@/components/badge";
 
 interface Props {
   item: IProduct;
 }
 
 const ProductTableRow: React.FC<Props> = ({ item }) => {
+  const { t } = useLanguage();
   const currencySymbol = useCurrencySymbol();
-  const isLowStock = item.stock <= item.reorderLevel;
   const editPath = `${PATHS.PRODUCT_EDIT}/${item.id}`;
 
   return (
@@ -21,7 +22,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
       <td className="p-3">
         <NavLink
           to={editPath}
-          className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors"
+          className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors hover:underline"
         >
           {item.id}
         </NavLink>
@@ -32,7 +33,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
         <div className="flex flex-col">
           <NavLink
             to={editPath}
-            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px] hover:text-blue-600 transition-colors"
+            className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[200px] hover:text-blue-600 transition-colors underline"
             title={item.name}
           >
             {item.name}
@@ -59,26 +60,19 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
 
       {/* Stock Status Badge */}
       <td className="p-3 text-center">
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase ${isLowStock
-            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-            }`}
-        >
-          {item.stock}
-        </span>
+        <InventoryStatus
+          isActive={true}
+          stock={item.stock}
+          reorderLevel={item.reorderLevel}
+          showCount={true}
+        />
       </td>
 
       {/* Active/Inactive Status */}
       <td className="p-3 text-center">
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${item.isActive
-            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20"
-            : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20"
-            }`}
-        >
-          {item.isActive ? resource.common.active : resource.common.inactive}
-        </span>
+        <Status isActive={item.isActive}>
+          {item.isActive ? t("common.active") : t("common.inactive")}
+        </Status>
       </td>
 
       {/* Small Action Button Group */}
@@ -88,21 +82,21 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
             to={`${PATHS.PRODUCT_VIEW}/${item.id}`}
             className="px-2 py-1 text-[11px] font-bold uppercase text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors"
           >
-            {resource.common.view}
+            {t("common.view")}
           </NavLink>
 
           <NavLink
             to={editPath}
             className="px-2 py-1 text-[11px] font-bold uppercase text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
           >
-            {resource.common.edit}
+            {t("common.edit")}
           </NavLink>
 
           <NavLink
             to={`${PATHS.PRODUCT_DELETE}/${item.id}`}
             className="px-2 py-1 text-[11px] font-bold uppercase text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
           >
-            {resource.common.delete}
+            {t("common.delete")}
           </NavLink>
         </div>
       </td>

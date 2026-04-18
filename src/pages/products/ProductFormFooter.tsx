@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 
 interface ProductFormFooterProps {
   action: string;
@@ -8,12 +8,14 @@ interface ProductFormFooterProps {
   onBack: () => void;
 }
 
+
 export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
   action,
   isPending,
   isReadOnly,
   onBack,
 }: ProductFormFooterProps) => {
+  const { t } = useLanguage();
   return (
     <div className="flex justify-end gap-2 border-t pt-4 dark:border-gray-700">
       <Button
@@ -21,7 +23,7 @@ export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
         onClick={onBack}
         className="bg-gray-600 hover:bg-gray-700"
       >
-        {resource.common.back_page}
+        {t("common.back_page")}
       </Button>
 
       {!isReadOnly ? (
@@ -31,12 +33,12 @@ export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
           isLoading={isPending}
           className="bg-green-600 hover:bg-green-700"
         >
-          {action === "add" ? resource.common.save : resource.common.update}
+          {action === "add" ? t("common.save") : t("common.update")}
         </Button>
       ) : (
         action === "delete" && (
           <Button type="submit" className="bg-red-600 hover:bg-red-700">
-            {resource.common.delete}
+            {t("common.delete")}
           </Button>
         )
       )}

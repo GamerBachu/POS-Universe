@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import type { IMasterProductAttribute } from "@/types/masters";
 import type { IProductAttributeView } from "@/types/product";
 
@@ -23,10 +23,11 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
   onRemoveRow,
   onChangeRow,
 }: ProductAttributesSectionProps) => {
+  const { t } = useLanguage();
   return (
     <div>
       <label className="text-xs font-bold uppercase text-gray-500" >
-        {resource.product_inventory.attributes}
+        {t("product_inventory.attributes")}
       </label>
       <div className="space-y-2">
         {attributeRows.map((row) => (
@@ -38,7 +39,7 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
               onChange={(e) => onChangeRow(row.rowid, "attributeId", Number(e.target.value))}
               required
             >
-              <option value="-1">{resource.product_inventory.select_attribute}</option>
+              <option value="-1">{t("product_inventory.select_attribute")}</option>
               {masterAttributes.map((attr) => (
                 <option key={"s" + attr.id + row.rowid} value={String(attr.id)}>{attr.name}</option>
               ))}
@@ -50,7 +51,7 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
               value={row.value}
               disabled={isReadOnly}
               onChange={(e) => onChangeRow(row.rowid, "value", e.target.value)}
-              placeholder={resource.product_inventory.attribute_value}
+              placeholder={t("product_inventory.attribute_value")}
               required
             />
             {!isReadOnly && (
@@ -60,13 +61,13 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
                 onClick={() => onRemoveRow(row.rowid)}
                 className="bg-red-500 hover:bg-red-600"
               >
-                {resource.common.remove}
+                {t("common.remove")}
               </Button>
             )}
           </div>
         ))}
         {attributeRows.length === 0 && (
-          <div className="text-xs text-gray-400">{resource.product_inventory.no_attributes}</div>
+          <div className="text-xs text-gray-400">{t("product_inventory.no_attributes")}</div>
         )}
       </div>
 
@@ -77,7 +78,7 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
             onClick={onAddRow}
             className="w-full bg-indigo-600 hover:bg-indigo-700"
           >
-            {resource.product_inventory.add_attribute}
+            {t("product_inventory.add_attribute")}
           </Button>
         )}
       </div>

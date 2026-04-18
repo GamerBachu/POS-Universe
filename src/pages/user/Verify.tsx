@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import { useLocation, useNavigate } from "react-router";
 import { userApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
@@ -91,7 +91,8 @@ const Verify = () => {
         handleVerification();
     }, [auth, navigate, getSafeRedirectUrl, location]);
 
-    return (<Loader label={resource.common.verify_user}></Loader>);
+    const { t } = useLanguage();
+    return (<Loader label={t("common.verify_user")}></Loader>);
 };
 
 export default Verify;

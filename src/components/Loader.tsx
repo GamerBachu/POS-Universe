@@ -1,4 +1,4 @@
-const Loader = ({ label = "Loading..." }: { label?: string; }) => {
+const Loader = ({ label = "" }: { label?: string; }) => {
     return (
         <div className="flex flex-col items-center justify-center min-h-[inherit] w-full space-y-4">
             {/* Outer Spinner */}

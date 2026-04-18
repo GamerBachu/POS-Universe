@@ -1,4 +1,5 @@
 import type { IProductView } from "@/types/product";
+import type { IReport } from "@/types/reports";
 
 class SeedData {
 
@@ -129,13 +130,14 @@ const generateSeedProducts = (): IProductView[] => {
             code: `${category.prefix}-${brand.substring(0, 3).toUpperCase()}-${1000 + i}`,
             sku: `${brand.toUpperCase()}-${i * 7}-POS`,
             barcode: (8806090000000 + i).toString(),
-            name: `${brand} ${category.name} Item #${i}`,
+            name: `${brand} ${category.name} Item ${i}`,
             costPrice: parseFloat((Math.random() * 500 + 10).toFixed(2)),
             sellingPrice: 0, // Calculated below
             taxRate: i % 5 === 0 ? 0 : 8.0,
             stock: Math.floor(Math.random() * 200),
             reorderLevel: 10,
             isActive: true,
+            discountInPercent: 1,
             productAttributes: category.attrs.map((attrId) => {
                 let value = "Standard";
                 // Logic to give realistic values based on Master IDs
@@ -158,7 +160,7 @@ const generateSeedProducts = (): IProductView[] => {
                     productId: productId,
                     title: "Primary Image",
                     description: `A high-quality image showcasing the ${brand} ${category.name} product.`,
-                    url: `/images/products/placeholder-${i % 10}.jpg`
+                    url: `/images/products/placeholder-${i % 10}.png`
                 }
             ],
             productDescription: {
@@ -185,3 +187,62 @@ const generateSeedProducts = (): IProductView[] => {
 };
 
 export const masterProductData: IProductView[] = generateSeedProducts();
+
+
+
+export const reportSeedData: IReport[] = [
+    {
+        id: 1,
+        name: 'Sales Summary',
+        description: 'Total sales, revenue, and growth trends.',
+        version: '1.0',
+        url: 'sales_summary',
+    },
+    {
+        id: 2,
+        name: 'Customer Insights',
+        description: 'Top customers, purchase frequency, and loyalty trends.',
+        version: '1.0',
+        url: 'customer_insights',
+    },
+    {
+        id: 4,
+        name: 'Financial Overview',
+        description: 'Profit margins, expenses, and cash flow analysis.',
+        version: '1.0',
+        url: 'financial_overview',
+    },
+
+    {
+        id: 5,
+        name: 'Inventory Management',
+        description: 'Stock levels, reorder points, and inventory turnover.',
+        version: '1.0',
+        url: 'inventory_management',
+    },
+    {
+        id: 7,
+        name: "Z Report",
+        description: "End-of-day sales summary and cash register reconciliation.",
+        version: "1.0",
+        url: "z_report",
+    },
+    {
+
+        id: 8,
+        name: "Inventory Valuation",
+        description: "Current value of inventory for financial reporting and insurance.",
+        version: "1.0",
+        url: "inventory_valuation",
+    },
+    {
+        id: 9,
+        name: "Void/Cancellation Report",
+        description: "Details of voided transactions for security and loss prevention.",
+        version: "1.0",
+        url: "void_cancellation",
+
+    }
+];
+
+

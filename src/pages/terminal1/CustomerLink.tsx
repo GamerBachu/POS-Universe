@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useTerminalState } from "./TerminalContext";
 import CustomerForm from "./CustomerForm";
-import { WALK_IN_CUSTOMER_TEXT } from "./utils";
 import { PersonCircleIcon } from "@/libs/icons";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
+
 
 const CustomerLink = () => {
     const state = useTerminalState();
-
+    const { t } = useLanguage();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const walkInCustomerText = "Walk-in Customer";
 
     return (
         <>
@@ -18,17 +19,17 @@ const CustomerLink = () => {
                         onClick={() => setIsModalOpen(true)}
                         className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-teal-500 text-gray-400 hover:text-teal-500 transition-all shadow-sm active:scale-90"
                     >
-                        <PersonCircleIcon className="w-4 h-4" />
+                        <PersonCircleIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                     </button>
                     <div
                         className="flex-1 cursor-pointer group"
                         onClick={() => setIsModalOpen(true)}
                     >
                         <p className="text-[10px] uppercase font-bold text-gray-400 group-hover:text-teal-500 transition-colors">
-                            {resource.pos_t1.lbl_customer}
+                            {t("pos_t1.lbl_customer")}
                         </p>
                         <p className="text-[12px] font-black text-gray-700 dark:text-gray-200 truncate">
-                            {state.customer?.name || WALK_IN_CUSTOMER_TEXT}
+                            {state.customer?.name || walkInCustomerText}
                         </p>
                     </div>
                 </div>

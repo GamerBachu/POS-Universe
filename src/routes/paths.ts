@@ -1,19 +1,20 @@
 export const PATHS = {
-    START: '/dashboard',
-    DASHBOARD: '/dashboard', //initial page 
-    HOME: '/home',
-    ABOUT: '/about',
-    LOGIN: '/account/login',
-    REGISTER: '/account/register',
-    LOGOUT: '/account/logout',
-    VERIFY: '/account/verify',
-    ERROR: '/error',
+    START: "/dashboard",
+    DASHBOARD: "/dashboard", //initial page
+    HOME: "/home",
+    ABOUT: "/about",
+    LOGIN: "/account/login",
+    REGISTER: "/account/register",
+    LOGOUT: "/account/logout",
+    VERIFY: "/account/verify",
+    ERROR: "/error",
     NOT_FOUND: "/not-found",
-    PRODUCT_LIST: "/product_v1/list",
-    PRODUCT_ADD: "/product_v1/page/add/",
-    PRODUCT_EDIT: "/product_v1/page/edit/",
-    PRODUCT_VIEW: "/product_v1/page/view/",
-    PRODUCT_DELETE: "/product_v1/page/delete/",
+
+    PRODUCT_LIST: "/product/v1/list",
+    PRODUCT_ADD: "/product/v1/page/add/",
+    PRODUCT_EDIT: "/product/v1/page/edit/",
+    PRODUCT_VIEW: "/product/v1/page/view/",
+    PRODUCT_DELETE: "/product/v1/page/delete/",
 
     MASTER_ATTRIBUTE_LIST: "/m_pro_attribute/list",
     MASTER_ATTRIBUTE_ADD: "/m_pro_attribute/page/add/",
@@ -21,21 +22,20 @@ export const PATHS = {
     MASTER_ATTRIBUTE_VIEW: "/m_pro_attribute/page/view/",
     MASTER_ATTRIBUTE_DELETE: "/m_pro_attribute/page/delete/",
 
-
     SYSTEM_LOG_LIST: "/sys_log/list",
     SYSTEM_LOG_ADD: "/sys_log/page/add/",
     SYSTEM_LOG_EDIT: "/sys_log/page/edit/",
     SYSTEM_LOG_VIEW: "/sys_log/page/view/",
     SYSTEM_LOG_DELETE: "/sys_log/page/delete/",
 
+    TERMINAL_1_POS: "/pos/v1/checkout/0",
+    TERMINAL_1_LIST: "/order/v1/list",
+    TERMINAL_1_ADD: "/pos/v1/checkout/0",
+    TERMINAL_1_EDIT: "/order/v1/page/edit/",
+    TERMINAL_1_VIEW: "/order/v1/page/view/",
+    TERMINAL_1_DELETE: "/order/v1/page/delete/",
 
-    TERMINAL_1_POS: "/pos/v1/checkout",
-    TERMINAL_1_LIST: "/pos/v1/list",
-    TERMINAL_1_ADD: "/pos/v1/page/add/",
-    TERMINAL_1_EDIT: "/pos/v1/page/edit/",
-    TERMINAL_1_VIEW: "/pos/v1/page/view/",
-    TERMINAL_1_DELETE: "/pos/v1/page/delete/",
-
+    REPORT: "/report",
 
 
 } as const;

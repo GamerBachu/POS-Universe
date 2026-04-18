@@ -7,18 +7,19 @@ import { mapTerminalStateToOrder } from "./utils";
 import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 
 type PaymentProcessProps = {
     resetFilter: () => void;
 };
 
 
+
 const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
     const auth = useAuth();
-
     const state = useTerminalState();
     const dispatch = useTerminalDispatch();
+    const { t } = useLanguage();
 
 
     const setPaymentMethod = useCallback(
@@ -36,7 +37,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!userId || userId === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: resource.pos_t1.msg_invalid_user },
+                alert: { type: "warning", message: t("common.session_expired") },
             });
             return;
         }
@@ -45,7 +46,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (state.cart.length === 0) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: resource.pos_t1.msg_cart_empty },
+                alert: { type: "warning", message: t("pos_t1.msg_cart_empty") },
             });
             return;
         }
@@ -54,7 +55,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!state.paymentCategory) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: resource.pos_t1.msg_select_payment },
+                alert: { type: "warning", message: t("pos_t1.msg_select_payment") },
             });
             return;
         }
@@ -69,7 +70,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
         if (!isCash && !state.isPaid) {
             dispatch({
                 type: "SET_ALERT",
-                alert: { type: "warning", message: resource.pos_t1.msg_payment_pending },
+                alert: { type: "warning", message: t("pos_t1.msg_payment_pending") },
             });
             return;
         }
@@ -78,7 +79,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
             // 4. Map and Send to API
             // Mapping happens here to keep the API call clean
             const payload = mapTerminalStateToOrder(state, userId);
-            console.log("payload", payload);
+
 
             const response = await orderServiceApi.addFullOrder(payload);
 
@@ -88,7 +89,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     type: "SET_ALERT",
                     alert: {
                         type: "success",
-                        message: resource.pos_t1.msg_order_saved.replace("{orderNumber}", response.data.orderNumber),
+                        message: t("pos_t1.msg_order_saved").replace("{orderNumber}", response.data.orderNumber),
                         duration: 10000,
                     },
                 });
@@ -103,7 +104,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     type: "SET_ALERT",
                     alert: {
                         type: "error",
-                        message: response.message || resource.pos_t1.msg_save_failed
+                        message: response.message || t("pos_t1.msg_save_failed")
                     },
                 });
                 LoggerUtils.logError(response, "PaymentProcess", "onCompletingOrder");
@@ -114,12 +115,12 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 type: "SET_ALERT",
                 alert: {
                     type: "error",
-                    message: resource.pos_t1.msg_critical_error
+                    message: t("pos_t1.msg_critical_error")
                 },
             });
             LoggerUtils.logCatch(error, "PaymentProcess", "onCompletingOrder");
         }
-    }, [state, dispatch, auth.info.authUser?.userId, resetFilter]);
+    }, [state, dispatch, auth.info.authUser?.userId, resetFilter, t]);
 
     return (
         <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
@@ -144,7 +145,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 onClick={onCompletingOrder}
                 className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest hover:bg-teal-700"
             >
-                {resource.pos_t1.complete_order}
+                {t("pos_t1.complete_order")}
             </button>
         </div>
     );

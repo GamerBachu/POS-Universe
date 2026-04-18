@@ -1,8 +1,8 @@
 import { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import type { IProduct } from "@/types/product";
-import { calculateFinalPrice } from "../terminal1/utils";
+import { calculateFinalPrice } from "@/utils/financial";
 
 interface ProductFinancialSectionProps {
   item: IProduct;
@@ -12,6 +12,7 @@ interface ProductFinancialSectionProps {
 export const ProductFinancialSection: React.FC<
   ProductFinancialSectionProps
 > = ({ item, isReadOnly }) => {
+  const { t } = useLanguage();
   const [runningPrice, setRunningPrice] = useState({
     sellingPrice: item.sellingPrice,
     discountInPercent: item.discountInPercent,
@@ -23,7 +24,7 @@ export const ProductFinancialSection: React.FC<
     value: string,
   ) => {
     const val = parseFloat(value);
-    setRunningPrice((prev) => ({ ...prev, [field]: isNaN(val) ? 0 : val }));
+    setRunningPrice((prev) => ({ ...prev, [field]: isNaN(val) ? 0 : Math.max(0, val) }));
   };
 
   const currentFinalPrice = calculateFinalPrice({
@@ -36,10 +37,10 @@ export const ProductFinancialSection: React.FC<
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 items-end">
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.cost_price}
+        label={t("product_inventory.cost_price")}
         defaultValue={item.costPrice}
         name="costPrice"
-        placeholder={resource.product_inventory.cost_price}
+        placeholder={t("product_inventory.cost_price")}
         classBox=""
         required={true}
         type="number"
@@ -47,10 +48,10 @@ export const ProductFinancialSection: React.FC<
 
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.selling_price}
+        label={t("product_inventory.selling_price")}
         value={runningPrice.sellingPrice}
         name="sellingPrice"
-        placeholder={resource.product_inventory.selling_price}
+        placeholder={t("product_inventory.selling_price")}
         classBox=""
         required={true}
         type="number"
@@ -60,10 +61,10 @@ export const ProductFinancialSection: React.FC<
       />
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.discount_in_percent}
+        label={t("product_inventory.discount_in_percent")}
         value={runningPrice.discountInPercent}
         name="discountInPercent"
-        placeholder={resource.product_inventory.ph_discount_in_percent}
+        placeholder={t("product_inventory.ph_discount_in_percent")}
         classBox=""
         required={true}
         type="number"
@@ -73,10 +74,10 @@ export const ProductFinancialSection: React.FC<
       />
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.tax_rate}
+        label={t("product_inventory.tax_rate")}
         value={runningPrice.taxRate}
         name="taxRate"
-        placeholder={resource.product_inventory.tax_rate}
+        placeholder={t("product_inventory.tax_rate")}
         classBox=""
         required={true}
         type="number"
@@ -86,10 +87,10 @@ export const ProductFinancialSection: React.FC<
       />
       <InputWithLabel
         readOnly={true}
-        label={`${resource.product_inventory.final_price} ( ${resource.product_inventory.ph_final_price_tc} )`}
+        label={`${t("product_inventory.final_price")} ( ${t("product_inventory.ph_final_price_tc")} )`}
         value={currentFinalPrice}
         name="finalPrice"
-        placeholder={resource.product_inventory.ph_final_price}
+        placeholder={t("product_inventory.ph_final_price")}
         classBox=""
         required={false}
         type="text"
@@ -100,10 +101,10 @@ export const ProductFinancialSection: React.FC<
 
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.stock}
+        label={t("product_inventory.stock")}
         defaultValue={item.stock}
         name="stock"
-        placeholder={resource.product_inventory.stock}
+        placeholder={t("product_inventory.stock")}
         classBox=""
         required={true}
         type="number"
@@ -111,10 +112,10 @@ export const ProductFinancialSection: React.FC<
 
       <InputWithLabel
         readOnly={isReadOnly}
-        label={resource.product_inventory.reorder_level}
+        label={t("product_inventory.reorder_level")}
         defaultValue={item.reorderLevel}
         name="reorderLevel"
-        placeholder={resource.product_inventory.stock}
+        placeholder={t("product_inventory.stock")}
         classBox=""
         required={true}
         type="number"

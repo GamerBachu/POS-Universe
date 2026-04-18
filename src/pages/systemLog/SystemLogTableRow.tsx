@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type ISystemLog } from "@/types/systemLog";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import { toDisplayString } from "@/utils/helper/dateUtils";
 
 interface RowProps {
@@ -9,6 +9,7 @@ interface RowProps {
 }
 
 const SystemLogTableRow = ({ item }: RowProps) => {
+  const { t } = useLanguage();
   return (
     <tr className="group hover:bg-gray-50/80 dark:hover:bg-gray-800/40 transition-colors border-b last:border-0 border-gray-100 dark:border-gray-700/50">
 
@@ -34,21 +35,21 @@ const SystemLogTableRow = ({ item }: RowProps) => {
             to={`${PATHS.SYSTEM_LOG_VIEW}/${item.id}`}
             className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors"
           >
-            {resource.common.view}
+            {t("common.view")}
           </NavLink>
 
           <NavLink
             to={`${PATHS.SYSTEM_LOG_EDIT}/${item.id}`}
             className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
           >
-            {resource.common.edit}
+            {t("common.edit")}
           </NavLink>
 
           <NavLink
             to={`${PATHS.SYSTEM_LOG_DELETE}/${item.id}`}
             className="flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-tight text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
           >
-            {resource.common.delete}
+            {t("common.delete")}
           </NavLink>
         </div>
       </td>

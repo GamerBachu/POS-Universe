@@ -1,5 +1,5 @@
 import { useActionState } from "react";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
 import { userApi } from "@/api";
 import ThemeToggleIcon from "@/components/ThemeToggleIcon";
 import { Link } from "react-router-dom";
@@ -26,8 +26,9 @@ interface ActionState {
 }
 
 const Register = () => {
+    const { t } = useLanguage();
     const loginAction = async (
-        prevState: ActionState | null,
+        _: ActionState | null,
         formData: FormData,
     ): Promise<ActionState> => {
         try {
@@ -44,30 +45,30 @@ const Register = () => {
             if (!data.username || !data.password) {
                 return {
                     success: false,
-                    message: resource.login.invalid_credentials,
+                    message: t("login.invalid_credentials"),
                 };
             }
 
             const response = await userApi.postRegister(data);
 
             if (!response) {
-                return { success: false, message: resource.common.error };
+                return { success: false, message: t("common.error") };
             }
 
             // Handling statuses based on our ServiceResponse structure
             switch (response.status) {
                 case 201:
-                    return { success: true, message: resource.register.success_message };
+                    return { success: true, message: t("register.success_message") };
                 case 409:
-                    return { success: false, message: resource.register.userExists };
+                    return { success: false, message: t("register.userExists") };
                 case 400:
-                    return { success: false, message: resource.login.invalid_credentials };
+                    return { success: false, message: t("login.invalid_credentials") };
                 default:
-                    return { success: false, message: resource.common.error };
+                    return { success: false, message: t("common.error") };
             }
         } catch (error: unknown) {
             LoggerUtils.logCatch(error, "Register", "handleAction", "66");
-            return { success: false, message: resource.common.error };
+            return { success: false, message: t("common.error") };
         }
     };
 
@@ -80,34 +81,34 @@ const Register = () => {
 
                 <header className="text-center mb-8">
                     <h1 className="text-2xl font-bold tracking-tight">
-                        {resource.register.title}
+                        {t("register.title")}
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        {resource.register.subtitle}
+                        {t("register.subtitle")}
                     </p>
                 </header>
 
                 <form action={formAction} className="space-y-4">
                     <InputWithLabel
-                        label={resource.common.name}
+                        label={t("common.name")}
                         name="nameFirst"
-                        placeholder={resource.common.ph_name}
+                        placeholder={t("common.ph_name")}
                         required={true}
                     />
 
                     <InputWithLabel
-                        label={`${resource.common.email}/${resource.common.username}`}
+                        label={`${t("common.email")}/${t("common.username")}`}
                         type="email"
                         name="email"
-                        placeholder={resource.common.ph_email}
+                        placeholder={t("common.ph_email")}
                         required={true}
                     />
 
                     <InputWithLabel
-                        label={resource.common.password}
+                        label={t("common.password")}
                         type="password"
                         name="password"
-                        placeholder={resource.common.ph_password}
+                        placeholder={t("common.ph_password")}
                         required={true}
                     />
                     {(state?.success === true) && <AlertSuccess message={state?.message} />}
@@ -120,13 +121,13 @@ const Register = () => {
                             disabled={isPending}
                             isLoading={isPending}
                         >
-                            {resource.register.submit}
+                            {t("register.submit")}
                         </Button>
                         <Link
                             to={PATHS.LOGIN}
                             className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
                         >
-                            {resource.login.submit}
+                            {t("login.submit")}
                         </Link>
                     </div>
                     <AppPurchase />

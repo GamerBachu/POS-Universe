@@ -1,20 +1,23 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
-import '@/styles/globals.css';
-import { ThemeProvider } from './contexts/theme';
-import { MainLayout } from './layouts/index.ts';
-import { router } from './routes/index.tsx';
-import { AuthProvider } from './contexts/authorize/AuthProvider.tsx';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import "@/styles/globals.css";
+import { ThemeProvider } from "./contexts/theme";
+import { MainLayout } from "./layouts/index.ts";
+import { router } from "./routes/index.tsx";
+import { AuthProvider } from "@/contexts/authorize/AuthProvider.tsx";
+import { LanguageProvider } from "@/contexts/language";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <AuthProvider>
-        <MainLayout>
-          <RouterProvider router={router} />
-        </MainLayout>
-      </AuthProvider>
-    </ThemeProvider>
-  </StrictMode>
+    <LanguageProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <AuthProvider>
+          <MainLayout>
+            <RouterProvider router={router} />
+          </MainLayout>
+        </AuthProvider>
+      </ThemeProvider>
+    </LanguageProvider>
+  </StrictMode>,
 );

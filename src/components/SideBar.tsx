@@ -1,7 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
+import type { TranslationKey } from "@/contexts/language/type";
 import { SIDEBAR_MENU } from "@/routes/navigationMenu";
+import { PATHS } from "@/routes/paths";
 import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
@@ -9,9 +11,11 @@ import { CloseIcon } from "@/libs/icons";
 import Input from "./Input";
 
 const SideBar = () => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const { isMinimized, minimizeWindow } = useSideBar();
+
 
   // Clear search on Escape
   useEffect(() => {
@@ -24,37 +28,37 @@ const SideBar = () => {
 
   // Filter menu logic
   const filteredMenu = useMemo(() => {
-    // 1. Get the base filtered list
     let items = SIDEBAR_MENU;
 
     if (searchTerm.trim()) {
       const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
       items = SIDEBAR_MENU.filter((item) => {
-        const contentToSearch = `${item.label} ${item.description || ""}`.toLowerCase();
+        // Search against translated text for a better user experience
+        const translatedLabel = t(item.label as TranslationKey).toLowerCase();
+        const translatedDesc = item.description ? t(item.description as TranslationKey).toLowerCase() : "";
+        const contentToSearch = `${translatedLabel} ${translatedDesc}`;
+
         return searchWords.every((word) => contentToSearch.includes(word));
       });
     }
 
-    // 2. Remove Duplicates based on the 'label' property
     const seenPaths = new Set();
     return items.filter((item) => {
-      if (seenPaths.has(item.label)) {
-        return false; // Skip if we've already seen this label
-      }
+      if (seenPaths.has(item.label)) return false;
       seenPaths.add(item.label);
       return true;
     });
-  }, [searchTerm]);
+  }, [searchTerm, t]);
 
   return (
     <>
       <aside
         className={`${!isMinimized ? "w-64" : "w-0 overflow-hidden border-none"} bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out`}
       >
-        <div className="px-3 py-2  border-b border-gray-200 dark:border-gray-700 relative">
+        <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 relative">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold truncate">
-              {resource.common.app_name}
+              {t("common.app_name")}
             </h2>
             <SideBarToggle isMinimized={isMinimized} onClick={minimizeWindow} />
           </div>
@@ -63,7 +67,7 @@ const SideBar = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={resource.sidebar.ph_search_menu}
+              placeholder={t("sidebar.ph_search_menu")}
               className="pr-9"
             />
             <div className="absolute right-0 top-0 h-full w-9 flex items-center justify-center">
@@ -77,7 +81,7 @@ const SideBar = () => {
                 </button>
               ) : (
                 <span className="text-[9px] font-bold text-gray-300 dark:text-gray-600 pointer-events-none group-hover:opacity-0 transition-opacity">
-                  ESC
+                  {t("common.esc")}
                 </span>
               )}
             </div>
@@ -87,9 +91,28 @@ const SideBar = () => {
         <nav className="flex-1 overflow-y-auto p-2 [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {filteredMenu.map((item) => {
-              const isActive = location.pathname === item.path;
+              // 1. Get the first real segment of the menu path (e.g., "product" or "report")
+              // We filter(Boolean) to remove empty strings from the leading slash
+              const itemSegments = item.path.split('/').filter(Boolean);
+              const itemModule = itemSegments[0];
+
+              // 2. Get the first real segment of the current browser location
+              const currentSegments = location.pathname.split('/').filter(Boolean);
+              const currentModule = currentSegments[0];
+
+              /**
+               * 3. Logic:
+               * - If it's the dashboard item, mark active if on root "/" or the dashboard path itself.
+               * - Otherwise, match by the first segment of the path (module-based highlighting).
+               */
+              const isHomeItem = item.path === (PATHS.START as string);
+              const isActive = isHomeItem
+                ? (location.pathname === "/" || location.pathname === PATHS.START)
+                : (itemModule === currentModule && currentModule !== undefined);
+
               return (
-                <li key={item.path} title={item.description}>
+                <li key={item.path}
+                  title={item.description ? t(item.description as TranslationKey) : ""}>
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all ${isActive
@@ -98,14 +121,14 @@ const SideBar = () => {
                       }`}
                   >
                     <span className="text-base w-6 shrink-0">{item.icon}</span>
-                    <span className="text-sm truncate">{item.label}</span>
+                    <span className="text-sm truncate">{t(item.label as TranslationKey)}</span>
                   </Link>
                 </li>
               );
             })}
             {filteredMenu.length === 0 && (
               <li className="text-center py-4 text-xs text-gray-500">
-                {resource.common.no_result}
+                {t("common.no_result")}
               </li>
             )}
           </ul>

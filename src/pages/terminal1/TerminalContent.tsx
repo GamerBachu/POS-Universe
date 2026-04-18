@@ -5,26 +5,26 @@ import SectionCenter from "./SectionCenter";
 import SectionRight from "./SectionRight";
 import { useTerminalDispatch, useTerminalState } from "./TerminalContext";
 import type { IProductView, IProductFilter } from "@/types/product";
-import { productsApi } from "@/api/productsApi";
+import { productsApi } from "@/api";
 import { generateGuid } from "@/utils/helper/guid";
 import FloatingAlert from "@/components/FloatingAlert";
-import resource from "@/locales/en.json";
+import { useLanguage } from "@/contexts/language";
+import { INITIAL_FILTER } from "./utils";
 
 const TerminalContent = () => {
+    const { t } = useLanguage();
 
     const dispatch = useTerminalDispatch();
     const { alert } = useTerminalState();
 
-
     const [products, setProducts] = useState<IProductView[]>([]);
-    const [filter, setFilter] = useState<IProductFilter>({ isActive: "true", currentPage: 1, pageSize: 200 } as IProductFilter);
+    const [filter, setFilter] = useState<IProductFilter>({ ...INITIAL_FILTER });
     const [inputCode, setInputCode] = useState("");
 
     // 1. Optimized API Fetching
     useEffect(() => {
         let isMounted = true;
         const loadData = async () => {
-
             const res = await productsApi.getFiltered(filter);
 
             if (isMounted && res.success && res.data) {
@@ -32,7 +32,7 @@ const TerminalContent = () => {
             }
         };
 
-        const handler = setTimeout(loadData, 200); // Shorter debounce for snappy local DB
+        const handler = setTimeout(loadData, 400); // Shorter debounce for snappy local DB
         return () => {
             isMounted = false;
             clearTimeout(handler);
@@ -40,76 +40,80 @@ const TerminalContent = () => {
     }, [filter]);
 
     // 2. Stable Handlers
-    const handleProductClick = useCallback((product: IProductView) => {
-        dispatch({
-            type: "ADD_ITEM",
-            item: {
-                id: 0,
-                rowId: generateGuid(),
-                product
-            }
-        });
-    }, [dispatch]);
+    const handleProductClick = useCallback(
+        (product: IProductView) => {
+            dispatch({
+                type: "ADD_ITEM",
+                item: {
+                    id: 0,
+                    rowId: generateGuid(),
+                    product,
+                },
+            });
+        },
+        [dispatch],
+    );
 
     // 3. Updated handleNumpad
-    const handleNumpad = useCallback((val: string) => {
-        let nextCode = "";
-        //NUMPAD_KEYS -2= Enter / Apply Button 
-        //NUMPAD_KEYS -1 = Backspace Button
+    const handleNumpad = useCallback(
+        (val: string) => {
+            let nextCode = "";
+            //NUMPAD_KEYS -2= Enter / Apply Button
+            //NUMPAD_KEYS -1 = Backspace Button
 
-        if (val === "-1") {
-            nextCode = inputCode.slice(0, -1);
-        } else if (val === "-2") {
-            // Manual enter: trigger search
-            setFilter(prev => ({ ...prev, code: inputCode }));
-            return;
-        } else {
-            nextCode = inputCode + val;
-        }
+            if (val === "-1") {
+                nextCode = inputCode.slice(0, -1);
+            } else if (val === "-2") {
+                // Manual enter: trigger search
+                setFilter((prev) => ({ ...prev, code: inputCode }));
+                return;
+            } else {
+                nextCode = inputCode + val;
+            }
 
-        // Update the buffer
-        setInputCode(nextCode);
+            // Update the buffer
+            setInputCode(nextCode);
 
-        // 3. AUTO-ADD LOGIC (Inside the event)
-        // if (nextCode.length >= 8) {
-        //     const exactMatch = products.find(p => p.code === nextCode);
-        //     if (exactMatch) {
-        //         handleProductClick(exactMatch);
-        //         // Clear everything in one batch
-        //         setInputCode("");
-        //         setFilter(prev => ({ ...prev, code: "" }));
-        //         return; // Exit early so we don't set the filter to the 8-digit code
-        //     }
-        // }
+            // 3. AUTO-ADD LOGIC (Inside the event)
+            // if (nextCode.length >= 8) {
+            //     const exactMatch = products.find(p => p.code === nextCode);
+            //     if (exactMatch) {
+            //         handleProductClick(exactMatch);
+            //         // Clear everything in one batch
+            //         setInputCode("");
+            //         setFilter(prev => ({ ...prev, code: "" }));
+            //         return; // Exit early so we don't set the filter to the 8-digit code
+            //     }
+            // }
 
-        // Update the list filter as they type
-        setFilter(prev => ({ ...prev, code: nextCode }));
+            // Update the list filter as they type
+            setFilter((prev) => ({ ...prev, code: nextCode }));
+        },
+        [inputCode],
+    );
 
-    }, [inputCode]);
-
-    // 4. Reset and Load again. 
+    // 4. Reset and Load again.
 
     const resetFilter = useCallback(async () => {
         setInputCode("");
-        setFilter(prev => ({ ...prev, code: "", isActive: "true", currentPage: 1, pageSize: 200 }));
+        setFilter((prev) => ({
+            ...prev,
+            ...INITIAL_FILTER
+        }));
     }, []);
-
 
     const onInputType = useCallback((val: string) => {
         setInputCode(val);
-        setFilter(prev => ({ ...prev, code: val }));
+        setFilter((prev) => ({ ...prev, code: val }));
     }, []);
-
 
     const hideAlert = () => {
         dispatch({ type: "SET_ALERT", alert: null });
     };
 
-
-
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-50 dark:bg-gray-900 overflow-hidden font-sans text-gray-800 dark:text-gray-200">
-            <Header label={resource.pos_t1.title} />
+            <Header label={t("pos_t1.title")} />
 
             <div className="flex flex-1 overflow-hidden border border-gray-200 dark:border-gray-700">
                 <SectionLeft />
@@ -122,9 +126,7 @@ const TerminalContent = () => {
                 <SectionRight
                     inputCode={inputCode}
                     onInputType={onInputType}
-
                     onNumpad={handleNumpad}
-
                     filter={filter}
                     setFilter={setFilter}
                     resetFilter={resetFilter}

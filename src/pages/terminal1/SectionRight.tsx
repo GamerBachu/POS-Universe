@@ -28,6 +28,7 @@ const SectionRight = ({
                     onNumpad={onNumpad}
                     filter={filter}
                     setFilter={setFilter}
+                    resetFilter={resetFilter}
                 />
             </div>
             <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
