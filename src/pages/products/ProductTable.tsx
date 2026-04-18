@@ -9,6 +9,7 @@ import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
+import TableNoRecord from "@/components/TableNoRecord";
 
 const ProductTable: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -157,11 +158,7 @@ const ProductTable: React.FC = () => {
             {isLoading ? (
               <TableSkeleton rows={pageSize} column={7} />
             ) : data.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-sm text-gray-500 italic">
-                  {t("common.no_record")}
-                </td>
-              </tr>
+              <TableNoRecord column={8} message={t("common.no_record")} />
             ) : (
               data.map((item) => (
                 <ProductTableRow key={item.id} item={item} />

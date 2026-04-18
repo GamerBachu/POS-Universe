@@ -4,6 +4,8 @@ import type { ICustomer } from "@/types/customer";
 import type { IActionState } from "@/types/actionState";
 import { useLanguage } from "@/contexts/language";
 import Modal from "@/components/Modal";
+import { LoggerUtils } from "@/utils";
+import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 
 interface CustomerFormProps {
     onClose: () => void;
@@ -16,29 +18,35 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
     const { t } = useLanguage();
 
     const handleAction = async (
-        _: IActionState | null,
+        prev: IActionState | null,
         formData: FormData,
     ): Promise<IActionState> => {
-        const customer: ICustomer = {
-            name: (formData.get("name") as string) || "",
-            phone: (formData.get("phone") as string) || "",
-            email: (formData.get("email") as string) || "",
-            address: (formData.get("address") as string) || "",
-            createdAt: "",
-            id: 0,
-        };
+        try {
+            const customer: ICustomer = {
+                name: (formData.get("name") as string) || "",
+                phone: (formData.get("phone") as string) || "",
+                email: (formData.get("email") as string) || "",
+                address: (formData.get("address") as string) || "",
+                createdAt: "",
+                id: 0,
+            };
 
-        dispatch({ type: "SET_CUSTOMER", customer });
-        dispatch({
-            type: "SET_ALERT",
-            alert: {
-                type: "success",
-                message: t("pos_t1.success_save"),
-            },
-        });
+            dispatch({ type: "SET_CUSTOMER", customer });
+            dispatch({
+                type: "SET_ALERT",
+                alert: {
+                    type: "success",
+                    message: t("pos_t1.success_save"),
+                },
+            });
 
-        onClose();
-        return { success: true, message: t("pos_t1.msg_customer_saved") };
+            onClose();
+            return { success: true, message: t("pos_t1.msg_customer_saved") };
+        } catch (error) {
+            LoggerUtils.logCatch(error, "CustomerForm", "handleAction", JSON.stringify(prev));
+            return { success: false, message: t("common.error") };
+
+        }
     };
     // Keyboard Shortcuts Logic
     useEffect(() => {
@@ -53,7 +61,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
     }, [onClose]);
 
     // FIX: React 19 useActionState returns [state, action, isPending]
-    const [_, formAction, isPending] = useActionState(handleAction, null);
+    const [state, formAction, isPending] = useActionState(handleAction, null);
 
     const handleClear = () => {
         dispatch({ type: "SET_CUSTOMER", customer: null });
@@ -110,7 +118,8 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                         />
                     </div>
                 </div>
-
+                {(state?.success === true) && <AlertSuccess message={state?.message} />}
+                {(state?.success === false) && <AlertError message={state?.message} />}
                 {/* Footer Actions */}
                 <div className="flex gap-2 pt-2">
                     <button

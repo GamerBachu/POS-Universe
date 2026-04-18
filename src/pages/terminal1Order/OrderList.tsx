@@ -14,7 +14,7 @@ const OrderList: React.FC = () => {
                 subtitle={undefined}
                 btnClass="bg-green-600 hover:bg-green-700"
                 btnLabel={t("common.addNew")}
-                onClick={() => navigate(PATHS.TERMINAL_1_ADD + "/0")}
+                onClick={() => navigate(PATHS.TERMINAL_1_POS)}
             />
 
             <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">

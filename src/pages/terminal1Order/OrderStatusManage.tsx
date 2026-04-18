@@ -95,6 +95,7 @@ const OrderStatusManage = ({
         order.id,
         onSuccess,
         onClose,
+        t
     ]);
 
     if (!isOpen) return null;

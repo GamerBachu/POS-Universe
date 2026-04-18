@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
+import TableNoRecord from "@/components/TableNoRecord";
 
 const OrderTable: React.FC = () => {
     const { t } = useLanguage();
@@ -113,11 +114,7 @@ const OrderTable: React.FC = () => {
                         {isLoading ? (
                             <TableSkeleton rows={pageSize} column={6} />
                         ) : data.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="p-8 text-center text-sm text-gray-500 italic">
-                                    {t("common.no_record")}
-                                </td>
-                            </tr>
+                           <TableNoRecord column={6} message={t("common.no_record")} />
                         ) : (
                             data.map((item) => (
                                 <OrderTableRow key={item.id} item={item} />

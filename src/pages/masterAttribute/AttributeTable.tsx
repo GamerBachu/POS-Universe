@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Pagination from "@/components/Pagination";
+import TableNoRecord from "@/components/TableNoRecord";
 
 const AttributeTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -119,11 +120,7 @@ const AttributeTable = () => {
                         {isLoading ? (
                             <TableSkeleton rows={5} column={4} />
                         ) : data.length === 0 ? (
-                            <tr>
-                                <td colSpan={4} className="p-8 text-center text-sm text-gray-500 italic bg-gray-50/30">
-                                    {t("common.no_record")}
-                                </td>
-                            </tr>
+                            <TableNoRecord column={4} message={t("common.no_record")} />
                         ) : (
                             data.map((item) => <AttributeTableRow key={item.id} item={item} />)
                         )}

@@ -16,7 +16,7 @@ const TopSelling = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const res = await reportApi.getTopSellingData(5);
+            const res = await reportApi.getTopSellingData(10);
             if (res.success && res.data) {
                 setData(res.data);
             } else {

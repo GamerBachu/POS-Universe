@@ -119,7 +119,7 @@ const SystemLogTable = () => {
               <th className="p-3 w-48 text-center font-bold">{t("common.action")}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-transparent">
             {isLoading ? (
               <TableSkeleton rows={5} column={6} />
             ) : data.length === 0 ? (
