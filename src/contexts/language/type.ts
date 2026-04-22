@@ -1,4 +1,4 @@
-export type TranslationSchema = typeof import('@/locales/en.json');
+export type TranslationSchema = typeof import('@/assets/locales/en.json');
 
 /**
  * Recursive type to extract all dot-notated paths to string leaves in the translation schema.
@@ -18,5 +18,3 @@ export interface LanguageContextType {
     changeLanguage: (lang: string) => void;
     isLoading: boolean;
 }
-
-

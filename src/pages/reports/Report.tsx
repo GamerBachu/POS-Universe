@@ -30,7 +30,7 @@ const Report = () => {
         try {
             setIsLoading(true);
             const response = await reportApi.getReports(userId);
-           
+
             if (response.success && Array.isArray(response.data)) {
                 setReports(response.data);
             } else {
@@ -50,7 +50,7 @@ const Report = () => {
 
     return (
         <CommonLayout h1={t("navigation.report_label")}>
-            <div className="p-6 max-w-6xl mx-auto">
+            <div className="py-3 max-w-6xl mx-auto">
                 {error && (
                     <FloatingAlert
                         type="error"
@@ -60,13 +60,13 @@ const Report = () => {
                 )}
 
                 {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="h-36 bg-white dark:bg-gray-800 animate-pulse rounded-md border border-gray-100 dark:border-gray-700" />
                         ))}
                     </div>
                 ) : reports.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {reports.map((report) => (
                             <button
                                 key={report.id}

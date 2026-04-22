@@ -119,7 +119,9 @@
     "system_log_list_label": "System Log",
     "system_log_list_desc": "System Log entry page",
     "report_label": "Report",
-    "report_desc": "various reports for sales and inventory insights."
+    "report_desc": "various reports for sales and inventory insights.",
+    "profile_label": "Profile",
+    "profile_desc": "View and edit your user details."
   },
   "product_inventory": {
     "name": "Product Name",
@@ -369,5 +371,12 @@
     "net_income_desc": "Final take-home profit",
     "margin": "Margin %",
     "cash_flow_summary": "Cash Flow Analysis"
+  },
+  "profile": {
+    "title": "User Profile",
+    "middle_name": "Middle Name",
+    "ph_middle_name": "Middle name...",
+    "last_name": "Last Name",
+    "ph_last_name": "Last name..."
   }
 }

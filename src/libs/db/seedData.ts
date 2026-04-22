@@ -246,3 +246,24 @@ export const reportSeedData: IReport[] = [
 ];
 
 
+export const rolesSeedData = [
+    {
+        id: 1,
+        name: "Admin",
+        description: "Full access to all features and settings.",
+        permissions: "*"
+    },
+    {
+        id: 2,
+        name: "Manager",
+        description: "Access to management features and reports.",
+        permissions: "view_reports, manage_inventory, view_customers"
+    },
+    {
+        id: 3,
+        name: "Cashier",
+        description: "Access to point-of-sale functionalities.",
+        permissions: "process_sales, view_products"
+    }
+];
+

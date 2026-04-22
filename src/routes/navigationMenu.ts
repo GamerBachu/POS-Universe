@@ -79,6 +79,14 @@ const NavigationMenu = [
         icon: "📋",
 
     },
+    {
+        path: PATHS.PROFILE,
+        label: "navigation.profile_label",
+        description: "navigation.profile_desc",
+        category: "account",
+        isVisible: true,
+        icon: "👤",
+    },
     //should on last
     {
         path: PATHS.LOGOUT,

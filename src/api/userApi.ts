@@ -1,11 +1,22 @@
 import type { ServiceResponse } from "@/types/serviceResponse";
 import db from "../libs/db/appDb";
-import type { IUser, IRefreshToken, IAuthResponse } from "@/types/user";
+import type {
+    IUser, IRefreshToken, IAuthResponse, IUserFull,
+    IUserProfile, IUserSettings, IUserWorkplace, IUserSecurity,
+
+} from "@/types/user";
 import { toUTCNowForDB } from "@/utils/helper/dateUtils";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { getDeviceInfo, tokenValidTill } from "@/utils";
 
 export class userApi {
+
+    static useStaticData = true; // Toggle for static data usage in development/testing
+
+    private static getErrorMessage(error: unknown): string {
+        return error instanceof Error ? error.message : "Operation failed";
+    }
+
     // Standard CRUD
     static async getById(id: number) { return db.users.get(id); }
     static async add(payload: IUser) { return db.users.add(payload); }
@@ -46,11 +57,36 @@ export class userApi {
         await db.refreshTokens.where("userId").equals(user.id).delete();
         const tokenData = await this.createSessionToken(user.id);
 
+
+        // get last loginHistory  
+        const lastLoginHistory = await db.loginHistory.where("userId").equals(user.id).last();
+
+
+        await db.loginHistory.add({
+            userId: user.id,
+            loginDate: toUTCNowForDB(),
+            ipAddress: "", // IP capture can be implemented with additional libraries
+            deviceInfo: getDeviceInfo(),
+        });
+
+
+        // Update last login date and IP
+        await db.userSecurity.where("userId").equals(user.id).modify({
+            lastLoginDate: lastLoginHistory?.loginDate || toUTCNowForDB(),
+            lastLoginIp: "", // IP capture can be implemented with additional libraries
+            passwordResetExpires: "",// Clear any existing password reset tokens on successful login
+            passwordResetToken: "",// Clear any existing password reset tokens on successful login
+            failedLoginAttempts: 0,
+            isLockedOut: false,
+            lockoutUntil: ""
+        });
+
+
         return this.createResponse({ user: userRes, token: tokenData }, "Login successful.");
     }
 
     /**
-     * Registers new user with conflict validation
+     * Registers new user with conflict validation and profile initialization
      */
     static async postRegister(payload: Partial<IUser>): Promise<ServiceResponse<IUser | null>> {
         if (!payload.username || !payload.password) {
@@ -62,16 +98,92 @@ export class userApi {
             return this.createResponse(null, "Username already exists.", false, 409);
         }
 
-        const newUser: IUser = {
-            ...payload,
-            guid: generateGuidV2().toUpperCase(),
-            isActive: true,
-            createdDate: toUTCNowForDB(),
-            password: await this.encryptPassword(payload.password),
-        } as IUser;
+        const hashedPassword = await this.encryptPassword(payload.password);
 
-        const id = await db.users.add(newUser);
-        return this.createResponse({ ...newUser, id, password: "" }, "User registered.", true, 201);
+        try {
+            const result = await db.transaction('rw', [
+                db.users,
+                db.userSecurity,
+                db.userProfiles,
+                db.userWorkplaces,
+                db.userSettings
+            ], async () => {
+                const newUser: IUser = {
+                    ...payload,
+                    guid: generateGuidV2().toUpperCase(),
+                    isActive: true,
+                    createdDate: toUTCNowForDB(),
+                    password: hashedPassword,
+                } as IUser;
+
+
+                if (userApi.useStaticData) {
+
+                    const userId = await db.users.add({
+                        ...newUser,
+                        nameMiddle: "System",
+                        nameLast: "data",
+                    }) as number;
+
+                    await db.userSecurity.add({
+                        userId,
+                        twoFactorEnabled: false,
+                        lastLoginDate: toUTCNowForDB(),
+                        lastLoginIp: "",
+                        failedLoginAttempts: 0,
+                        isLockedOut: false,
+                    } as IUserSecurity);
+
+
+                    await db.userProfiles.add({
+                        userId,
+                        avatarUrl: "",
+                        phoneNumber: "123-456-7890",
+                        dateOfBirth: "1990-05-05",
+                        gender: "male",
+                        languagePreference: "en-US",
+                        timezone: "America/New_York",
+                        addressLine1: "123 Main St",
+                        addressLine2: "Apt 4B",
+                        city: "Any-town",
+                        state: "NY",
+                        postalCode: "12345",
+                        country: "India"
+                    } as IUserProfile);
+
+                    await db.userWorkplaces.add({
+                        userId,
+                        roleId: 2,
+                        designation: "Manager",
+                    } as IUserWorkplace);
+
+
+                    await db.userSettings.add({
+                        userId,
+                        theme: "light",
+                        sidebarCollapsed: false,
+                        startPage: "/dashboard",
+                        permissions: "view_dashboard,manage_users"
+                    } as IUserSettings);
+
+
+                    return { ...newUser, id: userId, password: "" };
+                }
+                else {
+                    const userId = await db.users.add(newUser) as number;
+                    // Initialize associated tables with empty/static data
+                    await db.userSecurity.add({ userId } as IUserSecurity);
+                    await db.userProfiles.add({ userId } as IUserProfile);
+                    await db.userWorkplaces.add({ userId, roleId: 2 } as IUserWorkplace);
+                    await db.userSettings.add({ userId } as IUserSettings);
+                    return { ...newUser, id: userId, password: "" };
+                }
+            });
+
+            return this.createResponse(result, "User registered successfully.", true, 201);
+        } catch (error: unknown) {
+            return this.createResponse(null, this.getErrorMessage(error), false, 500);
+        }
     }
 
     /**
@@ -106,6 +218,84 @@ export class userApi {
         return this.createResponse({ user: { ...user, password: "" }, token: newToken }, "Token refreshed.");
     }
 
+    static async getFullUser(userId: number): Promise<ServiceResponse<IUserFull | null>> {
+        const user = await db.users.get(userId);
+        if (!user) return this.createResponse(null, "User not found.", false, 401);
+
+        // Run all profile-related DB queries in parallel for performance
+        const [security, profile, workplace, settings] = await Promise.all([
+            db.userSecurity.where("userId").equals(userId).first(),
+            db.userProfiles.where("userId").equals(userId).first(),
+            db.userWorkplaces.where("userId").equals(userId).first(),
+            db.userSettings.where("userId").equals(userId).first(),
+        ]);
+
+        if (security) {
+            // Security: Truncate sensitive fields so they are never traced in the frontend payload
+            delete security.twoFactorSecret;
+            delete security.passwordResetToken;
+            delete security.passwordResetExpires;
+        }
+
+        const data: IUserFull = {
+            ...user,
+            password: "",
+            security,
+            profile,
+            workplace,
+            settings,
+        };
+
+        if (data.workplace && data.workplace.roleId) {
+            data.role = await db.roles.get(data.workplace.roleId);
+        }
+
+        return this.createResponse(data, "User retrieved.");
+    }
+
+    // Update specific profile data
+    static async updateProfile(userId: number, payload: Partial<IUserProfile>): Promise<ServiceResponse<IUserProfile | null>> {
+        const existingProfile = await db.userProfiles.where("userId").equals(userId).first();
+        if (!existingProfile) {
+            return this.createResponse(null, "User profile not found.", false, 404);
+        }
+        await db.userProfiles.update(existingProfile.id!, payload);
+        return this.createResponse({ ...existingProfile, ...payload }, "User profile updated successfully.");
+
+    };
+
+    // Update specific user settings
+    static async updateSettings(userId: number, payload: Partial<IUserSettings>): Promise<ServiceResponse<IUserSettings | null>> {
+        const existingSettings = await db.userSettings.where("userId").equals(userId).first();
+        if (!existingSettings) {
+            return this.createResponse(null, "User settings not found.", false, 404);
+        }
+        await db.userSettings.update(existingSettings.id!, payload);
+        return this.createResponse({ ...existingSettings, ...payload }, "User settings updated successfully.");
+    };
+
+    // Update specific user security
+    static async updateSecurity(userId: number, payload: Partial<IUserSecurity>): Promise<ServiceResponse<IUserSecurity | null>> {
+        const existingSecurity = await db.userSecurity.where("userId").equals(userId).first();
+        if (!existingSecurity) {
+            return this.createResponse(null, "User security settings not found.", false, 404);
+        }
+        await db.userSecurity.update(existingSecurity.id!, payload);
+        return this.createResponse({ ...existingSecurity, ...payload }, "User security settings updated successfully.");
+    };
+
+    // Update specific user workplace
+    static async updateWorkplace(userId: number, payload: Partial<IUserWorkplace>): Promise<ServiceResponse<IUserWorkplace | null>> {
+        const existingWorkplace = await db.userWorkplaces.where("userId").equals(userId).first();
+        if (!existingWorkplace) {
+            return this.createResponse(null, "User workplace not found.", false, 404);
+        }
+        await db.userWorkplaces.update(existingWorkplace.id!, payload);
+        return this.createResponse({ ...existingWorkplace, ...payload }, "User workplace updated successfully.");
+    };
+
+
+
     /**
      * Unified response factory
      */
@@ -116,7 +306,7 @@ export class userApi {
         status: number = 200
     ): ServiceResponse<T> {
         return { status, success, message, data };
-    }
+    };
 
     /**
      * Internal session generator
@@ -143,5 +333,5 @@ export class userApi {
         return Array.from(new Uint8Array(hashBuffer))
             .map(b => b.toString(16).padStart(2, "0"))
             .join("");
-    }
+    };
 }

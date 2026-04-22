@@ -22,6 +22,7 @@ import OrderList from "@/pages/terminal1Order/OrderList";
 import OrderForm from "@/pages/terminal1Order/OrderForm";
 import Report from "@/pages/reports/Report";
 import DynamicReportPage from "@/pages/reports/DynamicReportPage";
+import UserProfilePage from "@/pages/account/UserProfilePage";
 
 export const router = createBrowserRouter([
     {
@@ -98,6 +99,15 @@ export const router = createBrowserRouter([
                     { path: "page/:action/:id", element: <SystemLogForm /> },
                 ],
             },
+
+            {
+                path: "secure/profile",
+                element: <ProtectedRoute />,
+                children: [
+                    { index: true, element: <UserProfilePage /> },
+                ],
+            },
+
 
             // Grouped Account Routes
             {

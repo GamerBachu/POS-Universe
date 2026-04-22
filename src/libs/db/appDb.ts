@@ -8,7 +8,7 @@ import {
     type IProductTimeStamp,
 } from "@/types/product";
 import { type IMasterProductAttribute } from "@/types/masters";
-import { type IUser, type IRefreshToken } from "@/types/user";
+
 import type { ISystemLog } from "@/types/systemLog";
 
 import {
@@ -25,10 +25,31 @@ import { type ICustomer } from "@/types/customer";
 
 import { type IReport } from "@/types/reports";
 
+import {
+    type IUser,
+    type IRefreshToken,
+    type IUserSecurity,
+    type IUserProfile,
+    type IUserWorkplace,
+    type IUserSettings,
+    type ILoginHistory,
+    type IRole
+} from "@/types/user";
 
 class POSUniversalDexie extends Dexie {
     users!: EntityTable<IUser, "id">;
     refreshTokens!: EntityTable<IRefreshToken, "id">;
+    userSecurity!: EntityTable<IUserSecurity, "id">;
+    loginHistory!: EntityTable<ILoginHistory, "id">;
+
+    // User Metadata
+    userProfiles!: EntityTable<IUserProfile, "id">;
+    userWorkplaces!: EntityTable<IUserWorkplace, "id">;
+    userSettings!: EntityTable<IUserSettings, "id">;
+    roles!: EntityTable<IRole, "id">;
+
+
+    // System Logs & Master Data
     systemLogs!: EntityTable<ISystemLog, "id">;
     masterProductAttributes!: EntityTable<IMasterProductAttribute, "id">;
 
@@ -57,6 +78,9 @@ class POSUniversalDexie extends Dexie {
 
 
 
+
+
+
     constructor() {
         super("POS_UniversalDB_0012");
 
@@ -65,6 +89,13 @@ class POSUniversalDexie extends Dexie {
             users: "++id, guid, name, email, username, password, isActive",
 
             refreshTokens: "++id, userId, token",
+            userSecurity: "++id, userId, lastLoginDate, isLockedOut",
+            userProfiles: "++id, userId, phoneNumber, email",
+            userWorkplaces: "++id, userId, roleId",
+            userSettings: "++id, userId",
+            loginHistory: "++id, userId, loginDate, ipAddress",
+            roles: "++id, name",
+
 
             systemLogs: '++id, type, pageName, timestamp',
 

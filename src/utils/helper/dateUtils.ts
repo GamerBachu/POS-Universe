@@ -45,6 +45,19 @@ export const toDisplayString = (utcString: string): string => {
 };
 
 /**
+ * Formats a UTC string into a human-readable local string for display without time (not inputs).
+ * Example: "Jan 31, 2026"
+ */
+export const toDisplayStringWithoutTime = (utcString: string): string => {
+    if (!utcString) return "N/A";
+    return new Date(utcString).toLocaleString(undefined, {
+        dateStyle: "medium",
+
+    });
+};
+
+
+/**
  * Converts the date time now to an ISO UTC string for the DB.
  * Example: "2026-01-31T13:14" -> "2026-01-31T07:44:00.000Z" (depending on local offset)
  */
