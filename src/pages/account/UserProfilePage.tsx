@@ -11,6 +11,7 @@ import CommonLayout from "@/layouts/CommonLayout";
 import { AlertError, AlertInfo } from "@/components/ActionStatusMessage";
 import { Status } from "@/components/badge";
 import { toDisplayString, toDisplayStringWithoutTime } from "@/utils/helper/dateUtils";
+import UserProfileEditModal from "./UserProfileEditModal";
 
 const UserProfilePage = () => {
     const { t } = useLanguage();
@@ -19,6 +20,7 @@ const UserProfilePage = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [data, setData] = useState<IUserFull | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const fetchData = useCallback(
         async (userId: number) => {
@@ -131,7 +133,12 @@ const UserProfilePage = () => {
                                 </div>
                             </div>
                         </div>
-                        <Button title="Edit Profile">Edit Profile</Button>
+                        <Button 
+                            title={t("common.edit")} 
+                            onClick={() => setIsEditModalOpen(true)}
+                        >
+                            {t("common.edit")}
+                        </Button>
                     </div>
 
                     <div className="space-y-6 mt-6  grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -327,6 +334,15 @@ const UserProfilePage = () => {
 
 
                     </div>
+
+                    {data && (
+                        <UserProfileEditModal 
+                            isOpen={isEditModalOpen}
+                            data={data}
+                            onClose={() => setIsEditModalOpen(false)}
+                            onSuccess={() => fetchData(auth.info.authUser?.userId || 0)}
+                        />
+                    )}
                 </>
             )}
         </CommonLayout>

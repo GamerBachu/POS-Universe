@@ -294,6 +294,34 @@ export class userApi {
         return this.createResponse({ ...existingWorkplace, ...payload }, "User workplace updated successfully.");
     };
 
+    /**
+     * Updates multiple user-related tables in a single transaction
+     */
+    static async updateFullProfile(userId: number, payload: {
+        user: Partial<IUser>,
+        profile: Partial<IUserProfile>,
+        workplace: Partial<IUserWorkplace>
+    }): Promise<ServiceResponse<boolean>> {
+        try {
+            await db.transaction('rw', [db.users, db.userProfiles, db.userWorkplaces], async () => {
+                await db.users.update(userId, payload.user);
+
+                const existingProfile = await db.userProfiles.where("userId").equals(userId).first();
+                if (existingProfile) {
+                    await db.userProfiles.update(existingProfile.id!, payload.profile);
+                }
+
+                const existingWorkplace = await db.userWorkplaces.where("userId").equals(userId).first();
+                if (existingWorkplace) {
+                    await db.userWorkplaces.update(existingWorkplace.id!, payload.workplace);
+                }
+            });
+            return this.createResponse(true, "Profile updated successfully.");
+        } catch (error: unknown) {
+            return this.createResponse(false, this.getErrorMessage(error), false, 500);
+        }
+    }
+
 
 
     /**
