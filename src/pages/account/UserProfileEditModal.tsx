@@ -6,7 +6,12 @@ import { userApi } from "@/api";
 import { LoggerUtils, getName } from "@/utils";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
+import InputWithLabel from "@/components/InputWithLabel";
 
+/**
+ * UserProfileEditModal Component
+ * Form modal for updating personal information, address, and profile details.
+ */
 interface UserProfileEditModalProps {
     isOpen: boolean;
     data: IUserFull;
@@ -37,17 +42,24 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
         designation: data.workplace?.designation || "",
     });
 
+    /**
+     * Generic input change handler
+     */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    /**
+     * Handle form submission and update context/API
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         try {
             const res = await userApi.updateFullProfile(data.id!, {
                 user: {
+                    id: auth.info.authUser?.userId,
                     nameFirst: form.nameFirst,
                     nameMiddle: form.nameMiddle,
                     nameLast: form.nameLast,
@@ -94,168 +106,146 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
 
     return (
         <Modal className="w-full max-w-xl" title={t("profile.title")} onClose={onClose}>
-            <form onSubmit={handleSubmit} className="p-4 space-y-5">
-                {/* Name Section */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("common.name")} (First)</label>
-                        <input
+            <form onSubmit={handleSubmit} className="flex flex-col max-h-[85vh]">
+                <div className="flex-1 overflow-y-auto p-4 space-y-5">
+                    {/* Name Section */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <InputWithLabel
+                            label={t("common.name")}
+                            placeholder={t("common.name")}
                             name="nameFirst"
                             value={form.nameFirst}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                            required
+                            required={true}
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.middle_name")}</label>
-                        <input
+                        <InputWithLabel
+                            label={t("profile.middle_name")}
+                            placeholder={t("profile.middle_name")}
                             name="nameMiddle"
                             value={form.nameMiddle}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.last_name")}</label>
-                        <input
+                        <InputWithLabel
+                            label={t("profile.last_name")}
+                            placeholder={t("profile.last_name")}
                             name="nameLast"
                             value={form.nameLast}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
-                </div>
 
-                {/* Avatar & Designation */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Avatar URL</label>
-                        <input
+                    {/* Avatar & Designation */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <InputWithLabel
+                            label={t("profile.avatar_url")}
                             name="avatarUrl"
                             value={form.avatarUrl}
                             onChange={handleChange}
                             placeholder="https://..."
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Designation</label>
-                        <input
+                        <InputWithLabel
+                            label={t("profile.designation")}
+                            placeholder={t("profile.designation")}
                             name="designation"
                             value={form.designation}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
                     </div>
-                </div>
 
-                {/* Bio Section */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Phone Number</label>
-                        <input
+                    {/* Bio Section */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <InputWithLabel
+                            label={t("profile.phone_number")}
+                            placeholder={t("profile.phone_number")}
                             name="phoneNumber"
                             value={form.phoneNumber}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Gender</label>
-                        <select
-                            name="gender"
-                            value={form.gender}
-                            onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        >
-                            <option value="">{t("common.select")}</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                            <option value="prefer_not_to_say">Prefer not to say</option>
-                        </select>
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Date of Birth</label>
-                        <input
-                            type="date"
-                            name="dateOfBirth"
-                            value={form.dateOfBirth}
-                            onChange={handleChange}
-                            className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
-                </div>
-
-                {/* Address Section */}
-                <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Address Line 1</label>
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.gender")}</label>
+                            <select
+                                name="gender"
+                                value={form.gender}
+                                onChange={handleChange}
+                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
+                            >
+                                <option value="">{t("common.select")}</option>
+                                <option value="male">{t("profile.gender_male")}</option>
+                                <option value="female">{t("profile.gender_female")}</option>
+                                <option value="other">{t("profile.gender_other")}</option>
+                                <option value="prefer_not_to_say">{t("profile.gender_none")}</option>
+                            </select>
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.dob")}</label>
                             <input
+                                type="date"
+                                name="dateOfBirth"
+                                value={form.dateOfBirth}
+                                onChange={handleChange}
+                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Address Section */}
+                    <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-700">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <InputWithLabel
+                                label={t("profile.address_line1")}
+                                placeholder={t("profile.address_line1")}
                                 name="addressLine1"
                                 value={form.addressLine1}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Address Line 2</label>
-                            <input
+                            <InputWithLabel
+                                label={t("profile.address_line2")}
+                                placeholder={t("profile.address_line2")}
                                 name="addressLine2"
                                 value={form.addressLine2}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">City</label>
-                            <input
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <InputWithLabel
+                                label={t("profile.city")}
+                                placeholder={t("profile.city")}
                                 name="city"
                                 value={form.city}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">State</label>
-                            <input
+                            <InputWithLabel
+                                label={t("profile.state")}
+                                placeholder={t("profile.state")}
                                 name="state"
                                 value={form.state}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Zip</label>
-                            <input
+                            <InputWithLabel
+                                label={t("profile.zip")}
+                                placeholder={t("profile.zip")}
                                 name="postalCode"
                                 value={form.postalCode}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Country</label>
-                            <input
+                            <InputWithLabel
+                                label={t("profile.country")}
+                                placeholder={t("profile.country")}
                                 name="country"
                                 value={form.country}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
+                                required={true}
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
                     <Button type="button" onClick={onClose} className="flex-1 bg-gray-600 hover:bg-gray-700" title={t("common.cancel")}>
                         {t("common.cancel")}
                     </Button>
                     <Button type="submit" className="flex-[2] bg-teal-600 hover:bg-teal-700" title={t("common.save")} isLoading={isSaving}>
-                        {t("common.save")}
+                        {t("common.update")}
                     </Button>
                 </div>
             </form>
