@@ -5,7 +5,6 @@ import type { IUserFull } from "@/types/user";
 import { useAuth } from "@/contexts/authorize";
 import { useLanguage } from "@/contexts/language";
 import { LoggerUtils, getName } from "@/utils";
-import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import CommonLayout from "@/layouts/CommonLayout";
 import { AlertError, AlertInfo } from "@/components/ActionStatusMessage";
@@ -15,8 +14,10 @@ import {
     toDisplayStringWithoutTime,
 } from "@/utils/helper/dateUtils";
 import UserProfileEditModal from "./UserProfileEditModal";
-import { LockedIcon } from "@/libs/icons";
+
 import UserPasswordChangeModal from "./UserPasswordChangeModal";
+import { SaveButton } from "@/components/button";
+import { ReadOnlyWithLabel } from "@/components/input";
 
 /**
  * UserProfilePage Component
@@ -152,13 +153,15 @@ const UserProfilePage = () => {
                                 </div>
                             </div>
                         </div>
-                        <Button
-                            title={t("common.update")}
-                            onClick={() => setIsEditModalOpen(true)}
-                            isLoading={isLoading}
-                        >
-                            {t("common.update")}
-                        </Button>
+                        <div className="ml-auto shrink-0">
+                            <SaveButton
+                                title={t("common.update")}
+                                onClick={() => setIsEditModalOpen(true)}
+                                isLoading={isLoading}
+                            >
+                                {t("common.update")}
+                            </SaveButton>
+                        </div>
                     </div>
 
                     <div className="space-y-6 mt-2 grid grid-cols-1 lg:grid-cols-3 gap-2">
@@ -169,103 +172,79 @@ const UserProfilePage = () => {
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8">
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("common.email")}
-                                        </label>
-                                        <p className="text-sm font-semibold truncate">{data?.email}</p>
+                                        <ReadOnlyWithLabel
+                                            label={t("common.email")}
+                                            value={data?.email}
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("profile.phone_number")}
-                                        </label>
-                                        <p className="text-sm font-semibold truncate">
-                                            {data?.profile?.phoneNumber || "-"}
-                                        </p>
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.phone_number")}
+                                            value={data?.profile?.phoneNumber || "-"}
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("common.username")}
-                                        </label>
-                                        <p className="text-sm font-semibold truncate">{data?.username}</p>
+                                        <ReadOnlyWithLabel
+                                            label={t("common.username")}
+                                            value={data?.username}
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("profile.dob")}
-                                        </label>
-                                        <p className="text-sm font-semibold truncate">
-                                            {data?.profile?.dateOfBirth
-                                                ? toDisplayStringWithoutTime(data.profile.dateOfBirth)
-                                                : "-"}
-                                        </p>
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.dob")}
+                                            value={data?.profile?.dateOfBirth ? toDisplayStringWithoutTime(data.profile.dateOfBirth) : "-"}
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("profile.gender")}
-                                        </label>
-                                        <p className="text-sm font-semibold capitalize truncate">
-                                            {data?.profile?.gender
-                                                ? t(`profile.gender_${data.profile.gender.toLowerCase()}` as Parameters<typeof t>[0])
-                                                : "-"}
-                                        </p>
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.gender")}
+                                            value={data?.profile?.gender ? t(`profile.gender_${data.profile.gender.toLowerCase()}` as Parameters<typeof t>[0]) : "-"}
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("profile.member_since")}
-                                        </label>
-                                        <p className="text-sm font-semibold">
-                                            {toDisplayString(data.createdDate)}
-                                        </p>
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.member_since")}
+                                            value={toDisplayString(data.createdDate)}
+                                        />
                                     </div>
                                     <div className="space-y-1 md:col-span-2 lg:col-span-3">
-                                        <label className="text-[10px] font-black uppercase text-gray-400">
-                                            {t("profile.address")}
-                                        </label>
-                                        <p className="text-sm font-semibold">
-                                            {[
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.address")}
+                                            value={[
                                                 data?.profile?.addressLine1,
                                                 data?.profile?.addressLine2,
                                                 data?.profile?.city,
                                                 data?.profile?.state,
                                                 data?.profile?.postalCode,
                                                 data?.profile?.country,
-                                            ]
-                                                .filter(Boolean)
-                                                .join(", ") || "-"}
-                                        </p>
+                                            ].filter(Boolean).join(", ") || "-"}
+                                        />
                                     </div>
                                 </div>
                             </section>
-
-                            <section className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-amber-600">
-                                        <LockedIcon></LockedIcon>
-                                    </div>
+                            <section className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+                                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-5">
+                                    {t("profile.security_privacy")}
+                                </h2>
+                                <div className="flex items-center gap-2">
                                     <div>
-                                        <h3 className="text-sm font-bold">{t("profile.security_privacy")}</h3>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase mt-1 flex items-center gap-2">
-                                            <span>
-                                                {data?.security?.lastLoginDate
-                                                    ? `${t("profile.last_login")}: ${toDisplayString(data.security.lastLoginDate)} from ${data.security.lastLoginIp}`
-                                                    : t("profile.no_login_history")}
-                                            </span>
-                                        </p>
-                                        <div className="mt-2 flex gap-4">
-                                            {data?.security?.twoFactorEnabled && (
-                                                <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-                                                    {t("profile.two_fa_enabled")}
-                                                </span>
-                                            )}
-                                        </div>
+                                        <ReadOnlyWithLabel
+                                            label={t("profile.last_login")}
+                                            value={data?.security?.lastLoginDate
+                                                ? ` ${toDisplayString(data.security.lastLoginDate)} from ${data.security.lastLoginIp}`
+                                                : t("profile.no_login_history")}
+                                        />
+                                    </div>
+                                    <div className="ml-auto shrink-0">
+                                        <SaveButton
+                                            title={t("profile.updatePassword")}
+                                            onClick={() => setIsPasswordModalOpen(true)}
+                                            isLoading={isLoading}
+                                        >
+                                            {t("profile.updatePassword")}
+                                        </SaveButton>
                                     </div>
                                 </div>
-                                <Button
-                                    title={t("common.update")}
-                                    onClick={() => setIsPasswordModalOpen(true)}
-                                    isLoading={isLoading}
-                                >
-                                    {t("common.update")}
-                                </Button>
                             </section>
                         </div>
                         <div className="space-y-6">

@@ -67,7 +67,9 @@
     "esc": "ESC",
     "end_of_report": "*** End Of Report ***",
     "generating_report": "Generating Report...",
-    "user": "Authorized By"
+    "user": "Authorized By",
+    "requiredAt": "{0} is required.",
+    "required": "This field is required."
   },
   "login": {
     "title": "Account Login",

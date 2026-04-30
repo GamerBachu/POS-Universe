@@ -4,9 +4,9 @@ import { useAuth } from "@/contexts/authorize";
 import type { IUserFull } from "@/types/user";
 import { userApi } from "@/api";
 import { LoggerUtils, getName } from "@/utils";
-import Button from "@/components/Button";
 import Modal from "@/components/Modal";
-import InputWithLabel from "@/components/InputWithLabel";
+import { TextBoxWithLabel } from "@/components/input";
+import { SecondaryButton, SubmitButton } from "@/components/button";
 
 /**
  * UserProfileEditModal Component
@@ -19,7 +19,12 @@ interface UserProfileEditModalProps {
     onSuccess: () => void;
 }
 
-const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileEditModalProps) => {
+const UserProfileEditModal = ({
+    isOpen,
+    data,
+    onClose,
+    onSuccess,
+}: UserProfileEditModalProps) => {
     const { t } = useLanguage();
     const auth = useAuth();
     const [isSaving, setIsSaving] = useState(false);
@@ -32,7 +37,9 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
         avatarUrl: data.profile?.avatarUrl || "",
         phoneNumber: data.profile?.phoneNumber || "",
         gender: data.profile?.gender || "",
-        dateOfBirth: data.profile?.dateOfBirth ? data.profile.dateOfBirth.split('T')[0] : "",
+        dateOfBirth: data.profile?.dateOfBirth
+            ? data.profile.dateOfBirth.split("T")[0]
+            : "",
         addressLine1: data.profile?.addressLine1 || "",
         addressLine2: data.profile?.addressLine2 || "",
         city: data.profile?.city || "",
@@ -45,7 +52,9 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
     /**
      * Generic input change handler
      */
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    ) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
@@ -76,7 +85,7 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                     postalCode: form.postalCode,
                     country: form.country,
                 },
-                workplace: { designation: form.designation }
+                workplace: { designation: form.designation },
             });
             if (res.success) {
                 // Update global auth context with new name information to ensure UI consistency
@@ -85,8 +94,12 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                         ...auth.info,
                         authUser: {
                             ...auth.info.authUser,
-                            displayName: getName(form.nameFirst, form.nameMiddle, form.nameLast)
-                        }
+                            displayName: getName(
+                                form.nameFirst,
+                                form.nameMiddle,
+                                form.nameLast,
+                            ),
+                        },
                     });
                 }
 
@@ -105,12 +118,16 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
     if (!isOpen) return null;
 
     return (
-        <Modal className="w-full max-w-xl" title={t("profile.title")} onClose={onClose}>
+        <Modal
+            className="w-full max-w-xl"
+            title={t("profile.title")}
+            onClose={onClose}
+        >
             <form onSubmit={handleSubmit} className="flex flex-col max-h-[85vh]">
-                <div className="flex-1 overflow-y-auto p-4 space-y-5">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
                     {/* Name Section */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <InputWithLabel
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <TextBoxWithLabel
                             label={t("common.name")}
                             placeholder={t("common.name")}
                             name="nameFirst"
@@ -118,14 +135,14 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                             onChange={handleChange}
                             required={true}
                         />
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("profile.middle_name")}
                             placeholder={t("profile.middle_name")}
                             name="nameMiddle"
                             value={form.nameMiddle}
                             onChange={handleChange}
                         />
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("profile.last_name")}
                             placeholder={t("profile.last_name")}
                             name="nameLast"
@@ -136,14 +153,14 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
 
                     {/* Avatar & Designation */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("profile.avatar_url")}
                             name="avatarUrl"
                             value={form.avatarUrl}
                             onChange={handleChange}
                             placeholder="https://..."
                         />
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("profile.designation")}
                             placeholder={t("profile.designation")}
                             name="designation"
@@ -154,7 +171,7 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
 
                     {/* Bio Section */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("profile.phone_number")}
                             placeholder={t("profile.phone_number")}
                             name="phoneNumber"
@@ -162,7 +179,9 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                             onChange={handleChange}
                         />
                         <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.gender")}</label>
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                                {t("profile.gender")}
+                            </label>
                             <select
                                 name="gender"
                                 value={form.gender}
@@ -173,11 +192,15 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                                 <option value="male">{t("profile.gender_male")}</option>
                                 <option value="female">{t("profile.gender_female")}</option>
                                 <option value="other">{t("profile.gender_other")}</option>
-                                <option value="prefer_not_to_say">{t("profile.gender_none")}</option>
+                                <option value="prefer_not_to_say">
+                                    {t("profile.gender_none")}
+                                </option>
                             </select>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t("profile.dob")}</label>
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                                {t("profile.dob")}
+                            </label>
                             <input
                                 type="date"
                                 name="dateOfBirth"
@@ -191,14 +214,14 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                     {/* Address Section */}
                     <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-700">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.address_line1")}
                                 placeholder={t("profile.address_line1")}
                                 name="addressLine1"
                                 value={form.addressLine1}
                                 onChange={handleChange}
                             />
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.address_line2")}
                                 placeholder={t("profile.address_line2")}
                                 name="addressLine2"
@@ -207,28 +230,28 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                             />
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.city")}
                                 placeholder={t("profile.city")}
                                 name="city"
                                 value={form.city}
                                 onChange={handleChange}
                             />
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.state")}
                                 placeholder={t("profile.state")}
                                 name="state"
                                 value={form.state}
                                 onChange={handleChange}
                             />
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.zip")}
                                 placeholder={t("profile.zip")}
                                 name="postalCode"
                                 value={form.postalCode}
                                 onChange={handleChange}
                             />
-                            <InputWithLabel
+                            <TextBoxWithLabel
                                 label={t("profile.country")}
                                 placeholder={t("profile.country")}
                                 name="country"
@@ -241,12 +264,13 @@ const UserProfileEditModal = ({ isOpen, data, onClose, onSuccess }: UserProfileE
                 </div>
 
                 <div className="flex gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
-                    <Button type="button" onClick={onClose} className="flex-1 bg-gray-600 hover:bg-gray-700" title={t("common.cancel")}>
+                    <SecondaryButton onClick={onClose} title={t("common.cancel")}>
                         {t("common.cancel")}
-                    </Button>
-                    <Button type="submit" className="flex-[2] bg-teal-600 hover:bg-teal-700" title={t("common.save")} isLoading={isSaving}>
+                    </SecondaryButton>
+
+                    <SubmitButton title={t("common.save")} isLoading={isSaving}>
                         {t("common.update")}
-                    </Button>
+                    </SubmitButton>
                 </div>
             </form>
         </Modal>

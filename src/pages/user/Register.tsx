@@ -6,34 +6,21 @@ import { Link } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import AppPurchase from "@/components/AppPurchase";
 import LoggerUtils from "@/utils/logger";
-import InputWithLabel from "@/components/InputWithLabel";
-import Button from "@/components/Button";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
-
-// Defined the form interface for strict typing
-interface RegisterFormPayload {
-    username: string;
-    password?: string;
-    nameFirst: string;
-    nameMiddle: string;
-    nameLast: string;
-    email: string;
-}
-
-interface ActionState {
-    success: boolean | null;
-    message: string;
-}
+import { TextBoxWithLabel } from "@/components/input";
+import type { IFormState } from "@/types/actionState";
+import type { IRegisterForm } from "@/types/user";
+import { SubmitButton } from "@/components/button";
 
 const Register = () => {
     const { t } = useLanguage();
-    const loginAction = async (
-        _: ActionState | null,
+    const formActionAsync = async (
+        _prevState: IFormState<IRegisterForm>,
         formData: FormData,
-    ): Promise<ActionState> => {
+    ): Promise<IFormState<IRegisterForm>> => {
         try {
             // Mapping FormData to our interface
-            const data: RegisterFormPayload = {
+            const data: IRegisterForm = {
                 username: formData.get("email") as string,
                 password: formData.get("password") as string,
                 nameFirst: formData.get("nameFirst") as string,
@@ -46,37 +33,76 @@ const Register = () => {
                 return {
                     success: false,
                     message: t("login.invalid_credentials"),
+                    errors: {
+                        username: !data.username ? [t("common.required")] : [],
+                        password: !data.password ? [t("common.required")] : [],
+                    },
+
                 };
             }
 
             const response = await userApi.postRegister(data);
 
             if (!response) {
-                return { success: false, message: t("common.error") };
+                return {
+                    success: false,
+                    message: t("common.error"),
+                    errors: null,
+
+                };
             }
 
             // Handling statuses based on our ServiceResponse structure
             switch (response.status) {
                 case 201:
-                    return { success: true, message: t("register.success_message") };
-                case 409:
-                    return { success: false, message: t("register.userExists") };
+                    return {
+                        success: true,
+                        message: t("register.success_message"),
+                        errors: null,
+                    };
+                case 409: return {
+                    success: false,
+                    message: t("register.userExists"),
+                    errors: {
+                        username: [t("register.userExists")],
+                    },
+                };
                 case 400:
-                    return { success: false, message: t("login.invalid_credentials") };
+                    return {
+                        success: false,
+                        message: t("login.invalid_credentials"),
+                        errors: {
+                            username: [t("login.invalid_credentials")],
+                            password: [t("login.invalid_credentials")],
+                        },
+                    };
                 default:
-                    return { success: false, message: t("common.error") };
+                    return {
+                        success: false,
+                        message: t("common.error"),
+                        errors: null,
+                    };
             }
         } catch (error: unknown) {
             LoggerUtils.logCatch(error, "Register", "handleAction", "66");
-            return { success: false, message: t("common.error") };
+            return {
+                success: false,
+                message: t("common.error"),
+                errors: null,
+            };
         }
     };
 
-    const [state, formAction, isPending] = useActionState(loginAction, null);
+    const [state, formAction, isPending] = useActionState(formActionAsync, {
+        success: false,
+        message: null,
+        errors: null,
+
+    });
 
     return (
         <div className="flex items-center justify-center p-6 min-h-[inherit]">
-            <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div className="relative w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-md shadow-2xl border border-gray-200 dark:border-gray-700">
                 <div className="absolute top-4 right-4"><ThemeToggleIcon /></div>
 
                 <header className="text-center mb-8">
@@ -89,43 +115,52 @@ const Register = () => {
                 </header>
 
                 <form action={formAction} className="space-y-4">
-                    <InputWithLabel
+
+                    <TextBoxWithLabel
                         label={t("common.name")}
                         name="nameFirst"
                         placeholder={t("common.ph_name")}
-                        required={true}
+                        disabled={isPending}
+                        error={state.errors?.username?.[0]}
+                        required
                     />
-
-                    <InputWithLabel
+                    <TextBoxWithLabel
                         label={`${t("common.email")}/${t("common.username")}`}
                         type="email"
                         name="email"
                         placeholder={t("common.ph_email")}
-                        required={true}
+                        disabled={isPending}
+                        error={state.errors?.email?.[0]}
+                        required
                     />
-
-                    <InputWithLabel
+                    <TextBoxWithLabel
                         label={t("common.password")}
                         type="password"
                         name="password"
                         placeholder={t("common.ph_password")}
-                        required={true}
+                        disabled={isPending}
+                        error={state.errors?.password?.[0]}
+                        required
                     />
-                    {(state?.success === true) && <AlertSuccess message={state?.message} />}
-                    {(state?.success === false) && <AlertError message={state?.message} />}
+                    {state.message &&
+                        (state.success ? (
+                            <AlertSuccess message={state.message} />
+                        ) : (
+                            <AlertError message={state.message} />
+                        ))}
 
                     <div className="flex flex-col gap-3 pt-4">
-                        <Button
-                            type="submit"
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 py-2"
-                            disabled={isPending}
+
+                        <SubmitButton
                             isLoading={isPending}
+                            disabled={isPending}
                         >
                             {t("register.submit")}
-                        </Button>
+                        </SubmitButton>
+
                         <Link
                             to={PATHS.LOGIN}
-                            className="w-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all text-center"
+                            className="w-full text-sm font-medium text-teal-600 dark:text-teal-400 hover:underline transition-all text-center"
                         >
                             {t("login.submit")}
                         </Link>

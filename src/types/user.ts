@@ -1,9 +1,17 @@
-export interface ILoginCredentials {
+export interface ILoginForm {
     email: string;
     password: string;
 }
 
 
+export interface IRegisterForm {
+    username: string;
+    password?: string;
+    nameFirst: string;
+    nameMiddle: string;
+    nameLast: string;
+    email: string;
+}
 
 export interface IAuthResponse {
     user: IUser;

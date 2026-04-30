@@ -12,15 +12,29 @@ This document defines the architectural and UI patterns for the POS-Universe pro
 
 ## 2. Component Guidelines
 
-### Inputs & DatePickers
-* **Height Matching:** All inputs and action buttons in a row must have matching heights (default `h-10` or `h-9`).
+### Inputs & Forms (React 19 Pattern)
+* **Standard Input:** Use `TextBoxWithLabel` from `@/components/input` for all text-based fields (text, email, password).
+    * **Integration:** Connect `disabled` to `isPending` and `error` to the specific field error from `useActionState` (e.g., `state.errors?.field?.[0]`).
+    * **Usage Example:**
+    ```tsx
+    <TextBoxWithLabel
+        label={t("common.email")}
+        name="email"
+        type="email"
+        disabled={isPending}
+        error={state.errors?.email?.[0]}
+        required
+    />
+    ```
 * **DatePicker Pattern:** Use the custom `DatePicker` component. 
     * Always initialize `useState` with `getTodayDateString()` from `@/utils/date`.
     * Standard format: `YYYY-MM-DD`.
-* **Labels:** Use uppercase, bold, tracking-wide labels: `text-[11px] font-bold uppercase tracking-wider text-gray-500`.
+* **Height Matching:** All inputs and action buttons in a row must have matching heights (default `h-10`).
 
-### Common Components
-* **Buttons:** Standardized via `@/components/Button`. Use `bg-teal-600` for "Submit/Search" and `bg-gray-600` or `bg-red-500` for "Reset/Cancel".
+### Buttons & Actions
+* **Form Submission:** Use `SubmitButton` from `@/components/button` for all form actions.
+    * **Props:** Must pass `isLoading={isPending}` and `disabled={isPending}` to handle React 19 transition states.
+* **General Buttons:** Standardized via `@/components/Button`. Use `bg-teal-600` for primary actions and `bg-gray-600` for secondary/cancel actions.
 * **Icons:** Use `SVGProps<SVGSVGElement>` with `stroke="currentColor"`.
     * Ensure `dark:` support by passing `text-gray-500 dark:text-gray-400` to icon instances.
 

@@ -2,12 +2,12 @@ import { useActionState } from "react";
 import { useLanguage } from "@/contexts/language";
 import { userApi } from "@/api";
 import { LoggerUtils } from "@/utils";
-import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 
-import InputWithLabel from "@/components/InputWithLabel";
+import { TextBoxWithLabel } from "@/components/input";
 import type { IActionState } from "@/types/actionState";
+import { SecondaryButton, SubmitButton } from "@/components/button";
 
 /**
  * UserPasswordChangeModal Component
@@ -107,21 +107,21 @@ const UserPasswordChangeModal = ({
                 action={formAction}
                 className="flex flex-col bg-white dark:bg-gray-900 p-6 gap-4"
             >
-                <InputWithLabel
+                <TextBoxWithLabel
                     label={t("common.password")}
                     type="password"
                     name="password"
                     placeholder={t("common.ph_password")}
                     required={true}
                 />
-                <InputWithLabel
+                <TextBoxWithLabel
                     label={t("common.new_password")}
                     type="password"
                     name="newPassword"
                     placeholder={t("common.ph_new_password")}
                     required={true}
                 />
-                <InputWithLabel
+                <TextBoxWithLabel
                     label={t("common.confirm_password")}
                     type="password"
                     name="confirmPassword"
@@ -132,22 +132,19 @@ const UserPasswordChangeModal = ({
                 {state?.success === false && <AlertError message={state?.message} />}
 
                 <div className="flex gap-2 pt-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
-                    <Button
-                        type="reset"
+
+                    <SecondaryButton
                         onClick={onClose}
-                        className="flex-1 bg-gray-600 hover:bg-gray-700"
                         title={t("common.cancel")}
                     >
                         {t("common.cancel")}
-                    </Button>
-                    <Button
-                        type="submit"
-                        className="flex-[2] bg-teal-600 hover:bg-teal-700"
+                    </SecondaryButton>
+                    <SubmitButton
                         title={t("common.update")}
                         isLoading={isPending}
                     >
                         {t("common.update")}
-                    </Button>
+                    </SubmitButton>
                 </div>
             </form>
         </Modal>

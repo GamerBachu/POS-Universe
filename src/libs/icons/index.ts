@@ -15,5 +15,6 @@ export { default as FilterIcon } from "./FilterIcon";
 export { default as CalendarIcon } from "./CalendarIcon";
 export { default as PrinterIcon } from "./PrinterIcon";
 export { default as LockedIcon } from "./LockedIcon";
+export { default as SpinnerIcon } from "./Spinner";
 
 
