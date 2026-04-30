@@ -1,6 +1,6 @@
-import { useId, forwardRef, type TextareaHTMLAttributes } from "react";
+import { useId, forwardRef, type SelectHTMLAttributes } from "react";
 
-interface TextAreaWithLabelProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface SelectWithLabelProps extends SelectHTMLAttributes<HTMLSelectElement> {
     label: string;
     error?: string;
     containerClassName?: string;
@@ -8,9 +8,9 @@ interface TextAreaWithLabelProps extends TextareaHTMLAttributes<HTMLTextAreaElem
     required?: boolean;
 }
 
-export const TextAreaWithLabel = forwardRef<
-    HTMLTextAreaElement,
-    TextAreaWithLabelProps
+export const SelectWithLabel = forwardRef<
+    HTMLSelectElement,
+    SelectWithLabelProps
 >(
     (
         {
@@ -20,6 +20,7 @@ export const TextAreaWithLabel = forwardRef<
             helperText,
             className = "",
             required,
+            children,
             ...props
         },
         ref,
@@ -40,14 +41,15 @@ export const TextAreaWithLabel = forwardRef<
                     )}
                 </label>
 
-                <textarea
+                <select
                     id={id}
                     ref={ref}
-                    autoComplete="off"
                     required={required}
-                    className={`w-full px-4 py-2.5 text-base bg-white dark:bg-gray-950 text-gray-900 dark:text-white border rounded-md shadow-sm transition-all outline-none placeholder:text-gray-400 ${error ? "border-red-500 focus:ring-2 focus:ring-red-500/20" : "border-gray-300 dark:border-gray-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"} disabled:bg-gray-50 dark:disabled:bg-gray-900 disabled:text-gray-500 min-h-[100px] ${className}`}
+                    className={`w-full px-4 py-2.5 text-base bg-white dark:bg-gray-950 text-gray-900 dark:text-white border rounded-md shadow-sm transition-all outline-none  ${error ? "border-red-500 focus:ring-2 focus:ring-red-500/20" : "border-gray-300 dark:border-gray-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"} disabled:bg-gray-50 dark:disabled:bg-gray-900 disabled:text-gray-500 ${className}`}
                     {...props}
-                />
+                >
+                    {children}
+                </select>
 
                 {(error || helperText) && (
                     <div className="min-h-[20px] ml-1">
@@ -63,4 +65,4 @@ export const TextAreaWithLabel = forwardRef<
     },
 );
 
-TextAreaWithLabel.displayName = "TextAreaWithLabel";
+SelectWithLabel.displayName = "SelectWithLabel";

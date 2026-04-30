@@ -14,7 +14,11 @@ import {
   TextAreaWithLabel,
   TextBoxWithLabel,
 } from "@/components/input";
-import { SecondaryButton, SubmitButton } from "@/components/button";
+import {
+  DangerButton,
+  PrimaryButton,
+  SecondaryButton,
+} from "@/components/button";
 
 const SystemLogForm = () => {
   const { t } = useLanguage();
@@ -231,23 +235,24 @@ const SystemLogForm = () => {
             <SecondaryButton onClick={onSendBack}>
               {t("common.back_page")}
             </SecondaryButton>
-            {action !== "view" && (
-              <SubmitButton
+            {action === "delete" && (
+              <DangerButton
                 disabled={isPending}
-                title={
-                  isPending
-                    ? "..."
-                    : action === "delete"
-                      ? t("common.delete")
-                      : t("common.save")
-                }
+                title={t("common.delete")}
+                type="submit"
               >
-                {isPending
-                  ? "..."
-                  : action === "delete"
-                    ? t("common.delete")
-                    : t("common.save")}
-              </SubmitButton>
+                {t("common.delete")}
+              </DangerButton>
+            )}
+
+            {(action === "edit" || action === "add") && (
+              <PrimaryButton
+                disabled={isPending}
+                title={t("common.save")}
+                type="submit"
+              >
+                {t("common.save")}
+              </PrimaryButton>
             )}
           </div>
         </form>

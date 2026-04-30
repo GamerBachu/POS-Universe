@@ -14,19 +14,16 @@ export const ReadOnlyWithLabel = forwardRef<
     const id = useId();
 
     return (
-        <div className={`flex flex-col gap-1 ${containerClassName}`} ref={ref}>
-            {/* Small, bold metadata label */}
+        <div className={`flex flex-col gap-2 ${containerClassName}`} ref={ref}>
             <label
                 htmlFor={id}
-                className="text-sm text-gray-700 dark:text-gray-400 uppercase tracking-wider ml-1"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-400 ml-1"
             >
                 {label}
             </label>
-
-            {/* Clean text display with no borders or backgrounds */}
             <div
                 id={id}
-                className={`w-full px-1 py-0.5 text-sm font-semibold text-gray-800 dark:text-gray-200 cursor-default select-all ${className} `}
+                className={`w-full px-4 py-1 text-base font-medium text-gray-900 dark:text-gray-100 cursor-default select-all ${className}`}
             >
                 {value || "—"}
             </div>

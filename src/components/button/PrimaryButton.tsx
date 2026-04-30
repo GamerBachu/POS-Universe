@@ -2,13 +2,13 @@ import { useLanguage } from "@/contexts/language";
 import { SpinnerIcon } from "@/libs/icons";
 import React from "react";
 
-interface SaveButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isLoading?: boolean;
     loadingText?: string;
     icon?: React.ReactNode;
 }
 
-export const SaveButton: React.FC<SaveButtonProps> = ({
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     children,
     isLoading = false,
     loadingText,
@@ -26,7 +26,7 @@ export const SaveButton: React.FC<SaveButtonProps> = ({
         <button
             type={props.type || "button"}
             disabled={disabled || isLoading}
-            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold uppercase text-sm tracking-wider transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
+            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
             {...props}
         >
             {isLoading && (

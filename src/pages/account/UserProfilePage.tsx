@@ -16,7 +16,7 @@ import {
 import UserProfileEditModal from "./UserProfileEditModal";
 
 import UserPasswordChangeModal from "./UserPasswordChangeModal";
-import { SaveButton } from "@/components/button";
+import { PrimaryButton } from "@/components/button";
 import { ReadOnlyWithLabel } from "@/components/input";
 
 /**
@@ -154,13 +154,13 @@ const UserProfilePage = () => {
                             </div>
                         </div>
                         <div className="ml-auto shrink-0">
-                            <SaveButton
+                            <PrimaryButton
                                 title={t("common.update")}
                                 onClick={() => setIsEditModalOpen(true)}
                                 isLoading={isLoading}
                             >
                                 {t("common.update")}
-                            </SaveButton>
+                            </PrimaryButton>
                         </div>
                     </div>
 
@@ -236,13 +236,13 @@ const UserProfilePage = () => {
                                         />
                                     </div>
                                     <div className="ml-auto shrink-0">
-                                        <SaveButton
+                                        <PrimaryButton
                                             title={t("profile.updatePassword")}
                                             onClick={() => setIsPasswordModalOpen(true)}
                                             isLoading={isLoading}
                                         >
                                             {t("profile.updatePassword")}
-                                        </SaveButton>
+                                        </PrimaryButton>
                                     </div>
                                 </div>
                             </section>
