@@ -5,7 +5,7 @@ import type { IUserFull } from "@/types/user";
 import { userApi } from "@/api";
 import { LoggerUtils, getName } from "@/utils";
 import Modal from "@/components/Modal";
-import { TextBoxWithLabel } from "@/components/input";
+import { DatePicker, SelectWithLabel, TextBoxWithLabel } from "@/components/input";
 import { SecondaryButton, SubmitButton } from "@/components/button";
 
 /**
@@ -179,14 +179,11 @@ const UserProfileEditModal = ({
                             onChange={handleChange}
                         />
                         <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                                {t("profile.gender")}
-                            </label>
-                            <select
+                            <SelectWithLabel
+                                label={t("profile.gender")}
                                 name="gender"
                                 value={form.gender}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             >
                                 <option value="">{t("common.select")}</option>
                                 <option value="male">{t("profile.gender_male")}</option>
@@ -195,18 +192,14 @@ const UserProfileEditModal = ({
                                 <option value="prefer_not_to_say">
                                     {t("profile.gender_none")}
                                 </option>
-                            </select>
+                            </SelectWithLabel>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                                {t("profile.dob")}
-                            </label>
-                            <input
-                                type="date"
+                            <DatePicker
+                                label={t("profile.dob")}
                                 name="dateOfBirth"
                                 value={form.dateOfBirth}
                                 onChange={handleChange}
-                                className="w-full h-10 px-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
                             />
                         </div>
                     </div>
