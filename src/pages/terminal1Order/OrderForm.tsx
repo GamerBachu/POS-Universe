@@ -10,12 +10,12 @@ import OrderStatusManage from "./OrderStatusManage";
 import CommonLayout from "@/layouts/CommonLayout";
 import PageHeader from "@/components/PageHeader";
 import { PATHS } from "@/routes/paths";
-import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
 import OrderStatusLabel from "./OrderStatusLabel";
 import OrderPrint from "./OrderPrint";
 import { calculateRowAmount } from "../terminal1/utils";
 import PrintService from "@/components/PrintService";
+import { PrimaryButton, SecondaryButton } from "@/components/button";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ const OrderForm = () => {
                 onClick={onSendBack}
             />
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-               <Loader label={t("common.loading")} />
+                <Loader label={t("common.loading")} />
             </div>
         </CommonLayout>
     );
@@ -207,8 +207,8 @@ const OrderForm = () => {
 
                 </div>
 
-                {/* Right Column: Meta Info */}
-                <div className="space-y-6">
+
+                <div className="space-y-6 mb-4">
                     {/* Order Meta */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div className="p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 font-bold text-xs uppercase ">
@@ -256,35 +256,29 @@ const OrderForm = () => {
                     </div>
 
                     {/* Actions Area */}
-                    <div className="grid grid-cols-2 gap-2 items-stretch">
-                        <Button
-                            type="button"
+                    <div className="grid grid-cols-2 gap-2 ">
+                        <SecondaryButton
                             onClick={onSendBack}
-                            className="bg-gray-600 hover:bg-gray-700 py-2"
-                            title={t("common.back_page")}
                             isLoading={loading}
+                            title={t("common.back_page")}
                         >
                             {t("common.back_page")}
-                        </Button>
-                        <Button
-                            type="button"
-                            className="bg-blue-600 hover:bg-blue-700 py-2"
+                        </SecondaryButton>
+                        <SecondaryButton
                             onClick={() => setIsPrinting(true)}
-                            title={t("common.print")}
                             isLoading={loading}
+                            title={t("common.print")}
                         >
                             {t("common.print")}
-                        </Button>
+                        </SecondaryButton>
 
-                        <Button
-                            type="button"
+                        <PrimaryButton
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-green-600 hover:bg-green-700  py-2"
-                            title={t("common.manage_status")}
                             isLoading={loading}
+                            title={t("common.manage_status")}
                         >
                             {t("common.manage_status")}
-                        </Button>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>

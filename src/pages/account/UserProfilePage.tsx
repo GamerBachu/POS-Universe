@@ -19,11 +19,7 @@ import UserPasswordChangeModal from "./UserPasswordChangeModal";
 import { PrimaryButton } from "@/components/button";
 import { ReadOnlyWithLabel } from "@/components/input";
 
-/**
- * UserProfilePage Component
- * Displays detailed information about the logged-in user, including
- * account details, security settings, and workspace preferences.
- */
+
 const UserProfilePage = () => {
     const { t } = useLanguage();
     const auth = useAuth();

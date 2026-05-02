@@ -152,7 +152,7 @@ const CustomerInsightsReport = () => {
                                         <tr>
                                             <td
                                                 colSpan={6}
-                                                className="py-20 text-center text-gray-400 text-xs uppercase"
+                                                className="py-20 text-center text-gray-400 text-sm uppercase"
                                             >
                                                 {error}
                                             </td>

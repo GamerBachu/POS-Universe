@@ -4,13 +4,16 @@ import { useAuth } from "@/contexts/authorize";
 import { useLanguage } from "@/contexts/language";
 import type { IOrder } from "@/types/orders";
 import { OrderStatusList } from "@/types/terminal1";
-import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
 import { getIsDangerousAction } from "./utils";
 import { AlertError } from "@/components/ActionStatusMessage";
-import Select from "@/components/Select";
-import TextArea from "@/components/TextArea";
 import Modal from "@/components/Modal";
+import { SelectWithLabel, TextAreaWithLabel } from "@/components/input";
+import {
+    DangerButton,
+    PrimaryButton,
+    SecondaryButton,
+} from "@/components/button";
 
 interface OrderStatusManageProps {
     order: IOrder;
@@ -95,7 +98,7 @@ const OrderStatusManage = ({
         order.id,
         onSuccess,
         onClose,
-        t
+        t,
     ]);
 
     if (!isOpen) return null;
@@ -103,7 +106,10 @@ const OrderStatusManage = ({
     return (
         <Modal
             className="w-full max-w-sm"
-            title={t("pos_t1.manage_title").replace("{orderNumber}", order.orderNumber,)}
+            title={t("pos_t1.manage_title").replace(
+                "{orderNumber}",
+                order.orderNumber,
+            )}
             onClose={onClose}
         >
             <div className="p-5 space-y-4">
@@ -114,16 +120,9 @@ const OrderStatusManage = ({
                     </p>
                 </div>
 
-                {/* Status Selection */}
                 <div className="space-y-1">
-                    <label
-                        className="text-xs font-bold uppercase text-gray-500"
-                        htmlFor="status"
-                    >
-                        {t("common.status")}
-                    </label>
-
-                    <Select
+                    <SelectWithLabel
+                        label={t("common.status")}
                         name="status"
                         value={status}
                         disabled={false}
@@ -136,12 +135,12 @@ const OrderStatusManage = ({
                                 {opt.value}
                             </option>
                         ))}
-                    </Select>
+                    </SelectWithLabel>
                 </div>
 
-                {/* Reason Textarea */}
                 <div className="space-y-1">
-                    <TextArea
+                    <TextAreaWithLabel
+                        label={t("pos_t1.manage_reason")}
                         name="descContent"
                         value={reason}
                         onChange={(e) => setReason(e.target.value)}
@@ -159,27 +158,32 @@ const OrderStatusManage = ({
             </div>
 
             <div className="p-5 pt-0 grid grid-cols-2 gap-3">
-                <Button
-                    type="button"
+                <SecondaryButton
                     onClick={onClose}
                     disabled={isSubmitting}
-                    className="bg-gray-600 hover:bg-gray-700 py-2"
                     title={t("common.cancel")}
                 >
                     {t("common.cancel")}
-                </Button>
-                <Button
-                    type="button"
-                    title={t("common.update")}
-                    onClick={handleUpdateStatus}
-                    isLoading={isSubmitting}
-                    className={` ${isDangerousAction
-                        ? "bg-red-600 hover:bg-red-700 py-2"
-                        : "bg-teal-600 hover:bg-teal-700 py-2"
-                        }`}
-                >
-                    {t("common.update")}
-                </Button>
+                </SecondaryButton>
+                {isDangerousAction ? (
+                    <DangerButton
+                        disabled={isSubmitting}
+                        title={t("common.update")}
+                        onClick={handleUpdateStatus}
+                        isLoading={isSubmitting}
+                    >
+                        {t("common.update")}
+                    </DangerButton>
+                ) : (
+                    <PrimaryButton
+                        disabled={isSubmitting}
+                        title={t("common.update")}
+                        onClick={handleUpdateStatus}
+                        isLoading={isSubmitting}
+                    >
+                        {t("common.update")}
+                    </PrimaryButton>
+                )}
             </div>
         </Modal>
     );

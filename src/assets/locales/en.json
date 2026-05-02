@@ -110,7 +110,7 @@
     "register_desc": "Create a new local store profile.",
     "logout_label": "Logout",
     "logout_desc": "Securely end the current session.",
-    "about_label": "About",
+    "about_label": "Information",
     "about_desc": "Version info and documentation.",
     "error_label": "Error",
     "error_desc": "System error fallback page.",
@@ -417,5 +417,21 @@
     "language": "Language",
     "timezone": "Timezone",
     "permissions_access": "Permissions & Access"
+  },
+  "faq": {
+    "title": "Help Center",
+    "desc": "Common questions and system guides",
+    "search_placeholder": "Search for help...",
+    "no_results": "No matching questions found.",
+    "q1": "How do I manage product images?",
+    "a1": "Go to the Inventory section, select a product, and use the 'Images' module to add titles and URLs. Each row includes a live preview.",
+    "q2": "What are product attributes?",
+    "a2": "Attributes are specific traits (like Size or Color) that you can assign to products using the predefined master list.",
+    "q3": "Can I search through reports?",
+    "a3": "Yes, every report header includes a search bar to filter data in real-time.",
+    "q4": "Is it possible to print report data?",
+    "a4": "The 'Print' button in the report header allows you to generate physical or PDF copies of your currently filtered insights.",
+    "q5": "How do I add keywords?",
+    "a5": "Keywords are managed in the product edit screen. Add unique tags to improve the searchability of your inventory items."
   }
 }

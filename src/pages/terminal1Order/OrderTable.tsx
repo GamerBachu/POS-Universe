@@ -108,7 +108,7 @@ const OrderTable: React.FC = () => {
             <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
                 <table className="w-full min-w-[700px] text-left border-collapse table-auto">
                     <thead>
-                        <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                        <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400">
                             <th className="p-3 w-16">{t("common.id")}</th>
                             <th className="p-3">{t("pos_t1.col_order_no")}</th>
                             <th className="p-3 text-center">{t("pos_t1.col_date")}</th>
