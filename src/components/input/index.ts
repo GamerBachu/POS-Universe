@@ -4,3 +4,4 @@ export { ReadOnlyWithLabel } from "./ReadOnlyWithLabel";
 export { DateTimePicker } from "./DateTimePicker";
 export { SelectWithLabel } from "./SelectWithLabel";
 export { DatePicker } from "./DatePicker";
+export { TextBox } from "./TextBox";

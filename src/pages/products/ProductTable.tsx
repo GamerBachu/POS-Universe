@@ -89,7 +89,7 @@ const ProductTable: React.FC = () => {
     <div className="space-y-2">
       <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm overflow-hidden">
         <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
-          {/* Inputs Section: Starts from left and expands */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 flex-1 w-full">
             <TextBoxWithLabel
               label={t("product_inventory.name")}
@@ -130,19 +130,20 @@ const ProductTable: React.FC = () => {
             </SelectWithLabel>
           </div>
 
-          {/* Actions Section: Pushed to the right */}
           <div className="flex gap-2 pb-1 w-full lg:w-auto justify-end">
             <PrimaryButton
               onClick={handleApplyFilters}
               isLoading={isLoading}
-              className="px-8"
+              title={t("common.search")}
+              className="px-6"
             >
               {t("common.search")}
             </PrimaryButton>
             <SecondaryButton
               onClick={handleClear}
               isLoading={isLoading}
-              className="px-6" // Using Bootstrap secondary style logic
+              title={t("common.reset")}
+              className="px-8"
             >
               {t("common.reset")}
             </SecondaryButton>
@@ -178,7 +179,7 @@ const ProductTable: React.FC = () => {
             )}
           </tbody>
         </table>
-      </div>
+      </div>;
 
       {/* Pagination Controls */}
       <Pagination
@@ -188,7 +189,7 @@ const ProductTable: React.FC = () => {
         onPageChange={handlePageChange}
         isLoading={isLoading}
       ></Pagination>
-    </div>
+    </div >
   );
 };
 

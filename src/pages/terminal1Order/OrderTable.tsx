@@ -5,8 +5,10 @@ import { useLanguage } from "@/contexts/language";
 import OrderTableRow from "./OrderTableRow";
 import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+
+import { TextBoxWithLabel } from "@/components/input";
+import { PrimaryButton, SecondaryButton, } from "@/components/button";
+
 import Pagination from "@/components/Pagination";
 import TableNoRecord from "@/components/TableNoRecord";
 
@@ -69,31 +71,36 @@ const OrderTable: React.FC = () => {
     return (
         <div className="space-y-2">
 
-            <div
-                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center p-3 border border-gray-200 dark:border-gray-700">
-                <Input
-                    type="text"
-                    placeholder={t("pos_t1.col_order_no")}
-                    value={localFilters.orderNumber}
-                    onChange={(e) => handleInputChange('orderNumber', e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-                    name="orderNumber"
-                />
-                <div className="flex gap-1 lg:justify-end">
-                    <Button
-                        onClick={handleApplyFilters}
-                        isLoading={isLoading}
-                        className="bg-blue-600 hover:bg-blue-700 py-1.5"
-                    >
-                        {t("common.search")}
-                    </Button>
-                    <Button
-                        onClick={handleClear}
-                        isLoading={isLoading}
-                        className="bg-gray-600 hover:bg-gray-700 py-1.5"
-                    >
-                        {t("common.reset")}
-                    </Button>
+            <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+                <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 w-full">
+                        <TextBoxWithLabel
+                            label={t("common.name")}
+                            placeholder={t("pos_t1.col_order_no")}
+                            value={localFilters.orderNumber}
+                            onChange={(e) => handleInputChange('orderNumber', e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
+                            name="orderNumber"
+                        />
+                    </div>
+                    <div className="flex gap-2 pb-0.5 w-full lg:w-auto justify-end">
+                        <PrimaryButton
+                            onClick={handleApplyFilters}
+                            isLoading={isLoading}
+                            title={t("common.search")}
+                            className="px-6"
+                        >
+                            {t("common.search")}
+                        </PrimaryButton>
+                        <SecondaryButton
+                            onClick={handleClear}
+                            isLoading={isLoading}
+                            title={t("common.reset")}
+                            className="px-8"
+                        >
+                            {t("common.reset")}
+                        </SecondaryButton>
+                    </div>
                 </div>
             </div>
 
@@ -114,7 +121,7 @@ const OrderTable: React.FC = () => {
                         {isLoading ? (
                             <TableSkeleton rows={pageSize} column={6} />
                         ) : data.length === 0 ? (
-                           <TableNoRecord column={6} message={t("common.no_record")} />
+                            <TableNoRecord column={6} message={t("common.no_record")} />
                         ) : (
                             data.map((item) => (
                                 <OrderTableRow key={item.id} item={item} />

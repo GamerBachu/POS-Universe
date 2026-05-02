@@ -1,5 +1,5 @@
 import { useActionState, useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 
 import { masterProductAttributeApi } from "@/api";
 import { type IMasterProductAttribute } from "@/types/masters";
@@ -16,6 +16,7 @@ import {
   PrimaryButton,
   SecondaryButton,
 } from "@/components/button";
+import RadioActiveToggle from "@/components/RadioActiveToggle";
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -147,17 +148,7 @@ const AttributeForm = () => {
 
   const isReadOnly = action === "view" || action === "delete";
 
-  // useEffect(() => {
-
-  //   const d = new SeedData();
-  //   d.masterProductAttribute.forEach(item => {
-  //     masterProductAttributeApi.add({
-  //       name: item.name,
-  //       isActive: true
-  //     });
-  //   });
-
-  // }, []);
+  console.log(action, data);
 
   return (
     <CommonLayout h1={t("navigation.master_pro__attr_label")}>
@@ -186,32 +177,15 @@ const AttributeForm = () => {
                 placeholder={t("common.ph_name")}
               />
             </div>
-            <label
-              htmlFor="isActive"
-              className={`flex items-center justify-between p-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 ${!isReadOnly ? "cursor-pointer" : ""}`}
-            >
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                  {t("common.active")}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {t("mst_product_attribute.toggle_active")}
-                </span>
-              </div>
 
-              <div className="relative inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  name="isActive"
-                  disabled={isReadOnly}
-                  defaultChecked={initialData.isActive}
-                  key={`active-${initialData.isActive}`}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 rounded-full peer bg-red-200 dark:bg-red-900/40 peer-checked:bg-green-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none disabled:opacity-50"></div>
-              </div>
-            </label>
+            <RadioActiveToggle
+              isActive={initialData.isActive}
+              isReadOnly={isReadOnly}
+              title={t("common.active")}
+              desc={t("mst_product_attribute.toggle_active")}
+              name="isActive"
+            />
+
           </div>
           {state?.success === true && <AlertSuccess message={state?.message} />}
           {state?.success === false && <AlertError message={state?.message} />}

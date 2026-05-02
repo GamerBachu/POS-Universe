@@ -232,7 +232,10 @@ const SystemLogForm = () => {
           {state?.success === false && <AlertError message={state?.message} />}
 
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <SecondaryButton onClick={onSendBack}>
+            <SecondaryButton
+              onClick={onSendBack}
+              title={t("common.back_page")}
+            >
               {t("common.back_page")}
             </SecondaryButton>
             {action === "delete" && (

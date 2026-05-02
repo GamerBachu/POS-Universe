@@ -41,12 +41,12 @@ const AttributeTableRow = ({ item }: RowProps) => {
                         },
                         {
                             label: t("common.edit"),
-                            path: `${PATHS.MASTER_ATTRIBUTE_VIEW}/${item.id}`,
+                            path: `${PATHS.MASTER_ATTRIBUTE_EDIT}/${item.id}`,
                             variant: 'primary'
                         },
                         {
                             label: t("common.delete"),
-                            path: `${PATHS.MASTER_ATTRIBUTE_VIEW}/${item.id}`,
+                            path: `${PATHS.MASTER_ATTRIBUTE_DELETE}/${item.id}`,
                             variant: 'danger'
                         },
                     ]}

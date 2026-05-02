@@ -10,9 +10,9 @@ import {
     SearchIcon,
 } from "@/libs/icons";
 import { useLanguage } from "@/contexts/language";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import InputWithLabel from "@/components/InputWithLabel";
+import { TextBox, TextBoxWithLabel } from "@/components/input";
+
+import { PrimaryButton, SecondaryButton } from "@/components/button";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -44,12 +44,10 @@ const ProductSearch = ({
                 <div className="flex items-center gap-1.5">
                     {/* 1. Search Input Container */}
                     <div className="relative flex-1 group">
-                        <Input
-                            type="text"
+                        <TextBox
                             placeholder={t("pos_t1.ph_search_item")}
                             value={inputCode}
                             onChange={(e) => onInputType(e.target.value)}
-                            className="w-full pr-9 py-2 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-teal-500"
                         />
                         {inputCode && (
                             <button
@@ -95,7 +93,7 @@ const ProductSearch = ({
                     }`}
             >
                 <div className="p-3 space-y-3">
-                    <InputWithLabel
+                    <TextBoxWithLabel
                         label={t("product_inventory.name")}
                         value={filter.name ?? ""}
                         name="name"
@@ -104,7 +102,7 @@ const ProductSearch = ({
                     />
 
                     <div className="grid grid-cols-2 gap-2">
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("product_inventory.sku")}
                             value={filter.sku ?? ""}
                             name="sku"
@@ -112,7 +110,7 @@ const ProductSearch = ({
                             onChange={(e) => setFilter({ ...filter, sku: e.target.value })}
                         />
 
-                        <InputWithLabel
+                        <TextBoxWithLabel
                             label={t("product_inventory.barcode")}
                             value={filter.barcode ?? ""}
                             name="barcode"
@@ -121,12 +119,12 @@ const ProductSearch = ({
                         />
                     </div>
 
-                    <InputWithLabel
+                    <TextBoxWithLabel
                         label={t("product_inventory.selling_price")}
                         value={filter.sellingPrice ?? ""}
                         name="sellingPrice"
                         placeholder={t("product_inventory.selling_price")}
-                        classBox=""
+
                         required={true}
                         type="number"
                         onChange={(e) =>
@@ -141,18 +139,19 @@ const ProductSearch = ({
                     />
 
                     <div className="flex gap-2 justify-end pt-1">
-                        <Button
+                        <SecondaryButton
                             onClick={resetFilter}
-                            className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 py-1.5 px-4 text-xs font-bold uppercase"
+                            title={t("common.reset")}
                         >
                             {t("common.reset")}
-                        </Button>
-                        <Button
+                        </SecondaryButton>
+                        <PrimaryButton
                             onClick={() => setShowFilter(false)}
-                            className="bg-teal-600 hover:bg-teal-700 py-1.5 px-6 text-xs font-bold uppercase"
+                            title={t("common.save")}
+
                         >
                             {t("common.search")}
-                        </Button>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>

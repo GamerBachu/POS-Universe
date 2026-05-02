@@ -6,6 +6,8 @@ import { useLanguage } from "@/contexts/language";
 import Modal from "@/components/Modal";
 import { LoggerUtils } from "@/utils";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
+import { TextBoxWithLabel } from "@/components/input";
+import { PrimaryButton, SecondaryButton } from "@/components/button";
 
 interface CustomerFormProps {
     onClose: () => void;
@@ -71,71 +73,56 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
         <Modal className="w-full max-w-sm" title={t("pos_t1.customer_profile")} onClose={onClose}>
             <form action={formAction} className="p-4 space-y-3">
                 <div className="space-y-3">
-                    <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {t("pos_t1.full_name")}
-                        </label>
-                        <input
-                            name="name"
-                            defaultValue={currentCustomer?.name}
-                            autoFocus
-                            placeholder={t("pos_t1.ph_guest_walk_in")}
-                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {t("pos_t1.phone")}
-                        </label>
-                        <input
-                            name="phone"
-                            defaultValue={currentCustomer?.phone}
-                            placeholder={t("pos_t1.phone")}
-                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {t("pos_t1.email")}
-                        </label>
-                        <input
-                            name="email"
-                            type="email"
-                            defaultValue={currentCustomer?.email}
-                            placeholder={t("pos_t1.email")}
-                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">
-                            {t("pos_t1.address")}
-                        </label>
-                        <input
-                            name="address"
-                            defaultValue={currentCustomer?.address}
-                            placeholder={t("pos_t1.ph_address")}
-                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
+                    <TextBoxWithLabel
+                        label={t("pos_t1.full_name")}
+
+                        name="name"
+                        defaultValue={currentCustomer?.name}
+                        autoFocus
+                        placeholder={t("pos_t1.ph_guest_walk_in")}
+                    />
+
+                    <TextBoxWithLabel
+                        label={t("pos_t1.phone")}
+                        name="phone"
+                        defaultValue={currentCustomer?.phone}
+                        placeholder={t("pos_t1.phone")}
+
+                    />
+
+                    <TextBoxWithLabel
+                        label={t("pos_t1.email")}
+                        name="email"
+                        type="email"
+                        defaultValue={currentCustomer?.email}
+                        placeholder={t("pos_t1.email")}
+                    />
+
+
+                    <TextBoxWithLabel
+                        label={t("pos_t1.address")}
+                        name="address"
+                        defaultValue={currentCustomer?.address}
+                        placeholder={t("pos_t1.ph_address")}
+                    />
                 </div>
                 {(state?.success === true) && <AlertSuccess message={state?.message} />}
                 {(state?.success === false) && <AlertError message={state?.message} />}
                 {/* Footer Actions */}
                 <div className="flex gap-2 pt-2">
-                    <button
-                        type="button"
+                    <SecondaryButton
                         onClick={handleClear}
-                        className="flex-1 py-2 text-[10px] font-black rounded border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all uppercase"
+                        title={t("pos_t1.clear")}
                     >
                         {t("pos_t1.clear")}
-                    </button>
-                    <button
-                        type="submit"
+                    </SecondaryButton>
+                    <PrimaryButton
                         disabled={isPending}
-                        className="flex-[2] py-2 text-[10px] font-black rounded bg-teal-600 text-white  hover:bg-teal-700 transition-all disabled:opacity-50 uppercase"
+                        title={t("common.save")}
+                        type="submit"
                     >
                         {isPending ? t("pos_t1.saving") : t("pos_t1.save")}
-                    </button>
+                    </PrimaryButton>
                 </div>
             </form>
         </Modal>

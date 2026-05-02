@@ -8,7 +8,7 @@ import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
 import { CloseIcon } from "@/libs/icons";
-import Input from "./Input";
+import { TextBox } from "./input";
 
 const SideBar = () => {
   const { t } = useLanguage();
@@ -63,8 +63,7 @@ const SideBar = () => {
             <SideBarToggle isMinimized={isMinimized} onClick={minimizeWindow} />
           </div>
           <div className="relative group mt-3">
-            <Input
-              type="text"
+            <TextBox
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t("sidebar.ph_search_menu")}

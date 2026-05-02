@@ -74,7 +74,6 @@ const AttributeTable = () => {
             <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
                 <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
 
-                    {/* Inputs Section: Stays on the left and expands */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 w-full">
                         <TextBoxWithLabel
                             label={t("common.name")}
@@ -95,19 +94,20 @@ const AttributeTable = () => {
                         </SelectWithLabel>
                     </div>
 
-                    {/* Actions Section: Pushed to the right using lg:w-auto */}
                     <div className="flex gap-2 pb-0.5 w-full lg:w-auto justify-end">
                         <PrimaryButton
                             onClick={handleApplyFilters}
                             isLoading={isLoading}
-                            className="px-8"
+                            title={t("common.search")}
+                            className="px-6"
                         >
                             {t("common.search")}
                         </PrimaryButton>
                         <SecondaryButton
                             onClick={handleClear}
                             isLoading={isLoading}
-                            className="px-6 bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 text-white border-none"
+                            title={t("common.reset")}
+                            className="px-8"
                         >
                             {t("common.reset")}
                         </SecondaryButton>
