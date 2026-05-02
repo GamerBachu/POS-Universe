@@ -445,8 +445,6 @@ const ProductForm: React.FC = () => {
         {/* SECTION 1: General Identifiers */}
         <ProductDetailsSection item={item} isReadOnly={isReadOnly} />
 
-        <hr className="dark:border-gray-700" />
-
         {/* SECTION 2: Financial & Inventory */}
         <ProductFinancialSection item={item} isReadOnly={isReadOnly} />
 
@@ -473,9 +471,6 @@ const ProductForm: React.FC = () => {
           onRemoveRow={handleRemoveAttributeRow}
           onChangeRow={handleAttributeRowChange}
         />
-
-        <hr className="dark:border-gray-700" />
-
         {/* SECTION 6: Product Images */}
         <ProductImagesSection
           imageRows={imageRows}
@@ -484,9 +479,6 @@ const ProductForm: React.FC = () => {
           onRemoveRow={handleRemoveImageRow}
           onChangeRow={handleImageRowChange}
         />
-
-        <hr className="dark:border-gray-700" />
-
         {/* SECTION 7: Product Keyword List */}
         <ProductKeywordsSection
           keywordRows={keywordRows}
@@ -506,7 +498,6 @@ const ProductForm: React.FC = () => {
         <ProductFormFooter
           action={action}
           isPending={isPending}
-          isReadOnly={isReadOnly}
           onBack={onSendBack}
         />
       </form>

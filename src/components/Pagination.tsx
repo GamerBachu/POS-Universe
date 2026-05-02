@@ -43,7 +43,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
 
     return (
-        <div className="flex items-center justify-between px-1 py-2">
+        <div className="flex items-center justify-between px-2 py-2">
             <span className="text-sm font-mono text-gray-500">
                 {formatString(
                     t("common.pagination_info"),

@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
 import { PATHS } from "@/routes/paths";
 import { type ISystemLog } from "@/types/systemLog";
 import { useLanguage } from "@/contexts/language";
 import { toDisplayString } from "@/utils/helper/dateUtils";
+import { ActionGroupButton } from "@/components/button";
 
 interface RowProps {
   item: ISystemLog;
@@ -30,28 +30,26 @@ const SystemLogTableRow = ({ item }: RowProps) => {
       </td>
 
       <td className="p-3 text-right">
-        <div className="inline-flex items-center rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm overflow-hidden">
-          <NavLink
-            to={`${PATHS.SYSTEM_LOG_VIEW}/${item.id}`}
-            className="flex items-center px-2.5 py-1 text-sm font-bold uppercase tracking-tight text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors"
-          >
-            {t("common.view")}
-          </NavLink>
+        <ActionGroupButton
+          itemId={item.id}
+          actions={[
+            {
+              label: t("common.view"),
+              path: `${PATHS.SYSTEM_LOG_VIEW}/${item.id}`
+            },
+            {
+              label: t("common.edit"),
+              path: `${PATHS.SYSTEM_LOG_EDIT}/${item.id}`,
+              variant: 'primary'
+            },
+            {
+              label: t("common.delete"),
+              path: `${PATHS.SYSTEM_LOG_DELETE}/${item.id}`,
+              variant: 'danger'
+            },
+          ]}
+        />
 
-          <NavLink
-            to={`${PATHS.SYSTEM_LOG_EDIT}/${item.id}`}
-            className="flex items-center px-2.5 py-1 text-sm font-bold uppercase tracking-tight text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
-          >
-            {t("common.edit")}
-          </NavLink>
-
-          <NavLink
-            to={`${PATHS.SYSTEM_LOG_DELETE}/${item.id}`}
-            className="flex items-center px-2.5 py-1 text-sm   font-bold uppercase tracking-tight text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-          >
-            {t("common.delete")}
-          </NavLink>
-        </div>
       </td>
     </tr>
   );

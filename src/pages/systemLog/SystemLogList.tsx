@@ -9,10 +9,10 @@ const SystemLogList = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   return (
-    <CommonLayout h1={t("navigation.system_log_list_label")}> 
+    <CommonLayout h1={t("navigation.system_log_list_label")}>
 
       <PageHeader
-        subtitle={undefined}
+        subtitle={t("navigation.system_log_list_label")}
         btnClass="bg-green-600 hover:bg-green-700"
         btnLabel={t("common.addNew")}
         onClick={() => navigate(PATHS.SYSTEM_LOG_ADD + "/0")}

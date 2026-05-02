@@ -72,35 +72,49 @@ const SystemLogTable = () => {
   };
 
   return (
-    <div className="space-y-2">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 items-end p-3 border border-gray-200 dark:border-gray-700">
-        <TextBoxWithLabel
-          label={t("system_log.type")}
-          placeholder={t("system_log.ph_type")}
-          value={localType}
-          onChange={(e) => setLocalType(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleApplyFilters()}
-        />
-        <SelectWithLabel
-          label={t("common.status")}
-          value={localPageName}
-          onChange={(e) => setLocalPageName(e.target.value)}
-        >
-          <option value="">{t("common.all_status")}</option>
-          <option value="true">{t("common.active")}</option>
-          <option value="false">{t("common.inactive")}</option>
-        </SelectWithLabel>
+    <div className="space-y-4">
+      <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+        <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
 
-        <div className="flex gap-1 md:justify-end">
-          <PrimaryButton onClick={handleApplyFilters} isLoading={isLoading}>
-            {t("common.search")}
-          </PrimaryButton>
-          <SecondaryButton onClick={handleClear} isLoading={isLoading}>
-            {t("common.reset")}
-          </SecondaryButton>
+          {/* Inputs Section: Balanced for Dark Mode */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 w-full">
+            <TextBoxWithLabel
+              label={t("system_log.type")}
+              placeholder={t("system_log.ph_type")}
+              value={localType}
+              onChange={(e) => setLocalType(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleApplyFilters()}
+            />
+            <SelectWithLabel
+              label={t("common.status")}
+              value={localPageName}
+              onChange={(e) => setLocalPageName(e.target.value)}
+            >
+              <option value="">{t("common.all_status")}</option>
+              <option value="true">{t("common.active")}</option>
+              <option value="false">{t("common.inactive")}</option>
+            </SelectWithLabel>
+          </div>
+
+          {/* Actions Section: Right-aligned with Tailwind Gray Scale */}
+          <div className="flex gap-2 pb-0.5 w-full lg:w-auto justify-end">
+            <PrimaryButton
+              onClick={handleApplyFilters}
+              isLoading={isLoading}
+              className="px-8"
+            >
+              {t("common.search")}
+            </PrimaryButton>
+            <SecondaryButton
+              onClick={handleClear}
+              isLoading={isLoading}
+              className="px-6 bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 text-white border-none"
+            >
+              {t("common.reset")}
+            </SecondaryButton>
+          </div>
         </div>
       </div>
-
       <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
         <table className="w-full min-w-[700px] text-left border-collapse table-auto">
           <thead>
@@ -137,13 +151,16 @@ const SystemLogTable = () => {
         </table>
       </div>
       {/* Pagination Controls */}
-      <Pagination
-        currentPage={currentPage}
-        totalCount={totalCount}
-        pageSize={pageSize}
-        onPageChange={handlePageChange}
-        isLoading={isLoading}
-      ></Pagination>
+      <div className="mb-4">
+        <Pagination
+          currentPage={currentPage}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        ></Pagination>
+      </div>
+
     </div>
   );
 };

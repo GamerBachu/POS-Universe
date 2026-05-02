@@ -226,8 +226,8 @@ const UserProfilePage = () => {
                                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-5">
                                     {t("profile.security_privacy")}
                                 </h2>
-                                <div className="flex items-center gap-2">
-                                    <div>
+                                <div className="grid grid-cols-1 gap-y-6 gap-x-8">
+                                    <div className="space-y-1">
                                         <ReadOnlyWithLabel
                                             label={t("profile.last_login")}
                                             value={data?.security?.lastLoginDate
@@ -235,7 +235,7 @@ const UserProfilePage = () => {
                                                 : t("profile.no_login_history")}
                                         />
                                     </div>
-                                    <div className="ml-auto shrink-0">
+                                    <div className="space-y-1 w-[180px]">
                                         <PrimaryButton
                                             title={t("profile.updatePassword")}
                                             onClick={() => setIsPasswordModalOpen(true)}

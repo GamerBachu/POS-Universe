@@ -77,6 +77,8 @@ const UserPasswordChangeModal = ({
                     return { success: true, message: t("profile.password_changed") };
                 case 400:
                     return { success: false, message: t("login.invalid_credentials") };
+                case 401:
+                    return { success: false, message: t("login.invalid_credentials") };
                 default:
                     return { success: false, message: t("common.error") };
             }

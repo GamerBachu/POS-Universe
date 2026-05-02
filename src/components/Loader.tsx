@@ -7,10 +7,10 @@ const Loader = ({ label = "" }: { label?: string; }) => {
                 <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
 
                 {/* Animated Spinning Ring */}
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
 
                 {/* Center Pulse Dot */}
-                <div className="absolute w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+                <div className="absolute w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
             </div>
 
             {/* Loading Text */}
