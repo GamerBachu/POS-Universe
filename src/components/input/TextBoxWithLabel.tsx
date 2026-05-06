@@ -28,7 +28,7 @@ export const TextBoxWithLabel = forwardRef<
 
     return (
       <div className={`flex flex-col gap-2 ${containerClassName}`}>
-        <label
+        {label && label !== "" && (<label
           htmlFor={id}
           className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1"
         >
@@ -38,7 +38,7 @@ export const TextBoxWithLabel = forwardRef<
               *
             </span>
           )}
-        </label>
+        </label>)}
 
         <input
           id={id}

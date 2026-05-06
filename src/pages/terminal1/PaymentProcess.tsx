@@ -8,6 +8,7 @@ import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
 import { useLanguage } from "@/contexts/language";
+import { PrimaryButton } from "@/components/button";
 
 type PaymentProcessProps = {
     resetFilter: () => void;
@@ -141,12 +142,11 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     {TPaymentCategory.ELECTRONIC}
                 </PaymentMethodButton>
             </div>
-            <button
+            <PrimaryButton
                 onClick={onCompletingOrder}
-                className="w-full py-3 bg-teal-600 text-white font-black rounded-sm shadow-md active:scale-95 transition-all uppercase tracking-widest hover:bg-teal-700"
             >
                 {t("pos_t1.complete_order")}
-            </button>
+            </PrimaryButton>
         </div>
     );
 };

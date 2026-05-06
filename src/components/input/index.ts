@@ -1,7 +1,7 @@
 export { TextBoxWithLabel } from "./TextBoxWithLabel";
 export { TextAreaWithLabel } from "./TextAreaWithLabel";
 export { ReadOnlyWithLabel } from "./ReadOnlyWithLabel";
-export { DateTimePicker } from "./DateTimePicker";
+export { DateTimePickerWithLabel } from "./DateTimePickerWithLabel";
 export { SelectWithLabel } from "./SelectWithLabel";
-export { DatePicker } from "./DatePicker";
+export { DatePickerWithLabel } from "./DatePickerWithLabel";
 export { TextBox } from "./TextBox";

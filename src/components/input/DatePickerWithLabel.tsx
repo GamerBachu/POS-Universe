@@ -1,6 +1,6 @@
 import { forwardRef, useId, type InputHTMLAttributes } from "react";
 
-interface DatePickerProps extends InputHTMLAttributes<HTMLInputElement> {
+interface DatePickerWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
     error?: string;
     containerClassName?: string;
@@ -8,7 +8,7 @@ interface DatePickerProps extends InputHTMLAttributes<HTMLInputElement> {
     required?: boolean; // Added explicit required prop for the label logic
 }
 
-export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
+export const DatePickerWithLabel = forwardRef<HTMLInputElement, DatePickerWithLabelProps>(
     (
         {
             label,
@@ -24,13 +24,14 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         const id = useId();
         return (
             <div className={`flex flex-col gap-2 ${containerClassName}`}>
-                <label
-                    htmlFor={id}
-                    className="text-sm font-semibold text-gray-700 dark:text-gray-400 ml-1"
-                >
-                    {label}
-                    {required && <span className="text-red-500 ml-1">*</span>}
-                </label>
+                {label && label !== "" && (
+                    <label
+                        htmlFor={id}
+                        className="text-sm font-semibold text-gray-700 dark:text-gray-400 ml-1"
+                    >
+                        {label}
+                        {required && <span className="text-red-500 ml-1">*</span>}
+                    </label>)}  
                 <input
                     type="date"
                     id={id}
@@ -53,4 +54,4 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     },
 );
 
-DatePicker.displayName = "DatePicker"; 
+DatePickerWithLabel.displayName = "DatePickerWithLabel"; 

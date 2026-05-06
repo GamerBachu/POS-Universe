@@ -1,6 +1,6 @@
 import { forwardRef, useId, type InputHTMLAttributes } from "react";
 
-interface DateTimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
+interface DateTimePickerWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
     error?: string;
     containerClassName?: string;
@@ -8,7 +8,7 @@ interface DateTimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
     required?: boolean; // Added explicit required prop for the label logic
 }
 
-export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
+export const DateTimePickerWithLabel = forwardRef<HTMLInputElement, DateTimePickerWithLabelProps>(
     (
         {
             label,
@@ -53,4 +53,4 @@ export const DateTimePicker = forwardRef<HTMLInputElement, DateTimePickerProps>(
     },
 );
 
-DateTimePicker.displayName = "DateTimePicker";
+DateTimePickerWithLabel.displayName = "DateTimePickerWithLabel";

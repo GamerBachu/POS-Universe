@@ -10,7 +10,7 @@ import { toLocalForInput, toUTCForDB } from "@/utils/helper/dateUtils";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import PageHeader from "@/components/PageHeader";
 import {
-  DateTimePicker,
+  DateTimePickerWithLabel,
   TextAreaWithLabel,
   TextBoxWithLabel,
 } from "@/components/input";
@@ -187,7 +187,7 @@ const SystemLogForm = () => {
             </div>
 
             <div className="space-y-1">
-              <DateTimePicker
+              <DateTimePickerWithLabel
                 label={t("system_log.timestamp")}
                 name="timestamp"
                 disabled={isReadOnly}

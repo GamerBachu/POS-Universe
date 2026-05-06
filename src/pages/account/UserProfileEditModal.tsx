@@ -5,7 +5,7 @@ import type { IUserFull } from "@/types/user";
 import { userApi } from "@/api";
 import { LoggerUtils, getName } from "@/utils";
 import Modal from "@/components/Modal";
-import { DatePicker, SelectWithLabel, TextBoxWithLabel } from "@/components/input";
+import { DatePickerWithLabel, SelectWithLabel, TextBoxWithLabel } from "@/components/input";
 import { SecondaryButton, SubmitButton } from "@/components/button";
 
 /**
@@ -195,7 +195,7 @@ const UserProfileEditModal = ({
                             </SelectWithLabel>
                         </div>
                         <div className="space-y-1">
-                            <DatePicker
+                            <DatePickerWithLabel
                                 label={t("profile.dob")}
                                 name="dateOfBirth"
                                 value={form.dateOfBirth}

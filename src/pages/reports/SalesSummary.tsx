@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/language";
-import DatePicker from "@/components/DatePicker";
-import Button from "@/components/Button";
+import { DatePickerWithLabel } from "@/components/input";
+import { PrimaryButton, SecondaryButton } from "@/components/button";
 import SummaryCard from "@/components/SummaryCard";
 import { SearchIcon, PrinterIcon, } from "@/libs/icons";
 import { getTodayDateString, toISODateString } from "@/utils/helper/dateUtils";
@@ -63,33 +63,36 @@ const SalesSummary = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <DatePicker
+                    <DatePickerWithLabel
+                        label=""
                         value={reportDate}
                         onChange={(e) => setReportDate(e.target.value)}
-                        classInput="h-9"
                     />
-                    <Button
+                    <PrimaryButton
                         onClick={fetchData}
+                        disabled={isLoading}
                         isLoading={isLoading}
-                        className="bg-teal-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
+                        title={t("common.search")}
+                        className="uppercase"
                     >
-                        <SearchIcon className="w-4 h-4" />
+                        <SearchIcon className="w-5 h-5" />
                         {t("common.search")}
-                    </Button>
-                    <Button
+                    </PrimaryButton>
+                    <SecondaryButton
                         onClick={() => setIsPrinting(true)}
                         disabled={!data || isLoading}
-                        className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
+                        title={t("common.print")}
+                        className="uppercase"
                     >
-                        <PrinterIcon className="w-4 h-4" />
+                        <PrinterIcon className="w-5 h-5" />
                         {t("common.print")}
-                    </Button>
+                    </SecondaryButton>
                 </div>
             </div>
 
             {isLoading ? (
                 <div className="flex-1 flex items-center justify-center p-10">
-                   <Loader label={t("common.loading")} />
+                    <Loader label={t("common.loading")} />
                 </div>
             ) : error ? (
                 <div className="p-10">

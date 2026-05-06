@@ -5,14 +5,13 @@ import { NUMPAD_KEYS, isInitialFilter } from "./utils";
 import {
     BackspaceIcon,
     CheckIcon,
-    CloseIcon,
     FilterIcon,
     SearchIcon,
 } from "@/libs/icons";
 import { useLanguage } from "@/contexts/language";
-import { TextBox, TextBoxWithLabel } from "@/components/input";
+import { TextBoxWithLabel } from "@/components/input";
 
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { IconButton, PrimaryButton, SecondaryButton, TextBoxClearButton } from "@/components/button";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -34,9 +33,9 @@ const ProductSearch = ({
     const { t } = useLanguage();
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
-    // The search is considered "active" (isSearching) if the current filter
+    // The search is considered "active" (isFilterApply) if the current filter
     // differs from the initial default state.
-    const isSearching = !isInitialFilter(filter);
+    const isFilterApply = !isInitialFilter(filter);
 
     return (
         <>
@@ -44,45 +43,33 @@ const ProductSearch = ({
                 <div className="flex items-center gap-1.5">
                     {/* 1. Search Input Container */}
                     <div className="relative flex-1 group">
-                        <TextBox
+                        <TextBoxWithLabel
+                            label=""
                             placeholder={t("pos_t1.ph_search_item")}
                             value={inputCode}
                             onChange={(e) => onInputType(e.target.value)}
                         />
                         {inputCode && (
-                            <button
-                                type="button"
+                            <TextBoxClearButton
                                 onClick={() => onInputType("")}
-                                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 transition-all active:scale-90"
-                            >
-                                <CloseIcon className="w-3.5 h-3.5" />
-                            </button>
+                                title={t("common.clear")} />
                         )}
                     </div>
 
                     <div className="flex items-center gap-1">
-                        {/* Search Button with Pulse Indicator */}
-                        <button
-                            type="button"
-                            className={`relative flex items-center justify-center w-9 h-9 border rounded transition-all active:scale-90 shadow-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500`}
-                        >
-                            <SearchIcon className="w-4 h-4" />
-                        </button>
-
-                        {/* Filter Toggle Button */}
-                        <button
+                        <IconButton
+                            icon={<SearchIcon className="w-4 h-4" />}
+                            title={t("common.search")}
+                        ></IconButton>
+                        <IconButton
+                            icon={<FilterIcon className="w-4 h-4" />}
+                            title={t("common.filter")}
                             onClick={() => setShowFilter(!showFilter)}
-                            type="button"
-                            className={`relative flex items-center justify-center w-9 h-9 border rounded transition-all active:scale-90 shadow-sm ${showFilter
-                                ? "border-teal-600 text-white"
-                                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500"
-                                }`}
                         >
-                            <FilterIcon className="w-4 h-4" />
-                            {isSearching && (
+                            {isFilterApply && (
                                 <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-teal-500 animate-pulse border border-white dark:border-gray-800" />
                             )}
-                        </button>
+                        </IconButton>
                     </div>
                 </div>
             </div>
