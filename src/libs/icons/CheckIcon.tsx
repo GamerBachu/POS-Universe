@@ -5,6 +5,7 @@ const CheckIcon = (props: SVGProps<SVGSVGElement>) => (
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
+        strokeWidth="4.5"
         {...props}
 
     >

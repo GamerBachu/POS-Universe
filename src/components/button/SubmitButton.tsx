@@ -26,7 +26,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
         <button
             type={props.type || "submit"}
             disabled={disabled || isLoading}
-            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold uppercase text-sm tracking-wider transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
+            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold uppercase text-sm tracking-wider transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
             {...props}
         >
             {isLoading && (

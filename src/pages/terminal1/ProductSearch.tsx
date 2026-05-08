@@ -79,9 +79,9 @@ const ProductSearch = ({
                 className={`overflow-hidden transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/10 ${showFilter ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 pointer-events-none border-none"
                     }`}
             >
-                <div className="p-3 space-y-3">
+                <div className="p-2 space-y-2">
                     <TextBoxWithLabel
-                        label={t("product_inventory.name")}
+                        label=""
                         value={filter.name ?? ""}
                         name="name"
                         placeholder={t("product_inventory.ph_name")}
@@ -90,29 +90,27 @@ const ProductSearch = ({
 
                     <div className="grid grid-cols-2 gap-2">
                         <TextBoxWithLabel
-                            label={t("product_inventory.sku")}
+                            label=""
                             value={filter.sku ?? ""}
                             name="sku"
-                            placeholder={t("product_inventory.ph_sku")}
+                            placeholder={t("product_inventory.sku")}
                             onChange={(e) => setFilter({ ...filter, sku: e.target.value })}
                         />
 
                         <TextBoxWithLabel
-                            label={t("product_inventory.barcode")}
+                            label=""
                             value={filter.barcode ?? ""}
                             name="barcode"
-                            placeholder={t("product_inventory.ph_barcode")}
+                            placeholder={t("product_inventory.barcode")}
                             onChange={(e) => setFilter({ ...filter, barcode: e.target.value })}
                         />
                     </div>
 
                     <TextBoxWithLabel
-                        label={t("product_inventory.selling_price")}
+                        label=""
                         value={filter.sellingPrice ?? ""}
                         name="sellingPrice"
                         placeholder={t("product_inventory.selling_price")}
-
-                        required={true}
                         type="number"
                         onChange={(e) =>
                             setFilter({

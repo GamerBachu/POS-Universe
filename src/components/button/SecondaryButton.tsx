@@ -26,7 +26,7 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
         <button
             type={props.type || "button"}
             disabled={disabled || isLoading}
-            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-gray-600 hover:bg-gray-700 text-white shadow-md shadow-gray-500/20 dark:bg-zinc-500 dark:hover:bg-zinc-400 ${className}`}
+            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-gray-600 hover:bg-gray-700 text-white shadow-md shadow-gray-500/20 dark:bg-zinc-500 dark:hover:bg-zinc-400 ${className}`}
             {...props}
         >
             {isLoading && (

@@ -26,7 +26,7 @@ export const SuccessButton: React.FC<SuccessButtonProps> = ({
         <button
             type={props.type || "button"}
             disabled={disabled || isLoading}
-            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-500/20 dark:bg-green-500 dark:hover:bg-green-400 ${className}`}
+            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-500/20 dark:bg-green-500 dark:hover:bg-green-400 ${className}`}
             {...props}
         >
             {isLoading && (

@@ -26,11 +26,11 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
         <button
             type={props.type || "button"}
             disabled={disabled || isLoading}
-            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
+            className={`relative flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold  text-sm  transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-500/20 dark:bg-teal-500 dark:hover:bg-teal-400 ${className}`}
             {...props}
         >
             {isLoading && (
-                <SpinnerIcon className="animate-spin h-5 w-5 text-current" />
+                <SpinnerIcon className="animate-spin h-4 w-4 text-current" />
             )}
 
             <span

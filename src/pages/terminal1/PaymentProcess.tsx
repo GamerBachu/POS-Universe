@@ -1,4 +1,4 @@
-import PaymentMethodButton from "./PaymentMethodButton";
+ 
 import { useCallback, } from "react";
 import { useTerminalState, useTerminalDispatch } from "./TerminalContext";
 import { TPaymentCategory } from "@/types/terminal1";
@@ -8,7 +8,8 @@ import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
 import { useLanguage } from "@/contexts/language";
-import { PrimaryButton } from "@/components/button";
+import { OutlineButton, PrimaryButton } from "@/components/button";
+import CheckIcon from "@/libs/icons/CheckIcon";
 
 type PaymentProcessProps = {
     resetFilter: () => void;
@@ -124,26 +125,45 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
     }, [state, dispatch, auth.info.authUser?.userId, resetFilter, t]);
 
     return (
-        <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
+        <div className="p-2 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 space-y-3">
             <AdjustmentButtons></AdjustmentButtons>
             <div className="flex gap-2">
 
-                <PaymentMethodButton
+                <OutlineButton
                     onClick={() => setPaymentMethod(TPaymentCategory.CASH)}
-                    active={state.paymentCategory === TPaymentCategory.CASH}
+                    variant="primary"
+                    className={`uppercase ${(state.paymentCategory === TPaymentCategory.CASH) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
+                    icon={
+                        (state.paymentCategory === TPaymentCategory.CASH) && (
+                            <CheckIcon
+                                className="w-3 h-3 shrink-0 animate-in fade-in zoom-in duration-200"
+
+                            />
+                        )
+                    }
                 >
                     {TPaymentCategory.CASH}
-                </PaymentMethodButton>
+                </OutlineButton>
 
-                <PaymentMethodButton
+                <OutlineButton
                     onClick={() => setPaymentMethod(TPaymentCategory.ELECTRONIC)}
-                    active={state.paymentCategory === TPaymentCategory.ELECTRONIC}
+                    variant="primary"
+                    className={`uppercase ${(state.paymentCategory === TPaymentCategory.ELECTRONIC) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
+                    icon={
+                        (state.paymentCategory === TPaymentCategory.ELECTRONIC) && (
+                            <CheckIcon
+                                className="w-3 h-3 shrink-0 animate-in fade-in zoom-in duration-200"
+
+                            />
+                        )
+                    }
                 >
                     {TPaymentCategory.ELECTRONIC}
-                </PaymentMethodButton>
+                </OutlineButton>
             </div>
             <PrimaryButton
                 onClick={onCompletingOrder}
+                className="uppercase"
             >
                 {t("pos_t1.complete_order")}
             </PrimaryButton>

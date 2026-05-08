@@ -71,7 +71,7 @@ const Report = () => {
                             <button
                                 key={report.id}
                                 onClick={() => navigate(`/report/${report.version}/${report.url}`)}
-                                className="group flex flex-col text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-5 transition-colors hover:border-teal-500 active:scale-[0.98] shadow-sm hover:shadow-md"
+                                className="group flex flex-col text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-5 transition-colors hover:border-teal-500 active:scale-95 shadow-sm hover:shadow-md"
                             >
                                 <div className="flex justify-between items-start mb-3">
                                     <h2 className="text-sm font-black uppercase tracking-tight text-gray-700 dark:text-gray-200 group-hover:text-teal-600 transition-colors">
