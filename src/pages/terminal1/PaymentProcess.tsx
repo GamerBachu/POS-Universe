@@ -1,4 +1,4 @@
- 
+
 import { useCallback, } from "react";
 import { useTerminalState, useTerminalDispatch } from "./TerminalContext";
 import { TPaymentCategory } from "@/types/terminal1";
@@ -8,7 +8,7 @@ import { LoggerUtils } from "@/utils";
 import { useAuth } from "@/contexts/authorize";
 import AdjustmentButtons from "./AdjustmentButtons";
 import { useLanguage } from "@/contexts/language";
-import { OutlineButton, PrimaryButton } from "@/components/button";
+import { OutlineButton, Button } from "@/components/button";
 import CheckIcon from "@/libs/icons/CheckIcon";
 
 type PaymentProcessProps = {
@@ -161,12 +161,13 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                     {TPaymentCategory.ELECTRONIC}
                 </OutlineButton>
             </div>
-            <PrimaryButton
+            <Button
+                variant="primary"
                 onClick={onCompletingOrder}
                 className="uppercase"
             >
                 {t("pos_t1.complete_order")}
-            </PrimaryButton>
+            </Button>
         </div>
     );
 };

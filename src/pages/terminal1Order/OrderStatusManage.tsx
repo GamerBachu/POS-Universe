@@ -9,11 +9,7 @@ import { getIsDangerousAction } from "./utils";
 import { AlertError } from "@/components/ActionStatusMessage";
 import Modal from "@/components/Modal";
 import { SelectWithLabel, TextAreaWithLabel } from "@/components/input";
-import {
-    DangerButton,
-    PrimaryButton,
-    SecondaryButton,
-} from "@/components/button";
+import { Button } from "@/components/button";
 
 interface OrderStatusManageProps {
     order: IOrder;
@@ -158,31 +154,34 @@ const OrderStatusManage = ({
             </div>
 
             <div className="p-5 pt-0 grid grid-cols-2 gap-3">
-                <SecondaryButton
+                <Button
+                    variant="secondary"
                     onClick={onClose}
                     disabled={isSubmitting}
                     title={t("common.cancel")}
                 >
                     {t("common.cancel")}
-                </SecondaryButton>
+                </Button>
                 {isDangerousAction ? (
-                    <DangerButton
+                    <Button
+                        variant="danger"
                         disabled={isSubmitting}
                         title={t("common.update")}
                         onClick={handleUpdateStatus}
                         isLoading={isSubmitting}
                     >
                         {t("common.update")}
-                    </DangerButton>
+                    </Button>
                 ) : (
-                    <PrimaryButton
+                    <Button
+                        variant="primary"
                         disabled={isSubmitting}
                         title={t("common.update")}
                         onClick={handleUpdateStatus}
                         isLoading={isSubmitting}
                     >
                         {t("common.update")}
-                    </PrimaryButton>
+                    </Button>
                 )}
             </div>
         </Modal>

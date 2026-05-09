@@ -14,11 +14,7 @@ import {
   TextAreaWithLabel,
   TextBoxWithLabel,
 } from "@/components/input";
-import {
-  DangerButton,
-  PrimaryButton,
-  SecondaryButton,
-} from "@/components/button";
+import { Button } from "@/components/button";
 
 const SystemLogForm = () => {
   const { t } = useLanguage();
@@ -232,30 +228,33 @@ const SystemLogForm = () => {
           {state?.success === false && <AlertError message={state?.message} />}
 
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <SecondaryButton
+            <Button
+              variant="secondary"
               onClick={onSendBack}
               title={t("common.back_page")}
             >
               {t("common.back_page")}
-            </SecondaryButton>
+            </Button>
             {action === "delete" && (
-              <DangerButton
+              <Button
+                variant="danger"
                 disabled={isPending}
                 title={t("common.delete")}
                 type="submit"
               >
                 {t("common.delete")}
-              </DangerButton>
+              </Button>
             )}
 
             {(action === "edit" || action === "add") && (
-              <PrimaryButton
+              <Button
+                variant="primary"
                 disabled={isPending}
                 title={t("common.save")}
                 type="submit"
               >
                 {t("common.save")}
-              </PrimaryButton>
+              </Button>
             )}
           </div>
         </form>

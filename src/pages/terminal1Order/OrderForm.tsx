@@ -15,7 +15,7 @@ import OrderStatusLabel from "./OrderStatusLabel";
 import OrderPrint from "./OrderPrint";
 import { calculateRowAmount } from "../terminal1/utils";
 import PrintService from "@/components/PrintService";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -257,28 +257,31 @@ const OrderForm = () => {
 
                     {/* Actions Area */}
                     <div className="grid grid-cols-2 gap-2 ">
-                        <SecondaryButton
+                        <Button
+                            variant="secondary"
                             onClick={onSendBack}
                             isLoading={loading}
                             title={t("common.back_page")}
                         >
                             {t("common.back_page")}
-                        </SecondaryButton>
-                        <SecondaryButton
+                        </Button>
+                        <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
                             isLoading={loading}
                             title={t("common.print")}
                         >
                             {t("common.print")}
-                        </SecondaryButton>
+                        </Button>
 
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             onClick={() => setIsModalOpen(true)}
                             isLoading={loading}
                             title={t("common.manage_status")}
                         >
                             {t("common.manage_status")}
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 
 import { TextBoxWithLabel } from "@/components/input";
 import type { IActionState } from "@/types/actionState";
-import { SecondaryButton, SubmitButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 /**
  * UserPasswordChangeModal Component
@@ -135,18 +135,21 @@ const UserPasswordChangeModal = ({
 
                 <div className="flex gap-2 pt-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
 
-                    <SecondaryButton
+                    <Button
+                        variant="secondary"
                         onClick={onClose}
                         title={t("common.cancel")}
                     >
                         {t("common.cancel")}
-                    </SecondaryButton>
-                    <SubmitButton
+                    </Button>
+                    <Button
+                        variant="primary"
+                        type="submit"
                         title={t("common.update")}
                         isLoading={isPending}
                     >
                         {t("common.update")}
-                    </SubmitButton>
+                    </Button>
                 </div>
             </form>
         </Modal>

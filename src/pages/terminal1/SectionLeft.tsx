@@ -7,7 +7,7 @@ import { calculateFinalPrice } from "@/utils/financial";
 import { CloseIcon } from "@/libs/icons";
 
 import { useLanguage } from "@/contexts/language";
-import { IconButton } from "@/components/button";
+import { OutlineButton } from "@/components/button";
 
 
 const SectionLeft = () => {
@@ -97,7 +97,7 @@ const SectionLeft = () => {
                         return (
                             <div key={adj.rowId} className="flex justify-between items-center">
                                 <div className="flex items-center gap-3">
-                                    <IconButton
+                                    <OutlineButton
                                         icon={<CloseIcon className="w-3 h-3" />}
                                         title={t("common.remove")}
                                         onClick={() => handleRemoveAdjustment(adj.rowId)}

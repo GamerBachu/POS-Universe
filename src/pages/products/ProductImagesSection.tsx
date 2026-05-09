@@ -1,4 +1,4 @@
-import { DangerButton, PrimaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import { TextAreaWithLabel, TextBoxWithLabel } from "@/components/input";
 import { useLanguage } from "@/contexts/language";
 import type { IProductImageView } from "@/types/product";
@@ -97,12 +97,13 @@ export const ProductImagesSection = ({
 
 
                 {!isReadOnly && (
-                  <DangerButton
+                  <Button
+                    variant="danger"
                     title={t("common.remove")}
                     onClick={() => onRemoveRow(key)}
                   >
                     {t("common.remove")}
-                  </DangerButton>
+                  </Button>
                 )}
               </div>
 
@@ -124,12 +125,13 @@ export const ProductImagesSection = ({
       {/* 3. Footer Section */}
       {!isReadOnly && (
         <div className="p-3 mt-auto border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/40 flex justify-center">
-          <PrimaryButton
+          <Button
+            variant="primary"
             title={t("product_inventory.add_image")}
             onClick={onAddRow}
           >
             {t("product_inventory.add_image")}
-          </PrimaryButton>
+          </Button>
         </div>
       )}
     </div>

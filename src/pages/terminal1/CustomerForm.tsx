@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import { LoggerUtils } from "@/utils";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import { TextBoxWithLabel } from "@/components/input";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 interface CustomerFormProps {
     onClose: () => void;
@@ -110,19 +110,21 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                 {(state?.success === false) && <AlertError message={state?.message} />}
                 {/* Footer Actions */}
                 <div className="flex gap-2 pt-2">
-                    <SecondaryButton
+                    <Button
+                        variant="secondary"
                         onClick={handleClear}
                         title={t("pos_t1.clear")}
                     >
                         {t("pos_t1.clear")}
-                    </SecondaryButton>
-                    <PrimaryButton
+                    </Button>
+                    <Button
+                        variant="primary"
                         disabled={isPending}
                         title={t("common.save")}
                         type="submit"
                     >
                         {isPending ? t("pos_t1.saving") : t("pos_t1.save")}
-                    </PrimaryButton>
+                    </Button>
                 </div>
             </form>
         </Modal>

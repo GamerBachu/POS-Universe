@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import Pagination from "@/components/Pagination";
 import TableNoRecord from "@/components/TableNoRecord";
 import { SelectWithLabel, TextBoxWithLabel } from "@/components/input";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 const ProductTable: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -131,22 +131,24 @@ const ProductTable: React.FC = () => {
           </div>
 
           <div className="flex gap-2 pb-1 w-full lg:w-auto justify-end">
-            <PrimaryButton
+            <Button
+              variant="primary"
               onClick={handleApplyFilters}
               isLoading={isLoading}
               title={t("common.search")}
               className="px-6"
             >
               {t("common.search")}
-            </PrimaryButton>
-            <SecondaryButton
+            </Button>
+            <Button
+              variant="secondary"
               onClick={handleClear}
               isLoading={isLoading}
               title={t("common.reset")}
               className="px-8"
             >
               {t("common.reset")}
-            </SecondaryButton>
+            </Button>
           </div>
         </div>
       </div>

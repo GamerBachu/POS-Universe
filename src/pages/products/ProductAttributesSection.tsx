@@ -1,4 +1,4 @@
-import { DangerButton, PrimaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import { SelectWithLabel, TextBoxWithLabel } from "@/components/input";
 import { useLanguage } from "@/contexts/language";
 import type { IMasterProductAttribute } from "@/types/masters";
@@ -73,11 +73,12 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
             {/* Danger button pushed to the right - Small sizing preserved */}
             {!isReadOnly && (
               <div className="pb-0.5">
-                <DangerButton
+                <Button
+                  variant="danger"
                   onClick={() => onRemoveRow(row.rowid)}
                   title={t("common.remove")}
                 > {t("common.remove")}
-                </DangerButton>
+                </Button>
               </div>
             )}
           </div>
@@ -93,12 +94,14 @@ export const ProductAttributesSection: React.FC<ProductAttributesSectionProps> =
       {/* 3. Footer Section - Centered Add Button */}
       {!isReadOnly && (
         <div className="p-3 mt-auto border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/40 flex justify-center">
-          <PrimaryButton
+          <Button
+            variant="primary"
             onClick={onAddRow}
             title={t("product_inventory.add_attribute")}
+
           >
             {t("product_inventory.add_attribute")}
-          </PrimaryButton>
+          </Button>
         </div>
       )}
     </div>

@@ -8,7 +8,7 @@ import Loader from "@/components/Loader";
 import PrintService from "@/components/PrintService";
 import InventoryStatus from "@/components/badge/InventoryStatus";
 import { TextBox } from "@/components/input";
-import { SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 const InventoryManagementReport = () => {
     const { t } = useLanguage();
@@ -88,13 +88,14 @@ const InventoryManagementReport = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <SecondaryButton
+                        <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
                             disabled={isLoading || data.length === 0}
                             title={t("common.print")}
                         >
                             <span>{t("common.print")}</span>
-                        </SecondaryButton>
+                        </Button>
                     </div>
 
                 </div>

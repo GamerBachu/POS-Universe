@@ -1,6 +1,6 @@
 import { productApi, reportApi } from "@/api";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
-import { PrimaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
@@ -211,14 +211,15 @@ const SeedDataPage = () => {
                             Master Data Tools
                         </h2>
 
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleAddMasterAttributeData}
-                         
+
                         >
                             {processing ? "Adding Data..." : "Add Master Attribute Data"}
-                        </PrimaryButton>
+                        </Button>
                     </div>
 
                     <div className="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm max-w-md">
@@ -226,14 +227,15 @@ const SeedDataPage = () => {
                             Master Data Tools
                         </h2>
 
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleProductData}
-                         
+
                         >
                             {processing ? "Adding Data..." : "Add Product Data"}
-                        </PrimaryButton>
+                        </Button>
                     </div>
 
 
@@ -242,14 +244,15 @@ const SeedDataPage = () => {
                             Master Data Tools - Add Reports
                         </h2>
 
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleAddReportData}
-                         
+
                         >
                             {processing ? "Adding Data..." : "Add Report Data"}
-                        </PrimaryButton>
+                        </Button>
                     </div>
 
 
@@ -260,14 +263,15 @@ const SeedDataPage = () => {
                             Master Data Tools - add Roles
                         </h2>
 
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleAddRoleData}
-                         
+
                         >
                             {processing ? "Adding Data..." : "Add Role Data"}
-                        </PrimaryButton>
+                        </Button>
                     </div>
 
 

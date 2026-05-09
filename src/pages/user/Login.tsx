@@ -16,9 +16,9 @@ import { getName } from "@/utils";
 import type { IAuthorize } from "@/contexts/authorize/type";
 import LoggerUtils from "@/utils/logger";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
-import {TextBoxWithLabel} from "@/components/input";
+import { TextBoxWithLabel } from "@/components/input";
 import type { IFormState } from "@/types/actionState";
-import { SecondaryButton, SubmitButton } from "@/components/button";
+import { Button, } from "@/components/button";
 
 const Login: React.FC = () => {
   const auth = useAuth();
@@ -211,23 +211,26 @@ const Login: React.FC = () => {
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-row gap-4">
-              {/* Reset Button */}
-              <SecondaryButton
+              <Button
+                variant="secondary"
                 onClick={handleReset}
                 disabled={isPending}
-                className="w-1/2"
+                className="w-1/2 uppercase"
+                title={t("common.reset")}
               >
                 {t("common.reset")}
-              </SecondaryButton>
+              </Button>
 
-              {/* Submit Button */}
-              <SubmitButton
+              <Button
+                variant="primary"
+                type="submit"
                 isLoading={isPending}
                 disabled={isPending}
-                className="w-1/2"
+                className="w-1/2 uppercase"
+                title={t("login.submit")}
               >
                 {t("login.submit")}
-              </SubmitButton>
+              </Button>
             </div>
 
             <div className="text-center">

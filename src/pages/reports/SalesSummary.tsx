@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/language";
 import { DatePickerWithLabel } from "@/components/input";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import SummaryCard from "@/components/SummaryCard";
 import { SearchIcon, PrinterIcon, } from "@/libs/icons";
 import { getTodayDateString, toISODateString } from "@/utils/helper/dateUtils";
@@ -68,7 +68,8 @@ const SalesSummary = () => {
                         value={reportDate}
                         onChange={(e) => setReportDate(e.target.value)}
                     />
-                    <PrimaryButton
+                    <Button
+                        variant="primary"
                         onClick={fetchData}
                         disabled={isLoading}
                         isLoading={isLoading}
@@ -77,8 +78,9 @@ const SalesSummary = () => {
                     >
                         <SearchIcon className="w-5 h-5" />
                         {t("common.search")}
-                    </PrimaryButton>
-                    <SecondaryButton
+                    </Button>
+                    <Button
+                        variant="indigo"
                         onClick={() => setIsPrinting(true)}
                         disabled={!data || isLoading}
                         title={t("common.print")}
@@ -86,7 +88,7 @@ const SalesSummary = () => {
                     >
                         <PrinterIcon className="w-5 h-5" />
                         {t("common.print")}
-                    </SecondaryButton>
+                    </Button>
                 </div>
             </div>
 

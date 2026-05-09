@@ -5,7 +5,7 @@ import { useTerminalDispatch } from "./TerminalContext";
 import { useLanguage } from "@/contexts/language";
 import Modal from "@/components/Modal";
 import { TextBoxWithLabel } from "@/components/input";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 interface AdjustmentModalProps {
     isOpen: boolean;
@@ -121,18 +121,20 @@ const AdjustmentModal = ({
 
                 {/* Footer Actions */}
                 <div className="flex gap-2 pt-2">
-                    <SecondaryButton
+                    <Button
+                        variant="secondary"
                         onClick={onClose}
                         title={t("common.cancel")}
                     >
                         {t("common.cancel")}
-                    </SecondaryButton>
-                    <PrimaryButton
+                    </Button>
+                    <Button
+                        variant="primary"
                         title={t("common.add")}
                         type="submit"
                     >
                         {t("common.add")}
-                    </PrimaryButton>
+                    </Button>
                 </div>
             </form>
         </Modal>

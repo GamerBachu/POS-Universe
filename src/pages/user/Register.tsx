@@ -10,7 +10,7 @@ import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import { TextBoxWithLabel } from "@/components/input";
 import type { IFormState } from "@/types/actionState";
 import type { IRegisterForm } from "@/types/user";
-import { SubmitButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 const Register = () => {
     const { t } = useLanguage();
@@ -151,12 +151,15 @@ const Register = () => {
 
                     <div className="flex flex-col gap-3 pt-4">
 
-                        <SubmitButton
+                        <Button
+                            variant="primary"
+                            type="submit"
                             isLoading={isPending}
                             disabled={isPending}
+                            title={t("register.submit")}
                         >
                             {t("register.submit")}
-                        </SubmitButton>
+                        </Button>
 
                         <Link
                             to={PATHS.LOGIN}

@@ -5,13 +5,14 @@ import { NUMPAD_KEYS, isInitialFilter } from "./utils";
 import {
     BackspaceIcon,
     CheckIcon,
+    CloseIcon,
     FilterIcon,
     SearchIcon,
 } from "@/libs/icons";
 import { useLanguage } from "@/contexts/language";
 import { TextBoxWithLabel } from "@/components/input";
 
-import { IconButton, PrimaryButton, SecondaryButton, TextBoxClearButton } from "@/components/button";
+import { Button, OutlineButton } from "@/components/button";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -50,33 +51,42 @@ const ProductSearch = ({
                             onChange={(e) => onInputType(e.target.value)}
                         />
                         {inputCode && (
-                            <TextBoxClearButton
+                            <OutlineButton
+                                variant="danger"
                                 onClick={() => onInputType("")}
-                                title={t("common.clear")} />
+                                icon={<CloseIcon className="w-3 h-3" />}
+                                className="border-none w-fit p-2 hover:bg-transparent absolute right-1 top-1/2 -translate-y-1/2"
+                                title={t("common.clear")}
+                            ></OutlineButton>
                         )}
                     </div>
 
                     <div className="flex items-center gap-1">
-                        <IconButton
+                        <OutlineButton
+                            variant="secondary"
                             icon={<SearchIcon className="w-4 h-4" />}
                             title={t("common.search")}
-                        ></IconButton>
-                        <IconButton
+                        ></OutlineButton>
+
+                        <OutlineButton
+                            variant="secondary"
+                            onClick={() => setShowFilter(!showFilter)}
                             icon={<FilterIcon className="w-4 h-4" />}
                             title={t("common.filter")}
-                            onClick={() => setShowFilter(!showFilter)}
                         >
                             {isFilterApply && (
                                 <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-teal-500 animate-pulse border border-white dark:border-gray-800" />
                             )}
-                        </IconButton>
+                        </OutlineButton>
                     </div>
                 </div>
             </div>
 
             {/* Transition Wrapper */}
             <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/10 ${showFilter ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 pointer-events-none border-none"
+                className={`overflow-hidden transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/10 ${showFilter
+                    ? "max-h-[500px] opacity-100"
+                    : "max-h-0 opacity-0 pointer-events-none border-none"
                     }`}
             >
                 <div className="p-2 space-y-2">
@@ -102,7 +112,9 @@ const ProductSearch = ({
                             value={filter.barcode ?? ""}
                             name="barcode"
                             placeholder={t("product_inventory.barcode")}
-                            onChange={(e) => setFilter({ ...filter, barcode: e.target.value })}
+                            onChange={(e) =>
+                                setFilter({ ...filter, barcode: e.target.value })
+                            }
                         />
                     </div>
 
@@ -124,19 +136,20 @@ const ProductSearch = ({
                     />
 
                     <div className="flex gap-2 justify-end pt-1">
-                        <SecondaryButton
+                        <Button
+                            variant="secondary"
                             onClick={resetFilter}
                             title={t("common.reset")}
                         >
                             {t("common.reset")}
-                        </SecondaryButton>
-                        <PrimaryButton
+                        </Button>
+                        <Button
+                            variant="primary"
                             onClick={() => setShowFilter(false)}
                             title={t("common.save")}
-
                         >
                             {t("common.search")}
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </div>
             </div>

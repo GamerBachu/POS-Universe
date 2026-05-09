@@ -6,7 +6,7 @@ import { userApi } from "@/api";
 import { LoggerUtils, getName } from "@/utils";
 import Modal from "@/components/Modal";
 import { DatePickerWithLabel, SelectWithLabel, TextBoxWithLabel } from "@/components/input";
-import { SecondaryButton, SubmitButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 /**
  * UserProfileEditModal Component
@@ -257,13 +257,21 @@ const UserProfileEditModal = ({
                 </div>
 
                 <div className="flex gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
-                    <SecondaryButton onClick={onClose} title={t("common.cancel")}>
+                    <Button
+                        variant="secondary"
+                        onClick={onClose}
+                        title={t("common.cancel")}>
                         {t("common.cancel")}
-                    </SecondaryButton>
+                    </Button>
 
-                    <SubmitButton title={t("common.save")} isLoading={isSaving}>
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        title={t("common.save")}
+                        isLoading={isSaving}
+                    >
                         {t("common.update")}
-                    </SubmitButton>
+                    </Button>
                 </div>
             </form>
         </Modal>

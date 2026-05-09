@@ -1,4 +1,4 @@
-import { DangerButton, PrimaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import { TextBoxWithLabel } from "@/components/input";
 import { useLanguage } from "@/contexts/language";
 import type { IProductKeywordView } from "@/types/product";
@@ -50,12 +50,13 @@ const ProductKeywordsSection = ({
                             </div>
                             {!isReadOnly && (
                                 <div className="pb-0.5">
-                                    <DangerButton
+                                    <Button
+                                        variant="danger"
                                         title={t("common.remove")}
                                         onClick={() => onRemoveRow(key)}
                                     >
                                         {t("common.remove")}
-                                    </DangerButton>
+                                    </Button>
                                 </div>
                             )}
                         </div>
@@ -75,12 +76,13 @@ const ProductKeywordsSection = ({
             {/* 3. Footer Section - Centered Add Button */}
             {!isReadOnly && (
                 <div className="p-3 mt-auto border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/40 flex justify-center">
-                    <PrimaryButton
+                    <Button
+                        variant="primary"
                         title={t("product_inventory.add_keyword")}
                         onClick={onAddRow}
                     >
                         {t("product_inventory.add_keyword")}
-                    </PrimaryButton>
+                    </Button>
                 </div>
             )}
         </div>

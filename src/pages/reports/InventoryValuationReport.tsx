@@ -9,7 +9,7 @@ import Loader from "@/components/Loader";
 import { LoggerUtils } from "@/utils";
 import type { IInventoryValuation } from "@/types/reports";
 import { TextBox } from "@/components/input";
-import { SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 
 const InventoryValuationReport = () => {
     const { t } = useLanguage();
@@ -82,13 +82,14 @@ const InventoryValuationReport = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <SecondaryButton
+                        <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
                             disabled={isLoading || !data}
                             title={t("common.print")}
                         >
                             <span>{t("common.print")}</span>
-                        </SecondaryButton>
+                        </Button>
                     </div>
                 </div>
             </div>

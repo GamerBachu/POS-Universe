@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { useLanguage } from "@/contexts/language";
 import { DatePickerWithLabel } from "@/components/input";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
+import { Button } from "@/components/button";
 import { PrinterIcon, SearchIcon } from "@/libs/icons";
 import { getTodayDateString, toDisplayString, toISODateString } from "@/utils/helper/dateUtils";
 import { reportApi } from "@/api";
@@ -98,7 +98,8 @@ const VoidCancellationReport = () => {
                             value={toDate}
                             onChange={(e) => setToDate(e.target.value)}
                         />
-                        <PrimaryButton
+                        <Button
+                            variant="primary"
                             onClick={fetchData}
                             disabled={isLoading}
                             isLoading={isLoading}
@@ -107,8 +108,9 @@ const VoidCancellationReport = () => {
                         >
                             <SearchIcon className="w-5 h-5" />
                             {t("common.search")}
-                        </PrimaryButton>
-                        <SecondaryButton
+                        </Button>
+                        <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
                             disabled={!data || isLoading}
                             title={t("common.print")}
@@ -116,7 +118,7 @@ const VoidCancellationReport = () => {
                         >
                             <PrinterIcon className="w-5 h-5" />
                             {t("common.print")}
-                        </SecondaryButton>
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { SecondaryButton } from "./button";
+import { Button } from "./button";
 
 type PageHeaderProps = {
     subtitle?: string;
@@ -24,13 +24,14 @@ const PageHeader = ({
             )}
             {btnLabel && (
                 <div>
-                    <SecondaryButton
+                    <Button
+                        variant="secondary"
                         onClick={onClick}
                         className={`${btnClass}`}
                         title={btnLabel}
                     >
                         {btnLabel}
-                    </SecondaryButton>
+                    </Button>
                 </div>
             )}
         </div>
