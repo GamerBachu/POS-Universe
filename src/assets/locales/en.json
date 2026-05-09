@@ -60,6 +60,8 @@
     "to": "to",
     "of": "of",
     "results": "results",
+    "dark":"Dark",
+    "light":"Light",
     "open": "Open",
     "close": "Close",
     "session_expired": "Session expired. Please login again.",
@@ -93,7 +95,9 @@
   },
   "sidebar": {
     "ph_search_menu": "Search...",
-    "show_all": " Show all"
+    "show_all": " Show all",
+    "show": "Show Menu",
+    "hide": "Hide Menu"
   },
   "navigation": {
     "dashboard_label": "Dashboard",

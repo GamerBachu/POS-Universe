@@ -8,7 +8,8 @@ type ButtonVariant =
     | "danger"
     | "info"
     | "amber"
-    | "indigo";
+    | "indigo"
+    | "neutral";
 
 interface OutlineButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     title?: string;
@@ -19,12 +20,13 @@ interface OutlineButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<ButtonVariant, string> = {
-    primary: "border-teal-600 text-teal-700 hover:bg-teal-50 dark:border-teal-500 dark:text-teal-400 dark:hover:bg-teal-950/30",
-    secondary: "border-gray-500 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
-    danger: "border-red-600 text-red-700 hover:bg-red-50 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-950/30",
-    info: "border-blue-600 text-blue-700 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-950/30",
-    amber: "border-amber-600 text-amber-700 hover:bg-amber-50 dark:border-amber-500 dark:text-amber-400 dark:hover:bg-amber-950/30",
-    indigo: "border-indigo-600 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-500 dark:text-indigo-400 dark:hover:bg-indigo-950/30",
+    primary: "border-teal-300 text-teal-700 hover:bg-teal-50 dark:border-teal-500 dark:text-teal-400 dark:hover:bg-teal-950/30",
+    secondary: "border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
+    danger: "border-red-300 text-red-700 hover:bg-red-50 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-950/30",
+    info: "border-blue-300 text-blue-700 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-950/30",
+    amber: "border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-500 dark:text-amber-400 dark:hover:bg-amber-950/30",
+    indigo: "border-indigo-300 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-500 dark:text-indigo-400 dark:hover:bg-indigo-950/30",
+    neutral: "border-black text-black hover:bg-gray-100 dark:border-white dark:text-white dark:hover:bg-gray-800",
 };
 
 export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
@@ -49,7 +51,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
                 ref={ref}
                 title={title}
                 disabled={disabled || isLoading}
-                className={`flex items-center justify-center gap-2 w-full py-2.5 px-2.5 rounded-md font-bold text-sm transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 border bg-transparent outline-none focus:ring-2 focus:ring-teal-500/20 ${variants[variant]} ${className}`}
+                className={`flex items-center justify-center gap-2 py-2.5 px-2.5 rounded-md font-bold text-sm transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 border bg-transparent outline-none focus:ring-2 focus:ring-teal-500/20 ${variants[variant]} ${className}`}
                 {...props}
             >
                 {isLoading ? (

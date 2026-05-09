@@ -132,7 +132,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 <OutlineButton
                     onClick={() => setPaymentMethod(TPaymentCategory.CASH)}
                     variant="primary"
-                    className={`uppercase ${(state.paymentCategory === TPaymentCategory.CASH) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
+                    className={`uppercase w-full ${(state.paymentCategory === TPaymentCategory.CASH) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
                     icon={
                         (state.paymentCategory === TPaymentCategory.CASH) && (
                             <CheckIcon
@@ -148,7 +148,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
                 <OutlineButton
                     onClick={() => setPaymentMethod(TPaymentCategory.ELECTRONIC)}
                     variant="primary"
-                    className={`uppercase ${(state.paymentCategory === TPaymentCategory.ELECTRONIC) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
+                    className={`uppercase w-full ${(state.paymentCategory === TPaymentCategory.ELECTRONIC) ? "bg-teal-200 dark:bg-teal-800 border-teal-700 dark:border-teal-400" : ""}`}
                     icon={
                         (state.paymentCategory === TPaymentCategory.ELECTRONIC) && (
                             <CheckIcon

@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/authorize';
 import { reportApi } from '@/api';
 import { LoggerUtils } from '@/utils';
 import FloatingAlert from '@/components/FloatingAlert';
-import ChevronRightIcon from '@/libs/icons/ChevronRightIcon';
+import { ChevronRightIcon } from '@/libs/icons/ChevronRightIcon';
 import type { IReport } from '@/types/reports';
 
 const Report = () => {

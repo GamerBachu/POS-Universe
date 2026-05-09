@@ -1,5 +1,7 @@
 import type { TStatusType } from "@/types/actionState";
 import { useEffect } from "react";
+import { OutlineButton } from "./button";
+import { CloseIcon } from "@/libs/icons";
 
 
 type FloatingAlertProps = {
@@ -46,14 +48,14 @@ const FloatingAlert = ({ message, type, onClose, duration = 3000 }: FloatingAler
                 </p>
 
                 {/* Vanilla Close Icon */}
-                <button
+                <OutlineButton
+                    variant="amber"
                     onClick={onClose}
-                    className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                    icon={<CloseIcon className="w-4 h-4" />}
+                    className="border-none w-fit p-2 hover:bg-transparent"
+                    title="X"
                 >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                </OutlineButton>
             </div>
         </div>
     );

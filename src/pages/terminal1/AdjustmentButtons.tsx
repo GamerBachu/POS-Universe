@@ -36,7 +36,7 @@ const AdjustmentButtons = () => {
                     onClick={onAddDiscount}
                     icon={<PercentageIcon className="w-3.5 h-3.5" />}
                     variant="amber"
-                    className="px-2"
+                    className="!px-2 w-full"
                 >
                     {t("pos_t1.btn_add_discount")}
                 </OutlineButton>
@@ -46,7 +46,7 @@ const AdjustmentButtons = () => {
                     onClick={onAddServiceCharge}
                     icon={<PlusIcon className="w-3.5 h-3.5" />}
                     variant="indigo"
-                    className="!px-2"
+                    className="!px-2 w-full"
                 >
                     {t("pos_t1.btn_service_charge")}
                 </OutlineButton>

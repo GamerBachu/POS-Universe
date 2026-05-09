@@ -1,5 +1,6 @@
 import React from "react";
 import { useLanguage } from "@/contexts/language";
+import { OutlineButton } from "./button";
 
 
 interface PaginationProps {
@@ -53,20 +54,22 @@ const Pagination: React.FC<PaginationProps> = ({
                 )}
             </span>
             <div className="flex gap-2">
-                <button
+                <OutlineButton
+                    variant="neutral"
                     disabled={currentPage === 1 || isLoading}
                     onClick={handlePrevious}
-                    className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 py-2.5 px-2.5 rounded text-sm font-bold uppercase disabled:opacity-30 transition-all"
+                    title={t("common.previous")}
                 >
                     {t("common.previous")}
-                </button>
-                <button
+                </OutlineButton>
+                <OutlineButton
+                    variant="neutral"
                     disabled={currentPage === totalPages || isLoading}
                     onClick={handleNext}
-                    className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 py-2.5 px-2.5 rounded text-sm font-bold uppercase disabled:opacity-30 transition-all"
+                    title={t("common.next")}
                 >
                     {t("common.next")}
-                </button>
+                </OutlineButton>
             </div>
         </div>
     );
