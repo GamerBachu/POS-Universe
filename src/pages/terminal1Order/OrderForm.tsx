@@ -64,10 +64,16 @@ const OrderForm = () => {
         <CommonLayout h1={t("navigation.product_list_label")}>
             <PageHeader
                 subtitle={`${t("pos_t1.order_details_title")}`}
-                btnClass="bg-gray-600 hover:bg-gray-700"
                 btnLabel={t("common.back_page")}
-                onClick={onSendBack}
-            />
+            >
+                <Button
+                    variant="secondary"
+                    onClick={onSendBack}
+                    title={t("common.back_page")}
+                >
+                    {t("common.back_page")}
+                </Button>
+            </PageHeader>
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
                 <Loader label={t("common.loading")} />
             </div>
@@ -80,10 +86,16 @@ const OrderForm = () => {
             <CommonLayout h1={t("navigation.product_list_label")}>
                 <PageHeader
                     subtitle={`${t("pos_t1.order_details_title")}`}
-                    btnClass="bg-gray-600 hover:bg-gray-700"
                     btnLabel={t("common.back_page")}
-                    onClick={onSendBack}
-                />
+                >
+                    <Button
+                        variant="secondary"
+                        onClick={onSendBack}
+                        title={t("common.back_page")}
+                    >
+                        {t("common.back_page")}
+                    </Button>
+                </PageHeader>
                 <div className="p-10 text-center text-red-500 font-bold">
                     {t("common.error")}
                 </div>
@@ -100,10 +112,16 @@ const OrderForm = () => {
 
             <PageHeader
                 subtitle={`${t("pos_t1.order_details_title")} ${order.orderNumber}`}
-                btnClass="bg-gray-600 hover:bg-gray-700"
                 btnLabel={t("common.back_page")}
-                onClick={onSendBack}
-            />
+            >
+                <Button
+                    variant="secondary"
+                    onClick={onSendBack}
+                    title={t("common.back_page")}
+                >
+                    {t("common.back_page")}
+                </Button>
+            </PageHeader>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 {/* Left Column: Items & Billing */}

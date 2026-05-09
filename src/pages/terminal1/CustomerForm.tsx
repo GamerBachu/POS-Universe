@@ -109,11 +109,12 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                 {(state?.success === true) && <AlertSuccess message={state?.message} />}
                 {(state?.success === false) && <AlertError message={state?.message} />}
                 {/* Footer Actions */}
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2 pt-2 justify-end">
                     <Button
                         variant="secondary"
                         onClick={handleClear}
                         title={t("pos_t1.clear")}
+                        className="px-4"
                     >
                         {t("pos_t1.clear")}
                     </Button>
@@ -121,6 +122,7 @@ const CustomerForm = ({ onClose }: CustomerFormProps) => {
                         variant="primary"
                         disabled={isPending}
                         title={t("common.save")}
+                        className="px-4"
                         type="submit"
                     >
                         {isPending ? t("pos_t1.saving") : t("pos_t1.save")}

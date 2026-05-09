@@ -133,12 +133,13 @@ const UserPasswordChangeModal = ({
                 {state?.success === true && <AlertSuccess message={state?.message} />}
                 {state?.success === false && <AlertError message={state?.message} />}
 
-                <div className="flex gap-2 pt-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
+                <div className="flex gap-2 pt-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 justify-end">
 
                     <Button
                         variant="secondary"
                         onClick={onClose}
                         title={t("common.cancel")}
+                        className="px-4"
                     >
                         {t("common.cancel")}
                     </Button>
@@ -147,6 +148,7 @@ const UserPasswordChangeModal = ({
                         type="submit"
                         title={t("common.update")}
                         isLoading={isPending}
+                        className="px-4"
                     >
                         {t("common.update")}
                     </Button>

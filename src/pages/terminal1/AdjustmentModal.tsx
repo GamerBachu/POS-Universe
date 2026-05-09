@@ -120,11 +120,13 @@ const AdjustmentModal = ({
                 </div>
 
                 {/* Footer Actions */}
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-2 pt-2 justify-end">
                     <Button
                         variant="secondary"
                         onClick={onClose}
                         title={t("common.cancel")}
+                        className="px-4"
+                        
                     >
                         {t("common.cancel")}
                     </Button>
@@ -132,6 +134,7 @@ const AdjustmentModal = ({
                         variant="primary"
                         title={t("common.add")}
                         type="submit"
+                        className="px-4"
                     >
                         {t("common.add")}
                     </Button>

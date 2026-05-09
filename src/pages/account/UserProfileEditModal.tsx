@@ -256,11 +256,13 @@ const UserProfileEditModal = ({
                     </div>
                 </div>
 
-                <div className="flex gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
+                <div className="flex gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 justify-end">
                     <Button
                         variant="secondary"
                         onClick={onClose}
-                        title={t("common.cancel")}>
+                        title={t("common.cancel")}
+                        className="px-4"
+                    >
                         {t("common.cancel")}
                     </Button>
 
@@ -269,6 +271,7 @@ const UserProfileEditModal = ({
                         type="submit"
                         title={t("common.save")}
                         isLoading={isSaving}
+                        className="px-4"
                     >
                         {t("common.update")}
                     </Button>

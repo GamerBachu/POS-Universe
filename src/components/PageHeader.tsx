@@ -1,18 +1,12 @@
-import { Button } from "./button";
+import type React from "react";
 
 type PageHeaderProps = {
     subtitle?: string;
     btnLabel?: string;
-    btnClass?: string;
-    onClick?: () => void;
+    children: React.ReactNode;
 };
 
-const PageHeader = ({
-    subtitle,
-    btnLabel,
-    btnClass = "",
-    onClick,
-}: PageHeaderProps) => {
+const PageHeader = ({ subtitle, btnLabel, children }: PageHeaderProps) => {
     return (
         <div
             className={`flex ${subtitle && btnLabel ? "justify-between" : "justify-end"} items-center p-2`}
@@ -22,18 +16,7 @@ const PageHeader = ({
                     {subtitle}
                 </h1>
             )}
-            {btnLabel && (
-                <div>
-                    <Button
-                        variant="secondary"
-                        onClick={onClick}
-                        className={`${btnClass}`}
-                        title={btnLabel}
-                    >
-                        {btnLabel}
-                    </Button>
-                </div>
-            )}
+            {children}
         </div>
     );
 };

@@ -150,10 +150,16 @@ const AttributeForm = () => {
     <CommonLayout h1={t("navigation.master_pro__attr_label")}>
       <PageHeader
         subtitle={`${action} ${t("navigation.master_pro__attr_label")}`}
-        btnClass="bg-gray-600 hover:bg-gray-700"
         btnLabel={t("common.back_page")}
-        onClick={onSendBack}
-      />
+      >
+        <Button
+          variant="secondary"
+          onClick={onSendBack}
+          title={t("common.back_page")}
+        >
+          {t("common.back_page")}
+        </Button>
+      </PageHeader>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <form
@@ -181,15 +187,12 @@ const AttributeForm = () => {
               desc={t("mst_product_attribute.toggle_active")}
               name="isActive"
             />
-
           </div>
           {state?.success === true && <AlertSuccess message={state?.message} />}
           {state?.success === false && <AlertError message={state?.message} />}
 
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <Button
-              variant="secondary"
-              onClick={onSendBack}>
+            <Button variant="secondary" onClick={onSendBack}>
               {t("common.back_page")}
             </Button>
             {action === "delete" && (

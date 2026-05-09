@@ -141,10 +141,16 @@ const SystemLogForm = () => {
     <CommonLayout h1={t("navigation.system_log_list_label")}>
       <PageHeader
         subtitle={`${action} ${t("navigation.system_log_list_label")}`}
-        btnClass="bg-gray-600 hover:bg-gray-700"
         btnLabel={t("common.back_page")}
-        onClick={onSendBack}
-      />
+      >
+        <Button
+          variant="secondary"
+          onClick={onSendBack}
+          title={t("common.back_page")}
+        >
+          {t("common.back_page")}
+        </Button>
+      </PageHeader>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <form action={formAction} className="p-3 space-y-3">

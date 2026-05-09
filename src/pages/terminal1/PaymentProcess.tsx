@@ -164,7 +164,7 @@ const PaymentProcess = ({ resetFilter }: PaymentProcessProps) => {
             <Button
                 variant="primary"
                 onClick={onCompletingOrder}
-                className="uppercase"
+                className="uppercase w-full"
             >
                 {t("pos_t1.complete_order")}
             </Button>
