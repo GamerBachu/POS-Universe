@@ -437,7 +437,32 @@ const ProductForm: React.FC = () => {
           message: `${t("common.success_save")} Warnings: ${warningMessages.join(", ")}`,
         };
       }
-      return { success: true, message: t("common.success_save") };
+      // If action is 'add', clear all form values
+      if (action === "add") {
+        setItem({
+          id: 0,
+          code: "",
+          sku: "",
+          barcode: "",
+          name: "",
+          costPrice: 0,
+          sellingPrice: 0,
+          discountInPercent: 0,
+          taxRate: 0,
+          stock: 0,
+          reorderLevel: 5,
+          isActive: true,
+        });
+        setAttributeRows([]);
+        setImageRows([]);
+        setDescriptionItem({ productId: 0, description: "", id: 0 });
+        setKeywordRows([]);
+        return { success: true, message: t("product_inventory.success_add") };
+      }
+      else {
+        return { success: true, message: t("common.success_save") };
+      }
+
     } catch (error) {
       LoggerUtils.logCatch(error, "ProductForm", "handleAction");
       return { success: false, message: t("common.error"), status: 500 };

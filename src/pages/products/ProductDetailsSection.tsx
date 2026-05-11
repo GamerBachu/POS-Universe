@@ -14,13 +14,14 @@ export const ProductDetailsSection = ({
   const { t } = useLanguage();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-      <TextBoxWithLabel
+
+      {item.code && <TextBoxWithLabel
         readOnly={true}
         label={t("product_inventory.code")}
         defaultValue={item.code}
         name="code"
         placeholder={t("common.system_generated")}
-      />
+      />}
 
       <TextBoxWithLabel
         readOnly={isReadOnly}

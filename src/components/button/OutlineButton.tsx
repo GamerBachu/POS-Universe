@@ -40,6 +40,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
             className = "",
             disabled,
             variant = "secondary",
+            type = "button",
             ...props
         },
         ref,
@@ -50,6 +51,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
             <button
                 ref={ref}
                 title={title}
+                type={type}
                 disabled={disabled || isLoading}
                 className={`flex items-center justify-center gap-2 py-2.5 px-2.5 rounded-md font-bold text-sm transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 border bg-transparent outline-none focus:ring-2 focus:ring-teal-500/20 ${variants[variant]} ${className}`}
                 {...props}

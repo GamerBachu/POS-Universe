@@ -56,12 +56,13 @@
     "fail_delete": "Delete failed. Please try again",
     "success_delete": "Delete successful",
     "success_save": "Save successful",
+    "success_add": "Added successful",
     "showing": "Showing",
     "to": "to",
     "of": "of",
     "results": "results",
-    "dark":"Dark",
-    "light":"Light",
+    "dark": "Dark",
+    "light": "Light",
     "open": "Open",
     "close": "Close",
     "session_expired": "Session expired. Please login again.",
@@ -178,6 +179,7 @@
     "add_keyword": "Add New Keyword",
     "description": "Product Description",
     "ph_description": "Description Content",
+    "success_add": "Product added! Ready for the next one.",
     "delete_info": "Deleting this product will permanently remove all associated records. If you need to keep historical data for reports but want to hide it from your POS and inventory lists, change the status to Inactive instead."
   },
   "mst_product_attribute": {
