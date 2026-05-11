@@ -13,7 +13,11 @@ import { ProductFinancialSection } from "./ProductFinancialSection";
 import { ProductAttributesSection } from "./ProductAttributesSection";
 import { ProductImagesSection } from "./ProductImagesSection";
 import { ProductFormFooter } from "./ProductFormFooter";
-import { AlertSuccess, AlertError, AlertWarning } from "@/components/ActionStatusMessage";
+import {
+  AlertSuccess,
+  AlertError,
+  AlertWarning,
+} from "@/components/ActionStatusMessage";
 import type { IMasterProductAttribute } from "@/types/masters";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonLayout from "@/layouts/CommonLayout";
@@ -47,11 +51,15 @@ import ProductDescriptionSection from "./ProductDescriptionSection";
 import ProductKeywordsSection from "./ProductKeywordsSection";
 import { productsApi } from "@/api";
 import { useAuth } from "@/contexts/authorize";
+import { Button } from "@/components/button";
 
 const initialState = { success: false, message: "", status: 0 };
 
 const ProductForm: React.FC = () => {
-  const { id: rawId, action: rawAction } = useParams<{ id: string; action: string; }>();
+  const { id: rawId, action: rawAction } = useParams<{
+    id: string;
+    action: string;
+  }>();
   const { t } = useLanguage();
   const auth = useAuth();
   const navigate = useNavigate();
@@ -59,7 +67,9 @@ const ProductForm: React.FC = () => {
   const action = rawAction?.toLowerCase() || "add";
 
   // Master Attribute State
-  const [masterAttributes, setMasterAttributes] = useState<IMasterProductAttribute[]>([]);
+  const [masterAttributes, setMasterAttributes] = useState<
+    IMasterProductAttribute[]
+  >([]);
 
   const [item, setItem] = useState<IProduct>({
     id: 0,
@@ -79,7 +89,9 @@ const ProductForm: React.FC = () => {
     isActive: true,
   });
 
-  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>([],);
+  const [attributeRows, setAttributeRows] = useState<IProductAttributeView[]>(
+    [],
+  );
 
   const [imageRows, setImageRows] = useState<IProductImageView[]>([]);
 
@@ -93,8 +105,6 @@ const ProductForm: React.FC = () => {
 
   // Form versioning - increments after successful save to force remount
   const [formVersion, setFormVersion] = useState<number>(0);
-
-
 
   // Fetch master attributes on mount
   useEffect(() => {
@@ -127,18 +137,33 @@ const ProductForm: React.FC = () => {
             isActive: result.isActive,
           });
           if (result.productAttributes) {
-            setAttributeRows(result.productAttributes.map((a) => ({ ...a, rowid: 'at' + "-" + a.id })));
+            setAttributeRows(
+              result.productAttributes.map((a) => ({
+                ...a,
+                rowid: "at" + "-" + a.id,
+              })),
+            );
           }
           if (result.productImages) {
-            setImageRows(result.productImages.map((a) => ({ ...a, rowid: 'is' + "-" + a.id })));
+            setImageRows(
+              result.productImages.map((a) => ({
+                ...a,
+                rowid: "is" + "-" + a.id,
+              })),
+            );
           }
           if (result.productDescription) {
             setDescriptionItem(result.productDescription);
           }
           if (result.productKeywords) {
-            setKeywordRows(result.productKeywords.map((a) => ({ ...a, rowid: 'kw' + "-" + a.id })));
+            setKeywordRows(
+              result.productKeywords.map((a) => ({
+                ...a,
+                rowid: "kw" + "-" + a.id,
+              })),
+            );
           }
-        };
+        }
       });
     }
   }, [id, action]);
@@ -250,8 +275,6 @@ const ProductForm: React.FC = () => {
     );
   }, []);
 
-
-
   const onSendBack = useCallback(() => {
     if (window.history.length > 1 && window.history.state?.idx > 0) {
       navigate(-1);
@@ -260,11 +283,11 @@ const ProductForm: React.FC = () => {
     }
   }, [navigate]);
 
-
-
   const handleAction = async (_: IActionState | null, formData: FormData) => {
     try {
-      const userId = auth.info.authUser?.userId ? auth.info.authUser?.userId : 0;
+      const userId = auth.info.authUser?.userId
+        ? auth.info.authUser?.userId
+        : 0;
       const payload = Object.fromEntries(formData) as Record<string, string>;
 
       // Collect attribute rows
@@ -431,10 +454,16 @@ const ProductForm: React.FC = () => {
     <CommonLayout h1={t("navigation.product_list_label")}>
       <PageHeader
         subtitle={`${action} ${t("product_inventory.name")}`}
-        btnClass="bg-gray-600  hover:bg-gray-700"
         btnLabel={t("common.back_page")}
-        onClick={() => navigate(PATHS.PRODUCT_LIST)}
-      />
+      >
+        <Button
+          variant="secondary"
+          onClick={() => navigate(PATHS.PRODUCT_LIST)}
+          title={t("common.back_page")}
+        >
+          {t("common.back_page")}
+        </Button>
+      </PageHeader>
 
       <form
         key={`${item.id}-${action}-${formVersion}`}
@@ -444,8 +473,6 @@ const ProductForm: React.FC = () => {
       >
         {/* SECTION 1: General Identifiers */}
         <ProductDetailsSection item={item} isReadOnly={isReadOnly} />
-
-        <hr className="dark:border-gray-700" />
 
         {/* SECTION 2: Financial & Inventory */}
         <ProductFinancialSection item={item} isReadOnly={isReadOnly} />
@@ -473,9 +500,6 @@ const ProductForm: React.FC = () => {
           onRemoveRow={handleRemoveAttributeRow}
           onChangeRow={handleAttributeRowChange}
         />
-
-        <hr className="dark:border-gray-700" />
-
         {/* SECTION 6: Product Images */}
         <ProductImagesSection
           imageRows={imageRows}
@@ -484,9 +508,6 @@ const ProductForm: React.FC = () => {
           onRemoveRow={handleRemoveImageRow}
           onChangeRow={handleImageRowChange}
         />
-
-        <hr className="dark:border-gray-700" />
-
         {/* SECTION 7: Product Keyword List */}
         <ProductKeywordsSection
           keywordRows={keywordRows}
@@ -496,17 +517,18 @@ const ProductForm: React.FC = () => {
           onChangeRow={handleKeywordRowChange}
         />
         {/* SECTION 8: Action Status Message */}
-        {(state?.success === true) && <AlertSuccess message={state?.message} />}
-        {(state?.success === false) && <AlertError message={state?.message} />}
+        {state?.success === true && <AlertSuccess message={state?.message} />}
+        {state?.success === false && <AlertError message={state?.message} />}
 
         {/* SECTION 9: Delete Confirmation Message */}
-        {action === "delete" && <AlertWarning message={t("product_inventory.delete_info")} />}
+        {action === "delete" && (
+          <AlertWarning message={t("product_inventory.delete_info")} />
+        )}
 
         {/* SECTION 9:Action Footer */}
         <ProductFormFooter
           action={action}
           isPending={isPending}
-          isReadOnly={isReadOnly}
           onBack={onSendBack}
         />
       </form>

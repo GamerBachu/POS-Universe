@@ -83,7 +83,7 @@ const DynamicReportPage = () => {
         return (
             <CommonLayout h1={t("navigation.report_label")}>
                 <div className="p-10 flex justify-center items-center">
-                   <Loader label={t("common.loading")} />
+                    <Loader label={t("common.loading")} />
                 </div>
             </CommonLayout>
         );
@@ -97,7 +97,7 @@ const DynamicReportPage = () => {
 
     return (
         <CommonLayout h1={t("navigation.report_label")}>
-            <div className="bg-white dark:bg-gray-800 rounded-md shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-md shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden my-3">
                 {ActiveReport && <ActiveReport />}
             </div>
         </CommonLayout>

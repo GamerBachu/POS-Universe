@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/language";
 import useCurrencySymbol from "@/hooks/useCurrencySymbol";
 import { calculateFinalPrice } from "@/utils/financial";
 import { InventoryStatus, Status } from "@/components/badge";
+import { ActionGroupButton } from "@/components/button";
 
 interface Props {
   item: IProduct;
@@ -18,7 +19,6 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
 
   return (
     <tr className="group hover:bg-gray-50/80 dark:hover:bg-gray-800/40 transition-colors">
-
       <td className="p-3">
         <NavLink
           to={editPath}
@@ -27,7 +27,6 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
           {item.id}
         </NavLink>
       </td>
-
 
       <td className="p-3">
         <div className="flex flex-col">
@@ -46,9 +45,7 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
       <td className="p-3 text-sm text-gray-600 dark:text-gray-300 font-mono">
         <div className="flex flex-col">
           <span>{item.sku}</span>
-          <span className="text-[10px] uppercase">
-            {item.barcode}
-          </span>
+          <span className="text-[10px] uppercase">{item.barcode}</span>
         </div>
       </td>
 
@@ -77,28 +74,25 @@ const ProductTableRow: React.FC<Props> = ({ item }) => {
 
       {/* Small Action Button Group */}
       <td className="p-3 text-right">
-        <div className="inline-flex items-center rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm overflow-hidden">
-          <NavLink
-            to={`${PATHS.PRODUCT_VIEW}/${item.id}`}
-            className="px-2 py-1 text-[11px] font-bold uppercase text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors"
-          >
-            {t("common.view")}
-          </NavLink>
-
-          <NavLink
-            to={editPath}
-            className="px-2 py-1 text-[11px] font-bold uppercase text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-r border-gray-200 dark:border-gray-700 transition-colors"
-          >
-            {t("common.edit")}
-          </NavLink>
-
-          <NavLink
-            to={`${PATHS.PRODUCT_DELETE}/${item.id}`}
-            className="px-2 py-1 text-[11px] font-bold uppercase text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-          >
-            {t("common.delete")}
-          </NavLink>
-        </div>
+        <ActionGroupButton
+          itemId={item.id ?? item.name}
+          actions={[
+            {
+              label: t("common.view"),
+              path: `${PATHS.PRODUCT_VIEW}/${item.id}`,
+            },
+            {
+              label: t("common.edit"),
+              path: `${editPath}`,
+              variant: "primary",
+            },
+            {
+              label: t("common.delete"),
+              path: `${PATHS.PRODUCT_DELETE}/${item.id}`,
+              variant: "danger",
+            },
+          ]}
+        />
       </td>
     </tr>
   );

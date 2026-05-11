@@ -9,7 +9,12 @@ import { PATHS } from "@/routes/paths";
 import { toLocalForInput, toUTCForDB } from "@/utils/helper/dateUtils";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import PageHeader from "@/components/PageHeader";
-import { Button } from "@/components/Button";
+import {
+  DateTimePickerWithLabel,
+  TextAreaWithLabel,
+  TextBoxWithLabel,
+} from "@/components/input";
+import { Button } from "@/components/button";
 
 const SystemLogForm = () => {
   const { t } = useLanguage();
@@ -31,16 +36,13 @@ const SystemLogForm = () => {
     stackTrace: "",
   });
 
-  const onSendBack = useCallback(
-    () => {
-      if (window.history.length > 1 && window.history.state?.idx > 0) {
-        navigate(-1);
-      } else {
-        navigate(PATHS.SYSTEM_LOG_LIST);
-      }
-    },
-    [navigate],
-  );
+  const onSendBack = useCallback(() => {
+    if (window.history.length > 1 && window.history.state?.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate(PATHS.SYSTEM_LOG_LIST);
+    }
+  }, [navigate]);
 
   useEffect(() => {
     // Validate ID and Action early
@@ -136,144 +138,134 @@ const SystemLogForm = () => {
   const isReadOnly = action === "view" || action === "delete";
 
   return (
-    <CommonLayout h1={t("navigation.system_log_list_label")}> 
-
+    <CommonLayout h1={t("navigation.system_log_list_label")}>
       <PageHeader
         subtitle={`${action} ${t("navigation.system_log_list_label")}`}
-        btnClass="bg-gray-600 hover:bg-gray-700"
         btnLabel={t("common.back_page")}
-        onClick={onSendBack}
-      />
+      >
+        <Button
+          variant="secondary"
+          onClick={onSendBack}
+          title={t("common.back_page")}
+        >
+          {t("common.back_page")}
+        </Button>
+      </PageHeader>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <form action={formAction} className="p-3 space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-
             <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.type")} <span className="text-red-500">*</span>
-              </label>
-              <input
-                required
-                type="text"
+              <TextBoxWithLabel
+                label={t("system_log.type")}
                 name="type"
-                disabled={isReadOnly}
+                required
+                disabled={isReadOnly || isPending}
                 defaultValue={initialData.type}
                 placeholder={t("system_log.ph_type")}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
 
-
             <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.page_name")} <span className="text-red-500">*</span>
-              </label>
-              <input
-                required
-                type="text"
+              <TextBoxWithLabel
+                label={t("system_log.page_name")}
                 name="pageName"
-                disabled={isReadOnly}
+                required
+                disabled={isReadOnly || isPending}
                 defaultValue={initialData.pageName}
                 placeholder={t("system_log.ph_page_name")}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
 
-
             <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.function")} <span className="text-red-500">*</span>
-              </label>
-              <input
-                required
-                type="text"
+              <TextBoxWithLabel
+                label={t("system_log.function")}
                 name="functionName"
-                disabled={isReadOnly}
+                required
+                disabled={isReadOnly || isPending}
                 defaultValue={initialData.functionName}
                 placeholder={t("system_log.ph_function")}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.timestamp")}
-              </label>
-              <input
-                type="datetime-local" // Changed from text to datetime-local
+              <DateTimePickerWithLabel
+                label={t("system_log.timestamp")}
                 name="timestamp"
                 disabled={isReadOnly}
                 defaultValue={toLocalForInput(initialData.timestamp)}
                 key={`timestamp-${initialData.timestamp}`} // Key ensures it resets when data loads
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all cursor-pointer dark:[color-scheme:dark]"
               />
             </div>
 
             <div className="md:col-span-2 space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.message")}
-              </label>
-              <input
-                type="text"
+              <TextBoxWithLabel
+                label={t("system_log.message")}
                 name="message"
-                disabled={isReadOnly}
+                required
+                disabled={isReadOnly || isPending}
                 defaultValue={initialData.message}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
+                placeholder={t("system_log.ph_message")}
               />
             </div>
+
             <div className="md:col-span-2 space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.data")}
-              </label>
-              <textarea
+              <TextAreaWithLabel
+                label={t("system_log.data")}
                 name="data"
                 disabled={isReadOnly}
                 defaultValue={initialData.data}
                 rows={3}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all font-mono"
               />
             </div>
 
             <div className="md:col-span-2 space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("system_log.stack_trace")}
-              </label>
-              <textarea
+              <TextAreaWithLabel
+                label={t("system_log.stack_trace")}
                 name="stackTrace"
                 disabled={isReadOnly}
                 defaultValue={initialData.stackTrace}
                 rows={5}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all font-mono"
               />
             </div>
           </div>
 
-          {(state?.success === true) && <AlertSuccess message={state?.message} />}
-          {(state?.success === false) && <AlertError message={state?.message} />}
-
+          {state?.success === true && <AlertSuccess message={state?.message} />}
+          {state?.success === false && <AlertError message={state?.message} />}
 
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
             <Button
-              type="button"
+              variant="secondary"
               onClick={onSendBack}
-              className="bg-gray-600 hover:bg-gray-700"
+              title={t("common.back_page")}
             >
               {t("common.back_page")}
             </Button>
-            {action !== "view" && (
+            {action === "delete" && (
               <Button
-                type="submit"
+                variant="danger"
                 disabled={isPending}
-                className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"} disabled:opacity-50 `}
+                title={t("common.delete")}
+                type="submit"
               >
-                {isPending ? "..." : action === "delete" ? t("common.delete") : t("common.save")}
+                {t("common.delete")}
+              </Button>
+            )}
+
+            {(action === "edit" || action === "add") && (
+              <Button
+                variant="primary"
+                disabled={isPending}
+                title={t("common.save")}
+                type="submit"
+              >
+                {t("common.save")}
               </Button>
             )}
           </div>
         </form>
-      </div >
-    </CommonLayout >
+      </div>
+    </CommonLayout>
   );
 };
 export default SystemLogForm;

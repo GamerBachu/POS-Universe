@@ -1,46 +1,51 @@
-import Button from "@/components/Button";
+import { Button } from "@/components/button";
 import { useLanguage } from "@/contexts/language";
 
 interface ProductFormFooterProps {
   action: string;
   isPending: boolean;
-  isReadOnly: boolean;
   onBack: () => void;
 }
-
 
 export const ProductFormFooter: React.FC<ProductFormFooterProps> = ({
   action,
   isPending,
-  isReadOnly,
   onBack,
 }: ProductFormFooterProps) => {
   const { t } = useLanguage();
   return (
-    <div className="flex justify-end gap-2 border-t pt-4 dark:border-gray-700">
+    <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
       <Button
-        type="button"
+        variant="secondary"
         onClick={onBack}
-        className="bg-gray-600 hover:bg-gray-700"
+        title={t("common.back_page")}
+        disabled={isPending}
+        isLoading={isPending}
       >
         {t("common.back_page")}
       </Button>
-
-      {!isReadOnly ? (
+      {action === "delete" && (
         <Button
-          type="submit"
+          variant="danger"
+          title={t("common.delete")}
           disabled={isPending}
           isLoading={isPending}
-          className="bg-green-600 hover:bg-green-700"
+          type="submit"
         >
-          {action === "add" ? t("common.save") : t("common.update")}
+          {t("common.delete")}
         </Button>
-      ) : (
-        action === "delete" && (
-          <Button type="submit" className="bg-red-600 hover:bg-red-700">
-            {t("common.delete")}
-          </Button>
-        )
+      )}
+
+      {(action === "edit" || action === "add") && (
+        <Button
+          variant="primary"
+          title={t("common.save")}
+          disabled={isPending}
+          isLoading={isPending}
+          type="submit"
+        >
+          {t("common.save")}
+        </Button>
       )}
     </div>
   );

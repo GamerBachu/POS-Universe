@@ -4,6 +4,7 @@ import { PATHS } from "@/routes/paths";
 import { useNavigate } from "react-router-dom";
 import AttributeTable from "./AttributeTable";
 import PageHeader from "@/components/PageHeader";
+import { Button } from "@/components/button";
 
 const AttributeList = () => {
     const navigate = useNavigate();
@@ -12,10 +13,16 @@ const AttributeList = () => {
         <CommonLayout h1={t("navigation.master_pro__attr_label")}>
             <PageHeader
                 subtitle={t("navigation.master_pro__attr_label")}
-                btnClass="bg-green-600 hover:bg-green-700"
                 btnLabel={t("common.addNew")}
-                onClick={() => navigate(PATHS.MASTER_ATTRIBUTE_ADD + "/0")}
-            />
+            >
+                <Button
+                    variant="info"
+                    onClick={() => navigate(PATHS.MASTER_ATTRIBUTE_ADD + "/0")}
+                    title={t("common.addNew")}
+                >
+                    {t("common.addNew")}
+                </Button>
+            </PageHeader>
             <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
                 <AttributeTable />
             </div>

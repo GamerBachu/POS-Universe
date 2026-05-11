@@ -5,6 +5,8 @@ const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
+        width="14"
+        height="14"
         {...props}
     >
         <path

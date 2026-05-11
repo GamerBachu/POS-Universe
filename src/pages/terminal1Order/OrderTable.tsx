@@ -5,8 +5,10 @@ import { useLanguage } from "@/contexts/language";
 import OrderTableRow from "./OrderTableRow";
 import TableSkeleton from "@/components/TableSkeleton";
 import { useSearchParams } from "react-router-dom";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+
+import { TextBoxWithLabel } from "@/components/input";
+import { Button } from "@/components/button";
+
 import Pagination from "@/components/Pagination";
 import TableNoRecord from "@/components/TableNoRecord";
 
@@ -69,31 +71,38 @@ const OrderTable: React.FC = () => {
     return (
         <div className="space-y-2">
 
-            <div
-                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center p-3 border border-gray-200 dark:border-gray-700">
-                <Input
-                    type="text"
-                    placeholder={t("pos_t1.col_order_no")}
-                    value={localFilters.orderNumber}
-                    onChange={(e) => handleInputChange('orderNumber', e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-                    name="orderNumber"
-                />
-                <div className="flex gap-1 lg:justify-end">
-                    <Button
-                        onClick={handleApplyFilters}
-                        isLoading={isLoading}
-                        className="bg-blue-600 hover:bg-blue-700 py-1.5"
-                    >
-                        {t("common.search")}
-                    </Button>
-                    <Button
-                        onClick={handleClear}
-                        isLoading={isLoading}
-                        className="bg-gray-600 hover:bg-gray-700 py-1.5"
-                    >
-                        {t("common.reset")}
-                    </Button>
+            <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+                <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 w-full">
+                        <TextBoxWithLabel
+                            label={t("common.name")}
+                            placeholder={t("pos_t1.col_order_no")}
+                            value={localFilters.orderNumber}
+                            onChange={(e) => handleInputChange('orderNumber', e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
+                            name="orderNumber"
+                        />
+                    </div>
+                    <div className="flex gap-2 pb-0.5 w-full lg:w-auto justify-end">
+                        <Button
+                            variant="primary"
+                            onClick={handleApplyFilters}
+                            isLoading={isLoading}
+                            title={t("common.search")}
+                            className="px-6"
+                        >
+                            {t("common.search")}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={handleClear}
+                            isLoading={isLoading}
+                            title={t("common.reset")}
+                            className="px-8"
+                        >
+                            {t("common.reset")}
+                        </Button>
+                    </div>
                 </div>
             </div>
 
@@ -101,7 +110,7 @@ const OrderTable: React.FC = () => {
             <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
                 <table className="w-full min-w-[700px] text-left border-collapse table-auto">
                     <thead>
-                        <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                        <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400">
                             <th className="p-3 w-16">{t("common.id")}</th>
                             <th className="p-3">{t("pos_t1.col_order_no")}</th>
                             <th className="p-3 text-center">{t("pos_t1.col_date")}</th>
@@ -114,7 +123,7 @@ const OrderTable: React.FC = () => {
                         {isLoading ? (
                             <TableSkeleton rows={pageSize} column={6} />
                         ) : data.length === 0 ? (
-                           <TableNoRecord column={6} message={t("common.no_record")} />
+                            <TableNoRecord column={6} message={t("common.no_record")} />
                         ) : (
                             data.map((item) => (
                                 <OrderTableRow key={item.id} item={item} />

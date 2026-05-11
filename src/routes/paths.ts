@@ -7,6 +7,7 @@ export const PATHS = {
     REGISTER: "/account/register",
     LOGOUT: "/account/logout",
     VERIFY: "/account/verify",
+    PROFILE: "/secure/profile",
     ERROR: "/error",
     NOT_FOUND: "/not-found",
 

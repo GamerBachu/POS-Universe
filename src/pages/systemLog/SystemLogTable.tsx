@@ -7,10 +7,10 @@ import SystemLogTableRow from "./SystemLogTableRow";
 import { useSearchParams } from "react-router-dom";
 import TableSkeleton from "@/components/TableSkeleton";
 import TableNoRecord from "@/components/TableNoRecord";
-import Button from "@/components/Button";
-import Select from "@/components/Select";
-import Input from "@/components/Input";
+
 import Pagination from "@/components/Pagination";
+import { Button } from "@/components/button";
+import { SelectWithLabel, TextBoxWithLabel } from "@/components/input";
 
 const SystemLogTable = () => {
   const { t } = useLanguage();
@@ -35,7 +35,7 @@ const SystemLogTable = () => {
         typeTerm,
         pageName,
         currentPage,
-        pageSize
+        pageSize,
       );
       if (res.success && res.data) {
         setData(res.data.items);
@@ -64,59 +64,80 @@ const SystemLogTable = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams({ type: typeTerm, pageName: pageName, page: newPage.toString() });
+    setSearchParams({
+      type: typeTerm,
+      pageName: pageName,
+      page: newPage.toString(),
+    });
   };
 
-
   return (
-    <div className="space-y-2">
-      <div
-        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center p-3 border border-gray-200 dark:border-gray-700">
-        <Input
-          type="text"
-          placeholder={t("system_log.ph_type")}
-          value={localType}
-          onChange={(e) => setLocalType(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
-        />
+    <div className="space-y-4">
+      <div className="bg-white dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+        <div className="flex flex-col lg:flex-row items-end gap-4 p-4">
 
-        <Select
-          value={localPageName}
-          onChange={(e) => setLocalPageName(e.target.value)}
-        >
-          <option value="">{t("common.all_status")}</option>
-          <option value="true">{t("common.active")}</option>
-          <option value="false">{t("common.inactive")}</option>
-        </Select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 w-full">
+            <TextBoxWithLabel
+              label={t("system_log.type")}
+              placeholder={t("system_log.ph_type")}
+              value={localType}
+              onChange={(e) => setLocalType(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleApplyFilters()}
+            />
+            <SelectWithLabel
+              label={t("common.status")}
+              value={localPageName}
+              onChange={(e) => setLocalPageName(e.target.value)}
+            >
+              <option value="">{t("common.all_status")}</option>
+              <option value="true">{t("common.active")}</option>
+              <option value="false">{t("common.inactive")}</option>
+            </SelectWithLabel>
+          </div>
 
-        <div className="flex gap-1 lg:justify-end">
-          <Button
-            onClick={handleApplyFilters}
-            className="bg-blue-600 hover:bg-blue-700 py-1.5"
-            isLoading={isLoading}
-          >
-            {t("common.search")}
-          </Button>
-          <Button
-            onClick={handleClear}
-            className="bg-gray-600 hover:bg-gray-700 py-1.5"
-            isLoading={isLoading}
-          >
-            {t("common.reset")}
-          </Button>
+
+          <div className="flex gap-2 pb-0.5 w-full lg:w-auto justify-end">
+            <Button
+                                variant="primary"
+              onClick={handleApplyFilters}
+              isLoading={isLoading}
+              title={t("common.search")}
+              className="px-6"
+            >
+              {t("common.search")}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleClear}
+              isLoading={isLoading}
+              title={t("common.reset")}
+              className="px-8"
+            >
+              {t("common.reset")}
+            </Button>
+          </div>
         </div>
       </div>
-
       <div className="w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
         <table className="w-full min-w-[700px] text-left border-collapse table-auto">
           <thead>
-            <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-xs uppercase tracking-wider text-gray-600 dark:text-gray-400">
+            <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400">
               <th className="p-3 w-20 text-left font-bold">{t("common.id")}</th>
-              <th className="p-3 w-32 text-left font-bold">{t("system_log.type")}</th>
-              <th className="p-3 text-left font-bold">{t("system_log.page_name")}</th>
-              <th className="p-3 text-left font-bold">{t("system_log.function")}</th>
-              <th className="p-3 w-48 text-left font-bold">{t("system_log.timestamp")}</th>
-              <th className="p-3 w-48 text-center font-bold">{t("common.action")}</th>
+              <th className="p-3 w-32 text-left font-bold">
+                {t("system_log.type")}
+              </th>
+              <th className="p-3 text-left font-bold">
+                {t("system_log.page_name")}
+              </th>
+              <th className="p-3 text-left font-bold">
+                {t("system_log.function")}
+              </th>
+              <th className="p-3 w-48 text-left font-bold">
+                {t("system_log.timestamp")}
+              </th>
+              <th className="p-3 w-48 text-center font-bold">
+                {t("common.action")}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-transparent">
@@ -125,19 +146,24 @@ const SystemLogTable = () => {
             ) : data.length === 0 ? (
               <TableNoRecord column={6} message={t("common.no_record")} />
             ) : (
-              data.map((item) => <SystemLogTableRow key={item.id} item={item} />)
+              data.map((item) => (
+                <SystemLogTableRow key={item.id} item={item} />
+              ))
             )}
           </tbody>
         </table>
       </div>
       {/* Pagination Controls */}
-      <Pagination
-        currentPage={currentPage}
-        totalCount={totalCount}
-        pageSize={pageSize}
-        onPageChange={handlePageChange}
-        isLoading={isLoading}
-      ></Pagination>
+      <div className="mb-4">
+        <Pagination
+          currentPage={currentPage}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        ></Pagination>
+      </div>
+
     </div>
   );
 };

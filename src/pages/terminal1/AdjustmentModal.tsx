@@ -3,9 +3,9 @@ import { TAdjustmentCategory, type IAdjustment } from "@/types/terminal1";
 import { generateGuidV2 } from "@/utils/helper/guid";
 import { useTerminalDispatch } from "./TerminalContext";
 import { useLanguage } from "@/contexts/language";
-import Button from "@/components/Button";
 import Modal from "@/components/Modal";
-
+import { TextBoxWithLabel } from "@/components/input";
+import { Button } from "@/components/button";
 
 interface AdjustmentModalProps {
     isOpen: boolean;
@@ -14,15 +14,18 @@ interface AdjustmentModalProps {
     onClose: () => void;
 }
 
-
-
-const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalProps) => {
+const AdjustmentModal = ({
+    isOpen,
+    title,
+    category,
+    onClose,
+}: AdjustmentModalProps) => {
     const dispatch = useTerminalDispatch();
     const { t } = useLanguage();
 
     const [label, setLabel] = useState("");
     const [value, setValue] = useState("");
-    const [valueType, setValueType] = useState<'PERCENT' | 'FIXED'>('PERCENT');
+    const [valueType, setValueType] = useState<"PERCENT" | "FIXED">("PERCENT");
 
     // Keyboard Shortcuts Logic
     useEffect(() => {
@@ -38,8 +41,6 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
     }, [onClose]);
 
     if (!isOpen) return null;
-
-
 
     // Using React.FormEvent explicitly or handling via button click
     const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
@@ -68,69 +69,72 @@ const AdjustmentModal = ({ isOpen, title, category, onClose }: AdjustmentModalPr
         onClose();
     };
 
-
     return (
         <Modal className="w-full max-w-sm" title={title} onClose={onClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-3">
                 <div className="space-y-3">
-
-                    {/* Label */}
-                    <div>
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.label")}</label>
-                        <input
-                            value={label}
-                            onChange={(e) => setLabel(e.target.value)}
-                            placeholder={t("pos_t1.ph_label")}
-                            className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500"
-                        />
-                    </div>
+                    <TextBoxWithLabel
+                        label={t("pos_t1.label")}
+                        value={label}
+                        onChange={(e) => setLabel(e.target.value)}
+                        placeholder={t("pos_t1.ph_label")}
+                    />
 
                     {/* Value & Type Toggle */}
                     <div className="flex gap-2">
                         <div className="flex-[2]">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.value")} ({valueType === 'PERCENT' ? '%' : t("pos_t1.txt_fix")})</label>
-                            <input
+                            <TextBoxWithLabel
+                                label={
+                                    t("pos_t1.value") +
+                                    ` (${valueType === "PERCENT" ? "%" : t("pos_t1.txt_fix")})`
+                                }
                                 type="number"
                                 value={value}
                                 onChange={(e) => setValue(e.target.value)}
                                 placeholder="0.00"
-                                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded outline-none focus:border-teal-500 font-mono font-bold"
                             />
                         </div>
                         <div className="flex-1">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase">{t("pos_t1.unit")}</label>
-                            <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded border border-gray-200 dark:border-gray-700 h-[38px]">
+                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">
+                                {t("pos_t1.unit")}
+                            </label>
+                            <div
+                                className="flex mt-1 bg-gray-100 dark:bg-gray-900 px-2.5 py-2.5  rounded border border-gray-200 dark:border-gray-700 h-11">
                                 <button
                                     type="button"
-                                    onClick={() => setValueType('PERCENT')}
-                                    className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'PERCENT' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                >%</button>
+                                    onClick={() => setValueType("PERCENT")}
+                                    className={`flex-1 text-xs font-black rounded transition-all ${valueType === "PERCENT" ? "bg-white dark:bg-gray-700 shadow-sm text-teal-600" : "text-gray-400"}`}
+                                >
+                                    %
+                                </button>
                                 <button
                                     type="button"
-                                    onClick={() => setValueType('FIXED')}
-                                    className={`flex-1 text-[9px] font-black rounded transition-all ${valueType === 'FIXED' ? 'bg-white dark:bg-gray-700 shadow-sm text-teal-600' : 'text-gray-400'}`}
-                                >{t("pos_t1.txt_fix")}</button>
+                                    onClick={() => setValueType("FIXED")}
+                                    className={`flex-1 text-xs font-black rounded transition-all ${valueType === "FIXED" ? "bg-white dark:bg-gray-700 shadow-sm text-teal-600" : "text-gray-400"}`}
+                                >
+                                    {t("pos_t1.txt_fix")}
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Footer Actions */}
-                <div className="flex gap-2 pt-2">
-
+                <div className="flex gap-2 pt-2 justify-end">
                     <Button
-                        type="button"
+                        variant="secondary"
                         onClick={onClose}
-                        className="flex-1 bg-gray-600 hover:bg-gray-700 py-2"
                         title={t("common.cancel")}
+                        className="px-4"
+                        
                     >
                         {t("common.cancel")}
                     </Button>
-
                     <Button
-                        type="submit"
-                        className="flex-[2] bg-teal-600 hover:bg-teal-700 py-2"
+                        variant="primary"
                         title={t("common.add")}
+                        type="submit"
+                        className="px-4"
                     >
                         {t("common.add")}
                     </Button>

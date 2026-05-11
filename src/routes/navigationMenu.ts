@@ -3,14 +3,14 @@ import { PATHS } from "./paths";
 import type { TranslationKey } from "@/contexts/language/type";
 
 const NavigationMenu = [
-    // --- Main Business Routes ---
+
     {
         path: PATHS.START,
         label: "navigation.dashboard_label",
         description: "navigation.dashboard_desc",
         category: "main",
         isVisible: true,
-        icon: "📊",
+        icon: "🏠",
     },
 
     {
@@ -19,7 +19,7 @@ const NavigationMenu = [
         description: "navigation.terminal1_desc",
         category: "main",
         isVisible: true,
-        icon: "🖥️",
+        icon: "🛒",
     },
     {
         path: PATHS.TERMINAL_1_LIST,
@@ -29,15 +29,13 @@ const NavigationMenu = [
         isVisible: true,
         icon: "🧾",
     },
-
-    // --- Product list ----
     {
         path: PATHS.PRODUCT_LIST,
         label: "navigation.product_list_label",
         description: "navigation.product_list_desc",
         category: "product",
         isVisible: true,
-        icon: "🛒",
+        icon: "📦",
     },
     {
         path: PATHS.MASTER_ATTRIBUTE_LIST,
@@ -48,27 +46,14 @@ const NavigationMenu = [
         icon: "🏷️",
     },
 
-    // -- Reports
-
     {
         path: PATHS.REPORT,
         label: "navigation.report_label",
         description: "navigation.report_desc",
         category: "report",
         isVisible: true,
-        icon: "📊",
+        icon: "📈",
     },
-
-    // --- System & Info Routes ---
-    {
-        path: PATHS.ABOUT,
-        label: "navigation.about_label",
-        description: "navigation.about_desc",
-        category: "system",
-        isVisible: true,
-        icon: "ℹ️",
-    },
-
 
     {
         path: PATHS.SYSTEM_LOG_LIST,
@@ -78,6 +63,22 @@ const NavigationMenu = [
         isVisible: true,
         icon: "📋",
 
+    },
+    {
+        path: PATHS.PROFILE,
+        label: "navigation.profile_label",
+        description: "navigation.profile_desc",
+        category: "account",
+        isVisible: true,
+        icon: "👤",
+    },
+    {
+        path: PATHS.ABOUT,
+        label: "navigation.about_label",
+        description: "navigation.about_desc",
+        category: "system",
+        isVisible: true,
+        icon: "ℹ️",
     },
     //should on last
     {

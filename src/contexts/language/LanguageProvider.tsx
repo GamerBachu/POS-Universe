@@ -3,71 +3,81 @@ import type { TranslationSchema, TranslationKey } from "./type";
 import LanguageContext from "./LanguageContext";
 import { applicationStorage, LoggerUtils, StorageKeys } from "@/utils";
 import { DEFAULT_LOCALE } from "./languages";
+import enUS from "@/assets/locales/en.json";
+
 
 // Instantiate storage once outside to avoid overhead
 const langStorage = new applicationStorage(StorageKeys.LANGUAGE);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode; }> = ({ children }) => {
-    const [locale, setLocale] = useState<string>(() => langStorage.get() || DEFAULT_LOCALE);
-    const [translations, setTranslations] = useState<TranslationSchema | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const initialLocale = useMemo(() => langStorage.get() || DEFAULT_LOCALE, []);
+
+    const [locale, setLocale] = useState<string>(initialLocale);
+    const [translations, setTranslations] = useState<TranslationSchema | null>(() =>
+        initialLocale === DEFAULT_LOCALE ? (enUS as unknown as TranslationSchema) : null
+    );
+    const [isLoading, setIsLoading] = useState(initialLocale !== DEFAULT_LOCALE);
 
     // Ref tracks the currently active language to skip redundant network requests
-    const activeLangRef = useRef<string | null>(null);
+    const activeLangRef = useRef<string | null>(initialLocale === DEFAULT_LOCALE ? DEFAULT_LOCALE : null);
 
     const loadTranslations = useCallback(async (lang: string) => {
-        if (activeLangRef.current === lang && translations) return;
+        // Prevent redundant loads if the language is already active
+        if (activeLangRef.current === lang) return;
 
         setIsLoading(true);
         try {
-            const data = await import(`@/locales/${lang}.json`) as { default: TranslationSchema; };
+            const data = await import(`@/assets/locales/${lang}.json`) as { default: TranslationSchema; };
 
             setTranslations(data.default);
-            setLocale(lang);
             activeLangRef.current = lang;
             langStorage.set(lang);
         } catch (error) {
+            // Fallback to the statically imported English asset if dynamic loading fails
+            setTranslations(enUS as unknown as TranslationSchema);
+            setLocale(DEFAULT_LOCALE);
+            activeLangRef.current = DEFAULT_LOCALE;
+            langStorage.set(DEFAULT_LOCALE);
             LoggerUtils.logCatch(error, "LanguageProvider", "loadTranslations", lang);
-            // Safety: if a specific file fails, attempt to load the default
-            if (lang !== DEFAULT_LOCALE) {
-                loadTranslations(DEFAULT_LOCALE);
-            }
         } finally {
             setIsLoading(false);
         }
-    }, [translations]);
+    }, []);
 
     useEffect(() => {
         loadTranslations(locale);
     }, [locale, loadTranslations]);
 
-    /**
-     * Optimized 't' function
-     * Replaces 'any' with Record<string, unknown> and strict type narrowing
-     */
-    const t = useCallback((path: TranslationKey): string => {
-        if (!translations) return path;
+    const t = useCallback(
+        (path: TranslationKey): string => {
+            const keys = path.split(".");
 
-        const keys = path.split('.');
-        let result: unknown = translations;
+            const getValue = (obj: unknown): string | undefined => {
+                if (!obj) return undefined;
+                let current: unknown = obj;
+                for (const key of keys) {
+                    if (current && typeof current === "object" && key in current) {
+                        current = (current as Record<string, unknown>)[key];
+                    } else {
+                        break;
+                    }
+                }
+                return typeof current === "string" ? current : undefined;
+            };
 
-        for (const key of keys) {
-            if (result && typeof result === 'object' && key in result) {
-                result = (result as Record<string, unknown>)[key];
-            } else {
-                result = undefined;
-                break;
-            }
-        }
+            // 1. Check primary translations
+            const result = getValue(translations);
+            if (result !== undefined) return result;
 
-        return typeof result === 'string' ? result : path;
-    }, [translations]);
+            // 2. Fallback to English static asset if primary isn't English
+            return (translations !== (enUS as unknown)) ? (getValue(enUS) ?? path) : path;
+        },
+        [translations]
+    );
 
     const changeLanguage = useCallback((lang: string) => {
-        if (lang !== activeLangRef.current) {
-            loadTranslations(lang);
-        }
-    }, [loadTranslations]);
+        setLocale(lang);
+    }, []);
 
     // Memoize the context value to prevent unnecessary re-renders in consumer components
     const contextValue = useMemo(() => ({

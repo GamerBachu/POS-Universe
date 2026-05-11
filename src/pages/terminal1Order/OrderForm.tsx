@@ -10,12 +10,12 @@ import OrderStatusManage from "./OrderStatusManage";
 import CommonLayout from "@/layouts/CommonLayout";
 import PageHeader from "@/components/PageHeader";
 import { PATHS } from "@/routes/paths";
-import Button from "@/components/Button";
 import { LoggerUtils } from "@/utils";
 import OrderStatusLabel from "./OrderStatusLabel";
 import OrderPrint from "./OrderPrint";
 import { calculateRowAmount } from "../terminal1/utils";
 import PrintService from "@/components/PrintService";
+import { Button } from "@/components/button";
 
 const OrderForm = () => {
     const navigate = useNavigate();
@@ -64,12 +64,18 @@ const OrderForm = () => {
         <CommonLayout h1={t("navigation.product_list_label")}>
             <PageHeader
                 subtitle={`${t("pos_t1.order_details_title")}`}
-                btnClass="bg-gray-600 hover:bg-gray-700"
                 btnLabel={t("common.back_page")}
-                onClick={onSendBack}
-            />
+            >
+                <Button
+                    variant="secondary"
+                    onClick={onSendBack}
+                    title={t("common.back_page")}
+                >
+                    {t("common.back_page")}
+                </Button>
+            </PageHeader>
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-               <Loader label={t("common.loading")} />
+                <Loader label={t("common.loading")} />
             </div>
         </CommonLayout>
     );
@@ -80,10 +86,16 @@ const OrderForm = () => {
             <CommonLayout h1={t("navigation.product_list_label")}>
                 <PageHeader
                     subtitle={`${t("pos_t1.order_details_title")}`}
-                    btnClass="bg-gray-600 hover:bg-gray-700"
                     btnLabel={t("common.back_page")}
-                    onClick={onSendBack}
-                />
+                >
+                    <Button
+                        variant="secondary"
+                        onClick={onSendBack}
+                        title={t("common.back_page")}
+                    >
+                        {t("common.back_page")}
+                    </Button>
+                </PageHeader>
                 <div className="p-10 text-center text-red-500 font-bold">
                     {t("common.error")}
                 </div>
@@ -100,10 +112,16 @@ const OrderForm = () => {
 
             <PageHeader
                 subtitle={`${t("pos_t1.order_details_title")} ${order.orderNumber}`}
-                btnClass="bg-gray-600 hover:bg-gray-700"
                 btnLabel={t("common.back_page")}
-                onClick={onSendBack}
-            />
+            >
+                <Button
+                    variant="secondary"
+                    onClick={onSendBack}
+                    title={t("common.back_page")}
+                >
+                    {t("common.back_page")}
+                </Button>
+            </PageHeader>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 {/* Left Column: Items & Billing */}
@@ -207,8 +225,8 @@ const OrderForm = () => {
 
                 </div>
 
-                {/* Right Column: Meta Info */}
-                <div className="space-y-6">
+
+                <div className="space-y-6 mb-4">
                     {/* Order Meta */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div className="p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 font-bold text-xs uppercase ">
@@ -256,32 +274,29 @@ const OrderForm = () => {
                     </div>
 
                     {/* Actions Area */}
-                    <div className="grid grid-cols-2 gap-2 items-stretch">
+                    <div className="grid grid-cols-2 gap-2 ">
                         <Button
-                            type="button"
+                            variant="secondary"
                             onClick={onSendBack}
-                            className="bg-gray-600 hover:bg-gray-700 py-2"
-                            title={t("common.back_page")}
                             isLoading={loading}
+                            title={t("common.back_page")}
                         >
                             {t("common.back_page")}
                         </Button>
                         <Button
-                            type="button"
-                            className="bg-blue-600 hover:bg-blue-700 py-2"
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
-                            title={t("common.print")}
                             isLoading={loading}
+                            title={t("common.print")}
                         >
                             {t("common.print")}
                         </Button>
 
                         <Button
-                            type="button"
+                            variant="primary"
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-green-600 hover:bg-green-700  py-2"
-                            title={t("common.manage_status")}
                             isLoading={loading}
+                            title={t("common.manage_status")}
                         >
                             {t("common.manage_status")}
                         </Button>

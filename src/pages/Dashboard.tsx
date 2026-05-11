@@ -10,7 +10,7 @@ const Dashboard = () => {
     const { t } = useLanguage();
     return (
         <CommonLayout h1={t("navigation.dashboard_label")}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 my-3">
                 <TopSelling></TopSelling>
 
                 <InventoryAlerts></InventoryAlerts>

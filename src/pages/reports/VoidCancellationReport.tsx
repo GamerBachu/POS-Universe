@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { useLanguage } from "@/contexts/language";
-import DatePicker from "@/components/DatePicker";
-import Button from "@/components/Button";
+import { DatePickerWithLabel } from "@/components/input";
+import { Button } from "@/components/button";
 import { PrinterIcon, SearchIcon } from "@/libs/icons";
 import { getTodayDateString, toDisplayString, toISODateString } from "@/utils/helper/dateUtils";
 import { reportApi } from "@/api";
@@ -87,33 +87,36 @@ const VoidCancellationReport = () => {
                         {t("reports.void_cancellation_title")}
                     </h2>
                     <div className="flex items-center gap-2">
-                        <DatePicker
+                        <DatePickerWithLabel
+                            label=""
                             value={fromDate}
                             onChange={(e) => setFromDate(e.target.value)}
-                            classInput="h-9"
                         />
                         <span className="text-gray-400 text-xs">to</span>
-                        <DatePicker
+                        <DatePickerWithLabel
+                            label=""
                             value={toDate}
                             onChange={(e) => setToDate(e.target.value)}
-                            classInput="h-9"
                         />
                         <Button
+                            variant="primary"
                             onClick={fetchData}
-                            className="bg-teal-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
                             disabled={isLoading}
                             isLoading={isLoading}
+                            title={t("common.search")}
+                            className="uppercase"
                         >
-                            <SearchIcon className="w-4 h-4" />
+                            <SearchIcon className="w-5 h-5" />
                             {t("common.search")}
                         </Button>
                         <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
-                            className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase"
                             disabled={!data || isLoading}
-                            isLoading={isLoading}
+                            title={t("common.print")}
+                            className="uppercase"
                         >
-                            <PrinterIcon className="w-4 h-4" />
+                            <PrinterIcon className="w-5 h-5" />
                             {t("common.print")}
                         </Button>
                     </div>
@@ -161,7 +164,7 @@ const VoidCancellationReport = () => {
                                     {isLoading ? (
                                         <tr>
                                             <td colSpan={6} className="py-20 text-center">
-                                               <Loader label={t("common.loading")} />
+                                                <Loader label={t("common.loading")} />
                                             </td>
                                         </tr>
                                     ) : error ? (

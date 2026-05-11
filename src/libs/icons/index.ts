@@ -10,8 +10,16 @@ export { default as PersonCircleIcon } from "./PersonCircleIcon";
 
 export { default as HouseIcon } from "./HouseIcon";
 export { default as UserIcon } from "./PersonCircleIcon";
-export { default as ChevronRightIcon } from "./ChevronRightIcon";
+export { ChevronRightIcon } from "./ChevronRightIcon";
+export { ChevronLeftIcon } from "./ChevronLeftIcon";
 export { default as FilterIcon } from "./FilterIcon";
 export { default as CalendarIcon } from "./CalendarIcon";
 export { default as PrinterIcon } from "./PrinterIcon";
+export { default as LockedIcon } from "./LockedIcon";
+export { default as SpinnerIcon } from "./Spinner";
+export { DoubleArrowRightIcon } from "./DoubleArrowRightIcon";
+export { MoonIcon } from "./MoonIcon";
+export { SunIcon } from "./SunIcon";
+
+
 

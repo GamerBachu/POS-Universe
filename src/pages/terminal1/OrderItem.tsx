@@ -4,6 +4,8 @@ import { useTerminalDispatch } from "./TerminalContext";
 import { calculateFinalPrice } from "@/utils/financial";
 import PlusIcon from "@/libs/icons/PlusIcon";
 import { MinusIcon } from "@/libs/icons";
+import { OutlineButton } from "@/components/button";
+import { useLanguage } from "@/contexts/language";
 
 
 type OrderItemProps = {
@@ -12,7 +14,7 @@ type OrderItemProps = {
 
 const OrderItem = ({ item }: OrderItemProps) => {
     const dispatch = useTerminalDispatch();
-
+    const { t } = useLanguage();
     const handleIncrement = () => {
         dispatch({
             type: "ADD_ITEM",
@@ -51,24 +53,29 @@ const OrderItem = ({ item }: OrderItemProps) => {
             <td className="py-2 px-1">
                 <div className="flex items-center justify-center gap-1.5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-lg w-fit mx-auto">
                     {/* Minus Button */}
-                    <button
+                    <OutlineButton
+                        variant="secondary"
                         onClick={handleDecrement}
-                        className="w-6 h-6 rounded-md flex items-center justify-center bg-white dark:bg-gray-600 shadow-sm border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-200 hover:text-red-500 hover:border-red-200 dark:hover:text-red-400 transition-all active:scale-90"
+                        className="w-5 h-5 hover:text-red-500 hover:border-red-200 dark:hover:text-red-400"
+                        icon={<MinusIcon className="w-3 h-3" />}
+                        title={t("common.remove")}
                     >
-                        <MinusIcon className="w-3 h-3" />
-                    </button>
+                    </OutlineButton>
 
                     <span className="w-6 text-center font-black text-sm text-gray-700 dark:text-gray-200">
                         {item.quantity}
                     </span>
 
                     {/* Plus Button */}
-                    <button
+                    <OutlineButton
+                        variant="primary"
                         onClick={handleIncrement}
-                        className="w-6 h-6 rounded-md flex items-center justify-center bg-teal-600 shadow-sm text-white hover:bg-teal-700 transition-all active:scale-90"
+                        className="w-5 h-5"
+                        icon={<PlusIcon className="w-3 h-3" />}
+                        title={t("common.add")}
                     >
-                        <PlusIcon className="w-3 h-3" />
-                    </button>
+
+                    </OutlineButton>
                 </div>
             </td>
 

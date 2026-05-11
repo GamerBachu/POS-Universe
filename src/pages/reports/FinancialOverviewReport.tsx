@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useLanguage } from "@/contexts/language";
-import DatePicker from "@/components/DatePicker";
-import Button from "@/components/Button";
+import { DatePickerWithLabel } from "@/components/input";
+import { Button } from "@/components/button";
 import { PrinterIcon, SearchIcon } from "@/libs/icons";
 import { getTodayDateString, toISODateString } from "@/utils/helper/dateUtils";
 import { reportApi } from "@/api";
@@ -66,34 +66,39 @@ const FinancialOverviewReport = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <DatePicker
+                        <DatePickerWithLabel
+                            label=""
                             value={fromDate}
                             onChange={(e) => setFromDate(e.target.value)}
-                            classInput="h-9"
+
                         />
                         <span className="text-gray-400 text-[10px] uppercase font-bold">
                             to
                         </span>
-                        <DatePicker
+                        <DatePickerWithLabel
+                            label=""
                             value={toDate}
                             onChange={(e) => setToDate(e.target.value)}
-                            classInput="h-9"
                         />
                         <Button
+                            variant="primary"
                             onClick={fetchData}
-                            className="bg-teal-600 h-9 px-4 gap-2 text-xs font-bold uppercase transition-all active:scale-95"
                             disabled={isLoading}
                             isLoading={isLoading}
+                            title={t("common.search")}
+                            className="uppercase"
                         >
-                            <SearchIcon className="w-4 h-4" />
+                            <SearchIcon className="w-5 h-5" />
                             {t("common.search")}
                         </Button>
                         <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
-                            className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase transition-all"
                             disabled={!data || isLoading}
+                            title={t("common.print")}
+                            className="uppercase"
                         >
-                            <PrinterIcon className="w-4 h-4" />
+                            <PrinterIcon className="w-5 h-5" />
                             {t("common.print")}
                         </Button>
                     </div>
@@ -103,7 +108,7 @@ const FinancialOverviewReport = () => {
             <div ref={printDiv} className="flex-1 flex flex-col overflow-auto">
                 {isLoading ? (
                     <div className="py-20 flex justify-center">
-                       <Loader label={t("common.loading")} />
+                        <Loader label={t("common.loading")} />
                     </div>
                 ) : error ? (
                     <div className="py-20 text-center text-gray-400 text-xs uppercase font-bold">

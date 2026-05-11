@@ -4,6 +4,7 @@ import { PATHS } from "@/routes/paths";
 import { useNavigate } from "react-router-dom";
 import ProductTable from "./ProductTable";
 import PageHeader from "@/components/PageHeader";
+import { Button } from "@/components/button";
 
 const ProductList: React.FC = () => {
   const navigate = useNavigate();
@@ -12,12 +13,17 @@ const ProductList: React.FC = () => {
     <CommonLayout h1={t("navigation.product_list_label")}>
 
       <PageHeader
-        subtitle={undefined}
-        btnClass="bg-green-600 hover:bg-green-700"
+        subtitle={t("navigation.product_list_label")}
         btnLabel={t("common.addNew")}
-        onClick={() => navigate(PATHS.PRODUCT_ADD + "/0")}
-      />
-
+      >
+        <Button
+          variant="info"
+          onClick={() => navigate(PATHS.PRODUCT_ADD + "/0")}
+          title={t("common.addNew")}
+        >
+          {t("common.addNew")}
+        </Button>
+      </PageHeader>
       <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
         <ProductTable />
       </div>

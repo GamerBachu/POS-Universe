@@ -1,5 +1,5 @@
 import { useActionState, useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 
 import { masterProductAttributeApi } from "@/api";
 import { type IMasterProductAttribute } from "@/types/masters";
@@ -9,9 +9,10 @@ import { PATHS } from "@/routes/paths";
 import LoggerUtils from "@/utils/logger";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
 import PageHeader from "@/components/PageHeader";
-import Button from "@/components/Button";
 import { useLanguage } from "@/contexts/language";
-
+import { TextBoxWithLabel } from "@/components/input";
+import { Button } from "@/components/button";
+import RadioActiveToggle from "@/components/RadioActiveToggle";
 
 const AttributeForm = () => {
   // Directly extract and normalize params
@@ -28,16 +29,13 @@ const AttributeForm = () => {
     name: "",
   });
 
-  const onSendBack = useCallback(
-    () => {
-      if (window.history.length > 1 && window.history.state?.idx > 0) {
-        navigate(-1);
-      } else {
-        navigate(PATHS.MASTER_ATTRIBUTE_LIST);
-      }
-    },
-    [navigate],
-  );
+  const onSendBack = useCallback(() => {
+    if (window.history.length > 1 && window.history.state?.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate(PATHS.MASTER_ATTRIBUTE_LIST);
+    }
+  }, [navigate]);
 
   useEffect(() => {
     // Validate ID and Action early
@@ -101,7 +99,6 @@ const AttributeForm = () => {
           ? await masterProductAttributeApi.update(id, payload)
           : await masterProductAttributeApi.add(payload);
 
-
       if (response.status === 400) {
         return {
           success: false,
@@ -115,14 +112,21 @@ const AttributeForm = () => {
         };
       }
 
-      if ((response.status === 200 || response.status === 201) && response.success) {
+      if (
+        (response.status === 200 || response.status === 201) &&
+        response.success
+      ) {
         setInitialData(payload);
         return { success: true, message: t("common.success_save") };
       }
       // Handle errors
 
-
-      LoggerUtils.logError(response, "AttributeForm", "handleAction", JSON.stringify(payload));
+      LoggerUtils.logError(
+        response,
+        "AttributeForm",
+        "handleAction",
+        JSON.stringify(payload),
+      );
       return {
         success: false,
         message: t("common.error"),
@@ -140,102 +144,82 @@ const AttributeForm = () => {
 
   const isReadOnly = action === "view" || action === "delete";
 
-  // useEffect(() => {
-
-  //   const d = new SeedData();
-  //   d.masterProductAttribute.forEach(item => {
-  //     masterProductAttributeApi.add({
-  //       name: item.name,
-  //       isActive: true
-  //     });
-  //   });
-
-  // }, []);
-
+  console.log(action, data);
 
   return (
     <CommonLayout h1={t("navigation.master_pro__attr_label")}>
-
-      < PageHeader
+      <PageHeader
         subtitle={`${action} ${t("navigation.master_pro__attr_label")}`}
-        btnClass="bg-gray-600 hover:bg-gray-700"
         btnLabel={t("common.back_page")}
-        onClick={onSendBack}
-      />
+      >
+        <Button
+          variant="secondary"
+          onClick={onSendBack}
+          title={t("common.back_page")}
+        >
+          {t("common.back_page")}
+        </Button>
+      </PageHeader>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <form
           key={initialData.id}
           action={formAction}
-          className="p-3 space-y-3">
+          className="p-3 space-y-3"
+        >
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {t("common.name")}
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
-                required
-                type="text"
+              <TextBoxWithLabel
+                label={t("common.name")}
                 name="name"
-                disabled={isReadOnly}
+                required
+                disabled={isReadOnly || isPending}
                 defaultValue={initialData.name}
                 key={`name-${initialData.name}`}
                 placeholder={t("common.ph_name")}
-                className="w-full px-3 py-2 text-sm border rounded bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-blue-500 outline-none disabled:opacity-60 transition-all"
               />
             </div>
-            <label
-              htmlFor="isActive"
-              className={`flex items-center justify-between p-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 ${!isReadOnly ? 'cursor-pointer' : ''}`}
-            >
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                  {t("common.active")}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {t("mst_product_attribute.toggle_active")}
-                </span>
-              </div>
 
-              <div className="relative inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  name="isActive"
-                  disabled={isReadOnly}
-                  defaultChecked={initialData.isActive}
-                  key={`active-${initialData.isActive}`}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 rounded-full peer bg-red-200 dark:bg-red-900/40 peer-checked:bg-green-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none disabled:opacity-50"></div>
-              </div>
-            </label>
+            <RadioActiveToggle
+              isActive={initialData.isActive}
+              isReadOnly={isReadOnly}
+              title={t("common.active")}
+              desc={t("mst_product_attribute.toggle_active")}
+              name="isActive"
+            />
           </div>
-          {(state?.success === true) && <AlertSuccess message={state?.message} />}
-          {(state?.success === false) && <AlertError message={state?.message} />}
+          {state?.success === true && <AlertSuccess message={state?.message} />}
+          {state?.success === false && <AlertError message={state?.message} />}
 
           <div className="flex items-center justify-end gap-2 pt-4 border-t dark:border-gray-700">
-            <Button
-              type="button"
-              onClick={onSendBack}
-              className="bg-gray-600 hover:bg-gray-700"
-            >
+            <Button variant="secondary" onClick={onSendBack}>
               {t("common.back_page")}
             </Button>
-            {action !== "view" && (
+            {action === "delete" && (
               <Button
-                type="submit"
+                variant="danger"
                 disabled={isPending}
-                className={`${action === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"} disabled:opacity-50 `}
+                title={t("common.delete")}
+                type="submit"
               >
-                {isPending ? "..." : action === "delete" ? t("common.delete") : t("common.save")}
+                {t("common.delete")}
+              </Button>
+            )}
+
+            {(action === "edit" || action === "add") && (
+              <Button
+                variant="primary"
+                disabled={isPending}
+                title={t("common.save")}
+                type="submit"
+              >
+                {t("common.save")}
               </Button>
             )}
           </div>
         </form>
-      </div >
-    </CommonLayout >
+      </div>
+    </CommonLayout>
   );
 };
 

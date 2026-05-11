@@ -10,9 +10,9 @@ import {
     SearchIcon,
 } from "@/libs/icons";
 import { useLanguage } from "@/contexts/language";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import InputWithLabel from "@/components/InputWithLabel";
+import { TextBoxWithLabel } from "@/components/input";
+
+import { Button, OutlineButton } from "@/components/button";
 
 type ProductSearchProps = {
     inputCode: string;
@@ -34,9 +34,9 @@ const ProductSearch = ({
     const { t } = useLanguage();
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
-    // The search is considered "active" (isSearching) if the current filter
+    // The search is considered "active" (isFilterApply) if the current filter
     // differs from the initial default state.
-    const isSearching = !isInitialFilter(filter);
+    const isFilterApply = !isInitialFilter(filter);
 
     return (
         <>
@@ -44,59 +44,54 @@ const ProductSearch = ({
                 <div className="flex items-center gap-1.5">
                     {/* 1. Search Input Container */}
                     <div className="relative flex-1 group">
-                        <Input
-                            type="text"
+                        <TextBoxWithLabel
+                            label=""
                             placeholder={t("pos_t1.ph_search_item")}
                             value={inputCode}
                             onChange={(e) => onInputType(e.target.value)}
-                            className="w-full pr-9 py-2 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-1 focus:ring-teal-500"
                         />
                         {inputCode && (
-                            <button
-                                type="button"
+                            <OutlineButton
+                                variant="danger"
                                 onClick={() => onInputType("")}
-                                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 transition-all active:scale-90"
-                            >
-                                <CloseIcon className="w-3.5 h-3.5" />
-                            </button>
+                                icon={<CloseIcon className="w-3 h-3" />}
+                                className="border-none w-fit p-2 hover:bg-transparent absolute right-1 top-1/2 -translate-y-1/2"
+                                title={t("common.clear")}
+                            ></OutlineButton>
                         )}
                     </div>
 
                     <div className="flex items-center gap-1">
-                        {/* Search Button with Pulse Indicator */}
-                        <button
-                            type="button"
-                            className={`relative flex items-center justify-center w-9 h-9 border rounded transition-all active:scale-90 shadow-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500`}
-                        >
-                            <SearchIcon className="w-4 h-4" />
-                        </button>
+                        <OutlineButton
+                            variant="secondary"
+                            icon={<SearchIcon className="w-4 h-4" />}
+                            title={t("common.search")}
+                        ></OutlineButton>
 
-                        {/* Filter Toggle Button */}
-                        <button
+                        <OutlineButton
+                            variant="secondary"
                             onClick={() => setShowFilter(!showFilter)}
-                            type="button"
-                            className={`relative flex items-center justify-center w-9 h-9 border rounded transition-all active:scale-90 shadow-sm ${showFilter
-                                ? "border-teal-600 text-white"
-                                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500"
-                                }`}
+                            icon={<FilterIcon className="w-4 h-4" />}
+                            title={t("common.filter")}
                         >
-                            <FilterIcon className="w-4 h-4" />
-                            {isSearching && (
+                            {isFilterApply && (
                                 <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-teal-500 animate-pulse border border-white dark:border-gray-800" />
                             )}
-                        </button>
+                        </OutlineButton>
                     </div>
                 </div>
             </div>
 
             {/* Transition Wrapper */}
             <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/10 ${showFilter ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 pointer-events-none border-none"
+                className={`overflow-hidden transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/10 ${showFilter
+                    ? "max-h-[500px] opacity-100"
+                    : "max-h-0 opacity-0 pointer-events-none border-none"
                     }`}
             >
-                <div className="p-3 space-y-3">
-                    <InputWithLabel
-                        label={t("product_inventory.name")}
+                <div className="p-2 space-y-2">
+                    <TextBoxWithLabel
+                        label=""
                         value={filter.name ?? ""}
                         name="name"
                         placeholder={t("product_inventory.ph_name")}
@@ -104,30 +99,30 @@ const ProductSearch = ({
                     />
 
                     <div className="grid grid-cols-2 gap-2">
-                        <InputWithLabel
-                            label={t("product_inventory.sku")}
+                        <TextBoxWithLabel
+                            label=""
                             value={filter.sku ?? ""}
                             name="sku"
-                            placeholder={t("product_inventory.ph_sku")}
+                            placeholder={t("product_inventory.sku")}
                             onChange={(e) => setFilter({ ...filter, sku: e.target.value })}
                         />
 
-                        <InputWithLabel
-                            label={t("product_inventory.barcode")}
+                        <TextBoxWithLabel
+                            label=""
                             value={filter.barcode ?? ""}
                             name="barcode"
-                            placeholder={t("product_inventory.ph_barcode")}
-                            onChange={(e) => setFilter({ ...filter, barcode: e.target.value })}
+                            placeholder={t("product_inventory.barcode")}
+                            onChange={(e) =>
+                                setFilter({ ...filter, barcode: e.target.value })
+                            }
                         />
                     </div>
 
-                    <InputWithLabel
-                        label={t("product_inventory.selling_price")}
+                    <TextBoxWithLabel
+                        label=""
                         value={filter.sellingPrice ?? ""}
                         name="sellingPrice"
                         placeholder={t("product_inventory.selling_price")}
-                        classBox=""
-                        required={true}
                         type="number"
                         onChange={(e) =>
                             setFilter({
@@ -142,14 +137,16 @@ const ProductSearch = ({
 
                     <div className="flex gap-2 justify-end pt-1">
                         <Button
+                            variant="secondary"
                             onClick={resetFilter}
-                            className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 py-1.5 px-4 text-xs font-bold uppercase"
+                            title={t("common.reset")}
                         >
                             {t("common.reset")}
                         </Button>
                         <Button
+                            variant="primary"
                             onClick={() => setShowFilter(false)}
-                            className="bg-teal-600 hover:bg-teal-700 py-1.5 px-6 text-xs font-bold uppercase"
+                            title={t("common.save")}
                         >
                             {t("common.search")}
                         </Button>

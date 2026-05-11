@@ -1,5 +1,7 @@
 import { CloseIcon } from "@/libs/icons";
 import React, { useEffect, useRef, useCallback } from "react";
+import { OutlineButton } from "./button";
+import { useLanguage } from "@/contexts/language";
 
 type ModalProps = {
     id?: string;
@@ -16,6 +18,7 @@ const Modal: React.FC<ModalProps> = ({
     title,
     onClose,
 }) => {
+    const { t } = useLanguage();
     const modalRef = useRef<HTMLDivElement>(null);
 
     // Memoize close function to prevent unnecessary re-renders
@@ -76,14 +79,14 @@ const Modal: React.FC<ModalProps> = ({
                         </h3>
                     </div>
                     {onClose && (
-                        <button
-                            type="button"
+                        <OutlineButton
+                            variant="danger"
                             onClick={handleClose}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                            aria-label="Close modal"
+                            icon={<CloseIcon className="w-3 h-3" />}
+                            className=""
+                            title={t("common.close")}
                         >
-                            <CloseIcon className="w-4 h-4" />
-                        </button>
+                        </OutlineButton>
                     )}
                 </div>
                 <div className="relative">

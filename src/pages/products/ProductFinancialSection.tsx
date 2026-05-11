@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputWithLabel from "@/components/InputWithLabel";
+import { TextBoxWithLabel } from "@/components/input";
 import { useLanguage } from "@/contexts/language";
 import type { IProduct } from "@/types/product";
 import { calculateFinalPrice } from "@/utils/financial";
@@ -24,7 +24,10 @@ export const ProductFinancialSection: React.FC<
     value: string,
   ) => {
     const val = parseFloat(value);
-    setRunningPrice((prev) => ({ ...prev, [field]: isNaN(val) ? 0 : Math.max(0, val) }));
+    setRunningPrice((prev) => ({
+      ...prev,
+      [field]: isNaN(val) ? 0 : Math.max(0, val),
+    }));
   };
 
   const currentFinalPrice = calculateFinalPrice({
@@ -34,64 +37,59 @@ export const ProductFinancialSection: React.FC<
     taxRate: runningPrice.taxRate,
   });
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 items-end">
-      <InputWithLabel
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4">
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.cost_price")}
         defaultValue={item.costPrice}
         name="costPrice"
         placeholder={t("product_inventory.cost_price")}
-        classBox=""
         required={true}
         type="number"
       />
 
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.selling_price")}
         value={runningPrice.sellingPrice}
         name="sellingPrice"
         placeholder={t("product_inventory.selling_price")}
-        classBox=""
         required={true}
         type="number"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handlePriceChange("sellingPrice", e.target.value)
         }
       />
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.discount_in_percent")}
         value={runningPrice.discountInPercent}
         name="discountInPercent"
         placeholder={t("product_inventory.ph_discount_in_percent")}
-        classBox=""
         required={true}
         type="number"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handlePriceChange("discountInPercent", e.target.value)
         }
       />
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.tax_rate")}
         value={runningPrice.taxRate}
         name="taxRate"
         placeholder={t("product_inventory.tax_rate")}
-        classBox=""
         required={true}
         type="number"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handlePriceChange("taxRate", e.target.value)
         }
       />
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={true}
         label={`${t("product_inventory.final_price")} ( ${t("product_inventory.ph_final_price_tc")} )`}
         value={currentFinalPrice}
         name="finalPrice"
         placeholder={t("product_inventory.ph_final_price")}
-        classBox=""
         required={false}
         type="text"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -99,24 +97,22 @@ export const ProductFinancialSection: React.FC<
         }
       />
 
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.stock")}
         defaultValue={item.stock}
         name="stock"
         placeholder={t("product_inventory.stock")}
-        classBox=""
         required={true}
         type="number"
       />
 
-      <InputWithLabel
+      <TextBoxWithLabel
         readOnly={isReadOnly}
         label={t("product_inventory.reorder_level")}
         defaultValue={item.reorderLevel}
         name="reorderLevel"
         placeholder={t("product_inventory.stock")}
-        classBox=""
         required={true}
         type="number"
       />

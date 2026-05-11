@@ -8,7 +8,8 @@ import AppVersion from "./AppVersion";
 import useSideBar from "@/hooks/useSideBar";
 import SideBarToggle from "./SideBarToggle";
 import { CloseIcon } from "@/libs/icons";
-import Input from "./Input";
+import { TextBox } from "./input";
+import { OutlineButton } from "./button";
 
 const SideBar = () => {
   const { t } = useLanguage();
@@ -63,8 +64,7 @@ const SideBar = () => {
             <SideBarToggle isMinimized={isMinimized} onClick={minimizeWindow} />
           </div>
           <div className="relative group mt-3">
-            <Input
-              type="text"
+            <TextBox
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t("sidebar.ph_search_menu")}
@@ -72,13 +72,14 @@ const SideBar = () => {
             />
             <div className="absolute right-0 top-0 h-full w-9 flex items-center justify-center">
               {searchTerm ? (
-                <button
-                  type="button"
+                <OutlineButton
+                  variant="danger"
                   onClick={() => setSearchTerm("")}
-                  className="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all active:scale-90"
+                  icon={<CloseIcon className="w-3 h-3" />}
+                  className="border-none w-fit p-2 hover:bg-transparent flex items-center justify-center w-6 h-6"
+                  title={t("common.clear")}
                 >
-                  <CloseIcon className="w-3 h-3" />
-                </button>
+                </OutlineButton>
               ) : (
                 <span className="text-[9px] font-bold text-gray-300 dark:text-gray-600 pointer-events-none group-hover:opacity-0 transition-opacity">
                   {t("common.esc")}

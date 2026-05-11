@@ -1,4 +1,4 @@
-import TextArea from "@/components/TextArea";
+import { TextAreaWithLabel } from "@/components/input";
 import { useLanguage } from "@/contexts/language";
 import type { IProductDescription } from "@/types/product";
 
@@ -13,11 +13,9 @@ const ProductDescriptionSection: React.FC<ProductDescriptionSectionProps> = ({
 }) => {
     const { t } = useLanguage();
     return (
-        <div>
-            <label className="text-xs font-bold uppercase text-gray-500" >
-                {t("product_inventory.description")}
-            </label>
-            <TextArea
+        <div className="mt-4">
+            <TextAreaWithLabel
+                label={t("product_inventory.description")}
                 name="descContent"
                 defaultValue={descriptionItem.description || ""}
                 disabled={isReadOnly}

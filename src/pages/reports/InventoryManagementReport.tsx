@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { useLanguage } from "@/contexts/language";
-import Button from "@/components/Button";
-import { PrinterIcon, SearchIcon } from "@/libs/icons";
 import { reportApi } from "@/api";
 import { LoggerUtils } from "@/utils";
 import SummaryCard from "@/components/SummaryCard";
@@ -9,6 +7,8 @@ import type { IProduct } from "@/types/product";
 import Loader from "@/components/Loader";
 import PrintService from "@/components/PrintService";
 import InventoryStatus from "@/components/badge/InventoryStatus";
+import { TextBox } from "@/components/input";
+import { Button } from "@/components/button";
 
 const InventoryManagementReport = () => {
     const { t } = useLanguage();
@@ -82,26 +82,22 @@ const InventoryManagementReport = () => {
                             {t("reports.inventory_management_desc")}
                         </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="relative">
-                            <SearchIcon className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder={t("common.search")}
-                                className="pl-9 pr-3 h-9 text-xs border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 focus:ring-1 focus:ring-teal-500 outline-none w-48 md:w-64 transition-all"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
+                    <div className="flex gap-2">
+                        <TextBox
+                            placeholder={t("common.search")}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                         <Button
+                            variant="indigo"
                             onClick={() => setIsPrinting(true)}
-                            className="bg-gray-600 h-9 px-4 gap-2 text-xs font-bold uppercase transition-all active:scale-95"
                             disabled={isLoading || data.length === 0}
+                            title={t("common.print")}
                         >
-                            <PrinterIcon className="w-4 h-4" />
-                            {t("common.print")}
+                            <span>{t("common.print")}</span>
                         </Button>
                     </div>
+
                 </div>
             </div>
 

@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/authorize';
 import { reportApi } from '@/api';
 import { LoggerUtils } from '@/utils';
 import FloatingAlert from '@/components/FloatingAlert';
-import ChevronRightIcon from '@/libs/icons/ChevronRightIcon';
+import { ChevronRightIcon } from '@/libs/icons/ChevronRightIcon';
 import type { IReport } from '@/types/reports';
 
 const Report = () => {
@@ -30,7 +30,7 @@ const Report = () => {
         try {
             setIsLoading(true);
             const response = await reportApi.getReports(userId);
-           
+
             if (response.success && Array.isArray(response.data)) {
                 setReports(response.data);
             } else {
@@ -50,7 +50,7 @@ const Report = () => {
 
     return (
         <CommonLayout h1={t("navigation.report_label")}>
-            <div className="p-6 max-w-6xl mx-auto">
+            <div className="py-3 max-w-6xl mx-auto">
                 {error && (
                     <FloatingAlert
                         type="error"
@@ -60,18 +60,18 @@ const Report = () => {
                 )}
 
                 {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="h-36 bg-white dark:bg-gray-800 animate-pulse rounded-md border border-gray-100 dark:border-gray-700" />
                         ))}
                     </div>
                 ) : reports.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {reports.map((report) => (
                             <button
                                 key={report.id}
                                 onClick={() => navigate(`/report/${report.version}/${report.url}`)}
-                                className="group flex flex-col text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-5 transition-colors hover:border-teal-500 active:scale-[0.98] shadow-sm hover:shadow-md"
+                                className="group flex flex-col text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-5 transition-colors hover:border-teal-500 active:scale-95 shadow-sm hover:shadow-md"
                             >
                                 <div className="flex justify-between items-start mb-3">
                                     <h2 className="text-sm font-black uppercase tracking-tight text-gray-700 dark:text-gray-200 group-hover:text-teal-600 transition-colors">

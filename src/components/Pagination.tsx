@@ -1,5 +1,6 @@
 import React from "react";
 import { useLanguage } from "@/contexts/language";
+import { OutlineButton } from "./button";
 
 
 interface PaginationProps {
@@ -43,8 +44,8 @@ const Pagination: React.FC<PaginationProps> = ({
 
 
     return (
-        <div className="flex items-center justify-between px-1 py-2">
-            <span className="text-xs font-mono text-gray-500">
+        <div className="flex items-center justify-between px-2 py-2">
+            <span className="text-sm font-mono text-gray-500">
                 {formatString(
                     t("common.pagination_info"),
                     (currentPage - 1) * pageSize + 1,
@@ -53,20 +54,22 @@ const Pagination: React.FC<PaginationProps> = ({
                 )}
             </span>
             <div className="flex gap-2">
-                <button
+                <OutlineButton
+                    variant="neutral"
                     disabled={currentPage === 1 || isLoading}
                     onClick={handlePrevious}
-                    className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
+                    title={t("common.previous")}
                 >
                     {t("common.previous")}
-                </button>
-                <button
+                </OutlineButton>
+                <OutlineButton
+                    variant="neutral"
                     disabled={currentPage === totalPages || isLoading}
                     onClick={handleNext}
-                    className="border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-1 rounded text-xs font-bold uppercase disabled:opacity-30 transition-all"
+                    title={t("common.next")}
                 >
                     {t("common.next")}
-                </button>
+                </OutlineButton>
             </div>
         </div>
     );

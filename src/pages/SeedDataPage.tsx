@@ -1,10 +1,10 @@
 import { productApi, reportApi } from "@/api";
 import { AlertError, AlertSuccess } from "@/components/ActionStatusMessage";
-import Button from "@/components/Button";
+import { Button } from "@/components/button";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import db from "@/libs/db/appDb";
-import SeedData, { masterProductData, reportSeedData } from "@/libs/db/seedData";
+import SeedData, { masterProductData, reportSeedData, rolesSeedData } from "@/libs/db/seedData";
 import type { IProduct } from "@/types/product";
 
 import { LoggerUtils } from "@/utils";
@@ -181,6 +181,23 @@ const SeedDataPage = () => {
         }
     };
 
+
+    const handleAddRoleData = async () => {
+        setProcessing(true);
+        setSuccessMsg(null);
+        setErrorMsg(null);
+        try {
+            await db.roles.bulkAdd(rolesSeedData);
+            setSuccessMsg("Successfully added role data.");
+        } catch (err) {
+            LoggerUtils.logCatch(err, "SeedDataPage", "AddRoleData");
+            setErrorMsg("A system error occurred during role data addition.");
+        } finally {
+            setProcessing(false);
+        }
+    };
+
+
     return (
         <div className="fixed inset-0 flex overflow-hidden">
             <SideBar />
@@ -195,10 +212,11 @@ const SeedDataPage = () => {
                         </h2>
 
                         <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleAddMasterAttributeData}
-                            className="bg-blue-600 hover:bg-blue-700 w-full justify-center"
+
                         >
                             {processing ? "Adding Data..." : "Add Master Attribute Data"}
                         </Button>
@@ -210,10 +228,11 @@ const SeedDataPage = () => {
                         </h2>
 
                         <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleProductData}
-                            className="bg-blue-600 hover:bg-blue-700 w-full justify-center"
+
                         >
                             {processing ? "Adding Data..." : "Add Product Data"}
                         </Button>
@@ -226,14 +245,36 @@ const SeedDataPage = () => {
                         </h2>
 
                         <Button
+                            variant="primary"
                             isLoading={processing}
                             disabled={processing}
                             onClick={handleAddReportData}
-                            className="bg-blue-600 hover:bg-blue-700 w-full justify-center"
+
                         >
                             {processing ? "Adding Data..." : "Add Report Data"}
                         </Button>
                     </div>
+
+
+
+
+                    <div className="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm max-w-md">
+                        <h2 className="text-[10px] font-black uppercase text-gray-400 mb-3 tracking-tight">
+                            Master Data Tools - add Roles
+                        </h2>
+
+                        <Button
+                            variant="primary"
+                            isLoading={processing}
+                            disabled={processing}
+                            onClick={handleAddRoleData}
+
+                        >
+                            {processing ? "Adding Data..." : "Add Role Data"}
+                        </Button>
+                    </div>
+
+
                     <div className="max-w-md space-y-2">
                         {successMsg && <AlertSuccess message={successMsg} />}
                         {errorMsg && <AlertError message={errorMsg} />}

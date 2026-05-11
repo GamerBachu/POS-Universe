@@ -22,6 +22,7 @@ import OrderList from "@/pages/terminal1Order/OrderList";
 import OrderForm from "@/pages/terminal1Order/OrderForm";
 import Report from "@/pages/reports/Report";
 import DynamicReportPage from "@/pages/reports/DynamicReportPage";
+import UserProfilePage from "@/pages/account/UserProfilePage";
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
                     { path: "home", element: <HomePage /> },
                     { path: "about", element: <AboutPage /> },
                     { path: "dashboard", element: <Dashboard /> },
+                    { path: "config/seed-data", element: <SeedDataPage /> },
                 ],
             },
 
@@ -99,6 +101,15 @@ export const router = createBrowserRouter([
                 ],
             },
 
+            {
+                path: "secure/profile",
+                element: <ProtectedRoute />,
+                children: [
+                    { index: true, element: <UserProfilePage /> },
+                ],
+            },
+
+
             // Grouped Account Routes
             {
                 path: "account",
@@ -115,8 +126,7 @@ export const router = createBrowserRouter([
             { path: "error", element: <ErrorPage /> },
             { path: "*", element: <NotFoundPage /> },
 
-            // app configuration page
-            { path: "config/seed-data", element: <SeedDataPage /> },
+
         ],
     },
 ]);
