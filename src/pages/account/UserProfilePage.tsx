@@ -16,13 +16,14 @@ import {
 import UserProfileEditModal from "./UserProfileEditModal";
 
 import UserPasswordChangeModal from "./UserPasswordChangeModal";
-import { Button } from "@/components/button";
+import { Button, OutlineButton } from "@/components/button";
 import { ReadOnlyWithLabel } from "@/components/input";
-
+import { useNavigate } from "react-router-dom";
 
 const UserProfilePage = () => {
     const { t } = useLanguage();
     const auth = useAuth();
+    const navigate = useNavigate();
 
     // UI State
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -189,13 +190,25 @@ const UserProfilePage = () => {
                                     <div className="space-y-1">
                                         <ReadOnlyWithLabel
                                             label={t("profile.dob")}
-                                            value={data?.profile?.dateOfBirth ? toDisplayStringWithoutTime(data.profile.dateOfBirth) : "-"}
+                                            value={
+                                                data?.profile?.dateOfBirth
+                                                    ? toDisplayStringWithoutTime(data.profile.dateOfBirth)
+                                                    : "-"
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-1">
                                         <ReadOnlyWithLabel
                                             label={t("profile.gender")}
-                                            value={data?.profile?.gender ? t(`profile.gender_${data.profile.gender.toLowerCase()}` as Parameters<typeof t>[0]) : "-"}
+                                            value={
+                                                data?.profile?.gender
+                                                    ? t(
+                                                        `profile.gender_${data.profile.gender.toLowerCase()}` as Parameters<
+                                                            typeof t
+                                                        >[0],
+                                                    )
+                                                    : "-"
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-1">
@@ -207,14 +220,18 @@ const UserProfilePage = () => {
                                     <div className="space-y-1 md:col-span-2 lg:col-span-3">
                                         <ReadOnlyWithLabel
                                             label={t("profile.address")}
-                                            value={[
-                                                data?.profile?.addressLine1,
-                                                data?.profile?.addressLine2,
-                                                data?.profile?.city,
-                                                data?.profile?.state,
-                                                data?.profile?.postalCode,
-                                                data?.profile?.country,
-                                            ].filter(Boolean).join(", ") || "-"}
+                                            value={
+                                                [
+                                                    data?.profile?.addressLine1,
+                                                    data?.profile?.addressLine2,
+                                                    data?.profile?.city,
+                                                    data?.profile?.state,
+                                                    data?.profile?.postalCode,
+                                                    data?.profile?.country,
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(", ") || "-"
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -227,9 +244,11 @@ const UserProfilePage = () => {
                                     <div className="space-y-1">
                                         <ReadOnlyWithLabel
                                             label={t("profile.last_login")}
-                                            value={data?.security?.lastLoginDate
-                                                ? ` ${toDisplayString(data.security.lastLoginDate)} from ${data.security.lastLoginIp}`
-                                                : t("profile.no_login_history")}
+                                            value={
+                                                data?.security?.lastLoginDate
+                                                    ? ` ${toDisplayString(data.security.lastLoginDate)} from ${data.security.lastLoginIp}`
+                                                    : t("profile.no_login_history")
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-1 w-[180px]">
@@ -242,6 +261,14 @@ const UserProfilePage = () => {
                                             {t("profile.updatePassword")}
                                         </Button>
                                     </div>
+                                    <div className="space-y-1 w-[180px]">
+                                        <OutlineButton
+                                            variant="info"
+                                            onClick={() => navigate("/config/seed-data")}
+                                        >
+                                            App Configuration
+                                        </OutlineButton>
+                                    </div>
                                 </div>
                             </section>
                         </div>
@@ -253,21 +280,27 @@ const UserProfilePage = () => {
 
                                 <div className="space-y-5">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs font-bold">{t("profile.theme")}</span>
+                                        <span className="text-xs font-bold">
+                                            {t("profile.theme")}
+                                        </span>
                                         <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700">
                                             {data?.settings?.theme || "System"}
                                         </span>
                                     </div>
 
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs font-bold">{t("profile.start_page")}</span>
+                                        <span className="text-xs font-bold">
+                                            {t("profile.start_page")}
+                                        </span>
                                         <span className="text-[10px] font-mono font-bold text-blue-500">
                                             {data?.settings?.startPage || "/dashboard"}
                                         </span>
                                     </div>
 
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs font-bold">{t("profile.sidebar_collapsed")}</span>
+                                        <span className="text-xs font-bold">
+                                            {t("profile.sidebar_collapsed")}
+                                        </span>
                                         <div
                                             className={`w-8 h-4 rounded-full relative transition-colors ${data?.settings?.sidebarCollapsed ? "bg-emerald-500" : "bg-gray-300 dark:bg-gray-700"}`}
                                         >

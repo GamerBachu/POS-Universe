@@ -41,6 +41,7 @@ export const router = createBrowserRouter([
                     { path: "home", element: <HomePage /> },
                     { path: "about", element: <AboutPage /> },
                     { path: "dashboard", element: <Dashboard /> },
+                    { path: "config/seed-data", element: <SeedDataPage /> },
                 ],
             },
 
@@ -125,8 +126,7 @@ export const router = createBrowserRouter([
             { path: "error", element: <ErrorPage /> },
             { path: "*", element: <NotFoundPage /> },
 
-            // app configuration page
-            { path: "config/seed-data", element: <SeedDataPage /> },
+
         ],
     },
 ]);
