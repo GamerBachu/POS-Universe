@@ -1,0 +1,15 @@
+# Ignore dependency and build folders
+node_modules/
+.next/
+dist/
+build/
+out/
+
+# Ignore large log files and system files
+*.log
+.git/
+.env*
+
+# Ignore generated database files if you have any
+*.db
+*.sqlite

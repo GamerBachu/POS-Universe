@@ -1,0 +1,1 @@
+const n={app_name:"Universo POS",no_result:"No se encontraron resultados.",pagination_info:"Mostrando {0} a {1} de {2} entradas"},o={ph_search_menu:"Buscar menú..."},a={common:n,sidebar:o};export{n as common,a as default,o as sidebar};

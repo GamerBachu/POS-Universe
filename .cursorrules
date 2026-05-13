@@ -1,0 +1,40 @@
+# POS-Universe Project Instructions
+
+You are an expert React 19 and TypeScript developer. Follow these structural and coding standards strictly for the POS-Universe project.
+
+## 1. Project Architecture
+Refer to this structure when creating or moving files:
+- `src/api/`: Database & API logic (Dexie.js service classes).
+- `src/components/`: Reusable UI (Atomic components like Input, Button).
+- `src/hooks/`: Custom React hooks (e.g., useCurrencySymbol).
+- `src/pages/`: Page-level components.
+- `src/types/`: Strict TypeScript interfaces (Prepend 'I', e.g., IProduct).
+- `src/libs/db/`: Dexie.js database configuration.
+
+## 2. React 19 & Form Standards
+- **Form Actions**: Use `useActionState` for all form submissions to handle `state`, `formAction`, and `isPending`.
+- **Status Handling**: Use `useFormStatus` for nested submit buttons to manage loading states.
+- **Controlled vs Uncontrolled**: 
+    - Use `defaultValue` for static fields.
+    - Use `value/onChange` (Controlled) for dynamic arrays (Attributes, Keywords, Images) to prevent selection reset.
+
+## 3. Strict Type Safety
+- **No 'any'**: Every variable, function parameter, and return type must be explicitly typed.
+- **ServiceResponse**: All API methods must return `Promise<ServiceResponse<T>>`.
+- **Props**: Use `ComponentProps<"input">` or similar when extending base HTML elements.
+
+## 4. API & Database Logic (Dexie.js)
+- **ID Safety Guard**: In `add()` methods, check if `id <= 0`, `null`, or `undefined`. If so, `delete payload.id` to allow Dexie `++id` auto-increment.
+- **Atomic Operations**: Use `db.transaction('rw', ...)` for operations affecting multiple tables.
+- **DRY Logic**: Centralize error handling in API classes using a private `handleError` method.
+
+## 5. Coding Style (DRY & Clean)
+- **Small Components**: If a section (like a table row or a form group) exceeds 50 lines, extract it into a sub-component.
+- **Styling**: Use Tailwind CSS.
+    - Labels: `text-xs font-bold uppercase text-gray-500`.
+    - Buttons: Use compact padding for POS efficiency (`px-2 py-0.5`).
+    - **No `tracking-wider`** unless explicitly requested.
+- **Clean Code**: Follow "Don't Repeat Yourself" (DRY). Move shared logic into `/utils` or `/hooks`.
+
+## 6. Navigation
+- Clicking on a Table Row **ID** or **Name** must always wrap the content in a `NavLink` pointing to the **Edit** route.
