@@ -6,7 +6,7 @@ import path from "path";
 // https://vite.dev/config/
 
 export default defineConfig({
-  base: "/POS-Universal/",
+  base: "/POS-Universe/",
   server: {
     port: 3690,
   },
