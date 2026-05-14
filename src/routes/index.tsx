@@ -129,6 +129,8 @@ export const router = createBrowserRouter([
 
         ],
     },
-]);
+],
+    { basename: "/POS-Universal" }
+);
 
 export default router;
