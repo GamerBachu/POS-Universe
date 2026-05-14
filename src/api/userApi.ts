@@ -183,7 +183,7 @@ export class userApi {
                             dateOfBirth: "1990-05-05",
                             gender: "male",
                             languagePreference: "en-US",
-                            timezone: "America/New_York",
+                            timezone: "India",
                             addressLine1: "123 Main St",
                             addressLine2: "Apt 4B",
                             city: "Any-town",
